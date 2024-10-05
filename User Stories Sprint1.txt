@@ -1,0 +1,46 @@
+User Stories
+CodeCain
+Sprint 1
+
+Class
+1. Add
+	- I can add a class to the UML Diagram from the main menu. If I add the same name, it should not be allowed, and
+	  I should be reprompted. 
+	
+2. Delete
+	- I can delete any class that I can create. I can do this by name. If the name doesnt exist, 
+	  I will get reprompted. When in the process of deleting, it will explain the relations of the object being deleted. 
+	
+3. Rename
+	- I can rename a class whenever wanted, but the name should not be changed if name is invalid or a duplicate.
+
+Relationship
+1. Add
+	- I can add a relationship between classes when I inquire a source, and destination. If either
+	  of theses are invalid, nothing will be changed, and I will be told to do it again. 
+	  
+2. Delete
+	- I can delete a relationship between two classes when I give a source, and destination. If either
+	  of theses are invalid, nothing will be changed, and I will be told to do it again. 
+
+
+Fields/Methods
+1. Add Field
+	- I will be prompted to give a class, and a field name. If the class doesn't exist, the field will not be created, and the user will be prompted to try again.
+	  If the name is not unique, or uses invalid characters (%$@!), the user will be prompted to try again and the field will not be created.
+
+2. Add Method
+	- 
+	
+3. Remove Field
+	- I will prompted to delete a field in a class. If the class or field doesn't exist, nothing will be deleted, and I will be reprompted to try again.  
+	
+4. Remove Method
+
+5. Rename Field
+
+
+
+Interface
+2. Help
+	- When I type help, I can get a list of all the commands.
