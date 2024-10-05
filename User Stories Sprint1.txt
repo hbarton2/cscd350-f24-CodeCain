@@ -24,7 +24,7 @@ Relationship
 	  of theses are invalid, nothing will be changed, and I will be told to do it again. 
 
 
-Fields/Methods
+Fields
 1. Add Field
 	- I will be prompted to give a class, and a field name. If the class doesn't exist, the field will not be created, and the user will be prompted to try again.
 	  If the name is not unique, or uses invalid characters (%$@!), the user will be prompted to try again and the field will not be created.
@@ -36,8 +36,43 @@ Fields/Methods
 	- I will prompted to delete a field in a class. If the class or field doesn't exist, nothing will be deleted, and I will be reprompted to try again.  
 	
 4. Remove Method
+	-
 
 5. Rename Field
+	- 
+
+Method
+1. Add Method
+	-
+2. Remove Method
+	-
+3. Rename Method
+	-
+4. Add Parameter
+	-
+5. Remove Parameter
+	-
+6. Change Parameter
+	-
+
+Save/Load
+1. Save
+	-
+2. Load
+	-
+
+Interface
+1. List Classes
+	-
+2. List Class
+	-
+3. List Relationships
+	-
+4. Help
+	-
+5. Exit
+	-
+
 
 
 
