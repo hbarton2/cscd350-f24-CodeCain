@@ -43,13 +43,15 @@ Fields
 
 Method
 1. Add Method
-	-
+	- I will be prompted to give a class name, and then I will be prompted for the name of the method to be added to the class.
 2. Remove Method
-	-
+	- I will be prompted to name a method to be removed. If the method does not exist, nothing will be removed, and I will be prompted to try again.
+	  If the method does exist, it will be removed.
 3. Rename Method
 	-
+
 4. Add Parameter
-	-
+	- 
 5. Remove Parameter
 	-
 6. Change Parameter
