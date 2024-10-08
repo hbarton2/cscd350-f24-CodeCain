@@ -1,12 +1,12 @@
 Group sections-
 	•Interface: Michelle, Colby
-	•Class and Relationships methods:
+	•Class and Relationships methods:Riley
 	•Fields/Methods methods: Aaron O., ben
 	•Readme: Michelle
 	•Save/Load: Colby
 
 Meeting #1 10/7/2024
-•	Discussing roles and responsibilities.
-•	Discussing how to use maven.
-•	Discussing future setbacks.
+	•Discussing roles and responsibilities.
+	•Discussing how to use maven.
+	•Discussing future setbacks.
 
