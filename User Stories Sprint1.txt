@@ -15,6 +15,7 @@ Class
 	- I can rename a class whenever wanted, but the name should not be changed if name is invalid or a duplicate.
 
 Relationship
+
 1. Add
 	- I can add a relationship between classes when I inquire a source, and destination. If either
 	  of theses are invalid, nothing will be changed, and I will be told to do it again. 
@@ -30,54 +31,70 @@ Fields
 	  If the name is not unique, or uses invalid characters (%$@!), the user will be prompted to try again and the field will not be created.
 
 2. Add Method
-	- 
+	- I will be prompted to give a class name and a field name. If the class doesn't exist or
+      the field name is invalid or non-unique, the field will not be created, and I will be reprompted.
+
 	
 3. Remove Field
 	- I will prompted to delete a field in a class. If the class or field doesn't exist, nothing will be deleted, and I will be reprompted to try again.  
 	
 4. Remove Method
-	-
+	-I will be prompted to delete a method from a class. If the method doesn't exist,
+     nothing will be removed, and I will be re-prompted to try again
 
 5. Rename Field
-	- 
+	- I can rename a field in a class, but the operation will fail if the new name is invalid or
+      a duplicate. I will be prompted to try again.
+
 
 Method
 1. Add Method
 	- I will be prompted to give a class name, and then I will be prompted for the name of the method to be added to the class.
+
 2. Remove Method
 	- I will be prompted to name a method to be removed. If the method does not exist, nothing will be removed, and I will be prompted to try again.
 	  If the method does exist, it will be removed.
+
 3. Rename Method
-	-
+	- I can rename a method in a class. If the new name is invalid or a duplicate, the
+	  renaming will fail, and I will be re-prompted.
 
 4. Add Parameter
-	- 
+	- I will be prompted to add a parameter to a method. If the method or class doesn't
+      exist, or the parameter is invalid, the operation will not be performed, and I will be reprompted.
+
 5. Remove Parameter
-	-
+	- I will be prompted to remove a parameter from a method. If the method, class, or
+      parameter doesn't exist, nothing will be removed, and I will be re-prompted.
+
 6. Change Parameter
-	-
+	- I will be prompted to change a method's parameter(s). If the method or parameter
+      does not exist, the change will not be made, and I will be re-prompted.
 
 Save/Load
 1. Save
-	-
+	- I can save the current UML diagram to a file in JSON or YAML format.
 2. Load
-	-
+	- I can load a previously saved UML diagram from a file in JSON or YAML format.
 
 Interface
+
 1. List Classes
-	-
+	- I can list all the classes in the UML diagram, showing each class with its fields and
+	  methods.
+
 2. List Class
-	-
+	- I can view the details of a specific class, including its fields and methods, by providing
+      the class name.
+
 3. List Relationships
-	-
+	- I can list all the relationships between classes, showing the source and destination for
+	  each relationship.
+
 4. Help
-	-
+	- When I type "help," I will get a list of all available commands, showing how to use the
+      UML editor from the command line.
+
 5. Exit
-	-
+	- I can exit the UML editor application using a command from the main menu
 
-
-
-
-Interface
-2. Help
-	- When I type help, I can get a list of all the commands.
