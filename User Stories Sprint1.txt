@@ -1,100 +1,105 @@
-User Stories
-CodeCain
-Sprint 1
+Add Class to UML Diagram
+  As a user,
+  I want to add a class to the UML diagram,
+  So that I can represent concepts in my system.
 
-Class
-1. Add
-	- I can add a class to the UML Diagram from the main menu. If I add the same name, it should not be allowed, and
-	  I should be reprompted. 
-	
-2. Delete
-	- I can delete any class that I can create. I can do this by name. If the name doesnt exist, 
-	  I will get reprompted. When in the process of deleting, it will explain the relations of the object being deleted. 
-	
-3. Rename
-	- I can rename a class whenever wanted, but the name should not be changed if name is invalid or a duplicate.
+Rename Class
+  As a user,
+  I want to rename a class,
+  So that my UML diagram remains accurate.
 
-Relationship
+Delete Class
+  As a user,
+  I want to delete a class 
+  So that I know if I make too many I can remove any of them.
 
-1. Add
-	- I can add a relationship between classes when I inquire a source, and destination. If either
-	  of theses are invalid, nothing will be changed, and I will be told to do it again. 
-	  
-2. Delete
-	- I can delete a relationship between two classes when I give a source, and destination. If either
-	  of theses are invalid, nothing will be changed, and I will be told to do it again. 
+Add Relationship
+  As a user,
+  I want to add a relationship between two classes,
+  So that I can show how different classes interact.
 
+Delete Relationship
+  As a user,
+  I want to delete relationships between methods and classes
+  So that I can modify my UML diagram.
 
-Fields
-1. Add Field
-	- I will be prompted to give a class, and a field name. If the class doesn't exist, the field will not be created, and the user will be prompted to try again.
-	  If the name is not unique, or uses invalid characters (%$@!), the user will be prompted to try again and the field will not be created.
+Add Field to Class
+  As a user,
+  I want to add fields to my class,
+  So that I can define the properties of the class.
 
-2. Add Method
-	- I will be prompted to give a class name and a field name. If the class doesn't exist or
-      the field name is invalid or non-unique, the field will not be created, and I will be reprompted.
+Add Method to Class
+  As a user,
+  I want to add methods to my class,
+  So that I can show the behavior of the class.
 
-	
-3. Remove Field
-	- I will prompted to delete a field in a class. If the class or field doesn't exist, nothing will be deleted, and I will be reprompted to try again.  
-	
-4. Remove Method
-	-I will be prompted to delete a method from a class. If the method doesn't exist,
-     nothing will be removed, and I will be re-prompted to try again
+Remove Method
+   As a user,
+   I want to remove methods to my class,
+   So that I can remove a method I no longer need.
 
-5. Rename Field
-	- I can rename a field in a class, but the operation will fail if the new name is invalid or
-      a duplicate. I will be prompted to try again.
+Rename Method
+   As a user,
+   I want to rename a method,
+   so that I can reorganize my umls future changes.
 
+Rename Field
+  As a user,
+  I want to rename fields
+  So that I can make it easier for my team to understand what attribute I want.
 
-Method
-1. Add Method
-	- I will be prompted to give a class name, and then I will be prompted for the name of the method to be added to the class.
+Remove Field
+  As a user,
+  I want to remove a field from my class,
+  so that I can remove a outdated value in my class.
 
-2. Remove Method
-	- I will be prompted to name a method to be removed. If the method does not exist, nothing will be removed, and I will be prompted to try again.
-	  If the method does exist, it will be removed.
+Add Parameter 
+  As a user, 
+  I want to add a parameter to a method
+  So I can add parameters where needed.
 
-3. Rename Method
-	- I can rename a method in a class. If the new name is invalid or a duplicate, the
-	  renaming will fail, and I will be re-prompted.
+Remove Parameter
+  As a user,
+  I want to remove a parameter from a method,
+  So that I can correct a method's definition.
 
-4. Add Parameter
-	- I will be prompted to add a parameter to a method. If the method or class doesn't
-      exist, or the parameter is invalid, the operation will not be performed, and I will be reprompted.
+Change Parameter
+  As a user,
+  I want to change the parameters of a method,
+  So that I can update the method's behavior.
 
-5. Remove Parameter
-	- I will be prompted to remove a parameter from a method. If the method, class, or
-      parameter doesn't exist, nothing will be removed, and I will be re-prompted.
+Save UML Diagram
+  As a user,
+  I want to save the UML diagram,
+  So that I can preserve my work for future usage.
 
-6. Change Parameter
-	- I will be prompted to change a method's parameter(s). If the method or parameter
-      does not exist, the change will not be made, and I will be re-prompted.
+List Classes
+  As a user,
+  I want to list all the classes in my UML Diagram,
+  So that I can see all the elements in my diagram.
 
-Save/Load
-1. Save
-	- I can save the current UML diagram to a file in JSON or YAML format.
-2. Load
-	- I can load a previously saved UML diagram from a file in JSON or YAML format.
+List Class 
+  As a user, 
+  I want to see the details of a specific class, 
+  So I can visually see the contents on the UML diagram.
 
-Interface
+List Relationships
+  As a user,
+  I want to list all relationships between classes,
+  So that I can review how the classes interact with each other.
 
-1. List Classes
-	- I can list all the classes in the UML diagram, showing each class with its fields and
-	  methods.
+Exit Application
+  As a user,
+  I want to exit the application,
+  So that I can end my work session.
 
-2. List Class
-	- I can view the details of a specific class, including its fields and methods, by providing
-      the class name.
+Help
+  As a user, 
+  I should be able to get help within the application, 
+  so if I get lost, I can be guided in the right direction
 
-3. List Relationships
-	- I can list all the relationships between classes, showing the source and destination for
-	  each relationship.
-
-4. Help
-	- When I type "help," I will get a list of all available commands, showing how to use the
-      UML editor from the command line.
-
-5. Exit
-	- I can exit the UML editor application using a command from the main menu
+Load
+  As a user,
+  I should be able to load a UML diagram,
+  so that I can recover previous work
 
