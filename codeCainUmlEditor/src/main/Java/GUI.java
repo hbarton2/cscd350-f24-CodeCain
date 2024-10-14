@@ -5,74 +5,74 @@ import java.awt.event.ActionListener;
 
 public class GUI {
     public static void main(String[] args) {
+        // Create the frame
         JFrame frame = new JFrame("Custom Command Prompt");
-        frame.setSize(600, 400);  // Set window size
+        frame.setSize(600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new BorderLayout());
         frame.add(panel);
         placeComponents(panel);
+
+        frame.setResizable(true);
 
         frame.setVisible(true);
     }
 
+    /**
+     * placeComponents sets up the GUI and adds the box you can type in as well as a welcome message.
+     * @param panel
+     */
+
     private static void placeComponents(JPanel panel) {
 
-        panel.setLayout(null);
-
-        // Create a non-editable text area to display "command-line" output
         JTextArea commandOutput = new JTextArea();
-        commandOutput.setBounds(10, 10, 560, 300);
         commandOutput.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        commandOutput.setEditable(false);  // This acts as the "console"
+        commandOutput.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(commandOutput);
-        scrollPane.setBounds(10, 10, 560, 300);
-        panel.add(scrollPane);
+        panel.add(scrollPane, BorderLayout.CENTER);
 
-        JTextField commandInput = new JTextField(50);
-        commandInput.setBounds(10, 320, 450, 30);
-        panel.add(commandInput);
+        // Create a text field to accept user input commands
+        JTextField commandInput = new JTextField();
+        panel.add(commandInput, BorderLayout.SOUTH);
 
-        // Create a "Run" button to simulate the "Enter" key
-        JButton runButton = new JButton("Run");
-        runButton.setBounds(470, 320, 100, 30);
-        panel.add(runButton);
+        //welcome message
+        String welcomeMessage = "CSCD 350 UML Editor\n" + "Group: Code Cain\n" +
+                "Type 'help' to see available commands.\n\n";
+        commandOutput.append(welcomeMessage);
 
-        // Define what happens when the "Run" button is clicked or the user presses Enter
-        runButton.addActionListener(new ActionListener() {
+        commandInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String inputCommand = commandInput.getText();
                 if (!inputCommand.trim().isEmpty()) {
+                    // Shows command execution and display the result
                     String output = ">> " + inputCommand + "\n" + executeCommand(inputCommand) + "\n";
-                    commandOutput.append(output);  // Append output to the "command-line"
+                    commandOutput.append(output);
                     commandInput.setText("");  // Clear input field
-                }
-            }
-        });
 
-        // Support pressing "Enter" to submit commands
-        commandInput.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                runButton.doClick();  // Simulate clicking the "Run" button
+                    // Scroll to the bottom of the output
+                    commandOutput.setCaretPosition(commandOutput.getDocument().getLength());
+                }
             }
         });
     }
 
-    // Method to simulate command execution
+    /**
+     * Handles the commands
+     * @param command
+     * @return
+     */
+
     private static String executeCommand(String command) {
-        // In this method, you can define your custom logic to handle different commands
+        
         switch (command.toLowerCase()) {
             case "help":
-                return "Available commands: help, greet, exit";
-            case "greet":
-                return "Hello! This is your custom command prompt!";
+                return "Available commands: help, exit";
             case "exit":
                 return "Exiting... (but this is a simulation, so it won't really close)";
             default:
                 return "Unknown command: " + command;
         }
     }
-
 }
