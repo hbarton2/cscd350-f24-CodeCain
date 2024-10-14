@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 public class GUI {
     public static void main(String[] args) {
         // Create the frame
-        JFrame frame = new JFrame("Custom Command Prompt");
+        JFrame frame = new JFrame("UML editor Command Line");
         frame.setSize(600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -65,7 +65,7 @@ public class GUI {
      */
 
     private static String executeCommand(String command) {
-        
+
         switch (command.toLowerCase()) {
             case "help":
                 return "Available commands: help, exit";
