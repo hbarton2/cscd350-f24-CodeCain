@@ -1,7 +1,7 @@
 Group sections-
 	•Interface: Michelle, Colby
-	•Class and Relationships methods:Riley, Aaron WB
-	•Fields/Methods methods: Aaron O., ben
+	•Class and Relationships methods:Riley, Benno
+	•Fields/Methods methods: Aaron O., Aaron WB
 	•Readme: Michelle
 	•Save/Load: Colby
 
