@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="d97d09b8-ce59-4ac2-b037-c5781ec0cb86" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/cscd350-f24-CodeCain.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cscd350-f24-CodeCain.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Group Roles.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Group Roles.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/User Stories Sprint1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/User Stories Sprint1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/DemoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/DemoTest.java" afterDir="false" />
     </list>
@@ -20,19 +20,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="GUI" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
@@ -44,37 +32,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.GUI.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Develop",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Develop&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
-    <configuration name="GUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="GUI" />
-      <module name="cscd350-f24-CodeCain" />
+    <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.GUI" />
-      </list>
-    </recent_temporary>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -86,7 +65,8 @@
       <updated>1728523393017</updated>
       <workItem from="1728523394606" duration="14000" />
       <workItem from="1728523425276" duration="95000" />
-      <workItem from="1728873377657" duration="728000" />
+      <workItem from="1728874546267" duration="85000" />
+      <workItem from="1728874699646" duration="30000" />
     </task>
     <servers />
   </component>
