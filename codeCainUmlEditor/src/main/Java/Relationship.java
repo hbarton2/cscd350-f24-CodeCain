@@ -73,6 +73,17 @@ public class Relationship {
         return false;
     }
 
+    /**
+     * helper method to check if both classes exists and dont already have a relationship
+     * @param class1 first class
+     * @param class2 second class
+     * @return true if entry is valid
+     */
+    private static boolean entryIsValid(String class1, String class2){
+        return !relationshipExists(class1,class2)
+                && Class.classMap.containsKey(class1)
+                && Class.classMap.containsKey(class2);
+    }
 
     /**
      * adds a relationship to the relationship map
@@ -81,9 +92,8 @@ public class Relationship {
      * @throws Exception if a class entered doesn't exist
      */
     public static void addRelationship(String class1, String class2) throws Exception {
-        boolean isValid = !relationshipExists(class1,class2);
-                            //&& classes.classExists(class1)
-                            //&& classes.classExists(class2);
+
+        boolean isValid = entryIsValid(class1, class2);
 
         if(!isValid) throw new Exception("invalid entry");
 
