@@ -128,8 +128,8 @@ public class Methods {
      * @param className the name of the class
      * @return false if the class exists, true otherwise
      */
-    private boolean classExists(String className) {
-        if (!classMethods.containsKey(className)) {
+    public boolean classExists(String className) {
+        if (!Class.classMap.containsKey(className)) {
             System.out.println("Error: Class " + className + " does not exist");
             return true;
         }
