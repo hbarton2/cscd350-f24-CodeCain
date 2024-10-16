@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+
 public class Relationship {
 
     /**
@@ -80,12 +81,19 @@ public class Relationship {
      * @param class2 the second class to add
      * @throws Exception if a class entered doesn't exist
      */
+<<<<<<< Updated upstream
     public static void addRelationship(String class1, String class2) throws Exception {
         boolean isValid = !relationshipExists(class1,class2);
                             //&& classes.classExists(class1)
                             //&& classes.classExists(class2);
+=======
+    public static void addRelationship(String class1, String class2) {
 
-        if(!isValid) throw new Exception("invalid entry");
+        boolean isValid = entryIsValid(class1, class2);
+>>>>>>> Stashed changes
+
+        if(!isValid)
+            System.out.println("This is invalid and cannot be added");
 
         Relationship newRelationship = new Relationship(class1, class2);
 
@@ -100,7 +108,7 @@ public class Relationship {
      * @param class2 the second class to add
      * @throws Exception if a class entered doesn't exist
      */
-    public static void removeRelationship(String class1, String class2) throws Exception {
+    public static void removeRelationship(String class1, String class2){
 
         for (Relationship r : relationshipList){
             if (r.classNames.contains(class1)
@@ -110,7 +118,7 @@ public class Relationship {
                 return;
             }
         }
-        throw new Exception("relationship not found");
+        System.out.println("Cannot find a class to be removed");
     }
 
 
@@ -118,13 +126,14 @@ public class Relationship {
      * takes the list of relationships and returns it as a string
      * @return String - the list of relationships
      */
-    public static String listToString() throws Exception {
+    public static String listToString(){
         if (relationshipList.isEmpty()) return "";
         StringBuilder s = new StringBuilder();
         for (Relationship r: relationshipList){
             String[] names = r.getClassNames();
 
-            if (names.length < 2) throw new Exception("no classes found");
+            if (names.length < 2)
+                System.out.println("No classes can be found");
 
             s.append(names[0]).append(" ------- ").append(names[1]).append("\n");
         }
@@ -137,8 +146,9 @@ public class Relationship {
      * @param oldName name to replace
      * @param newName name to replace with
      */
-    public static void renameClassInRelationships(String oldName, String newName) throws Exception {
-        if (!relationshipExists(oldName)) throw new Exception("relationship does not exist");
+    public static void renameClassInRelationships(String oldName, String newName) {
+        if (!relationshipExists(oldName))
+            System.out.println("Cannot find the relationship");
         for (Relationship r : relationshipList){
             if (r.classNames.contains(oldName)){
                 r.classNames.remove(oldName);
