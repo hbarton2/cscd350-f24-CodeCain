@@ -3,7 +3,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The GUI class represents a command-line-based UML editor with a graphical user interface (GUI) 
+ * built using Java Swing components. It provides an interface where users can enter commands 
+ * to manipulate UML class models and their relationships through a command line interface.
+ */
 public class GUI {
+
+    /**
+     * The main method is the entry point of the application. It sets up the main JFrame 
+     * and initializes the GUI components, including a command input field and a command output area.
+     *
+     * @param args command-line arguments (not used in this application)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("UML editor Command Line");
         frame.setSize(600, 400);
@@ -17,16 +29,29 @@ public class GUI {
         frame.setVisible(true);
     }
 
+    /**
+     * Places all the necessary components (command input field, command output area, and scroll pane)
+     * inside the provided panel. The output area displays the results of commands executed, 
+     * and the input field accepts user commands.
+     * <p>
+     * The welcome message is displayed initially, and the user can enter commands which are then processed
+     * and the output is shown in the output area.
+     *
+     * @param panel the panel to which components are added
+     */
     private static void placeComponents(JPanel panel) {
+        // Command output area (non-editable, monospace font) with scroll functionality
         JTextArea commandOutput = new JTextArea();
         commandOutput.setFont(new Font("Monospaced", Font.PLAIN, 14));
         commandOutput.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(commandOutput);
         panel.add(scrollPane, BorderLayout.CENTER);
 
+        // Command input field where users can enter their commands
         JTextField commandInput = new JTextField();
         panel.add(commandInput, BorderLayout.SOUTH);
 
+        // Welcome message displayed at the start of the application
         String welcomeMessage = """
                 CSCD 350 UML Editor
                 Group: Code Cain
@@ -34,6 +59,7 @@ public class GUI {
                 """;
         commandOutput.append(welcomeMessage);
 
+        // Event listener to handle user input commands
         commandInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -42,16 +68,19 @@ public class GUI {
                     String output = ">> " + inputCommand + "\n" + executeCommand(inputCommand) + "\n";
                     commandOutput.append(output);
                     commandInput.setText("");
-                    commandOutput.setCaretPosition(commandOutput.getDocument().getLength());
+                    commandOutput.setCaretPosition(commandOutput.getDocument().getLength()); // Scroll to the bottom
                 }
             }
         });
     }
 
     /**
-     * Handles the commands
-     * @param command the input command string
-     * @return the result of the command execution
+     * Processes the user input command, parses it, and performs the appropriate operation.
+     * This method supports various UML operations such as adding classes, deleting classes,
+     * listing classes, and showing help information.
+     *
+     * @param command the input command string entered by the user
+     * @return the result of the command execution as a string to be displayed in the output area
      */
     private static String executeCommand(String command) {
         String[] tokens = command.split(" ");
@@ -61,6 +90,7 @@ public class GUI {
 
         String commandName = tokens[0].toLowerCase();
 
+        // Handling different commands by name
         switch (commandName) {
             case "help":
                 return """
