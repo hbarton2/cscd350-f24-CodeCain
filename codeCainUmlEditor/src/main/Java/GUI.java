@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 /**
  * The GUI class represents a command-line-based UML editor with a graphical user interface (GUI)
@@ -107,15 +108,15 @@ public class GUI {
 
                         Field Operations:
                         1. add field 'className' 'fieldName'  - Adds a unique field to the specified class.
-                        2. remove field 'className' 'fieldName' - Removes a field from the specified class.
+                        2. delete field 'className' 'fieldName' - Removes a field from the specified class.
                         3. rename field 'className' 'oldFieldName' 'newFieldName' - Renames a field in the specified class.
 
                         Method Operations:
                         1. add method 'className' 'methodName' 'parameters' - Adds a unique method to the specified class.
-                        2. remove method 'className' 'methodName' - Removes the method from the specified class.
+                        2. delete method 'className' 'methodName' - Removes the method from the specified class.
                         3. rename method 'className' 'oldMethodName' 'newMethodName' - Renames a method in the specified class.
                         4. add parameter 'className' 'methodName' 'parameterName' 'parameterType' - Adds a parameter to a method.
-                        5. remove parameter 'className' 'methodName' 'parameterName' - Removes a parameter from a method.
+                        5. delete parameter 'className' 'methodName' 'parameterName' - Removes a parameter from a method.
 
                         Save/Load Operations:
                         1. save                                - Saves the current state of the project.
@@ -145,6 +146,24 @@ public class GUI {
                     } catch (Exception e) {
                         return "Error: " + e.getMessage();
                     }
+
+                } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("field")) {
+                    String className = tokens[2];
+                    String fieldName = tokens[3];
+                    Fields fields = new Fields();
+                    fields.addField(className, fieldName);
+                    return "Field '" + fieldName + "' added to class '" + className + "'.";
+
+                } else if (tokens.length >= 5 && tokens[1].equalsIgnoreCase("method")) {
+                    String className = tokens[2];
+                    String methodName = tokens[3];
+                    String[] parameters = Arrays.copyOfRange(tokens, 4, tokens.length); // Capture all parameters after method name
+                    Methods methods = new Methods();
+                    methods.addMethod(className, methodName, Arrays.asList(parameters));
+                    return "Method '" + methodName + "' added to class '" + className + "' with parameters: " + Arrays.toString(parameters) + ".";
+
+                } else {
+                    return "Invalid command. Use 'help' for available commands.";
                 }
             case "delete":
                 if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
@@ -161,18 +180,45 @@ public class GUI {
                     } catch (Exception e) {
                         return "Error: " + e.getMessage();
                     }
-                }
-                return "Invalid command. Use: delete class 'name' or delete relationship 'class1' 'class2'.";
+                } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("field")) { //Not Working
+                    String className = tokens[2];
+                    String fieldName = tokens[3];
+                    Fields fields = new Fields();
+                    fields.removeField(className, fieldName);
+                    return "Field '" + fieldName + "' removed from class '" + className + "'.";
 
+                } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("method")) {
+                    String className = tokens[2];
+                    String methodName = tokens[3];
+                    Methods methods = new Methods();
+                    methods.removeMethod(className, methodName);
+                    return "Method '" + methodName + "' removed from class '" + className + "'.";
+                } else {
+                    return "Invalid command. Use 'help' for available commands.";
+                }
             case "rename":
                 if (tokens.length == 4 && tokens[1].equalsIgnoreCase("class")) {
                     String oldName = tokens[2];
                     String newName = tokens[3];
                     Class.renameClass(oldName, newName);
                     return "Class '" + oldName + "' renamed to '" + newName + "'.";
+                } else if (tokens.length == 5 && tokens[1].equalsIgnoreCase("field")) {
+                    String className = tokens[2];
+                    String oldFieldName = tokens[3];
+                    String newFieldName = tokens[4];
+                    Fields fields = new Fields();
+                    fields.renameField(className, oldFieldName, newFieldName);
+                return "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.";
+                } else if (tokens.length == 5 && tokens[1].equalsIgnoreCase("method")) {
+                    String className = tokens[2];
+                    String oldMethodName = tokens[3];
+                    String newMethodName = tokens[4];
+                    Methods methods = new Methods();
+                    methods.renameMethod(className, oldMethodName, newMethodName);
+                return "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.";
+                } else {
+                return "Invalid command. Use 'help' for available commands.";
                 }
-                return "Invalid command. Use: rename class 'oldName' 'newName'.";
-
             case "list":
                 if (tokens.length == 2 && tokens[1].equalsIgnoreCase("classes")) {
                     if (Class.classMap.isEmpty()) {
@@ -197,9 +243,7 @@ public class GUI {
                         return "Error: " + e.getMessage();
                     }
                 }
-
                 return "Invalid command. Use: list classes.";
-
             default:
                 return "Unknown command. Type 'help' to see available commands.";
         }
