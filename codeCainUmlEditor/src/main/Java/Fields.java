@@ -11,7 +11,7 @@ public class Fields {
      * Stores fields for each class.
      * The key is the class name, and the value is a map of field names to field values.
      */
-    private Map<String, Map<String, String>> classFields = new HashMap<>();
+    public static Map<String, Map<String, String>> classFields = new HashMap<>();
 
     /**
      * Adds a field to a class.
@@ -22,10 +22,7 @@ public class Fields {
     public void addField(String className, String fieldName) {
         if (validateInputs(className, fieldName)) return;
         if (classExists(className)) return;
-
-        classFields.putIfAbsent(className, new HashMap<>());
         Map<String, String> fields = classFields.get(className);
-
         if (fields.containsKey(fieldName)) {
             System.out.println("Error: Field " + fieldName + " already exists in class " + className);
         } else {
@@ -44,7 +41,6 @@ public class Fields {
         if (validateInputs(className, fieldName)) return;
         if (classExists(className)) return;
         if (fieldExists(className, fieldName)) return;
-
         classFields.get(className).remove(fieldName);
         System.out.println("Field " + fieldName + " removed from class " + className);
     }
@@ -63,7 +59,6 @@ public class Fields {
         }
         if (classExists(className)) return;
         if (fieldExists(className, oldFieldName)) return;
-
         Map<String, String> fields = classFields.get(className);
         if (fields.containsKey(newFieldName)) {
             System.out.println("Error: Field " + newFieldName + " already exists in class " + className);
