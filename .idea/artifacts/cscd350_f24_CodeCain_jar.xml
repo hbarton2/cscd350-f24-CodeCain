@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="cscd350-f24-CodeCain:jar">
+    <output-path>$PROJECT_DIR$/codeCainUmlEditor/Target/artifacts/cscd350_f24_CodeCain_jar</output-path>
+    <root id="archive" name="cscd350-f24-CodeCain.jar">
+      <element id="module-output" name="cscd350-f24-CodeCain" />
+    </root>
+  </artifact>
+</component>
