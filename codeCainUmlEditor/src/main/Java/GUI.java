@@ -4,14 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * The GUI class represents a command-line-based UML editor with a graphical user interface (GUI) 
- * built using Java Swing components. It provides an interface where users can enter commands 
+ * The GUI class represents a command-line-based UML editor with a graphical user interface (GUI)
+ * built using Java Swing components. It provides an interface where users can enter commands
  * to manipulate UML class models and their relationships through a command line interface.
  */
 public class GUI {
 
     /**
-     * The main method is the entry point of the application. It sets up the main JFrame 
+     * The main method is the entry point of the application. It sets up the main JFrame
      * and initializes the GUI components, including a command input field and a command output area.
      *
      * @param args command-line arguments (not used in this application)
@@ -31,7 +31,7 @@ public class GUI {
 
     /**
      * Places all the necessary components (command input field, command output area, and scroll pane)
-     * inside the provided panel. The output area displays the results of commands executed, 
+     * inside the provided panel. The output area displays the results of commands executed,
      * and the input field accepts user commands.
      * <p>
      * The welcome message is displayed initially, and the user can enter commands which are then processed
@@ -136,16 +136,33 @@ public class GUI {
                     String className = tokens[2];
                     Class.addClass(className);
                     return "Class '" + className + "' added.";
+                } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("relationship")) {
+                    try {
+                        String class1 = tokens[2];
+                        String class2 = tokens[3];
+                        Relationship.addRelationship(class1, class2);
+                        return "Relationship between '" + class1 + "' and '" + class2 + "' added.";
+                    } catch (Exception e) {
+                        return "Error: " + e.getMessage();
+                    }
                 }
-                return "Invalid command. Use: add class 'name'.";
-
             case "delete":
                 if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
                     String className = tokens[2];
                     Class.removeClass(className);
-                    return "Class '" + className + "' deleted.";
+                    Relationship.removeAttachedRelationships(className); // Remove any relationships involving this class
+                    return "Class '" + className + "' and its relationships deleted.";
+                } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("relationship")) {
+                    try {
+                        String class1 = tokens[2];
+                        String class2 = tokens[3];
+                        Relationship.removeRelationship(class1, class2);
+                        return "Relationship between '" + class1 + "' and '" + class2 + "' deleted.";
+                    } catch (Exception e) {
+                        return "Error: " + e.getMessage();
+                    }
                 }
-                return "Invalid command. Use: delete class 'name'.";
+                return "Invalid command. Use: delete class 'name' or delete relationship 'class1' 'class2'.";
 
             case "rename":
                 if (tokens.length == 4 && tokens[1].equalsIgnoreCase("class")) {
@@ -168,7 +185,19 @@ public class GUI {
                         }
                         return sb.toString();
                     }
+                } else if (tokens.length == 2 && tokens[1].equalsIgnoreCase("relationships")) {
+                    try {
+                        String relationships = Relationship.listToString();
+                        if (relationships.isEmpty()) {
+                            return "No relationships available.";
+                        } else {
+                            return "Relationships:\n" + relationships;
+                        }
+                    } catch (Exception e) {
+                        return "Error: " + e.getMessage();
+                    }
                 }
+
                 return "Invalid command. Use: list classes.";
 
             default:
