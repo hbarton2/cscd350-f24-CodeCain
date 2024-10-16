@@ -71,7 +71,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.relationshipTestSuite.test1">
+  <component name="RunManager" selected="JUnit.relationshiptests">
     <configuration name="GUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="GUI" />
       <module name="cscd350-f24-CodeCain" />
@@ -95,6 +95,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="relationshiptests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="cscd350-f24-CodeCain" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="relationshiptests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
@@ -108,6 +117,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.relationshiptests" />
         <item itemvalue="JUnit.relationshipTestSuite.test1" />
         <item itemvalue="Application.GUI" />
       </list>
