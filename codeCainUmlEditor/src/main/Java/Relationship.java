@@ -5,18 +5,20 @@ import java.util.HashSet;
 public class Relationship {
 
     /**
-     * Set with 2 class names
+     * Set with 2 class names that will be in the relationship
      */
     private Collection<String> classNames;
 
     /**
-     * arraylist for every relationship
+     * arraylist for every single relationship created.
+     * This is a static list, so every relationship created only exists in this list
      */
     public static final ArrayList<Relationship> relationshipList = new ArrayList<Relationship>();
 
 
     /**
-     * constructor for relationship class
+     * constructor for relationship class. This is private
+     * and is only used by the addRelationship method
      * @param class1 name of first class to add
      * @param class2 name of second class to add
      */
@@ -26,6 +28,15 @@ public class Relationship {
         classNames.add(class2);
     }
 
+
+
+    /**
+     * deletes all attached classes in the
+     */
+    public static void removeAttachedRelationships(String className /*, Classes classes*/) /*throws Exception*/ {
+        //if(!classes.classExists(className)) throw new Exception("class not found");
+        relationshipList.removeIf(r -> r.classNames.contains(className));
+    }
 
 
     /**
@@ -68,7 +79,7 @@ public class Relationship {
      * @param class2 the second class to add
      * @throws Exception if a class entered doesn't exist
      */
-    public static void addRelationship(String class1, String class2/*, Classes classes */) throws Exception {
+    public static void addRelationship(String class1, String class2) throws Exception {
         boolean isValid = !relationshipExists(class1,class2);
                             //&& classes.classExists(class1)
                             //&& classes.classExists(class2);
@@ -79,6 +90,8 @@ public class Relationship {
 
         relationshipList.add(newRelationship);
     }
+
+
 
     /**
      * adds a relationship to the relationship map
@@ -118,7 +131,6 @@ public class Relationship {
     }
 
 
-
     /**
      * renames a class in a relationship
      * @param oldName name to replace
@@ -133,6 +145,8 @@ public class Relationship {
             }
         }
     }
+
+
 
     /**
      * helper method to get the names of the classes in the relationship in an

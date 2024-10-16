@@ -145,5 +145,48 @@ public class relationshiptests {
 
     }
 
+    @Nested
+    class removeAttachedRelationshipsTests{
+
+        /**
+         * adding a bunch of relationships
+         */
+        @BeforeAll
+        static void setup() throws Exception {
+           Relationship.addRelationship("bob","jim");
+           Relationship.addRelationship("george", "bob");
+           Relationship.addRelationship("jim","george");
+           Relationship.addRelationship("bob", "james");
+           Relationship.addRelationship("bill", "james");
+        }
+
+        /**
+         * tests to see if jim still exists after removing attached relationships
+         */
+        @Test
+        void test1() throws Exception {
+            Assertions.assertTrue(Relationship.relationshipExists("jim"),
+                    "setup failed");
+            Relationship.removeAttachedRelationships("jim");
+
+            String errormsglist = "Relationship list \n=============================" +
+                    Relationship.listToString();
+
+            Assertions.assertFalse(Relationship.relationshipExists("jim"),
+                    "class still has relationships" + errormsglist);
+
+            //System.out.println(Relationship.listToString());
+
+        }
+
+        @Test
+        void test2() throws Exception {
+            Relationship.removeAttachedRelationships("bob");
+            Assertions.assertFalse(Relationship.relationshipExists("bob"));
+
+            System.out.println(Relationship.listToString());
+        }
+
+    }
 
 }
