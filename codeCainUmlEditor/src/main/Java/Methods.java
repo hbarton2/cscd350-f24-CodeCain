@@ -57,7 +57,7 @@ public class Methods {
      */
     public void renameMethod(String className, String oldMethodName, String newMethodName) {
         if (validateInputs(className, oldMethodName) || newMethodName == null) { return; } //Redo this
-        if (!classExists(className)) {return;}
+        if (classExists(className)) {return;}
         Map<String, List<String>> methods = classMethods.get(className);
         if (methods.containsKey(newMethodName)) {
             System.out.println("Error: Method " + newMethodName + " already exists in class " + className);
@@ -159,7 +159,7 @@ public class Methods {
      * @return the methods map for the class, or null if the class does not exist
      */
     private Map<String, List<String>> getMethodsForClass(String className) {
-        if (!classExists(className)) {
+        if (classExists(className)) {
             return null;
         }
         return classMethods.get(className);
