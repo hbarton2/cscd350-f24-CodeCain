@@ -13,7 +13,7 @@ public class Methods {
      * Stores methods for each class.
      * The key is the class name and the value is a map of method names to their parameters.
      */
-    private Map<String, Map<String, List<String>>> classMethods = new HashMap<>();
+    public static Map<String, Map<String, List<String>>> classMethods = new HashMap<>();
 
     /**
      * Adds a method to a class.
@@ -25,7 +25,6 @@ public class Methods {
     public void addMethod(String className, String methodName, List<String> parameters) {
         if (validateInputs(className, methodName)) { return; }
         if (classExists(className)) {return;}
-        classMethods.putIfAbsent(className, new HashMap<>());
         Map<String, List<String>> methods = classMethods.get(className);
         if (methods.containsKey(methodName)) {
             System.out.println("Error: Method " + methodName + " already exists in class " + className);

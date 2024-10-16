@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +44,8 @@ public class Class {
             System.out.println("Error: Class " + className + " already exists");
         } else {
             classMap.put(className, new Class(className));
+            Methods.classMethods.put(className, new HashMap<>());
+            Fields.classFields.put(className, new HashMap<>());
             System.out.println("Class " + className + " added");
         }
     }
@@ -58,6 +61,8 @@ public class Class {
             System.out.println("Error: Class " + className + " does not exist");
         } else {
             classMap.remove(className);
+            Methods.classMethods.remove(className);
+            Fields.classFields.remove(className);
             System.out.println("Class " + className + " removed");
         }
     }
@@ -78,6 +83,10 @@ public class Class {
             Class classObj = classMap.remove(oldClassName);
             classObj.className = newClassName;
             classMap.put(newClassName, classObj);
+            Map<String, List<String>> methods = Methods.classMethods.remove(oldClassName);
+            Methods.classMethods.put(newClassName, methods);
+            Map<String, String> fields = Fields.classFields.remove(oldClassName);
+            Fields.classFields.put(newClassName, fields);
             System.out.println("Class " + oldClassName + " renamed to " + newClassName);
         }
     }
