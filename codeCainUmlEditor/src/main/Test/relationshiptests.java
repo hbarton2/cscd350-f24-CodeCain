@@ -179,6 +179,7 @@ public class relationshiptests {
 
         }
 
+
         @Test
         void test2() throws Exception {
             Relationship.removeAttachedRelationships("bob");

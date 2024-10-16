@@ -9,6 +9,7 @@ public class Relationship {
      */
     private Collection<String> classNames;
 
+
     /**
      * arraylist for every single relationship created.
      * This is a static list, so every relationship created only exists in this list
@@ -31,7 +32,7 @@ public class Relationship {
 
 
     /**
-     * deletes all attached classes in the
+     * deletes all relationships that contain the specified class
      */
     public static void removeAttachedRelationships(String className /*, Classes classes*/) /*throws Exception*/ {
         //if(!classes.classExists(className)) throw new Exception("class not found");
