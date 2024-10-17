@@ -91,9 +91,11 @@ public class Relationship {
         }
         if (!Class.classMap.containsKey(class1)){
             System.out.println(class1 + " is not an existing class");
+            return;
         }
         if (!Class.classMap.containsKey(class2)){
             System.out.println(class2 + " is not an existing class");
+            return;
         }
 
         Relationship newRelationship = new Relationship(class1, class2);
