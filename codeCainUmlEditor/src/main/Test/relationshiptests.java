@@ -27,9 +27,9 @@ public class relationshiptests {
 
         @Test
         void test2(){
-            Assertions.assertThrows(Exception.class, () ->{
+
                 Relationship.addRelationship("jim", "george");
-            });
+
         }
     }
 

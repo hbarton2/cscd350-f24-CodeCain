@@ -9,13 +9,11 @@ public class Relationship {
      */
     private Collection<String> classNames;
 
-
     /**
      * arraylist for every single relationship created.
      * This is a static list, so every relationship created only exists in this list
      */
     public static final ArrayList<Relationship> relationshipList = new ArrayList<Relationship>();
-
 
     /**
      * constructor for relationship class. This is private
@@ -29,16 +27,13 @@ public class Relationship {
         classNames.add(class2);
     }
 
-
-
     /**
      * deletes all relationships that contain the specified class
      */
-    public static void removeAttachedRelationships(String className /*, Classes classes*/) /*throws Exception*/ {
+    public static void removeAttachedRelationships(String className) /*throws Exception*/ {
         //if(!classes.classExists(className)) throw new Exception("class not found");
         relationshipList.removeIf(r -> r.classNames.contains(className));
     }
-
 
     /**
      * checks if the relationship already exists
@@ -52,8 +47,6 @@ public class Relationship {
         }
         return false;
     }
-
-
 
     /**
      * relationshipExists
@@ -89,20 +82,24 @@ public class Relationship {
      * adds a relationship to the relationship map
      * @param class1 the first class to add
      * @param class2 the second class to add
-     * @throws Exception if a class entered doesn't exist
      */
-    public static void addRelationship(String class1, String class2) throws Exception {
-
-        boolean isValid = entryIsValid(class1, class2);
-
-        if(!isValid) throw new Exception("invalid entry");
+    public static void addRelationship(String class1, String class2){
+        
+        if (relationshipExists(class1,class2)){
+            System.out.println("relationship already exists");
+            return;
+        }
+        if (!Class.classMap.containsKey(class1)){
+            System.out.println(class1 + " is not an existing class");
+        }
+        if (!Class.classMap.containsKey(class2)){
+            System.out.println(class2 + " is not an existing class");
+        }
 
         Relationship newRelationship = new Relationship(class1, class2);
 
         relationshipList.add(newRelationship);
     }
-
-
 
     /**
      * adds a relationship to the relationship map
@@ -110,7 +107,7 @@ public class Relationship {
      * @param class2 the second class to add
      * @throws Exception if a class entered doesn't exist
      */
-    public static void removeRelationship(String class1, String class2) throws Exception {
+    public static void removeRelationship(String class1, String class2){
 
         for (Relationship r : relationshipList){
             if (r.classNames.contains(class1)
@@ -120,7 +117,10 @@ public class Relationship {
                 return;
             }
         }
-        throw new Exception("relationship not found");
+        //throw new Exception("relationship not found");
+
+        System.out.println("relationship not found");
+
     }
 
 
@@ -141,14 +141,13 @@ public class Relationship {
         return s.toString();
     }
 
-
     /**
      * renames a class in a relationship
      * @param oldName name to replace
      * @param newName name to replace with
      */
-    public static void renameClassInRelationships(String oldName, String newName) throws Exception {
-        if (!relationshipExists(oldName)) throw new Exception("relationship does not exist");
+    public static void renameClassInRelationships(String oldName, String newName){
+        if (!relationshipExists(oldName)) System.out.println("relationship does not exist");
         for (Relationship r : relationshipList){
             if (r.classNames.contains(oldName)){
                 r.classNames.remove(oldName);
@@ -156,8 +155,6 @@ public class Relationship {
             }
         }
     }
-
-
 
     /**
      * helper method to get the names of the classes in the relationship in an
