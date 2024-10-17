@@ -84,7 +84,7 @@ public class Relationship {
      * @param class2 the second class to add
      */
     public static void addRelationship(String class1, String class2){
-        
+
         if (relationshipExists(class1,class2)){
             System.out.println("relationship already exists");
             return;
@@ -123,14 +123,15 @@ public class Relationship {
 
     }
 
-
     /**
      * takes the list of relationships and returns it as a string
      * @return String - the list of relationships
      */
     public static String listToString() {
         if (relationshipList.isEmpty()) return "";
+
         StringBuilder s = new StringBuilder();
+
         for (Relationship r: relationshipList){
             String[] names = r.getClassNames();
 
