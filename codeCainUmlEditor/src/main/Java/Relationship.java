@@ -111,7 +111,7 @@ public class Relationship {
 
         for (Relationship r : relationshipList){
             if (r.classNames.contains(class1)
-                && r.classNames.contains(class2))
+                    && r.classNames.contains(class2))
             {
                 relationshipList.remove(r);
                 return;
@@ -128,13 +128,13 @@ public class Relationship {
      * takes the list of relationships and returns it as a string
      * @return String - the list of relationships
      */
-    public static String listToString() throws Exception {
+    public static String listToString() {
         if (relationshipList.isEmpty()) return "";
         StringBuilder s = new StringBuilder();
         for (Relationship r: relationshipList){
             String[] names = r.getClassNames();
 
-            if (names.length < 2) throw new Exception("no classes found");
+            if (names.length < 2) System.out.println("There are no clases to print out");
 
             s.append(names[0]).append(" ------- ").append(names[1]).append("\n");
         }
