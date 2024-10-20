@@ -51,22 +51,17 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 String inputCommand = commandInput.getText();
                 if (!inputCommand.trim().isEmpty()) {
-<<<<<<< Updated upstream
 
-=======
                     // Capture the current caret position before appending the command output
                     int helpStartPosition = commandOutput.getDocument().getLength();
 
                     // Execute the command and append the result to the text area
->>>>>>> Stashed changes
                     String output = ">> " + inputCommand + "\n" + executeCommand(inputCommand) + "\n";
                     commandOutput.append(output);
                     commandInput.setText("");
 
-<<<<<<< Updated upstream
 
                     commandOutput.setCaretPosition(commandOutput.getDocument().getLength());
-=======
                     // Check if the entered command is "help"
                     if (inputCommand.equalsIgnoreCase("help")) {
                         // Scroll to the position where the help output starts
@@ -75,7 +70,6 @@ public class GUI {
                         // Scroll to the bottom for all other commands
                         commandOutput.setCaretPosition(commandOutput.getDocument().getLength());
                     }
->>>>>>> Stashed changes
                 }
             }
         });
