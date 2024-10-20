@@ -11,6 +11,7 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.BLACK); // Set background color to black
         frame.add(panel);
         placeComponents(panel);
 
@@ -29,11 +30,15 @@ public class GUI {
         JTextArea commandOutput = new JTextArea();
         commandOutput.setFont(new Font("Monospaced", Font.PLAIN, 14));
         commandOutput.setEditable(false);
+        commandOutput.setBackground(Color.BLACK); // Set background color to black
+        commandOutput.setForeground(Color.WHITE); // Set text color to white
         JScrollPane scrollPane = new JScrollPane(commandOutput);
         panel.add(scrollPane, BorderLayout.CENTER);
 
         // Create a text field to accept user input commands
         JTextField commandInput = new JTextField();
+        commandInput.setBackground(Color.BLACK); // Set background color to black
+        commandInput.setForeground(Color.WHITE); // Set text color to white
         panel.add(commandInput, BorderLayout.SOUTH);
 
         //welcome message
@@ -46,13 +51,31 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 String inputCommand = commandInput.getText();
                 if (!inputCommand.trim().isEmpty()) {
+<<<<<<< Updated upstream
 
+=======
+                    // Capture the current caret position before appending the command output
+                    int helpStartPosition = commandOutput.getDocument().getLength();
+
+                    // Execute the command and append the result to the text area
+>>>>>>> Stashed changes
                     String output = ">> " + inputCommand + "\n" + executeCommand(inputCommand) + "\n";
                     commandOutput.append(output);
                     commandInput.setText("");
 
+<<<<<<< Updated upstream
 
                     commandOutput.setCaretPosition(commandOutput.getDocument().getLength());
+=======
+                    // Check if the entered command is "help"
+                    if (inputCommand.equalsIgnoreCase("help")) {
+                        // Scroll to the position where the help output starts
+                        commandOutput.setCaretPosition(helpStartPosition);
+                    } else {
+                        // Scroll to the bottom for all other commands
+                        commandOutput.setCaretPosition(commandOutput.getDocument().getLength());
+                    }
+>>>>>>> Stashed changes
                 }
             }
         });
