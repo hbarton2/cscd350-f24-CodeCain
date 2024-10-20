@@ -6,16 +6,18 @@ import static org.junit.Assert.*;
 public class relationshiptests {
 
     @Nested
-    class addRelationshipTests {
+    class addRemoveRelationshipTests {
 
         @BeforeAll
         static void setup(){
             Class.addClass("jim");
             Class.addClass("bob");
+            Class.addClass("george");
+            Class.addClass("bill");
         }
 
         @Test
-        void test1(){
+        void test1add(){
             try {
                 Relationship.addRelationship("jim", "bob");
             } catch (Exception e) {
@@ -26,12 +28,49 @@ public class relationshiptests {
         }
 
         @Test
+        void test2add(){
+
+            Relationship.addRelationship("jim", "george");
+            Assertions.assertTrue(Relationship.relationshipExists("jim","george"));
+        }
+
+        @Test
+        void test1remove(){
+            Relationship.addRelationship("jim", "bill");
+            Relationship.removeRelationship("jim", "bill");
+            Assertions.assertFalse(Relationship.relationshipExists("jim", "bill"));
+        }
+
+    }
+
+    @Nested
+    class removeAttachedRelationshipsTests{
+        @BeforeAll
+        static void setup(){
+            Class.addClass("jim");
+            Class.addClass("bob");
+            Class.addClass("george");
+            Class.addClass("bill");
+            Relationship.addRelationship("jim", "bob");
+            Relationship.addRelationship("jim", "george");
+            Relationship.addRelationship("jim", "steve");
+            Relationship.addRelationship("jim", "bill");
+            Relationship.addRelationship("george", "bill");
+        }
+
+        @Test
+        void test1(){
+            Relationship.removeAttachedRelationships("jim");
+            Assertions.assertFalse(Relationship.relationshipExists("jim"));
+        }
+
+        @Test
         void test2(){
-
-                Relationship.addRelationship("jim", "george");
-
+            Relationship.removeAttachedRelationships("bill");
+            Assertions.assertFalse(Relationship.relationshipExists("bill"));
         }
     }
+
 
 
 //    /**
