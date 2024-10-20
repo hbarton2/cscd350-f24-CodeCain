@@ -143,8 +143,9 @@ public class GUI {
                 1. add method 'className' 'methodName' 'parameters' - Adds a unique method to the specified class.
                 2. delete method 'className' 'methodName' - Removes the method from the specified class.
                 3. rename method 'className' 'oldMethodName' 'newMethodName' - Renames a method in the specified class.
-                4. add parameter 'className' 'methodName' 'parameterName' 'parameterType' - Adds a parameter to a method.
-                5. delete parameter 'className' 'methodName' 'parameterName' - Removes a parameter from a method.
+                4. add parameter 'className' 'methodName' 'parameter' - Adds a parameter to a method.
+                5. delete parameter 'className' 'methodName' 'parameter' - Removes a parameter from a method.
+                6. rename parameter 'className' 'methodName' 'oldParameterName' 'newParameterName' - Renames a parameter in a method.
     
                 Save/Load Operations:
                 1. save                                - Saves the current state of the project.
@@ -164,6 +165,9 @@ public class GUI {
                 - add relationship Person Address
                 - add field Person name
                 - add method Person setName String name
+                - add parameter Person setName String name
+                - delete parameter Person setName String name
+                - rename parameter Person setName oldName newName
                 - delete class Person
                 - rename class Person Employee
                 - list classes
@@ -171,9 +175,8 @@ public class GUI {
                 - help
                 - exit
 
-
                 """;
-    
+
         return """
                 +---------------------------------------------------------------+
                 |                                                               |
@@ -194,6 +197,8 @@ public class GUI {
             return addField(tokens[2], tokens[3]);
         } else if (tokens.length >= 5 && tokens[1].equalsIgnoreCase("method")) {
             return addMethod(tokens[2], tokens[3], Arrays.copyOfRange(tokens, 4, tokens.length));
+        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("parameter")) {
+            return addParameter(tokens[2], tokens[3], tokens[4]);
         } else {
             return "Invalid command. Use 'help' for available commands.";
         }
@@ -234,6 +239,13 @@ public class GUI {
         return "Method '" + methodName + "' added to class '" + className + "' with parameters: " + Arrays.toString(parameters) + ".";
     }
 
+    private static String addParameter(String className, String methodName, String parameter) {
+        Methods methods = new Methods();
+        methods.addParameter(className, methodName, parameter);
+        return "Parameter '" + parameter + "' added to method '" + methodName + "' in class '" + className + "'.";
+    }
+
+
 
     private static String handleDeleteCommand(String[] tokens) {
         if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
@@ -244,10 +256,19 @@ public class GUI {
             return deleteField(tokens[2], tokens[3]);
         } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("method")) {
             return deleteMethod(tokens[2], tokens[3]);
+        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("parameter")) {
+            return deleteParameter(tokens[2], tokens[3], tokens[4]);
         } else {
             return "Invalid command. Use 'help' for available commands.";
         }
     }
+
+    private static String deleteParameter(String className, String methodName, String parameter) {
+        Methods methods = new Methods();
+        methods.removeParameter(className, methodName, parameter);
+        return "Parameter '" + parameter + "' removed from method '" + methodName + "' in class '" + className + "'.";
+    }
+
 
     private static String deleteClass(String className) {
         Class.removeClass(className);
