@@ -220,10 +220,20 @@ public class GUI {
     }
 
     private static String addMethod(String className, String methodName, String[] parameters) {
+        // Join the parameters into a single string
+        String parametersString = String.join(",", parameters);
+        return addMethod(className, methodName, parametersString);
+    }
+
+    private static String addMethod(String className, String methodName, String parametersString) {
+        // Split the parameters by commas and trim any whitespace
+        String[] parameters = parametersString.split("\\s*,\\s*");
+
         Methods methods = new Methods();
         methods.addMethod(className, methodName, Arrays.asList(parameters));
         return "Method '" + methodName + "' added to class '" + className + "' with parameters: " + Arrays.toString(parameters) + ".";
     }
+
 
     private static String handleDeleteCommand(String[] tokens) {
         if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
