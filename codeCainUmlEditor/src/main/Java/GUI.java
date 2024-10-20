@@ -122,43 +122,67 @@ public class GUI {
     }
 
     private static String showHelp() {
+        String helpMessage = """
+                Available commands:
+    
+                Class Operations:
+                1. add class 'name'                  - Adds a new class with a unique name.
+                2. delete class 'name'               - Deletes the class with the specified name.
+                3. rename class 'oldName' 'newName'  - Renames the class from 'oldName' to 'newName'.
+    
+                Relationship Operations:
+                1. add relationship 'source' 'destination'   - Adds a relationship between 'source' and 'destination' classes.
+                2. delete relationship 'source' 'destination' - Deletes the relationship between 'source' and 'destination'.
+    
+                Field Operations:
+                1. add field 'className' 'fieldName'  - Adds a unique field to the specified class.
+                2. delete field 'className' 'fieldName' - Removes a field from the specified class.
+                3. rename field 'className' 'oldFieldName' 'newFieldName' - Renames a field in the specified class.
+    
+                Method Operations:
+                1. add method 'className' 'methodName' 'parameters' - Adds a unique method to the specified class.
+                2. delete method 'className' 'methodName' - Removes the method from the specified class.
+                3. rename method 'className' 'oldMethodName' 'newMethodName' - Renames a method in the specified class.
+                4. add parameter 'className' 'methodName' 'parameterName' 'parameterType' - Adds a parameter to a method.
+                5. delete parameter 'className' 'methodName' 'parameterName' - Removes a parameter from a method.
+    
+                Save/Load Operations:
+                1. save                                - Saves the current state of the project.
+                2. load                                - Loads the project state from a file.
+    
+                Listing Operations:
+                1. list classes                        - Lists all the classes in the project.
+                2. list class 'className'              - Lists the contents (fields and methods) of the specified class.
+                3. list relationships                  - Lists all the relationships between classes.
+    
+                Other Commands:
+                1. help                                - Shows this help message.
+                2. exit                                - Exits the application.
+
+                Examples:
+                - add class Person
+                - add relationship Person Address
+                - add field Person name
+                - add method Person setName String name
+                - delete class Person
+                - rename class Person Employee
+                - list classes
+                - list relationships
+                - help
+                - exit
+
+
+                """;
+    
         return """
-            Available commands:
-
-            Class Operations:
-            1. add class 'name'                  - Adds a new class with a unique name.
-            2. delete class 'name'               - Deletes the class with the specified name.
-            3. rename class 'oldName' 'newName'  - Renames the class from 'oldName' to 'newName'.
-
-            Relationship Operations:
-            1. add relationship 'source' 'destination'   - Adds a relationship between 'source' and 'destination' classes.
-            2. delete relationship 'source' 'destination' - Deletes the relationship between 'source' and 'destination'.
-
-            Field Operations:
-            1. add field 'className' 'fieldName'  - Adds a unique field to the specified class.
-            2. delete field 'className' 'fieldName' - Removes a field from the specified class.
-            3. rename field 'className' 'oldFieldName' 'newFieldName' - Renames a field in the specified class.
-
-            Method Operations:
-            1. add method 'className' 'methodName' 'parameters' - Adds a unique method to the specified class.
-            2. delete method 'className' 'methodName' - Removes the method from the specified class.
-            3. rename method 'className' 'oldMethodName' 'newMethodName' - Renames a method in the specified class.
-            4. add parameter 'className' 'methodName' 'parameterName' 'parameterType' - Adds a parameter to a method.
-            5. delete parameter 'className' 'methodName' 'parameterName' - Removes a parameter from a method.
-
-            Save/Load Operations:
-            1. save                                - Saves the current state of the project.
-            2. load                                - Loads the project state from a file.
-
-            Listing Operations:
-            1. list classes                        - Lists all the classes in the project.
-            2. list class 'className'              - Lists the contents (fields and methods) of the specified class.
-            3. list relationships                  - Lists all the relationships between classes.
-
-            Other Commands:
-            1. help                                - Shows this help message.
-            2. exit                                - Exits the application.
-            """;
+                +---------------------------------------------------------------+
+                |                                                               |
+                |  Command Help Menu                                            |
+                |                                                               |
+                +---------------------------------------------------------------+
+                """ + helpMessage + """
+                +---------------------------------------------------------------+
+                """;
     }
 
     private static String handleAddCommand(String[] tokens) {
