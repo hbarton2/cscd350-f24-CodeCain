@@ -1,12 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="cscd350-f24-CodeCain:jar2" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d97d09b8-ce59-4ac2-b037-c5781ec0cb86" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/cscd350_f24_CodeCain_jar2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/cscd350_f24_CodeCain_jar2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/cscd350-f24-CodeCain.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cscd350-f24-CodeCain.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]1/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]1/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM_[Changes]/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]1/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]1/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]2/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]2/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]1/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]1/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Group Roles.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Group Roles.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Class.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Class.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Fields.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Fields.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Methods.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Methods.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Relationship.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Relationship.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/ClassTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/ClassTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/DemoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/DemoTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/TestUML.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/TestUML.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/relationshiptests.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/relationshiptests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +92,7 @@
     "Application.GUI.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "GUI",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Michelle/Documents/School/year 4/CSCD350/projects/cscd350-f24-CodeCain",
@@ -55,13 +101,18 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.keymap",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Michelle\Documents\School\year 4\CSCD350\projects\cscd350-f24-CodeCain" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="GUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="GUI" />

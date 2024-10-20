@@ -2,8 +2,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
+/**
+ * The GUI class represents a command-line-based UML editor with a graphical user interface (GUI)
+ * built using Java Swing components. It provides an interface where users can enter commands
+ * to manipulate UML class models and their relationships through a command line interface.
+ */
 public class GUI {
+
+    /**
+     * The main method is the entry point of the application. It sets up the main JFrame
+     * and initializes the GUI components, including a command input field and a command output area.
+     *
+     * @param args command-line arguments (not used in this application)
+     */
     public static void main(String[] args) {
         // Create the frame
         JFrame frame = new JFrame("UML editor Command Line");
@@ -76,21 +89,40 @@ public class GUI {
     }
 
     /**
-     * Handles the commands
-     * @param command
-     * @return
+     * Processes the user input command, parses it, and performs the appropriate operation.
+     * This method supports various UML operations such as adding classes, deleting classes,
+     * listing classes, and showing help information.
+     *
+     * @param command the input command string entered by the user
+     * @return the result of the command execution as a string to be displayed in the output area
      */
-
     private static String executeCommand(String command) {
-
         String[] tokens = command.split(" ");
-        
+        if (tokens.length == 0) {
+            return "No command entered.";
+        }
 
         String commandName = tokens[0].toLowerCase();
 
+        // Handling different commands by name
         switch (commandName) {
             case "help":
-                return """
+                return showHelp();
+            case "add":
+                return handleAddCommand(tokens);
+            case "delete":
+                return handleDeleteCommand(tokens);
+            case "rename":
+                return handleRenameCommand(tokens);
+            case "list":
+                return handleListCommand(tokens);
+            default:
+                return "Unknown command. Type 'help' to see available commands.";
+        }
+    }
+
+    private static String showHelp() {
+        return """
             Available commands:
 
             Class Operations:
@@ -104,15 +136,15 @@ public class GUI {
 
             Field Operations:
             1. add field 'className' 'fieldName'  - Adds a unique field to the specified class.
-            2. remove field 'className' 'fieldName' - Removes a field from the specified class.
+            2. delete field 'className' 'fieldName' - Removes a field from the specified class.
             3. rename field 'className' 'oldFieldName' 'newFieldName' - Renames a field in the specified class.
 
             Method Operations:
             1. add method 'className' 'methodName' 'parameters' - Adds a unique method to the specified class.
-            2. remove method 'className' 'methodName' - Removes the method from the specified class.
+            2. delete method 'className' 'methodName' - Removes the method from the specified class.
             3. rename method 'className' 'oldMethodName' 'newMethodName' - Renames a method in the specified class.
             4. add parameter 'className' 'methodName' 'parameterName' 'parameterType' - Adds a parameter to a method.
-            5. remove parameter 'className' 'methodName' 'parameterName' - Removes a parameter from a method.
+            5. delete parameter 'className' 'methodName' 'parameterName' - Removes a parameter from a method.
 
             Save/Load Operations:
             1. save                                - Saves the current state of the project.
@@ -127,117 +159,152 @@ public class GUI {
             1. help                                - Shows this help message.
             2. exit                                - Exits the application.
             """;
+    }
 
-            // Other cases for the commands
-            case "add":
-                if (tokens.length > 1) {
-                    switch (tokens[1]) {
-                        case "class":
-                            if (tokens.length == 3) {
-                                String className = tokens[2];
-                                return "Class '" + className + "' added.";
-                            }
-                            return "Usage: add class 'name'";
-                        case "relationship":
-                            if (tokens.length == 4) {
-                                String source = tokens[2];
-                                String destination = tokens[3];
-                                return "Relationship added between '" + source + "' and '" + destination + "'.";
-                            }
-                            return "Usage: add relationship 'source' 'destination'";
-                        case "field":
-                            if (tokens.length == 4) {
-                                String className = tokens[2];
-                                String fieldName = tokens[3];
-                                return "Field '" + fieldName + "' added to class '" + className + "'.";
-                            }
-                            return "Usage: add field 'className' 'fieldName'";
-                        case "method":
-                            if (tokens.length == 5) {
-                                String className = tokens[2];
-                                String methodName = tokens[3];
-                                String parameters = tokens[4];
-                                return "Method '" + methodName + "' with parameters '" + parameters + "' added to class '" + className + "'.";
-                            }
-                            return "Usage: add method 'className' 'methodName' 'parameters'";
-                        case "parameter":
-                            if (tokens.length == 5) {
-                                String className = tokens[2];
-                                String methodName = tokens[3];
-                                String parameterName = tokens[4];
-                                return "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '" + className + "'.";
-                            }
-                            return "Usage: add parameter 'className' 'methodName' 'parameterName' 'parameterType'";
-                        default:
-                            return "Unknown add operation.";
-                    }
-                }
-                return "Usage: add 'type' ...";
-
-            case "delete":
-                if (tokens.length > 1) {
-                    switch (tokens[1]) {
-                        case "class":
-                            if (tokens.length == 3) {
-                                String className = tokens[2];
-                                return "Class '" + className + "' deleted.";
-                            }
-                            return "Usage: delete class 'name'";
-                        case "relationship":
-                            if (tokens.length == 4) {
-                                String source = tokens[2];
-                                String destination = tokens[3];
-                                return "Relationship between '" + source + "' and '" + destination + "' deleted.";
-                            }
-                            return "Usage: delete relationship 'source' 'destination'";
-                        case "field":
-                            if (tokens.length == 4) {
-                                String className = tokens[2];
-                                String fieldName = tokens[3];
-                                return "Field '" + fieldName + "' removed from class '" + className + "'.";
-                            }
-                            return "Usage: remove field 'className' 'fieldName'";
-                        case "method":
-                            if (tokens.length == 4) {
-                                String className = tokens[2];
-                                String methodName = tokens[3];
-                                return "Method '" + methodName + "' removed from class '" + className + "'.";
-                            }
-                            return "Usage: remove method 'className' 'methodName'";
-                        default:
-                            return "Unknown delete operation.";
-                    }
-                }
-                return "Usage: delete 'type' ...";
-
-            case "list":
-                if (tokens.length == 2) {
-                    switch (tokens[1]) {
-                        case "classes":
-                            return "Listing all classes...";
-                        case "relationships":
-                            return "Listing all relationships...";
-                        default:
-                            return "Unknown list operation.";
-                    }
-                } else if (tokens.length == 3 && tokens[1].equals("class")) {
-                    String className = tokens[2];
-                    return "Listing contents of class '" + className + "'...";
-                }
-                return "Usage: list 'classes' | 'relationships' | class 'className'";
-
-            case "save":
-                return "Project state saved.";
-
-            case "load":
-                return "Project state loaded.";
-
-            case "exit":
-                System.exit(0);
-                return "Exiting application...";
-
-            default:
-                return "Unknown command. Type 'help' to see available commands.";
+    private static String handleAddCommand(String[] tokens) {
+        if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
+            return addClass(tokens[2]);
+        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("relationship")) {
+            return addRelationship(tokens[2], tokens[3]);
+        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("field")) {
+            return addField(tokens[2], tokens[3]);
+        } else if (tokens.length >= 5 && tokens[1].equalsIgnoreCase("method")) {
+            return addMethod(tokens[2], tokens[3], Arrays.copyOfRange(tokens, 4, tokens.length));
+        } else {
+            return "Invalid command. Use 'help' for available commands.";
         }
     }
+
+    private static String addClass(String className) {
+        Class.addClass(className);
+        return "Class '" + className + "' added.";
+    }
+
+    private static String addRelationship(String class1, String class2) {
+        try {
+            Relationship.addRelationship(class1, class2);
+            return "Relationship between '" + class1 + "' and '" + class2 + "' added.";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    private static String addField(String className, String fieldName) {
+        Fields fields = new Fields();
+        fields.addField(className, fieldName);
+        return "Field '" + fieldName + "' added to class '" + className + "'.";
+    }
+
+    private static String addMethod(String className, String methodName, String[] parameters) {
+        Methods methods = new Methods();
+        methods.addMethod(className, methodName, Arrays.asList(parameters));
+        return "Method '" + methodName + "' added to class '" + className + "' with parameters: " + Arrays.toString(parameters) + ".";
+    }
+
+    private static String handleDeleteCommand(String[] tokens) {
+        if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
+            return deleteClass(tokens[2]);
+        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("relationship")) {
+            return deleteRelationship(tokens[2], tokens[3]);
+        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("field")) {
+            return deleteField(tokens[2], tokens[3]);
+        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("method")) {
+            return deleteMethod(tokens[2], tokens[3]);
+        } else {
+            return "Invalid command. Use 'help' for available commands.";
+        }
+    }
+
+    private static String deleteClass(String className) {
+        Class.removeClass(className);
+        Relationship.removeAttachedRelationships(className); // Remove any relationships involving this class
+        return "Class '" + className + "' and its relationships deleted.";
+    }
+
+    private static String deleteRelationship(String class1, String class2) {
+        try {
+            Relationship.removeRelationship(class1, class2);
+            return "Relationship between '" + class1 + "' and '" + class2 + "' deleted.";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    private static String deleteField(String className, String fieldName) {
+        Fields fields = new Fields();
+        fields.removeField(className, fieldName);
+        return "Field '" + fieldName + "' removed from class '" + className + "'.";
+    }
+
+    private static String deleteMethod(String className, String methodName) {
+        Methods methods = new Methods();
+        methods.removeMethod(className, methodName);
+        return "Method '" + methodName + "' removed from class '" + className + "'.";
+    }
+
+    private static String handleRenameCommand(String[] tokens) {
+        if (tokens.length == 4 && tokens[1].equalsIgnoreCase("class")) {
+            return renameClass(tokens[2], tokens[3]);
+        } else if (tokens.length == 5 && tokens[1].equalsIgnoreCase("field")) {
+            return renameField(tokens[2], tokens[3], tokens[4]);
+        } else if (tokens.length == 5 && tokens[1].equalsIgnoreCase("method")) {
+            return renameMethod(tokens[2], tokens[3], tokens[4]);
+        } else {
+            return "Invalid command. Use 'help' for available commands.";
+        }
+    }
+
+    private static String renameClass(String oldName, String newName) {
+        Class.renameClass(oldName, newName);
+        return "Class '" + oldName + "' renamed to '" + newName + "'.";
+    }
+
+    private static String renameField(String className, String oldFieldName, String newFieldName) {
+        Fields fields = new Fields();
+        fields.renameField(className, oldFieldName, newFieldName);
+        return "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.";
+    }
+
+    private static String renameMethod(String className, String oldMethodName, String newMethodName) {
+        Methods methods = new Methods();
+        methods.renameMethod(className, oldMethodName, newMethodName);
+        return "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.";
+    }
+
+    private static String handleListCommand(String[] tokens) {
+        if (tokens.length == 2 && tokens[1].equalsIgnoreCase("classes")) {
+            return listClasses();
+        } else if (tokens.length == 2 && tokens[1].equalsIgnoreCase("relationships")) {
+            return listRelationships();
+        } else {
+            return "Invalid command. Use: list classes.";
+        }
+    }
+
+    private static String listClasses() {
+        if (Class.classMap.isEmpty()) {
+            return "No classes available.";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Classes:\n");
+            for (String className : Class.classMap.keySet()) {
+                sb.append("- ").append(className).append("\n");
+            }
+            return sb.toString();
+        }
+    }
+
+    private static String listRelationships() {
+        try {
+            String relationships = Relationship.listToString();
+            if (relationships.isEmpty()) {
+                return "No relationships available.";
+            } else {
+                return "Relationships:\n" + relationships;
+            }
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
 }
