@@ -7,79 +7,63 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 /**
- * The GUI class represents a command-line-based UML editor with a graphical user interface (GUI)
- * built using Java Swing components. It provides an interface where users can enter commands
- * to manipulate UML class models and their relationships through a command line interface.
+ * The GUI class represents a UML editor with a graphical user interface (GUI)
+ * built using Java Swing components. It allows users to interact with UML models
+ * through command-line-style input.
  */
 public class GUI {
 
     /**
-     * The main method is the entry point of the application. It sets up the main JFrame
-     * and initializes the GUI components, including a command input field and a command output area.
+     * The main method initializes the application, setting up the main JFrame and GUI components.
      *
      * @param args command-line arguments (not used in this application)
      */
     public static void main(String[] args) {
-        // Create the frame
         JFrame frame = new JFrame("UML editor Command Line");
         frame.setSize(600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.BLACK); // Set background color to black
+        panel.setBackground(Color.BLACK);
         frame.add(panel);
         placeComponents(panel);
-
         frame.setResizable(true);
         frame.setVisible(true);
     }
 
     /**
-     * placeComponents sets up the GUI and adds the box you can type in as well as a welcome message.
-     * @param panel
+     * Initializes and adds the components to the specified JPanel.
+     *
+     * @param panel the JPanel where the components are placed
      */
     private static void placeComponents(JPanel panel) {
-
         JTextArea commandOutput = new JTextArea();
         commandOutput.setFont(new Font("Monospaced", Font.PLAIN, 14));
         commandOutput.setEditable(false);
-        commandOutput.setBackground(Color.BLACK); // Set background color to black
-        commandOutput.setForeground(Color.WHITE); // Set text color to white
+        commandOutput.setBackground(Color.BLACK);
+        commandOutput.setForeground(Color.WHITE);
         JScrollPane scrollPane = new JScrollPane(commandOutput);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Create a text field to accept user input commands
         JTextField commandInput = new JTextField();
-        commandInput.setBackground(Color.BLACK); // Set background color to black
-        commandInput.setForeground(Color.WHITE); // Set text color to white
+        commandInput.setBackground(Color.BLACK);
+        commandInput.setForeground(Color.WHITE);
         panel.add(commandInput, BorderLayout.SOUTH);
 
-        // Welcome message
-        String welcomeMessage = "CSCD 350 UML Editor\n" + "Group: Code Cain\n" +
-                "Type 'help' to see available commands.\n\n";
+        String welcomeMessage = "CSCD 350 UML Editor\n" + "Group: Code Cain\n" + "Type 'help' to see available commands.\n\n";
         commandOutput.append(welcomeMessage);
 
-        // Action listener for command input
         commandInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String inputCommand = commandInput.getText();
                 if (!inputCommand.trim().isEmpty()) {
-
-                    // Capture the current caret position before appending the command output
                     int helpStartPosition = commandOutput.getDocument().getLength();
-
-                    // Execute the command and append the result to the text area
                     String output = ">> " + inputCommand + "\n" + executeCommand(inputCommand) + "\n";
                     commandOutput.append(output);
                     commandInput.setText("");
-
-                    // Check if the entered command is "help"
                     if (inputCommand.equalsIgnoreCase("help")) {
-                        // Scroll to the position where the help output starts
                         commandOutput.setCaretPosition(helpStartPosition);
                     } else {
-                        // Scroll to the bottom for all other commands
                         commandOutput.setCaretPosition(commandOutput.getDocument().getLength());
                     }
                 }
@@ -88,12 +72,10 @@ public class GUI {
     }
 
     /**
-     * Processes the user input command, parses it, and performs the appropriate operation.
-     * This method supports various UML operations such as adding classes, deleting classes,
-     * listing classes, saving/loading, and showing help information.
+     * Parses and executes the command entered by the user.
      *
-     * @param command the input command string entered by the user
-     * @return the result of the command execution as a string to be displayed in the output area
+     * @param command the input command entered by the user
+     * @return the result of the command execution as a string
      */
     private static String executeCommand(String command) {
         String[] tokens = command.split(" ");
@@ -103,7 +85,6 @@ public class GUI {
 
         String commandName = tokens[0].toLowerCase();
 
-        // Handling different commands by name
         switch (commandName) {
             case "help":
                 return showHelp();
@@ -117,7 +98,6 @@ public class GUI {
                 return handleListCommand(tokens);
             case "exit":
                 System.exit(0);
-
             case "save":
                 if (tokens.length == 2) {
                     return saveDiagram(tokens[1]);
@@ -136,10 +116,10 @@ public class GUI {
     }
 
     /**
-     * Save the current UML diagram to a specified file using SaveManager.
+     * Saves the current UML diagram to a specified file.
      *
-     * @param fileName The name of the file to save the UML diagram
-     * @return Success or error message.
+     * @param fileName the name of the file to save the UML diagram
+     * @return success or error message
      */
     private static String saveDiagram(String fileName) {
         try {
@@ -151,10 +131,10 @@ public class GUI {
     }
 
     /**
-     * Load the UML diagram from a specified file using SaveManager.
+     * Loads a UML diagram from a specified file.
      *
-     * @param fileName The name of the file to load the UML diagram from
-     * @return Success or error message.
+     * @param fileName the name of the file to load the UML diagram from
+     * @return success or error message
      */
     private static String loadDiagram(String fileName) {
         try {
@@ -165,24 +145,29 @@ public class GUI {
         }
     }
 
+    /**
+     * Displays the help message with available commands.
+     *
+     * @return a string containing the help message
+     */
     private static String showHelp() {
         String helpMessage = """
                 Available commands:
-    
+
                 Class Operations:
                 1. add class 'name'                  - Adds a new class with a unique name.
                 2. delete class 'name'               - Deletes the class with the specified name.
                 3. rename class 'oldName' 'newName'  - Renames the class from 'oldName' to 'newName'.
-    
+
                 Relationship Operations:
                 1. add relationship 'source' 'destination'   - Adds a relationship between 'source' and 'destination' classes.
                 2. delete relationship 'source' 'destination' - Deletes the relationship between 'source' and 'destination'.
-    
+
                 Field Operations:
                 1. add field 'className' 'fieldName'  - Adds a unique field to the specified class.
                 2. delete field 'className' 'fieldName' - Removes a field from the specified class.
                 3. rename field 'className' 'oldFieldName' 'newFieldName' - Renames a field in the specified class.
-    
+
                 Method Operations:
                 1. add method 'className' 'methodName' 'parameters' - Adds a unique method to the specified class.
                 2. delete method 'className' 'methodName' - Removes the method from the specified class.
@@ -190,16 +175,16 @@ public class GUI {
                 4. add parameter 'className' 'methodName' 'parameter' - Adds a parameter to a method.
                 5. delete parameter 'className' 'methodName' 'parameter' - Removes a parameter from a method.
                 6. rename parameter 'className' 'methodName' 'oldParameterName' 'newParameterName' - Renames a parameter in a method.
-    
+
                 Save/Load Operations:
                 1. save                                - Saves the current state of the project.
                 2. load                                - Loads the project state from a file.
-    
+
                 Listing Operations:
                 1. list classes                        - Lists all the classes in the project.
                 2. list class 'className'              - Lists the contents (fields and methods) of the specified class.
                 3. list relationships                  - Lists all the relationships between classes.
-    
+
                 Other Commands:
                 1. help                                - Shows this help message.
                 2. exit                                - Exits the application.
@@ -232,6 +217,12 @@ public class GUI {
                 """;
     }
 
+    /**
+     * Handles the 'add' command for adding classes, relationships, fields, methods, or parameters.
+     *
+     * @param tokens an array of command tokens
+     * @return the result of the add operation
+     */
     private static String handleAddCommand(String[] tokens) {
         if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
             return addClass(tokens[2]);
@@ -248,11 +239,24 @@ public class GUI {
         }
     }
 
+    /**
+     * Adds a class to the UML diagram.
+     *
+     * @param className the name of the class to add
+     * @return a message indicating the success of the operation
+     */
     private static String addClass(String className) {
         Class.addClass(className);
         return "Class '" + className + "' added.";
     }
 
+    /**
+     * Adds a relationship between two classes.
+     *
+     * @param class1 the source class of the relationship
+     * @param class2 the destination class of the relationship
+     * @return a message indicating the success of the operation
+     */
     private static String addRelationship(String class1, String class2) {
         try {
             Relationship.addRelationship(class1, class2);
@@ -262,35 +266,67 @@ public class GUI {
         }
     }
 
+    /**
+     * Adds a field to a class.
+     *
+     * @param className the name of the class
+     * @param fieldName the name of the field to add
+     * @return a message indicating the success of the operation
+     */
     private static String addField(String className, String fieldName) {
         Fields fields = new Fields();
         fields.addField(className, fieldName);
         return "Field '" + fieldName + "' added to class '" + className + "'.";
     }
 
+    /**
+     * Adds a method to a class with parameters.
+     *
+     * @param className the name of the class
+     * @param methodName the name of the method
+     * @param parameters the parameters of the method
+     * @return a message indicating the success of the operation
+     */
     private static String addMethod(String className, String methodName, String[] parameters) {
-        // Join the parameters into a single string
         String parametersString = String.join(",", parameters);
         return addMethod(className, methodName, parametersString);
     }
 
+    /**
+     * Adds a method to a class.
+     *
+     * @param className the name of the class
+     * @param methodName the name of the method
+     * @param parametersString the parameters as a comma-separated string
+     * @return a message indicating the success of the operation
+     */
     private static String addMethod(String className, String methodName, String parametersString) {
-        // Split the parameters by commas and trim any whitespace
         String[] parameters = parametersString.split("\\s*,\\s*");
-
         Methods methods = new Methods();
         methods.addMethod(className, methodName, Arrays.asList(parameters));
         return "Method '" + methodName + "' added to class '" + className + "' with parameters: " + Arrays.toString(parameters) + ".";
     }
 
+    /**
+     * Adds a parameter to a method in a class.
+     *
+     * @param className the name of the class
+     * @param methodName the name of the method
+     * @param parameter the parameter to add
+     * @return a message indicating the success of the operation
+     */
     private static String addParameter(String className, String methodName, String parameter) {
         Methods methods = new Methods();
         methods.addParameter(className, methodName, parameter);
         return "Parameter '" + parameter + "' added to method '" + methodName + "' in class '" + className + "'.";
     }
 
-
-
+    /**
+     * Handles the 'delete' command for deleting classes, relationships, fields, methods, or parameters.
+     *
+     * @param tokens an array of command tokens
+     * @return the result of the delete operation
+     */
     private static String handleDeleteCommand(String[] tokens) {
         if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
             return deleteClass(tokens[2]);
@@ -307,19 +343,25 @@ public class GUI {
         }
     }
 
-    private static String deleteParameter(String className, String methodName, String parameter) {
-        Methods methods = new Methods();
-        methods.removeParameter(className, methodName, parameter);
-        return "Parameter '" + parameter + "' removed from method '" + methodName + "' in class '" + className + "'.";
-    }
-
-
+    /**
+     * Deletes a class and its attached relationships.
+     *
+     * @param className the name of the class to delete
+     * @return a message indicating the success of the operation
+     */
     private static String deleteClass(String className) {
         Class.removeClass(className);
-        Relationship.removeAttachedRelationships(className); // Remove any relationships involving this class
+        Relationship.removeAttachedRelationships(className);
         return "Class '" + className + "' and its relationships deleted.";
     }
 
+    /**
+     * Deletes a relationship between two classes.
+     *
+     * @param class1 the source class of the relationship
+     * @param class2 the destination class of the relationship
+     * @return a message indicating the success of the operation
+     */
     private static String deleteRelationship(String class1, String class2) {
         try {
             Relationship.removeRelationship(class1, class2);
@@ -329,18 +371,52 @@ public class GUI {
         }
     }
 
+    /**
+     * Deletes a field from a class.
+     *
+     * @param className the name of the class
+     * @param fieldName the name of the field to delete
+     * @return a message indicating the success of the operation
+     */
     private static String deleteField(String className, String fieldName) {
         Fields fields = new Fields();
         fields.removeField(className, fieldName);
         return "Field '" + fieldName + "' removed from class '" + className + "'.";
     }
 
+    /**
+     * Deletes a method from a class.
+     *
+     * @param className the name of the class
+     * @param methodName the name of the method to delete
+     * @return a message indicating the success of the operation
+     */
     private static String deleteMethod(String className, String methodName) {
         Methods methods = new Methods();
         methods.removeMethod(className, methodName);
         return "Method '" + methodName + "' removed from class '" + className + "'.";
     }
 
+    /**
+     * Deletes a parameter from a method in a class.
+     *
+     * @param className the name of the class
+     * @param methodName the name of the method
+     * @param parameter the parameter to delete
+     * @return a message indicating the success of the operation
+     */
+    private static String deleteParameter(String className, String methodName, String parameter) {
+        Methods methods = new Methods();
+        methods.removeParameter(className, methodName, parameter);
+        return "Parameter '" + parameter + "' removed from method '" + methodName + "' in class '" + className + "'.";
+    }
+
+    /**
+     * Handles the 'rename' command for renaming classes, fields, or methods.
+     *
+     * @param tokens an array of command tokens
+     * @return the result of the rename operation
+     */
     private static String handleRenameCommand(String[] tokens) {
         if (tokens.length == 4 && tokens[1].equalsIgnoreCase("class")) {
             return renameClass(tokens[2], tokens[3]);
@@ -353,23 +429,52 @@ public class GUI {
         }
     }
 
+    /**
+     * Renames a class.
+     *
+     * @param oldName the current name of the class
+     * @param newName the new name for the class
+     * @return a message indicating the success of the operation
+     */
     private static String renameClass(String oldName, String newName) {
         Class.renameClass(oldName, newName);
         return "Class '" + oldName + "' renamed to '" + newName + "'.";
     }
 
+    /**
+     * Renames a field in a class.
+     *
+     * @param className the name of the class
+     * @param oldFieldName the current name of the field
+     * @param newFieldName the new name for the field
+     * @return a message indicating the success of the operation
+     */
     private static String renameField(String className, String oldFieldName, String newFieldName) {
         Fields fields = new Fields();
         fields.renameField(className, oldFieldName, newFieldName);
         return "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.";
     }
 
+    /**
+     * Renames a method in a class.
+     *
+     * @param className the name of the class
+     * @param oldMethodName the current name of the method
+     * @param newMethodName the new name for the method
+     * @return a message indicating the success of the operation
+     */
     private static String renameMethod(String className, String oldMethodName, String newMethodName) {
         Methods methods = new Methods();
         methods.renameMethod(className, oldMethodName, newMethodName);
         return "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.";
     }
 
+    /**
+     * Handles the 'list' command for listing classes or relationships.
+     *
+     * @param tokens an array of command tokens
+     * @return the result of the list operation
+     */
     private static String handleListCommand(String[] tokens) {
         if (tokens.length == 2 && tokens[1].equalsIgnoreCase("classes")) {
             return listClasses();
@@ -380,6 +485,11 @@ public class GUI {
         }
     }
 
+    /**
+     * Lists all classes in the UML diagram.
+     *
+     * @return a string listing all the classes
+     */
     private static String listClasses() {
         if (Class.classMap.isEmpty()) {
             return "No classes available.";
@@ -393,6 +503,11 @@ public class GUI {
         }
     }
 
+    /**
+     * Lists all relationships between classes.
+     *
+     * @return a string listing all the relationships
+     */
     private static String listRelationships() {
         try {
             String relationships = Relationship.listToString();
@@ -405,5 +520,4 @@ public class GUI {
             return "Error: " + e.getMessage();
         }
     }
-
 }
