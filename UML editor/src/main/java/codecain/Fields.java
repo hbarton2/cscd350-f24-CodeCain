@@ -1,5 +1,3 @@
-package codecain;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,11 +20,11 @@ public class Fields {
      * @param fieldName the name of the field being added
      */
     public void addField(String className, String fieldName) {
-        if (validateInputs(className, fieldName)) return;
-        if (classExists(className)) return;
+        if (isInputInvalid(className, fieldName)) return;
+        if (!doesClassExists(className)) return;
         Map<String, String> fields = classFields.get(className);
         if (fields.containsKey(fieldName)) {
-            System.out.println("Error: Field " + fieldName + " already exists in class " + className);
+            System.out.println("Action Canceled: Field " + fieldName + " already exists in class " + className);
         } else {
             fields.put(fieldName, "");
             System.out.println("Field " + fieldName + " added to class " + className);
@@ -40,9 +38,9 @@ public class Fields {
      * @param fieldName the name of the field to be removed
      */
     public void removeField(String className, String fieldName) {
-        if (validateInputs(className, fieldName)) return;
-        if (classExists(className)) return;
-        if (fieldExists(className, fieldName)) return;
+        if (isInputInvalid(className, fieldName)) return;
+        if (!doesClassExists(className)) return;
+        if (!doesFieldExist(className, fieldName)) return;
         classFields.get(className).remove(fieldName);
         System.out.println("Field " + fieldName + " removed from class " + className);
     }
@@ -55,15 +53,15 @@ public class Fields {
      * @param newFieldName the new name for the field
      */
     public void renameField(String className, String oldFieldName, String newFieldName) {
-        if (validateInputs(className, oldFieldName) || newFieldName == null) {
-            System.out.println("Error: Class Name or Old/New Field Name is Null");
+        if (className.isBlank() || oldFieldName.isBlank() || newFieldName.isBlank()) {
+            System.out.println("Action Canceled: One or More Inputs (Class Name, Old Field Name, New Field Name) are empty");
             return;
         }
-        if (classExists(className)) return;
-        if (fieldExists(className, oldFieldName)) return;
+        if (!doesClassExists(className)) return;
+        if (!doesFieldExist(className, oldFieldName)) return;
         Map<String, String> fields = classFields.get(className);
         if (fields.containsKey(newFieldName)) {
-            System.out.println("Error: Field " + newFieldName + " already exists in class " + className);
+            System.out.println("Action Canceled: Field " + newFieldName + " already exists in class " + className);
         } else {
             fields.put(newFieldName, fields.remove(oldFieldName));
             System.out.println("Field " + oldFieldName + " renamed to " + newFieldName + " in class " + className);
@@ -72,32 +70,37 @@ public class Fields {
 
 
     /**
-     * Helper method to validate input.
+     * Helper method to validate Class and Field.
      *
      * @param className the name of the class
      * @param fieldName the name of the field
-     * @return false if both className and fieldName are not null, true otherwise
+     * @return true if both className and fieldName are blank, false otherwise
      */
-    private boolean validateInputs(String className, String fieldName) {
-        if (className == null || fieldName == null) {
-            System.out.println("Error: Class Name or Field Name is Null");
+    private boolean isInputInvalid(String className, String fieldName) {
+        if (className.isBlank()) {
+            System.out.println("Canceled: Input Class Name is Blank");
+            return true;
+        }
+        if (fieldName.isBlank()) {
+            System.out.println("Canceled: Input Field Name is Blank");
             return true;
         }
         return false;
     }
 
+
     /**
      * Helper method to check if a class exists in the map.
      *
      * @param className the name of the class
-     * @return false if the class exists, true otherwise
+     * @return true if the class exists, false otherwise
      */
-    public boolean classExists(String className) {
+    public boolean doesClassExists(String className) {
         if (!Class.classMap.containsKey(className)) {
-            System.out.println("Error: Class " + className + " does not exist");
-            return true;
+            System.out.println("Action Canceled: Class " + className + " does not exist");
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -105,14 +108,13 @@ public class Fields {
      *
      * @param className the name of the class
      * @param fieldName the name of the field
-     * @return false if the field exists, true otherwise
+     * @return true if the field exists, false otherwise
      */
-    private boolean fieldExists(String className, String fieldName) {
-        Map<String, String> fields = classFields.get(className);
-        if (!fields.containsKey(fieldName)) {
-            System.out.println("Error: Field " + fieldName + " does not exist in class " + className);
-            return true;
+    private boolean doesFieldExist(String className, String fieldName) {
+        if (!classFields.get(className).containsKey(fieldName)) {
+            System.out.println("Field " + fieldName + " does not exist in class " + className);
+            return false;
         }
-        return false;
+        return true;
     }
 }

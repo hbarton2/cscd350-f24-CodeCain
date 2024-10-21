@@ -1,5 +1,3 @@
-package codecain;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +22,11 @@ public class Methods {
      * @param parameters a list of parameters for the method
      */
     public void addMethod(String className, String methodName, List<String> parameters) {
-        if (validateInputs(className, methodName)) { return; }
-        if (classExists(className)) {return;}
+        if (isClassNameOrMethodNameInvalid(className, methodName)) { return; }
+        if (!doesClassExists(className)) {return;}
         Map<String, List<String>> methods = classMethods.get(className);
         if (methods.containsKey(methodName)) {
-            System.out.println("Error: Method " + methodName + " already exists in class " + className);
+            System.out.println("Action Canceled: Method " + methodName + " already exists in class " + className);
         } else {
             methods.put(methodName, parameters);
             System.out.println("Method " + methodName + " added to class " + className);
@@ -42,8 +40,8 @@ public class Methods {
      * @param methodName the name of the method to be removed
      */
     public void removeMethod(String className, String methodName) {
-        if (validateInputs(className, methodName)) return;
-        if (methodExists(className, methodName)) return;
+        if (isClassNameOrMethodNameInvalid(className, methodName)) return;
+        if (!doesMethodExist(className, methodName)) return;
         classMethods.get(className).remove(methodName);
         System.out.println("Method " + methodName + " removed from class " + className);
     }
@@ -56,11 +54,14 @@ public class Methods {
      * @param newMethodName the new name for the method
      */
     public void renameMethod(String className, String oldMethodName, String newMethodName) {
-        if (validateInputs(className, oldMethodName) || newMethodName == null) { return; } //Redo this
-        if (classExists(className)) {return;}
+        if (className.isBlank() || oldMethodName.isBlank() || newMethodName.isBlank()) {
+            System.out.println("Action Canceled: One or More Inputs (Class Name, Old Method Name, New Method Name) are empty");
+            return;
+        }
+        if (!doesClassExists(className)) {return;}
         Map<String, List<String>> methods = classMethods.get(className);
         if (methods.containsKey(newMethodName)) {
-            System.out.println("Error: Method " + newMethodName + " already exists in class " + className);
+            System.out.println("Action Canceled: Method " + newMethodName + " already exists in class " + className);
         } else {
             methods.put(newMethodName, methods.remove(oldMethodName));
             System.out.println("Method " + oldMethodName + " renamed to " + newMethodName + " in class " + className);
@@ -75,11 +76,15 @@ public class Methods {
      * @param parameter the parameter to add (e.g., "int param1")
      */
     public void addParameter(String className, String methodName, String parameter) {
-        if (validateInputs(className, methodName) || parameter == null) return;
-        if (methodExists(className, methodName)) return;
-
-        classMethods.get(className).get(methodName).add(parameter);
-        System.out.println("Parameter " + parameter + " added to method " + methodName + " in class " + className);
+        if (isClassNameOrMethodNameOrParameterInvalid(className, methodName, parameter)) return;
+        if (!doesMethodExist(className, methodName)) return;
+        List<String> parameters = classMethods.get(className).get(methodName);
+        if (!parameters.contains(parameter)) {
+            parameters.add(parameter);
+            System.out.println("Parameter " + parameter + " added to method " + methodName + " in class " + className);
+        } else {
+            System.out.println("Action Canceled:Parameter " + parameter + " already exists in method " + methodName);
+        }
     }
 
     /**
@@ -90,11 +95,11 @@ public class Methods {
      * @param parameter the parameter to remove
      */
     public void removeParameter(String className, String methodName, String parameter) {
-        if (validateInputs(className, methodName) || parameter == null) return;
-        if (methodExists(className, methodName)) return;
+        if (isClassNameOrMethodNameOrParameterInvalid(className, methodName, parameter)) return;
+        if (!doesMethodExist(className, methodName)) return;
         List<String> parameters = classMethods.get(className).get(methodName);
         if (!parameters.contains(parameter)) {
-            System.out.println("Error: Parameter " + parameter + " does not exist in method " + methodName);
+            System.out.println("Action Canceled: Parameter " + parameter + " does not exist in method " + methodName);
         } else {
             parameters.remove(parameter);
             System.out.println("Parameter " + parameter + " removed from method " + methodName + " in class " + className);
@@ -109,12 +114,12 @@ public class Methods {
      * @param newParameters the new list of parameters
      */
     public void changeParameters(String className, String methodName, List<String> newParameters) {
-        if (validateInputs(className, methodName) || newParameters == null) { return; }
-        if (classExists(className)) {return;}
+        if (isClassNameOrMethodNameOrParameterInvalid(className, methodName, String.valueOf(newParameters))) return;
+        if (!doesClassExists(className)) {return;}
 
         Map<String, List<String>> methods = classMethods.get(className);
         if (!methods.containsKey(methodName)) {
-            System.out.println("Error: Method " + methodName + " does not exist in class " + className);
+            System.out.println("Action Canceled: Method " + methodName + " does not exist in class " + className);
             return;
         }
         methods.put(methodName, newParameters);
@@ -126,26 +131,46 @@ public class Methods {
      * Helper method to check if a class exists in the map.
      *
      * @param className the name of the class
-     * @return false if the class exists, true otherwise
+     * @return true if the class exists, false otherwise
      */
-    public boolean classExists(String className) {
+    public boolean doesClassExists(String className) {
         if (!Class.classMap.containsKey(className)) {
-            System.out.println("Error: Class " + className + " does not exist");
+            System.out.println("Action Canceled: Class " + className + " does not exist");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Helper method to check if className and methodName are not blank.
+     *
+     * @param className the name of the class
+     * @param methodName the name of the method or parameter
+     * @return true if both values are valid, false otherwise
+     */
+    private boolean isClassNameOrMethodNameInvalid(String className, String methodName) {
+        if (className.isBlank()) {
+            System.out.println("Canceled: Input Class Name is Blank");
+            return true;
+        }
+        if (methodName.isBlank()) {
+            System.out.println("Canceled: Input Method Name is Blank");
             return true;
         }
         return false;
     }
 
     /**
-     * Helper method to check if className and methodName/parameter are not null.
+     * Helper method to check if className and methodName/parameter are not blank.
      *
      * @param className the name of the class
      * @param methodName the name of the method or parameter
-     * @return true if both values are valid, false otherwise
+     * @return true if all values are valid, false otherwise
      */
-    private boolean validateInputs(String className, String methodName) {
-        if (className == null || methodName == null) {
-            System.out.println("Error: Class Name or Method Name is null");
+    private boolean isClassNameOrMethodNameOrParameterInvalid(String className, String methodName, String parameter) {
+        isClassNameOrMethodNameInvalid(className, methodName);
+        if (parameter.isBlank()) {
+            System.out.println("Canceled: Inputted Parameter is Blank");
             return true;
         }
         return false;
@@ -159,7 +184,7 @@ public class Methods {
      * @return the methods map for the class, or null if the class does not exist
      */
     private Map<String, List<String>> getMethodsForClass(String className) {
-        if (classExists(className)) {
+        if (doesClassExists(className)) {
             return null;
         }
         return classMethods.get(className);
@@ -170,15 +195,14 @@ public class Methods {
      *
      * @param className the name of the class
      * @param methodName the name of the method
-     * @return false if the method exists, true otherwise
+     * @return true if the method exists, false otherwise
      */
-    private boolean methodExists(String className, String methodName) {
-        Map<String, List<String>> methods = getMethodsForClass(className);
-        if (methods == null || !methods.containsKey(methodName)) {
-            System.out.println("Error: Method " + methodName + " does not exist in class " + className);
-            return true;
+    private boolean doesMethodExist(String className, String methodName) {
+        if (!classMethods.get(className).containsKey(methodName)) {
+            System.out.println("Method " + methodName + " does not exist in class " + className);
+            return false;
         }
-        return false;
+        return true;
     }
 
 }

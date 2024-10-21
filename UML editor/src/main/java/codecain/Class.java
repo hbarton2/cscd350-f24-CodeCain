@@ -1,5 +1,3 @@
-package codecain;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +40,12 @@ public class Class {
      * @param className the name of the class to be added
      */
     public static void addClass(String className) {
+        if (className.isBlank()) {
+            System.out.println("Canceled: Inputted Class Name is Blank");
+            return;
+        }
         if (classMap.containsKey(className)) {
-            System.out.println("Error: Class " + className + " already exists");
+            System.out.println("Class " + className + " already exists");
         } else {
             classMap.put(className, new Class(className));
             Methods.classMethods.put(className, new HashMap<>());
@@ -59,8 +61,12 @@ public class Class {
      * @param className the name of the class to be removed
      */
     public static void removeClass(String className) {
+        if (className.isBlank()) {
+            System.out.println("Canceled: Inputted Class Name is Blank");
+            return;
+        }
         if (!classMap.containsKey(className)) {
-            System.out.println("Error: Class " + className + " does not exist");
+            System.out.println("Class " + className + " does not exist");
         } else {
             classMap.remove(className);
             Methods.classMethods.remove(className);
@@ -77,10 +83,18 @@ public class Class {
      * @param newClassName the new name for the class
      */
     public static void renameClass(String oldClassName, String newClassName) {
+        if (oldClassName.isBlank()) {
+            System.out.println("Canceled: Inputted Old Class Name is Blank");
+            return;
+        }
+        if (newClassName.isBlank()) {
+            System.out.println("Canceled: Inputted New Class Name is Blank");
+            return;
+        }
         if (!classMap.containsKey(oldClassName)) {
-            System.out.println("Error: Class " + oldClassName + " does not exist");
+            System.out.println("Class " + oldClassName + " does not exist");
         } else if (classMap.containsKey(newClassName)) {
-            System.out.println("Error: Class " + newClassName + " already exists");
+            System.out.println("Class " + newClassName + " already exists");
         } else {
             Class classObj = classMap.remove(oldClassName);
             classObj.className = newClassName;
