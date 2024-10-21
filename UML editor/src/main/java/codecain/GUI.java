@@ -115,6 +115,9 @@ public class GUI {
                 return handleRenameCommand(tokens);
             case "list":
                 return handleListCommand(tokens);
+            case "exit":
+                System.exit(0);
+
             case "save":
                 if (tokens.length == 2) {
                     return saveDiagram(tokens[1]);
