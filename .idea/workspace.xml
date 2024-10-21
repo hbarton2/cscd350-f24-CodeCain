@@ -49,6 +49,7 @@
       <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Methods.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Methods.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Relationship.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Relationship.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/SaveManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/SaveManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/test/java/UMLClassTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/test/java/UMLClassTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" afterDir="false" />

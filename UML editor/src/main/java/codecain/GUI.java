@@ -31,7 +31,6 @@ public class GUI {
         placeComponents(panel);
 
         frame.setResizable(true);
-
         frame.setVisible(true);
     }
 
@@ -39,7 +38,6 @@ public class GUI {
      * placeComponents sets up the GUI and adds the box you can type in as well as a welcome message.
      * @param panel
      */
-
     private static void placeComponents(JPanel panel) {
 
         JTextArea commandOutput = new JTextArea();
@@ -56,11 +54,12 @@ public class GUI {
         commandInput.setForeground(Color.WHITE); // Set text color to white
         panel.add(commandInput, BorderLayout.SOUTH);
 
-        //welcome message
+        // Welcome message
         String welcomeMessage = "CSCD 350 UML Editor\n" + "Group: Code Cain\n" +
                 "Type 'help' to see available commands.\n\n";
         commandOutput.append(welcomeMessage);
 
+        // Action listener for command input
         commandInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -75,8 +74,6 @@ public class GUI {
                     commandOutput.append(output);
                     commandInput.setText("");
 
-
-                    commandOutput.setCaretPosition(commandOutput.getDocument().getLength());
                     // Check if the entered command is "help"
                     if (inputCommand.equalsIgnoreCase("help")) {
                         // Scroll to the position where the help output starts
@@ -93,7 +90,7 @@ public class GUI {
     /**
      * Processes the user input command, parses it, and performs the appropriate operation.
      * This method supports various UML operations such as adding classes, deleting classes,
-     * listing classes, and showing help information.
+     * listing classes, saving/loading, and showing help information.
      *
      * @param command the input command string entered by the user
      * @return the result of the command execution as a string to be displayed in the output area
@@ -118,8 +115,50 @@ public class GUI {
                 return handleRenameCommand(tokens);
             case "list":
                 return handleListCommand(tokens);
+            case "save":
+                if (tokens.length == 2) {
+                    return saveDiagram(tokens[1]);
+                } else {
+                    return "Usage: save <filename>";
+                }
+            case "load":
+                if (tokens.length == 2) {
+                    return loadDiagram(tokens[1]);
+                } else {
+                    return "Usage: load <filename>";
+                }
             default:
                 return "Unknown command. Type 'help' to see available commands.";
+        }
+    }
+
+    /**
+     * Save the current UML diagram to a specified file using SaveManager.
+     *
+     * @param fileName The name of the file to save the UML diagram
+     * @return Success or error message.
+     */
+    private static String saveDiagram(String fileName) {
+        try {
+            SaveManager.saveToJSON(fileName);
+            return "UML diagram saved to " + fileName;
+        } catch (Exception e) {
+            return "Error saving UML diagram: " + e.getMessage();
+        }
+    }
+
+    /**
+     * Load the UML diagram from a specified file using SaveManager.
+     *
+     * @param fileName The name of the file to load the UML diagram from
+     * @return Success or error message.
+     */
+    private static String loadDiagram(String fileName) {
+        try {
+            SaveManager.loadFromJSON(fileName);
+            return "UML diagram loaded from " + fileName;
+        } catch (Exception e) {
+            return "Error loading UML diagram: " + e.getMessage();
         }
     }
 
