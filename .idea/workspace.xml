@@ -41,13 +41,14 @@
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Class.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Class.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Fields.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Fields.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Methods.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Methods.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Relationship.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Relationship.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/SaveManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/SaveManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/ClassTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/ClassTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/DemoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/DemoTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/TestUML.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/TestUML.java" afterDir="false" />
@@ -93,7 +94,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "GUI",
+    "git-widget-placeholder": "saveloadactual",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Michelle/Documents/School/year 4/CSCD350/projects/cscd350-f24-CodeCain",
     "node.js.detected.package.eslint": "true",
@@ -101,7 +102,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.keymap",
