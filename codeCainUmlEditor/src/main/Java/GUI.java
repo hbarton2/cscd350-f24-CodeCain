@@ -205,7 +205,7 @@ public class GUI {
     }
 
     private static String addClass(String className) {
-        Class.addClass(className);
+        UMLClass.addClass(className);
         return "Class '" + className + "' added.";
     }
 
@@ -219,7 +219,7 @@ public class GUI {
     }
 
     private static String addField(String className, String fieldName) {
-        Fields fields = new Fields();
+        UMLFields fields = new UMLFields();
         fields.addField(className, fieldName);
         return "Field '" + fieldName + "' added to class '" + className + "'.";
     }
@@ -234,13 +234,13 @@ public class GUI {
         // Split the parameters by commas and trim any whitespace
         String[] parameters = parametersString.split("\\s*,\\s*");
 
-        Methods methods = new Methods();
+        UMLMethods methods = new UMLMethods();
         methods.addMethod(className, methodName, Arrays.asList(parameters));
         return "Method '" + methodName + "' added to class '" + className + "' with parameters: " + Arrays.toString(parameters) + ".";
     }
 
     private static String addParameter(String className, String methodName, String parameter) {
-        Methods methods = new Methods();
+        UMLMethods methods = new UMLMethods();
         methods.addParameter(className, methodName, parameter);
         return "Parameter '" + parameter + "' added to method '" + methodName + "' in class '" + className + "'.";
     }
@@ -264,14 +264,14 @@ public class GUI {
     }
 
     private static String deleteParameter(String className, String methodName, String parameter) {
-        Methods methods = new Methods();
+        UMLMethods methods = new UMLMethods();
         methods.removeParameter(className, methodName, parameter);
         return "Parameter '" + parameter + "' removed from method '" + methodName + "' in class '" + className + "'.";
     }
 
 
     private static String deleteClass(String className) {
-        Class.removeClass(className);
+        UMLClass.removeClass(className);
         Relationship.removeAttachedRelationships(className); // Remove any relationships involving this class
         return "Class '" + className + "' and its relationships deleted.";
     }
@@ -286,13 +286,13 @@ public class GUI {
     }
 
     private static String deleteField(String className, String fieldName) {
-        Fields fields = new Fields();
+        UMLFields fields = new UMLFields();
         fields.removeField(className, fieldName);
         return "Field '" + fieldName + "' removed from class '" + className + "'.";
     }
 
     private static String deleteMethod(String className, String methodName) {
-        Methods methods = new Methods();
+        UMLMethods methods = new UMLMethods();
         methods.removeMethod(className, methodName);
         return "Method '" + methodName + "' removed from class '" + className + "'.";
     }
@@ -310,18 +310,18 @@ public class GUI {
     }
 
     private static String renameClass(String oldName, String newName) {
-        Class.renameClass(oldName, newName);
+        UMLClass.renameClass(oldName, newName);
         return "Class '" + oldName + "' renamed to '" + newName + "'.";
     }
 
     private static String renameField(String className, String oldFieldName, String newFieldName) {
-        Fields fields = new Fields();
+        UMLFields fields = new UMLFields();
         fields.renameField(className, oldFieldName, newFieldName);
         return "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.";
     }
 
     private static String renameMethod(String className, String oldMethodName, String newMethodName) {
-        Methods methods = new Methods();
+        UMLMethods methods = new UMLMethods();
         methods.renameMethod(className, oldMethodName, newMethodName);
         return "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.";
     }
@@ -337,12 +337,12 @@ public class GUI {
     }
 
     private static String listClasses() {
-        if (Class.classMap.isEmpty()) {
+        if (UMLClass.classMap.isEmpty()) {
             return "No classes available.";
         } else {
             StringBuilder sb = new StringBuilder();
             sb.append("Classes:\n");
-            for (String className : Class.classMap.keySet()) {
+            for (String className : UMLClass.classMap.keySet()) {
                 sb.append("- ").append(className).append("\n");
             }
             return sb.toString();

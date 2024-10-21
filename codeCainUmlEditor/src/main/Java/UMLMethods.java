@@ -7,7 +7,7 @@ import java.util.Map;
  * This class manages methods within classes in a UML diagram.
  * Each class can have multiple methods, each with a list of parameters.
  */
-public class Methods {
+public class UMLMethods {
 
     /**
      * Stores methods for each class.
@@ -128,7 +128,7 @@ public class Methods {
      * @return false if the class exists, true otherwise
      */
     public boolean classExists(String className) {
-        if (!Class.classMap.containsKey(className)) {
+        if (!UMLClass.classMap.containsKey(className)) {
             System.out.println("Error: Class " + className + " does not exist");
             return true;
         }

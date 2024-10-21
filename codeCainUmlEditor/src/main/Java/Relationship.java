@@ -74,8 +74,8 @@ public class Relationship {
      */
     private static boolean entryIsValid(String class1, String class2){
         return !relationshipExists(class1,class2)
-                && Class.classMap.containsKey(class1)
-                && Class.classMap.containsKey(class2);
+                && UMLClass.classMap.containsKey(class1)
+                && UMLClass.classMap.containsKey(class2);
     }
 
     /**
@@ -91,11 +91,11 @@ public class Relationship {
             System.out.println("relationship already exists");
             return false;
         }
-        if (!Class.classMap.containsKey(class1)){
+        if (!UMLClass.classMap.containsKey(class1)){
             System.out.println(class1 + " is not an existing class");
             return false;
         }
-        if (!Class.classMap.containsKey(class2)){
+        if (!UMLClass.classMap.containsKey(class2)){
             System.out.println(class2 + " is not an existing class");
             return false;
         }
