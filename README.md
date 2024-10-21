@@ -7,5 +7,6 @@ you can find it here: https://www.java.com/en/download/.
 
 
 To start up the program:
-1. Run the GUI class to start the program. And make sure you enable Maven to run the program.
+1. Run the GUI class to start the program. And make sure you enable Maven to run the program by right clicking on
+   pom.xml and add the project to maven.
 2. Use help menu to get started with the program.
