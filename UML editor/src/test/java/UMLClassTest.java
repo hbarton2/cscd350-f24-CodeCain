@@ -134,7 +134,7 @@ public class UMLClassTest {
         Class.addClass("TestClass1");
         methodsManager.addMethod("TestClass1", "method1", new ArrayList<>(Arrays.asList("int param1")));
         methodsManager.addParameter("TestClass1", "method1", "String param2");
-        List<String> parameters = Methods.classMethods.get("TestClass1").get("method1");
+        List<Object> parameters = Methods.classMethods.get("TestClass1").get("method1");
         assertTrue(parameters.contains("String param2"), "Parameter should be added to method");
     }
 
@@ -145,7 +145,7 @@ public class UMLClassTest {
         methodsManager.addMethod("TestClass1", "method1", new ArrayList<>(Arrays.asList("int param1")));
         methodsManager.addParameter("TestClass1", "method1", "String param2");
         methodsManager.removeParameter("TestClass1", "method1", "String param2");
-        List<String> parameters = Methods.classMethods.get("TestClass1").get("method1");
+        List<Object> parameters = Methods.classMethods.get("TestClass1").get("method1");
         assertFalse(parameters.contains("String param2"), "Parameter should be removed from method");
     }
 
@@ -155,7 +155,7 @@ public class UMLClassTest {
         Class.addClass("TestClass1");
         methodsManager.addMethod("TestClass1", "method1", Arrays.asList("int param1"));
         methodsManager.changeParameters("TestClass1", "method1", Arrays.asList("String newParam"));
-        List<String> parameters = Methods.classMethods.get("TestClass1").get("method1");
+        List<Object> parameters = Methods.classMethods.get("TestClass1").get("method1");
         assertEquals(1, parameters.size(), "Parameters should be replaced");
         assertTrue(parameters.contains("String newParam"), "New parameter should be set");
 
