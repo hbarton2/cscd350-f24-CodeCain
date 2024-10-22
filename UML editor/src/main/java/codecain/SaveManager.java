@@ -44,9 +44,9 @@ public class SaveManager {
             Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
 
             // Restore the classes, fields, and methods
-            Class.classMap = (Map<String, Class>) umlData.get("classes");
-            Fields.classFields = (Map<String, Map<String, String>>) umlData.get("fields");
-            Methods.classMethods = (Map<String, Map<String, java.util.List<String>>>) umlData.get("methods");
+            Class.classMap = (Map<Object, Class>) umlData.get("classes");
+            Fields.classFields = (Map<Object, Map<Object, Object>>) umlData.get("fields");
+            Methods.classMethods = (Map<Object, Map<Object, java.util.List<Object>>>) umlData.get("methods");
 
             System.out.println("UML diagram loaded successfully from JSON.");
         } catch (IOException e) {

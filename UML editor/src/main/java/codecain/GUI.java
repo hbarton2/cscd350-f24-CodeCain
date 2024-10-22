@@ -496,7 +496,7 @@ public class GUI {
         } else {
             StringBuilder sb = new StringBuilder();
             sb.append("Classes:\n");
-            for (String className : Class.classMap.keySet()) {
+            for (Object className : Class.classMap.keySet()) {
                 sb.append("- ").append(className).append("\n");
             }
             return sb.toString();
