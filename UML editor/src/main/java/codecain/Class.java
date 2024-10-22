@@ -9,14 +9,14 @@ import java.util.Map;
  * Each class is identified by its name, and all classes are stored in a shared static map.
  */
 public class Class {
-    private String className;
+    private Object className;
 
     /**
      * Constructs a new Class with the specified name.
      *
      * @param className the name of the class
      */
-    public Class(String className) {
+    public Class(Object className) {
         this.className = className;
     }
 
@@ -25,7 +25,7 @@ public class Class {
      *
      * @return the class name
      */
-    public String getClassName() {
+    public Object getClassName() {
         return this.className;
     }
 
@@ -33,7 +33,7 @@ public class Class {
      * A static map that stores all classes by their name.
      * The key is the class name, and the value is the corresponding Class object.
      */
-    public static Map<String, Class> classMap = new HashMap<>();
+    public static Map<Object, Class> classMap = new HashMap<>();
 
     /**
      * Adds a class with the specified name to the classMap.
@@ -41,8 +41,8 @@ public class Class {
      *
      * @param className the name of the class to be added
      */
-    public static void addClass(String className) {
-        if (className.isBlank()) {
+    public static void addClass(Object className) {
+        if (className == null || className.toString().isBlank()) {
             System.out.println("Canceled: Inputted Class Name is Blank");
             return;
         }
@@ -62,8 +62,8 @@ public class Class {
      *
      * @param className the name of the class to be removed
      */
-    public static void removeClass(String className) {
-        if (className.isBlank()) {
+    public static void removeClass(Object className) {
+        if (className == null || className.toString().isBlank()) {
             System.out.println("Canceled: Inputted Class Name is Blank");
             return;
         }
@@ -84,12 +84,12 @@ public class Class {
      * @param oldClassName the current name of the class to be renamed
      * @param newClassName the new name for the class
      */
-    public static void renameClass(String oldClassName, String newClassName) {
-        if (oldClassName.isBlank()) {
+    public static void renameClass(Object oldClassName, Object newClassName) {
+        if (oldClassName == null || oldClassName.toString().isBlank()) {
             System.out.println("Canceled: Inputted Old Class Name is Blank");
             return;
         }
-        if (newClassName.isBlank()) {
+        if (newClassName == null || newClassName.toString().isBlank()) {
             System.out.println("Canceled: Inputted New Class Name is Blank");
             return;
         }
@@ -101,9 +101,9 @@ public class Class {
             Class classObj = classMap.remove(oldClassName);
             classObj.className = newClassName;
             classMap.put(newClassName, classObj);
-            Map<String, List<String>> methods = Methods.classMethods.remove(oldClassName);
+            Map<Object, List<Object>> methods = Methods.classMethods.remove(oldClassName);
             Methods.classMethods.put(newClassName, methods);
-            Map<String, String> fields = Fields.classFields.remove(oldClassName);
+            Map<Object, Object> fields = Fields.classFields.remove(oldClassName);
             Fields.classFields.put(newClassName, fields);
             System.out.println("Class " + oldClassName + " renamed to " + newClassName);
         }
