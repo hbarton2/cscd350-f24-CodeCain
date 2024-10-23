@@ -8,7 +8,7 @@ import java.util.Map;
  * Represents a UML class and provides methods for managing a collection of classes.
  * Each class is identified by its name, and all classes are stored in a shared static map.
  */
-public class Class {
+public class UMLClass {
     private Object className;
 
     /**
@@ -16,7 +16,7 @@ public class Class {
      *
      * @param className the name of the class
      */
-    public Class(Object className) {
+    public UMLClass(Object className) {
         this.className = className;
     }
 
@@ -33,7 +33,7 @@ public class Class {
      * A static map that stores all classes by their name.
      * The key is the class name, and the value is the corresponding Class object.
      */
-    public static Map<Object, Class> classMap = new HashMap<>();
+    public static Map<Object, UMLClass> classMap = new HashMap<>();
 
     /**
      * Adds a class with the specified name to the classMap.
@@ -49,9 +49,9 @@ public class Class {
         if (classMap.containsKey(className)) {
             System.out.println("Class " + className + " already exists");
         } else {
-            classMap.put(className, new Class(className));
-            Methods.classMethods.put(className, new HashMap<>());
-            Fields.classFields.put(className, new HashMap<>());
+            classMap.put(className, new UMLClass(className));
+            UMLMethods.classMethods.put(className, new HashMap<>());
+            UMLFields.classFields.put(className, new HashMap<>());
             System.out.println("Class " + className + " added");
         }
     }
@@ -71,8 +71,8 @@ public class Class {
             System.out.println("Class " + className + " does not exist");
         } else {
             classMap.remove(className);
-            Methods.classMethods.remove(className);
-            Fields.classFields.remove(className);
+            UMLMethods.classMethods.remove(className);
+            UMLFields.classFields.remove(className);
             System.out.println("Class " + className + " removed");
         }
     }
@@ -98,13 +98,13 @@ public class Class {
         } else if (classMap.containsKey(newClassName)) {
             System.out.println("Class " + newClassName + " already exists");
         } else {
-            Class classObj = classMap.remove(oldClassName);
+            UMLClass classObj = classMap.remove(oldClassName);
             classObj.className = newClassName;
             classMap.put(newClassName, classObj);
-            Map<Object, List<Object>> methods = Methods.classMethods.remove(oldClassName);
-            Methods.classMethods.put(newClassName, methods);
-            Map<Object, Object> fields = Fields.classFields.remove(oldClassName);
-            Fields.classFields.put(newClassName, fields);
+            Map<Object, List<Object>> methods = UMLMethods.classMethods.remove(oldClassName);
+            UMLMethods.classMethods.put(newClassName, methods);
+            Map<Object, Object> fields = UMLFields.classFields.remove(oldClassName);
+            UMLFields.classFields.put(newClassName, fields);
             System.out.println("Class " + oldClassName + " renamed to " + newClassName);
         }
     }

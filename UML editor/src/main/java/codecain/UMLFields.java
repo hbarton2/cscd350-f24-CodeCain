@@ -7,7 +7,7 @@ import java.util.Map;
  * This class manages fields within classes in a UML diagram.
  * Each class can have multiple fields with unique names.
  */
-public class Fields {
+public class UMLFields {
 
     /**
      * Stores fields for each class.
@@ -94,7 +94,7 @@ public class Fields {
      * @return true if the class exists, false otherwise
      */
     public boolean doesClassExists(Object className) {
-        if (!Class.classMap.containsKey(className)) {
+        if (!UMLClass.classMap.containsKey(className)) {
             System.out.println("Action Canceled: Class " + className + " does not exist");
             return false;
         }
@@ -109,10 +109,7 @@ public class Fields {
      * @return true if the field exists, false otherwise
      */
     private boolean doesFieldExist(Object className, Object fieldName) {
-        if (!doesClassExists(className)) {
-            return false;  // Class doesn't exist, no need to check fields
-        }
-
+        if (!doesClassExists(className)) return false;
         Map<Object, Object> fields = classFields.get(className);
         if (fields == null || !fields.containsKey(fieldName)) {
             System.out.println("Field " + fieldName + " does not exist in class " + className);
