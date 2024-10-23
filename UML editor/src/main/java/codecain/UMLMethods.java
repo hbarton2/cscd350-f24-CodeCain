@@ -206,4 +206,20 @@ public class UMLMethods {
         return true;
     }
 
+    /**
+     * Lists all methods for a given class.
+     *
+     * @param className the name of the class for which the methods are listed
+     */
+    public static void listMethodsForClass(Object className) {
+        Map<Object, List<Object>> methods = classMethods.get(className);
+        if (methods != null && !methods.isEmpty()) {
+            System.out.println("Methods:");
+            for (Map.Entry<Object, List<Object>> methodEntry : methods.entrySet()) {
+                System.out.println("Method: " + methodEntry.getKey() + " with parameters: " + methodEntry.getValue());
+            }
+        } else {
+            System.out.println("No methods available.");
+        }
+    }
 }

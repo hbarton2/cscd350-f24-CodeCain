@@ -108,4 +108,18 @@ public class UMLClass {
             System.out.println("Class " + oldClassName + " renamed to " + newClassName);
         }
     }
+
+    /**
+     * Lists all classes and delegates the task of listing fields and methods
+     * to their respective classes.
+     */
+    public static void listClasses() {
+        for (Map.Entry<Object, UMLClass> entry : classMap.entrySet()) {
+            Object className = entry.getKey();
+            System.out.println("Class: " + className);
+            UMLMethods.listMethodsForClass(className);
+            UMLFields.listFieldsForClass(className);
+            System.out.println();
+        }
+    }
 }

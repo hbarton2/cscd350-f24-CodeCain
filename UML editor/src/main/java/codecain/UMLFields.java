@@ -118,5 +118,20 @@ public class UMLFields {
         return true;
     }
 
-
+    /**
+     * Lists all fields for a given class.
+     *
+     * @param className the name of the class for which the fields are listed
+     */
+    public static void listFieldsForClass(Object className) {
+        Map<Object, Object> fields = classFields.get(className);
+        if (fields != null && !fields.isEmpty()) {
+            System.out.println("Fields:");
+            for (Map.Entry<Object, Object> fieldEntry : fields.entrySet()) {
+                System.out.println("Field: " + fieldEntry.getKey());
+            }
+        } else {
+            System.out.println("No fields available.");
+        }
+    }
 }

@@ -1,4 +1,3 @@
-package java;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -160,5 +159,16 @@ public class UMLClassTest {
         assertEquals(1, parameters.size(), "Parameters should be replaced");
         assertTrue(parameters.contains("String newParam"), "New parameter should be set");
 
+    }
+
+    @Test
+    public void testListClassesWithDetails() {
+        UMLClass.addClass("TestClass1");
+        fieldsManager.addField("TestClass1", "field1");
+        methodsManager.addMethod("TestClass1", "method1", Arrays.asList("int param1"));
+        UMLClass.addClass("TestClass2");
+        fieldsManager.addField("TestClass2", "int 5");
+        methodsManager.addMethod("TestClass2", "method2", Arrays.asList("String param2"));
+        UMLClass.listClasses();
     }
 }
