@@ -21,9 +21,9 @@ public class SaveManager {
             Map<String, Object> umlData = new HashMap<>();
 
             // Save all UML classes, fields, and methods
-            umlData.put("classes", Class.classMap);
-            umlData.put("fields", Fields.classFields);
-            umlData.put("methods", Methods.classMethods);
+            umlData.put("classes", UMLClass.classMap);
+            umlData.put("fields", UMLFields.classFields);
+            umlData.put("methods", UMLMethods.classMethods);
 
             // Write the UML diagram data to the specified JSON file
             objectMapper.writeValue(new File(filePath), umlData);
@@ -44,9 +44,9 @@ public class SaveManager {
             Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
 
             // Restore the classes, fields, and methods
-            Class.classMap = (Map<String, Class>) umlData.get("classes");
-            Fields.classFields = (Map<String, Map<String, String>>) umlData.get("fields");
-            Methods.classMethods = (Map<String, Map<String, java.util.List<String>>>) umlData.get("methods");
+            UMLClass.classMap = (Map<Object, UMLClass>) umlData.get("classes");
+            UMLFields.classFields = (Map<Object, Map<Object, Object>>) umlData.get("fields");
+            UMLMethods.classMethods = (Map<Object, Map<Object, java.util.List<Object>>>) umlData.get("methods");
 
             System.out.println("UML diagram loaded successfully from JSON.");
         } catch (IOException e) {
