@@ -1,14 +1,20 @@
 package codecain;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SaveManager {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper()
+            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
     /**
      * Saves the current UML diagram, including classes, fields, and methods, into a JSON file.
@@ -20,10 +26,11 @@ public class SaveManager {
             // Create a map to hold all components of the UML diagram
             Map<String, Object> umlData = new HashMap<>();
 
-            // Save all UML classes, fields, and methods
+            // Save all UML classes, fields, methods, and relationships
             umlData.put("classes", UMLClass.classMap);
             umlData.put("fields", UMLFields.classFields);
             umlData.put("methods", UMLMethods.classMethods);
+            umlData.put("relationships", Relationship.relationshipList);
 
             // Write the UML diagram data to the specified JSON file
             objectMapper.writeValue(new File(filePath), umlData);
@@ -46,7 +53,13 @@ public class SaveManager {
             // Restore the classes, fields, and methods
             UMLClass.classMap = (Map<Object, UMLClass>) umlData.get("classes");
             UMLFields.classFields = (Map<Object, Map<Object, Object>>) umlData.get("fields");
-            UMLMethods.classMethods = (Map<Object, Map<Object, java.util.List<Object>>>) umlData.get("methods");
+            UMLMethods.classMethods = (Map<Object, Map<Object, List<Object>>>) umlData.get("methods");
+
+            // Deserialize relationships using TypeReference
+            List<Relationship> relationships = objectMapper.convertValue(
+                    umlData.get("relationships"), new TypeReference<List<Relationship>>() {}
+            );
+            Relationship.relationshipList = new ArrayList<>(relationships);
 
             System.out.println("UML diagram loaded successfully from JSON.");
         } catch (IOException e) {
