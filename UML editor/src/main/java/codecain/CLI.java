@@ -100,21 +100,27 @@ public class CLI {
             case "exit":
                 System.exit(0);
             case "save":
-                if (tokens.length == 2) {
-                    return saveDiagram(tokens[1]);
-                } else {
-                    return "Usage: save <filename>";
-                }
+                return handleSaveLoadCommand(tokens, "save");
             case "load":
-                if (tokens.length == 2) {
-                    return loadDiagram(tokens[1]);
-                } else {
-                    return "Usage: load <filename>";
-                }
+                return handleSaveLoadCommand(tokens, "load");
             default:
                 return "Unknown command. Type 'help' to see available commands.";
         }
     }
+
+    private static String handleSaveLoadCommand(String[] tokens, String operation) {
+        if (tokens.length == 2) {
+            String fileName = tokens[1];
+            if (operation.equals("save")) {
+                return saveDiagram(fileName);
+            } else {
+                return loadDiagram(fileName);
+            }
+        } else {
+            return "Usage: " + operation + " <filename>";
+        }
+    }
+
 
     /**
      * Saves the current UML diagram to a specified file.
@@ -225,19 +231,42 @@ public class CLI {
      * @return the result of the add operation
      */
     private static String handleAddCommand(String[] tokens) {
-        if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
-            return addClass(tokens[2]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("relationship")) {
-            return addRelationship(tokens[2], tokens[3]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("field")) {
-            return addField(tokens[2], tokens[3]);
-        } else if (tokens.length >= 5 && tokens[1].equalsIgnoreCase("method")) {
-            return addMethod(tokens[2], tokens[3], Arrays.copyOfRange(tokens, 4, tokens.length));
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("parameter")) {
-            return addParameter(tokens[2], tokens[3], tokens[4]);
-        } else {
-            return "Invalid command. Use 'help' for available commands.";
+        if (tokens.length < 3) {
+            return "Usage: add <type> <name> [additional parameters]. Use 'help' for available commands.";
         }
+
+        String type = tokens[1].toLowerCase();
+
+        switch (type) {
+            case "class":
+                if (tokens.length == 3) {
+                    return addClass(tokens[2]);
+                }
+                break;
+            case "relationship":
+                if (tokens.length == 4) {
+                    return addRelationship(tokens[2], tokens[3]);
+                }
+                break;
+            case "field":
+                if (tokens.length == 4) {
+                    return addField(tokens[2], tokens[3]);
+                }
+                break;
+            case "method":
+                if (tokens.length >= 5) {
+                    return addMethod(tokens[2], tokens[3], Arrays.copyOfRange(tokens, 4, tokens.length));
+                }
+                break;
+            case "parameter":
+                if (tokens.length == 5) {
+                    return addParameter(tokens[2], tokens[3], tokens[4]);
+                }
+                break;
+            default:
+                return "Unknown add type: " + type + ". Use 'help' for available commands.";
+        }
+        return "Invalid command. Use 'help' for available commands.";
     }
 
     /**
@@ -329,19 +358,42 @@ public class CLI {
      * @return the result of the delete operation
      */
     private static String handleDeleteCommand(String[] tokens) {
-        if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
-            return deleteClass(tokens[2]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("relationship")) {
-            return deleteRelationship(tokens[2], tokens[3]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("field")) {
-            return deleteField(tokens[2], tokens[3]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("method")) {
-            return deleteMethod(tokens[2], tokens[3]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("parameter")) {
-            return deleteParameter(tokens[2], tokens[3], tokens[4]);
-        } else {
-            return "Invalid command. Use 'help' for available commands.";
+        if (tokens.length < 3) {
+            return "Usage: delete <type> <name>. Use 'help' for available commands.";
         }
+
+        String type = tokens[1].toLowerCase();
+
+        switch (type) {
+            case "class":
+                if (tokens.length == 3) {
+                    return deleteClass(tokens[2]);
+                }
+                break;
+            case "relationship":
+                if (tokens.length == 4) {
+                    return deleteRelationship(tokens[2], tokens[3]);
+                }
+                break;
+            case "field":
+                if (tokens.length == 5) {
+                    return deleteField(tokens[2], tokens[3]);
+                }
+                break;
+            case "method":
+                if (tokens.length == 4) {
+                    return deleteMethod(tokens[2], tokens[3]);
+                }
+                break;
+            case "parameter":
+                if (tokens.length == 4) {
+                    return deleteParameter(tokens[2], tokens[3], tokens[4]);
+                }
+                break;
+            default:
+                return "Unknown delete type: " + type + ". Use 'help' for available commands.";
+        }
+        return "Invalid command. Use 'help' for available commands.";
     }
 
     /**
@@ -419,16 +471,34 @@ public class CLI {
      * @return the result of the rename operation
      */
     private static String handleRenameCommand(String[] tokens) {
-        if (tokens.length == 4 && tokens[1].equalsIgnoreCase("class")) {
-            return renameClass(tokens[2], tokens[3]);
-        } else if (tokens.length == 5 && tokens[1].equalsIgnoreCase("field")) {
-            return renameField(tokens[2], tokens[3], tokens[4]);
-        } else if (tokens.length == 5 && tokens[1].equalsIgnoreCase("method")) {
-            return renameMethod(tokens[2], tokens[3], tokens[4]);
-        } else {
-            return "Invalid command. Use 'help' for available commands.";
+        if (tokens.length < 4) {
+            return "Usage: rename <type> <oldName> <newName>. Use 'help' for available commands.";
         }
+
+        String type = tokens[1].toLowerCase();
+
+        switch (type) {
+            case "class":
+                if (tokens.length == 4) {
+                    return renameClass(tokens[2], tokens[3]);
+                }
+                break;
+            case "field":
+                if (tokens.length == 5) {
+                    return renameField(tokens[2], tokens[3], tokens[4]);
+                }
+                break;
+            case "method":
+                if (tokens.length == 5) {
+                    return renameMethod(tokens[2], tokens[3], tokens[4]);
+                }
+                break;
+            default:
+                return "Unknown rename type: " + type + ". Use 'help' for available commands.";
+        }
+        return "Invalid command. Use 'help' for available commands.";
     }
+
 
     /**
      * Renames a class.
@@ -521,4 +591,5 @@ public class CLI {
             return "Error: " + e.getMessage();
         }
     }
+
 }
