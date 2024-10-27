@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-public class UMLClassTest {
+public class OLDTestFile {
 
     UMLFields fieldsManager;
     UMLMethods methodsManager;
