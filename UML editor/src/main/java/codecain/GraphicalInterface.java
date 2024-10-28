@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class GraphicalInterface extends JFrame {
     private JPanel canvas;
@@ -59,7 +61,11 @@ public class GraphicalInterface extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveDiagram();
+                try {
+                    saveDiagram();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -91,7 +97,7 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
-    private void saveDiagram() {
+    private void saveDiagram() throws IOException {
         String fileName = JOptionPane.showInputDialog(this, "Enter file name to save:");
         if (fileName != null && !fileName.trim().isEmpty()) {
             SaveManager.saveToJSON(fileName + ".json");
@@ -102,7 +108,17 @@ public class GraphicalInterface extends JFrame {
     }
 
     private void loadDiagram() {
-        JOptionPane.showMessageDialog(this, "Load button clicked.");
+        String fileName = JOptionPane.showInputDialog(this, "Enter file name to load:");
+        if (fileName != null && !fileName.trim().isEmpty()) {
+            try {
+                SaveManager.loadFromJSON(fileName + ".json");
+                JOptionPane.showMessageDialog(this, "Diagram loaded from " + fileName + ".json");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid file name. Diagram not loaded.");
+        }
     }
 
     public static void main(String[] args) {
