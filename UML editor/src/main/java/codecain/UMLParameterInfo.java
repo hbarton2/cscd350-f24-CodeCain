@@ -1,7 +1,5 @@
 package codecain;
 
-
-
 /**
  * The UMLParameterInfo class represents a parameter in a UML class.
  * It includes the parameter name and the parameter type.
@@ -24,9 +22,9 @@ public class UMLParameterInfo {
      * @param parameterName the name of the parameter
      * @param parameterType the type of the parameter
      */
-    public UMLParameterInfo(String parameterName, String parameterType) {
-        this.parameterName = parameterType;
-        this.parameterType = parameterName;
+    public UMLParameterInfo(String parameterType, String parameterName) {
+        this.parameterType = parameterType;
+        this.parameterName = parameterName;
     }
 
     /**
