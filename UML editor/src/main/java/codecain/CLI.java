@@ -12,7 +12,7 @@ import java.util.Arrays;
  * built using Java Swing components. It allows users to interact with UML models
  * through command-line-style input.
  */
-public class GUI {
+public class CLI {
 
     /**
      * The main method initializes the application, setting up the main JFrame and GUI components.
