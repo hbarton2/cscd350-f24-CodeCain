@@ -23,6 +23,21 @@ public class MenuGUI extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
 
+        // CLI Button
+        JButton cliButton = new JButton("CLI");
+        cliButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Instantiate CLI when the button is clicked
+                if (cli == null) {
+                    cli = new CLI(); // Create CLI instance
+                }
+                cli.setVisible(true); // Show the CLI interface
+                MenuGUI.this.setVisible(false);
+            }
+        });
+        buttonPanel.add(cliButton);
+
         // GUI Button
         JButton guiButton = new JButton("Graphical Interface");
         guiButton.addActionListener(new ActionListener() {
