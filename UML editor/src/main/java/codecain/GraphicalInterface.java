@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class GraphicalInterface extends JFrame {
@@ -38,9 +37,11 @@ public class GraphicalInterface extends JFrame {
 
         JButton addClassButton = new JButton("Add Class");
         JButton deleteClassButton = new JButton("Remove Class");
+        JButton renameClassButton = new JButton("Rename Class");
 
         classesPanel.add(addClassButton);
         classesPanel.add(deleteClassButton);
+        classesPanel.add(renameClassButton);
 
         add(classesPanel, BorderLayout.EAST);
 
@@ -58,14 +59,17 @@ public class GraphicalInterface extends JFrame {
             }
         });
 
+        renameClassButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                renameClass();
+            }
+        });
+
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    saveDiagram();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                saveDiagram();
             }
         });
 
@@ -80,7 +84,8 @@ public class GraphicalInterface extends JFrame {
     private void addClass() {
         String className = JOptionPane.showInputDialog(this, "Enter the name of the class to add:");
         if (className != null && !className.trim().isEmpty()) {
-            UMLClass.addClass(className);
+            UMLClassInfo newClass = new UMLClassInfo(className);
+            UMLClass.classMap.put(className, newClass);
             JOptionPane.showMessageDialog(this, "Class '" + className + "' added.");
         } else {
             JOptionPane.showMessageDialog(this, "Invalid class name. Class not added.");
@@ -89,19 +94,40 @@ public class GraphicalInterface extends JFrame {
 
     private void deleteClass() {
         String className = JOptionPane.showInputDialog(this, "Enter the name of the class to delete:");
-        if (className != null && !className.trim().isEmpty()) {
-            UMLClass.removeClass(className);
+        if (className != null && !className.trim().isEmpty() && UMLClass.classMap.containsKey(className)) {
+            UMLClass.classMap.remove(className);
             JOptionPane.showMessageDialog(this, "Class '" + className + "' deleted.");
         } else {
-            JOptionPane.showMessageDialog(this, "Invalid class name. Class not deleted.");
+            JOptionPane.showMessageDialog(this, "Class not found or invalid name. Deletion canceled.");
         }
     }
 
-    private void saveDiagram() throws IOException {
+    private void renameClass() {
+        String oldClassName = JOptionPane.showInputDialog(this, "Enter the name of the class to rename:");
+        if (oldClassName != null && UMLClass.classMap.containsKey(oldClassName)) {
+            String newClassName = JOptionPane.showInputDialog(this, "Enter the new name for the class:");
+            if (newClassName != null && !newClassName.trim().isEmpty()) {
+                UMLClassInfo classInfo = UMLClass.classMap.remove(oldClassName);
+                classInfo.setClassName(newClassName);
+                UMLClass.classMap.put(newClassName, classInfo);
+                JOptionPane.showMessageDialog(this, "Class '" + oldClassName + "' renamed to '" + newClassName + "'.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid new class name. Rename canceled.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found or invalid name. Rename canceled.");
+        }
+    }
+
+    private void saveDiagram() {
         String fileName = JOptionPane.showInputDialog(this, "Enter file name to save:");
         if (fileName != null && !fileName.trim().isEmpty()) {
-            SaveManager.saveToJSON(fileName + ".json");
-            JOptionPane.showMessageDialog(this, "Diagram saved as " + fileName + ".json");
+            try {
+                SaveManager.saveToJSON(fileName + ".json");
+                JOptionPane.showMessageDialog(this, "Diagram saved as " + fileName + ".json");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error saving diagram: " + ex.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Invalid file name. Diagram not saved.");
         }
@@ -113,8 +139,8 @@ public class GraphicalInterface extends JFrame {
             try {
                 SaveManager.loadFromJSON(fileName + ".json");
                 JOptionPane.showMessageDialog(this, "Diagram loaded from " + fileName + ".json");
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error loading diagram: " + ex.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Invalid file name. Diagram not loaded.");
