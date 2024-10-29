@@ -25,8 +25,8 @@ public class SaveManager {
         try {
             Map<String, Object> umlData = new HashMap<>();
             umlData.put("classes", UMLClass.classMap);
-            umlData.put("fields", UMLFields.classFields);
-            umlData.put("methods", UMLMethods.classMethods);
+    //        umlData.put("fields", UMLFields.classFields);
+     //       umlData.put("methods", UMLMethods.classMethods);
             umlData.put("relationships", Relationship.relationshipList);
 
             objectMapper.writeValue(new File(filePath), umlData);
@@ -34,7 +34,7 @@ public class SaveManager {
         } catch (IOException e) {
             String errorCatch = "Error saving UML diagram to JSON: " + e.getMessage();
             System.err.println(errorCatch);
-            throw new IOException(errorCatch); 
+            throw new IOException(errorCatch);
         }
     }
     /**
@@ -46,9 +46,9 @@ public class SaveManager {
         try {
             Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
 
-            UMLClass.classMap = (Map<Object, UMLClass>) umlData.get("classes");
-            UMLFields.classFields = (Map<Object, Map<Object, Object>>) umlData.get("fields");
-            UMLMethods.classMethods = (Map<Object, Map<Object, List<Object>>>) umlData.get("methods");
+            UMLClass.classMap = (Map<Object, UMLClassInfo>) umlData.get("classes");
+         //   UMLClass.classFields = (Map<Object, Map<Object, Object>>) umlData.get("fields");
+           // UMLMethods.classMethods = (Map<Object, Map<Object, List<Object>>>) umlData.get("methods");
 
             List<Relationship> relationships = objectMapper.convertValue(
                     umlData.get("relationships"), new TypeReference<List<Relationship>>() {}
