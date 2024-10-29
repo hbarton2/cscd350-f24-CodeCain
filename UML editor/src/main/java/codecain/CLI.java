@@ -249,8 +249,8 @@ public class CLI {
                 }
                 break;
             case "field":
-                if (tokens.length == 4) {
-                    return addField(tokens[2], tokens[3]);
+                if (tokens.length == 5) {
+                    return addField(tokens[2], tokens[3],tokens[4]);
                 }
                 break;
             case "method":
@@ -303,9 +303,9 @@ public class CLI {
      * @param fieldName the name of the field to add
      * @return a message indicating the success of the operation
      */
-    private static String addField(String className, String fieldName) {
+    private static String addField(String className, String fieldName, String fieldType) {
         UMLFields fields = new UMLFields();
-        fields.addField(className, fieldName);
+        fields.addField(className, fieldName, fieldType);
         return "Field '" + fieldName + "' added to class '" + className + "'.";
     }
 
@@ -377,7 +377,7 @@ public class CLI {
                 break;
             case "field":
                 if (tokens.length == 5) {
-                    return deleteField(tokens[2], tokens[3]);
+                    return deleteField(tokens[2], tokens[3],tokens[4]);
                 }
                 break;
             case "method":
@@ -386,7 +386,7 @@ public class CLI {
                 }
                 break;
             case "parameter":
-                if (tokens.length == 4) {
+                if (tokens.length == 5) {
                     return deleteParameter(tokens[2], tokens[3], tokens[4]);
                 }
                 break;
@@ -431,9 +431,9 @@ public class CLI {
      * @param fieldName the name of the field to delete
      * @return a message indicating the success of the operation
      */
-    private static String deleteField(String className, String fieldName) {
+    private static String deleteField(String className, String fieldName, String fieldType) {
         UMLFields fields = new UMLFields();
-        fields.removeField(className, fieldName);
+        fields.removeField(className, fieldName, fieldType);
         return "Field '" + fieldName + "' removed from class '" + className + "'.";
     }
 
@@ -484,8 +484,8 @@ public class CLI {
                 }
                 break;
             case "field":
-                if (tokens.length == 5) {
-                    return renameField(tokens[2], tokens[3], tokens[4]);
+                if (tokens.length == 7) {
+                    return renameField(tokens[2], tokens[3], tokens[4], tokens[5],tokens[6]);
                 }
                 break;
             case "method":
@@ -520,9 +520,9 @@ public class CLI {
      * @param newFieldName the new name for the field
      * @return a message indicating the success of the operation
      */
-    private static String renameField(String className, String oldFieldName, String newFieldName) {
+    private static String renameField(String className, String oldFieldName, String oldFieldType, String newFieldName, String newFieldType) {
         UMLFields fields = new UMLFields();
-        fields.renameField(className, oldFieldName, newFieldName);
+        fields.renameField(className, oldFieldName, oldFieldType, newFieldName, newFieldType);
         return "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.";
     }
 
@@ -591,5 +591,4 @@ public class CLI {
             return "Error: " + e.getMessage();
         }
     }
-
 }
