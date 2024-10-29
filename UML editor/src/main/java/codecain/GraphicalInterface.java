@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 public class GraphicalInterface extends JFrame {
     private JPanel canvas;
@@ -61,21 +63,87 @@ public class GraphicalInterface extends JFrame {
         classesPanel.add(addRelationshipButton);
         classesPanel.add(deleteRelationshipButton);
 
+        classesPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JButton addMethodButton = new JButton("Add Method");
+        JButton deleteMethodButton = new JButton("Delete Method");
+        JButton renameMethodButton = new JButton("Rename Method");
+        JButton addParameterButton = new JButton("Add Parameter");
+        JButton deleteParameterButton = new JButton("Delete Parameter");
+        JButton renameParameterButton = new JButton("Rename Parameter");
+
+        classesPanel.add(addMethodButton);
+        classesPanel.add(deleteMethodButton);
+        classesPanel.add(renameMethodButton);
+        classesPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        classesPanel.add(addParameterButton);
+        classesPanel.add(deleteParameterButton);
+        classesPanel.add(renameParameterButton);
+
         add(classesPanel, BorderLayout.EAST);
 
         addClassButton.addActionListener(e -> addClass());
         deleteClassButton.addActionListener(e -> deleteClass());
         renameClassButton.addActionListener(e -> renameClass());
-
         addFieldButton.addActionListener(e -> addField());
         deleteFieldButton.addActionListener(e -> deleteField());
         renameFieldButton.addActionListener(e -> renameField());
-
         addRelationshipButton.addActionListener(e -> addRelationship());
         deleteRelationshipButton.addActionListener(e -> deleteRelationship());
-
         saveButton.addActionListener(e -> saveDiagram());
         loadButton.addActionListener(e -> loadDiagram());
+
+        addMethodButton.addActionListener(e -> addMethod());
+        deleteMethodButton.addActionListener(e -> deleteMethod());
+        renameMethodButton.addActionListener(e -> renameMethod());
+        addParameterButton.addActionListener(e -> addParameter());
+        deleteParameterButton.addActionListener(e -> deleteParameter());
+        renameParameterButton.addActionListener(e -> renameParameter());
+    }
+
+
+    private void addMethod() {
+        String className = JOptionPane.showInputDialog(this, "Enter the class name to add a method:");
+        String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
+        String parametersInput = JOptionPane.showInputDialog(this, "Enter parameters (comma-separated):");
+
+        List<String> parameters = parametersInput == null ? new ArrayList<>() : List.of(parametersInput.split(","));
+        new UMLMethods().addMethod(className, methodName, parameters); // Directly calls UMLMethods
+    }
+
+    private void deleteMethod() {
+        String className = JOptionPane.showInputDialog(this, "Enter the class name to delete a method:");
+        String methodName = JOptionPane.showInputDialog(this, "Enter the method name to delete:");
+        new UMLMethods().removeMethod(className, methodName);
+    }
+
+    private void renameMethod() {
+        String className = JOptionPane.showInputDialog(this, "Enter the class name to rename a method:");
+        String oldMethodName = JOptionPane.showInputDialog(this, "Enter the current method name:");
+        String newMethodName = JOptionPane.showInputDialog(this, "Enter the new method name:");
+        new UMLMethods().renameMethod(className, oldMethodName, newMethodName);
+    }
+
+    private void addParameter() {
+        String className = JOptionPane.showInputDialog(this, "Enter the class name:");
+        String methodName = JOptionPane.showInputDialog(this, "Enter the method name to add a parameter:");
+        String parameter = JOptionPane.showInputDialog(this, "Enter the parameter to add:");
+        new UMLMethods().addParameter(className, methodName, parameter);
+    }
+
+    private void deleteParameter() {
+        String className = JOptionPane.showInputDialog(this, "Enter the class name:");
+        String methodName = JOptionPane.showInputDialog(this, "Enter the method name to delete a parameter:");
+        String parameter = JOptionPane.showInputDialog(this, "Enter the parameter to delete:");
+        new UMLMethods().removeParameter(className, methodName, parameter);
+    }
+
+    private void renameParameter() {
+        String className = JOptionPane.showInputDialog(this, "Enter the class name:");
+        String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
+        String oldParameterName = JOptionPane.showInputDialog(this, "Enter the current parameter name:");
+        String newParameterName = JOptionPane.showInputDialog(this, "Enter the new parameter name:");
+        new UMLMethods().changeParameter(className, methodName, oldParameterName, newParameterName);
     }
 
     private void addClass() {
@@ -116,6 +184,7 @@ public class GraphicalInterface extends JFrame {
             JOptionPane.showMessageDialog(this, "Class not found or invalid name. Rename canceled.");
         }
     }
+
 
     private void addField() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to add a field to:");
