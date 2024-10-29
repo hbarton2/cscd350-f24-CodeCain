@@ -73,7 +73,7 @@ public class Relationship {
      * @param class1 class to look for
      * @return true if there is a relationship with that class
      */
-    public static boolean relationshipExists(String class1) {
+    public static boolean relationshipHasClass(String class1) {
         for (Relationship r : relationshipList) {
             if (r.classNames.contains(class1)) {
                 return true;
