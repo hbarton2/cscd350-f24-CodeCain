@@ -66,7 +66,7 @@ public class Relationship {
     }
 
     /**
-     * Checks if the relationship already exists
+     * Checks if the relationship already exists with the specified class
      * @param class1 class to look for
      * @return true if there is a relationship with that class
      */
@@ -93,6 +93,23 @@ public class Relationship {
         }
         return false;
     }
+
+
+    /**
+     * Checks if the relationship already exists between two classes that has the specified type
+     * @param class1 first class
+     * @param class2 second class
+     * @return true if the relationship exists
+     */
+    public static boolean relationshipExists(String class1, String class2, RelationshipType type){
+        for (Relationship r : relationshipList) {
+            if (r.classNames.contains(class1) && r.classNames.contains(class2) && r.type.equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Adds a relationship to the relationship map
