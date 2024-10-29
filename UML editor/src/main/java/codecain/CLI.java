@@ -12,23 +12,18 @@ import java.util.Arrays;
  * built using Java Swing components. It allows users to interact with UML models
  * through command-line-style input.
  */
-public class CLI {
+public class CLI extends JFrame {
 
-    /**
-     * The main method initializes the application, setting up the main JFrame and GUI components.
-     *
-     * @param args command-line arguments (not used in this application)
-     */
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("UML editor Command Line");
-        frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public CLI() {
+        setTitle("UML Editor Command Line");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.BLACK);
-        frame.add(panel);
+        add(panel);
         placeComponents(panel);
-        frame.setResizable(true);
-        frame.setVisible(true);
+        setResizable(true);
+        setVisible(true);
     }
 
     /**
@@ -108,6 +103,9 @@ public class CLI {
         }
     }
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(CLI::new);
+    }
     private static String handleSaveLoadCommand(String[] tokens, String operation) {
         if (tokens.length == 2) {
             String fileName = tokens[1];
