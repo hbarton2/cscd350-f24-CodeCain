@@ -167,7 +167,7 @@ public class UMLMethodsTests {
     @Test
     public void testRemoveParm(){
         UMLClass.addClass("Test");
-        umlMethods.addMethod("Test", "AddDog", Arrays.asList("int"));
+        umlMethods.addMethod("Test", "AddDog", Arrays.asList("String"));
         umlMethods.removeParameter("Test", "AddDog", "String");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
