@@ -53,6 +53,14 @@ public class GraphicalInterface extends JFrame {
         classesPanel.add(deleteFieldButton);
         classesPanel.add(renameFieldButton);
 
+        classesPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JButton addRelationshipButton = new JButton("Add Relationship");
+        JButton deleteRelationshipButton = new JButton("Remove Relationship");
+
+        classesPanel.add(addRelationshipButton);
+        classesPanel.add(deleteRelationshipButton);
+
         add(classesPanel, BorderLayout.EAST);
 
         addClassButton.addActionListener(e -> addClass());
@@ -62,6 +70,9 @@ public class GraphicalInterface extends JFrame {
         addFieldButton.addActionListener(e -> addField());
         deleteFieldButton.addActionListener(e -> deleteField());
         renameFieldButton.addActionListener(e -> renameField());
+
+        addRelationshipButton.addActionListener(e -> addRelationship());
+        deleteRelationshipButton.addActionListener(e -> deleteRelationship());
 
         saveButton.addActionListener(e -> saveDiagram());
         loadButton.addActionListener(e -> loadDiagram());
@@ -82,7 +93,8 @@ public class GraphicalInterface extends JFrame {
         String className = JOptionPane.showInputDialog(this, "Enter the name of the class to delete:");
         if (className != null && !className.trim().isEmpty() && UMLClass.classMap.containsKey(className)) {
             UMLClass.classMap.remove(className);
-            JOptionPane.showMessageDialog(this, "Class '" + className + "' deleted.");
+            Relationship.removeAttachedRelationships(className);
+            JOptionPane.showMessageDialog(this, "Class '" + className + "' deleted along with its relationships.");
         } else {
             JOptionPane.showMessageDialog(this, "Class not found or invalid name. Deletion canceled.");
         }
@@ -163,6 +175,46 @@ public class GraphicalInterface extends JFrame {
             }
         } else {
             JOptionPane.showMessageDialog(this, "Class not found. Field not renamed.");
+        }
+    }
+
+    private void addRelationship() {
+        String sourceClass = JOptionPane.showInputDialog(this, "Enter the source class name for the relationship:");
+        String destinationClass = JOptionPane.showInputDialog(this, "Enter the destination class name for the relationship:");
+
+        if (sourceClass == null || sourceClass.trim().isEmpty() || !UMLClass.classMap.containsKey(sourceClass)) {
+            JOptionPane.showMessageDialog(this, "Source class '" + sourceClass + "' does not exist or is invalid.");
+            return;
+        }
+
+        if (destinationClass == null || destinationClass.trim().isEmpty() || !UMLClass.classMap.containsKey(destinationClass)) {
+            JOptionPane.showMessageDialog(this, "Destination class '" + destinationClass + "' does not exist or is invalid.");
+            return;
+        }
+        if (sourceClass == null || sourceClass.trim().isEmpty() || !UMLClass.classMap.containsKey(sourceClass)) {
+            JOptionPane.showMessageDialog(this, "Source class '" + sourceClass + "' does not exist or is invalid.");
+            return;
+        }
+
+        if (destinationClass == null || destinationClass.trim().isEmpty() || !UMLClass.classMap.containsKey(destinationClass)) {
+            JOptionPane.showMessageDialog(this, "Destination class '" + destinationClass + "' does not exist or is invalid.");
+            return;
+        }
+
+        if (sourceClass != null && destinationClass != null && Relationship.addRelationship(sourceClass, destinationClass)) {
+            JOptionPane.showMessageDialog(this, "Relationship added between '" + sourceClass + "' and '" + destinationClass + "'.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Unable to add relationship. Check class names or existing relationships.");
+        }
+    }
+
+    private void deleteRelationship() {
+        String sourceClass = JOptionPane.showInputDialog(this, "Enter the source class name for the relationship:");
+        String destinationClass = JOptionPane.showInputDialog(this, "Enter the destination class name for the relationship:");
+        if (sourceClass != null && destinationClass != null && Relationship.removeRelationship(sourceClass, destinationClass)) {
+            JOptionPane.showMessageDialog(this, "Relationship removed between '" + sourceClass + "' and '" + destinationClass + "'.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Relationship not found or unable to remove.");
         }
     }
 
