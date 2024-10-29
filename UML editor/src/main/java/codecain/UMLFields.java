@@ -1,36 +1,28 @@
 package codecain;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * This class manages fields within classes in a UML diagram.
- * Each class can have multiple fields with unique names.
+ * The UMLFields class provides functionality to manage fields in a UML class.
+ * This includes adding, removing, and renaming fields within a class.
  */
 public class UMLFields {
-
-    /**
-     * Stores fields for each class.
-     * The key is the class name, and the value is a map of field names to field values.
-     */
-    public static Map<Object, Map<Object, Object>> classFields = new HashMap<>();
 
     /**
      * Adds a field to a class.
      *
      * @param className the name of the class to which the field is added
      * @param fieldName the name of the field being added
+     * @param fieldType the type of the field being added
      */
-    public void addField(Object className, Object fieldName) {
-        if (isInputInvalid(className, fieldName)) return;
-        if (!doesClassExists(className)) return;
-        Map<Object, Object> fields = classFields.get(className);
-        if (fields.containsKey(fieldName)) {
+    public void addField(String className, String fieldName, String fieldType) {
+        if (isInputInvalid(className, fieldName, fieldType)) return;
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) return;
+        if (doesFieldExist(classInfo, fieldName, fieldType)) {
             System.out.println("Action Canceled: Field " + fieldName + " already exists in class " + className);
-        } else {
-            fields.put(fieldName, new Object());
-            System.out.println("Field " + fieldName + " added to class " + className);
+            return;
         }
+        classInfo.getFields().add(new UMLFieldInfo(fieldName, fieldType));
+        System.out.println("Field " + fieldName + " of type " + fieldType + " added to class " + className);
     }
 
     /**
@@ -38,13 +30,21 @@ public class UMLFields {
      *
      * @param className the name of the class from which the field is removed
      * @param fieldName the name of the field to be removed
+     * @param fieldType the type of the field to be removed
      */
-    public void removeField(Object className, Object fieldName) {
-        if (isInputInvalid(className, fieldName)) return;
-        if (!doesClassExists(className)) return;
-        if (!doesFieldExist(className, fieldName)) return;
-        classFields.get(className).remove(fieldName);
-        System.out.println("Field " + fieldName + " removed from class " + className);
+    public void removeField(String className, String fieldName, String fieldType) {
+        if (isInputInvalid(className, fieldName, fieldType)) return;
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) return;
+        if (!doesFieldExist(classInfo, fieldName, fieldType)) {
+            System.out.println("Action Canceled: Field " + fieldName + " of type " + fieldType + " does not exist in class " + className);
+            return;
+        }
+        UMLFieldInfo field = getFieldByNameAndType(classInfo, fieldName, fieldType);
+        if (field != null) {
+            classInfo.getFields().remove(field);
+            System.out.println("Field " + fieldName + " of type " + fieldType + " removed from class " + className);
+        }
     }
 
     /**
@@ -53,85 +53,101 @@ public class UMLFields {
      * @param className the name of the class containing the field
      * @param oldFieldName the current name of the field
      * @param newFieldName the new name for the field
+     * @param newFieldType the new type for the field
      */
-    public void renameField(Object className, Object oldFieldName, Object newFieldName) {
-        if (isInputInvalid(className, oldFieldName) || isInputInvalid(className, newFieldName)) return;
-        if (!doesClassExists(className)) return;
-        if (!doesFieldExist(className, oldFieldName)) return;
-        Map<Object, Object> fields = classFields.get(className);
-        if (fields.containsKey(newFieldName)) {
-            System.out.println("Action Canceled: Field " + newFieldName + " already exists in class " + className);
-        } else {
-            fields.put(newFieldName, fields.remove(oldFieldName));
-            System.out.println("Field " + oldFieldName + " renamed to " + newFieldName + " in class " + className);
+    public void renameField(String className, String oldFieldName, String oldFieldType, String newFieldName, String newFieldType) {
+        if (isInputInvalid(className, oldFieldName, oldFieldType) || isInputInvalid(className, newFieldName, newFieldType)) {
+            return;
+        }
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) return;
+        if (!doesFieldExist(classInfo, oldFieldName, oldFieldType)) {
+            System.out.println("Action Canceled: Field " + oldFieldName + " with type " + oldFieldType + " does not exist in class " + className);
+            return;
+        }
+        if (doesFieldExist(classInfo, newFieldName, newFieldType)) {
+            System.out.println("Action Canceled: Field " + newFieldName + " with" + newFieldType + " already exists in class " + className);
+            return;
+        }
+        UMLFieldInfo field = getFieldByNameAndType(classInfo, oldFieldName, oldFieldType);
+        if (field != null) {
+            field.setFieldName(newFieldName);
+            field.setFieldType(newFieldType);
+            System.out.println("Field " + oldFieldName + " with type " + oldFieldType + " renamed to " + newFieldName + " with type " + newFieldType + " in class " + className);
         }
     }
 
 
     /**
-     * Helper method to validate Class and Field.
+     * Helper method to validate className, fieldName, and fieldType.
      *
      * @param className the name of the class
      * @param fieldName the name of the field
-     * @return true if both className and fieldName are blank, false otherwise
+     * @param fieldType the type of the field
+     * @return true if any of the inputs are invalid, false otherwise
      */
-    private boolean isInputInvalid(Object className, Object fieldName) {
-        if (className == null || className.toString().isBlank()) {
-            System.out.println("Canceled: Input Class Name is Blank");
+    private boolean isInputInvalid(String className, String fieldName, String fieldType) {
+        if (className == null || className.isBlank()) {
+            System.out.println("Action Canceled: Class name is invalid");
             return true;
         }
-        if (fieldName == null || fieldName.toString().isBlank()) {
-            System.out.println("Canceled: Input Field Name is Blank");
+        if (fieldName == null || fieldName.isBlank()) {
+            System.out.println("Action Canceled: Field name is invalid");
+            return true;
+        }
+        if (fieldType == null || fieldType.isBlank()) {
+            System.out.println("Action Canceled: Field type is invalid");
             return true;
         }
         return false;
     }
 
+
     /**
-     * Helper method to check if a class exists in the map.
+     * Helper method to get UMLClassInfo for a class.
      *
      * @param className the name of the class
-     * @return true if the class exists, false otherwise
+     * @return the UMLClassInfo object, or null if class does not exist
      */
-    public boolean doesClassExists(Object className) {
-        if (!UMLClass.classMap.containsKey(className)) {
+    private UMLClassInfo getClassInfo(String className) {
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+        if (classInfo == null) {
             System.out.println("Action Canceled: Class " + className + " does not exist");
-            return false;
         }
-        return true;
+        return classInfo;
     }
 
     /**
-     * Helper method to check if a field exists in a class.
+     * Helper method to check if a field with the given name and type exists in the class.
      *
-     * @param className the name of the class
+     * @param classInfo the UMLClassInfo object for the class
      * @param fieldName the name of the field
+     * @param fieldType the type of the field
      * @return true if the field exists, false otherwise
      */
-    private boolean doesFieldExist(Object className, Object fieldName) {
-        if (!doesClassExists(className)) return false;
-        Map<Object, Object> fields = classFields.get(className);
-        if (fields == null || !fields.containsKey(fieldName)) {
-            System.out.println("Field " + fieldName + " does not exist in class " + className);
-            return false;
+    private boolean doesFieldExist(UMLClassInfo classInfo, String fieldName, String fieldType) {
+        for (UMLFieldInfo field : classInfo.getFields()) {
+            if (field.getFieldName().equals(fieldName) && field.getFieldType().equals(fieldType)) {
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     /**
-     * Lists all fields for a given class.
+     * Retrieves a field by its name and type from the class.
      *
-     * @param className the name of the class for which the fields are listed
+     * @param classInfo the UMLClassInfo object for the class
+     * @param fieldName the name of the field
+     * @param fieldType the type of the field
+     * @return the UMLFieldInfo object representing the field, or null if not found
      */
-    public static void listFieldsForClass(Object className) {
-        Map<Object, Object> fields = classFields.get(className);
-        if (fields != null && !fields.isEmpty()) {
-            System.out.println("Fields:");
-            for (Map.Entry<Object, Object> fieldEntry : fields.entrySet()) {
-                System.out.println("Field: " + fieldEntry.getKey());
+    private UMLFieldInfo getFieldByNameAndType(UMLClassInfo classInfo, String fieldName, String fieldType) {
+        for (UMLFieldInfo field : classInfo.getFields()) {
+            if (field.getFieldName().equals(fieldName) && field.getFieldType().equals(fieldType)) {
+                return field;
             }
-        } else {
-            System.out.println("No fields available.");
         }
+        return null;
     }
 }

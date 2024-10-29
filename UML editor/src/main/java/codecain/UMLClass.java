@@ -1,43 +1,23 @@
 package codecain;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- * Represents a UML class and provides methods for managing a collection of classes.
- * Each class is identified by its name, and all classes are stored in a shared static map.
+ * The UMLClass class provides static methods to manage UML classes.
+ * It includes functionality to add, remove, and rename classes.
+ * All class information is stored in a static map where the key is the class name
+ * and the value is the UMLClassInfo object containing details about the class.
  */
 public class UMLClass {
-    private Object className;
 
     /**
-     * Constructs a new Class with the specified name.
-     *
-     * @param className the name of the class
+     * A static map storing all classes, where the key is the class name and the value is the UMLClassInfo object.
      */
-    public UMLClass(Object className) {
-        this.className = className;
-    }
+    public static Map<Object, UMLClassInfo> classMap = new HashMap<>();
 
     /**
-     * Returns the name of the class.
-     *
-     * @return the class name
-     */
-    public Object getClassName() {
-        return this.className;
-    }
-
-    /**
-     * A static map that stores all classes by their name.
-     * The key is the class name, and the value is the corresponding Class object.
-     */
-    public static Map<Object, UMLClass> classMap = new HashMap<>();
-
-    /**
-     * Adds a class with the specified name to the classMap.
-     * If the class already exists, an error message is printed.
+     * Adds a new class to the classMap if it does not already exist.
      *
      * @param className the name of the class to be added
      */
@@ -49,16 +29,13 @@ public class UMLClass {
         if (classMap.containsKey(className)) {
             System.out.println("Class " + className + " already exists");
         } else {
-            classMap.put(className, new UMLClass(className));
-            UMLMethods.classMethods.put(className, new HashMap<>());
-            UMLFields.classFields.put(className, new HashMap<>());
+            classMap.put(className, new UMLClassInfo(className));
             System.out.println("Class " + className + " added");
         }
     }
 
     /**
-     * Removes the class with the specified name from the classMap.
-     * If the class does not exist, an error message is printed.
+     * Removes a class from the classMap if it exists.
      *
      * @param className the name of the class to be removed
      */
@@ -71,17 +48,14 @@ public class UMLClass {
             System.out.println("Class " + className + " does not exist");
         } else {
             classMap.remove(className);
-            UMLMethods.classMethods.remove(className);
-            UMLFields.classFields.remove(className);
             System.out.println("Class " + className + " removed");
         }
     }
 
     /**
-     * Renames a class by changing its key in the classMap.
-     * If the old class name does not exist or the new class name already exists, an error message is printed.
+     * Renames an existing class by replacing its old name with a new name.
      *
-     * @param oldClassName the current name of the class to be renamed
+     * @param oldClassName the current name of the class
      * @param newClassName the new name for the class
      */
     public static void renameClass(Object oldClassName, Object newClassName) {
@@ -98,28 +72,10 @@ public class UMLClass {
         } else if (classMap.containsKey(newClassName)) {
             System.out.println("Class " + newClassName + " already exists");
         } else {
-            UMLClass classObj = classMap.remove(oldClassName);
-            classObj.className = newClassName;
-            classMap.put(newClassName, classObj);
-            Map<Object, List<Object>> methods = UMLMethods.classMethods.remove(oldClassName);
-            UMLMethods.classMethods.put(newClassName, methods);
-            Map<Object, Object> fields = UMLFields.classFields.remove(oldClassName);
-            UMLFields.classFields.put(newClassName, fields);
+            UMLClassInfo classInfo = classMap.remove(oldClassName);
+            classInfo.setClassName(newClassName);
+            classMap.put(newClassName, classInfo);
             System.out.println("Class " + oldClassName + " renamed to " + newClassName);
-        }
-    }
-
-    /**
-     * Lists all classes and delegates the task of listing fields and methods
-     * to their respective classes.
-     */
-    public static void listClasses() {
-        for (Map.Entry<Object, UMLClass> entry : classMap.entrySet()) {
-            Object className = entry.getKey();
-            System.out.println("Class: " + className);
-            UMLMethods.listMethodsForClass(className);
-            UMLFields.listFieldsForClass(className);
-            System.out.println();
         }
     }
 }
