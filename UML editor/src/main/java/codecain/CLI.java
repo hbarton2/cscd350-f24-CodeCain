@@ -12,23 +12,18 @@ import java.util.Arrays;
  * built using Java Swing components. It allows users to interact with UML models
  * through command-line-style input.
  */
-public class GUI {
+public class CLI extends JFrame {
 
-    /**
-     * The main method initializes the application, setting up the main JFrame and GUI components.
-     *
-     * @param args command-line arguments (not used in this application)
-     */
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("UML editor Command Line");
-        frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public CLI() {
+        setTitle("UML Editor Command Line");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.BLACK);
-        frame.add(panel);
+        add(panel);
         placeComponents(panel);
-        frame.setResizable(true);
-        frame.setVisible(true);
+        setResizable(true);
+        setVisible(true);
     }
 
     /**
@@ -100,21 +95,30 @@ public class GUI {
             case "exit":
                 System.exit(0);
             case "save":
-                if (tokens.length == 2) {
-                    return saveDiagram(tokens[1]);
-                } else {
-                    return "Usage: save <filename>";
-                }
+                return handleSaveLoadCommand(tokens, "save");
             case "load":
-                if (tokens.length == 2) {
-                    return loadDiagram(tokens[1]);
-                } else {
-                    return "Usage: load <filename>";
-                }
+                return handleSaveLoadCommand(tokens, "load");
             default:
                 return "Unknown command. Type 'help' to see available commands.";
         }
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(CLI::new);
+    }
+    private static String handleSaveLoadCommand(String[] tokens, String operation) {
+        if (tokens.length == 2) {
+            String fileName = tokens[1];
+            if (operation.equals("save")) {
+                return saveDiagram(fileName);
+            } else {
+                return loadDiagram(fileName);
+            }
+        } else {
+            return "Usage: " + operation + " <filename>";
+        }
+    }
+
 
     /**
      * Saves the current UML diagram to a specified file.
@@ -165,9 +169,9 @@ public class GUI {
                 2. delete relationship 'source' 'destination' - Deletes the relationship between 'source' and 'destination'.
 
                 Field Operations:
-                1. add field 'className' 'fieldName'  - Adds a unique field to the specified class.
-                2. delete field 'className' 'fieldName' - Removes a field from the specified class.
-                3. rename field 'className' 'oldFieldName' 'newFieldName' - Renames a field in the specified class.
+                1. add field 'className' 'fieldName' 'fieldType'  - Adds a unique field to the specified class.
+                2. delete field 'className' 'fieldName''fieldType' - Removes a field from the specified class.
+                3. rename field 'className' 'oldFieldName' 'oldFieldType''newFieldName' 'newFieldType' - Renames a field and it's type in the specified class.
 
                 Method Operations:
                 1. add method 'className' 'methodName' 'parameters' - Adds a unique method to the specified class.
@@ -183,8 +187,9 @@ public class GUI {
 
                 Listing Operations:
                 1. list classes                        - Lists all the classes in the project.
-                2. list class 'className'              - Lists the contents (fields and methods) of the specified class.
+                2. list class 'className'              - (doesn't work) Lists the contents (fields and methods) of the specified class.
                 3. list relationships                  - Lists all the relationships between classes.
+                4. list AllClassInfo                   - List all the classes with their fields and methods.
 
                 Other Commands:
                 1. help                                - Shows this help message.
@@ -193,11 +198,16 @@ public class GUI {
                 Examples:
                 - add class Person
                 - add relationship Person Address
-                - add field Person name
+                
+                - add field Person name String
+                - rename field Person name String example int
+                
                 - add method Person setName String name
                 - add parameter Person setName String name
+                
                 - delete parameter Person setName String name
                 - rename parameter Person setName oldName newName
+                
                 - delete class Person
                 - rename class Person Employee
                 - list classes
@@ -225,19 +235,56 @@ public class GUI {
      * @return the result of the add operation
      */
     private static String handleAddCommand(String[] tokens) {
-        if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
-            return addClass(tokens[2]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("relationship")) {
-            return addRelationship(tokens[2], tokens[3]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("field")) {
-            return addField(tokens[2], tokens[3]);
-        } else if (tokens.length >= 5 && tokens[1].equalsIgnoreCase("method")) {
-            return addMethod(tokens[2], tokens[3], Arrays.copyOfRange(tokens, 4, tokens.length));
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("parameter")) {
-            return addParameter(tokens[2], tokens[3], tokens[4]);
-        } else {
-            return "Invalid command. Use 'help' for available commands.";
+        if (tokens.length < 3) {
+            return "Usage: add <type> <name> [additional parameters]. Use 'help' for available commands.";
         }
+
+        String type = tokens[1].toLowerCase();
+        String className = tokens[2];
+
+        switch (type) {
+            case "class":
+
+                if (tokens.length == 3) {
+                    return addClass(tokens[2]);
+                }
+                break;
+            case "relationship":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 4) {
+                    return addRelationship(tokens[2], tokens[3]);
+                }
+                break;
+            case "field":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 5) {
+                    return addField(tokens[2], tokens[3],tokens[4]);
+                }
+                break;
+            case "method":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length >= 5) {
+                    return addMethod(tokens[2], tokens[3], Arrays.copyOfRange(tokens, 4, tokens.length));
+                }
+                break;
+            case "parameter":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 5) {
+                    return addParameter(tokens[2], tokens[3], tokens[4]);
+                }
+                break;
+            default:
+                return "Unknown add type: " + type + ". Use 'help' for available commands.";
+        }
+        return "Invalid command. Use 'help' for available commands.";
     }
 
     /**
@@ -274,9 +321,9 @@ public class GUI {
      * @param fieldName the name of the field to add
      * @return a message indicating the success of the operation
      */
-    private static String addField(String className, String fieldName) {
+    private static String addField(String className, String fieldName, String fieldType) {
         UMLFields fields = new UMLFields();
-        fields.addField(className, fieldName);
+        fields.addField(className, fieldName, fieldType);
         return "Field '" + fieldName + "' added to class '" + className + "'.";
     }
 
@@ -329,19 +376,55 @@ public class GUI {
      * @return the result of the delete operation
      */
     private static String handleDeleteCommand(String[] tokens) {
-        if (tokens.length == 3 && tokens[1].equalsIgnoreCase("class")) {
-            return deleteClass(tokens[2]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("relationship")) {
-            return deleteRelationship(tokens[2], tokens[3]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("field")) {
-            return deleteField(tokens[2], tokens[3]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("method")) {
-            return deleteMethod(tokens[2], tokens[3]);
-        } else if (tokens.length == 4 && tokens[1].equalsIgnoreCase("parameter")) {
-            return deleteParameter(tokens[2], tokens[3], tokens[4]);
-        } else {
-            return "Invalid command. Use 'help' for available commands.";
+        if (tokens.length < 3) {
+            return "Usage: delete <type> <name>. Use 'help' for available commands.";
         }
+
+        String type = tokens[1].toLowerCase();
+        String className = tokens[2];
+
+        switch (type) {
+            case "class":
+                if (tokens.length == 3) {
+                    return deleteClass(tokens[2]);
+                }
+                break;
+            case "relationship":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 4) {
+                    return deleteRelationship(tokens[2], tokens[3]);
+                }
+                break;
+            case "field":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 5) {
+                    return deleteField(tokens[2], tokens[3],tokens[4]);
+                }
+                break;
+            case "method":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 4) {
+                    return deleteMethod(tokens[2], tokens[3]);
+                }
+                break;
+            case "parameter":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 5) {
+                    return deleteParameter(tokens[2], tokens[3], tokens[4]);
+                }
+                break;
+            default:
+                return "Unknown delete type: " + type + ". Use 'help' for available commands.";
+        }
+        return "Invalid command. Use 'help' for available commands.";
     }
 
     /**
@@ -379,9 +462,9 @@ public class GUI {
      * @param fieldName the name of the field to delete
      * @return a message indicating the success of the operation
      */
-    private static String deleteField(String className, String fieldName) {
+    private static String deleteField(String className, String fieldName, String fieldType) {
         UMLFields fields = new UMLFields();
-        fields.removeField(className, fieldName);
+        fields.removeField(className, fieldName, fieldType);
         return "Field '" + fieldName + "' removed from class '" + className + "'.";
     }
 
@@ -419,16 +502,41 @@ public class GUI {
      * @return the result of the rename operation
      */
     private static String handleRenameCommand(String[] tokens) {
-        if (tokens.length == 4 && tokens[1].equalsIgnoreCase("class")) {
-            return renameClass(tokens[2], tokens[3]);
-        } else if (tokens.length == 5 && tokens[1].equalsIgnoreCase("field")) {
-            return renameField(tokens[2], tokens[3], tokens[4]);
-        } else if (tokens.length == 5 && tokens[1].equalsIgnoreCase("method")) {
-            return renameMethod(tokens[2], tokens[3], tokens[4]);
-        } else {
-            return "Invalid command. Use 'help' for available commands.";
+        if (tokens.length < 4) {
+            return "Usage: rename <type> <oldName> <newName>. Use 'help' for available commands.";
         }
+
+        String type = tokens[1].toLowerCase();
+        String className = tokens[2];
+
+        switch (type) {
+            case "class":
+                if (tokens.length == 4) {
+                    return renameClass(tokens[2], tokens[3]);
+                }
+                break;
+            case "field":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 7) {
+                    return renameField(tokens[2], tokens[3], tokens[4], tokens[5],tokens[6]);
+                }
+                break;
+            case "method":
+                if (!UMLClass.exists(className)) {
+                    return "Class '" + className + "' does not exist.";
+                }
+                if (tokens.length == 5) {
+                    return renameMethod(tokens[2], tokens[3], tokens[4]);
+                }
+                break;
+            default:
+                return "Unknown rename type: " + type + ". Use 'help' for available commands.";
+        }
+        return "Invalid command. Use 'help' for available commands.";
     }
+
 
     /**
      * Renames a class.
@@ -450,9 +558,9 @@ public class GUI {
      * @param newFieldName the new name for the field
      * @return a message indicating the success of the operation
      */
-    private static String renameField(String className, String oldFieldName, String newFieldName) {
+    private static String renameField(String className, String oldFieldName, String oldFieldType, String newFieldName, String newFieldType) {
         UMLFields fields = new UMLFields();
-        fields.renameField(className, oldFieldName, newFieldName);
+        fields.renameField(className, oldFieldName, oldFieldType, newFieldName, newFieldType);
         return "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.";
     }
 
@@ -481,6 +589,8 @@ public class GUI {
             return listClasses();
         } else if (tokens.length == 2 && tokens[1].equalsIgnoreCase("relationships")) {
             return listRelationships();
+        } else if (tokens.length == 2 && tokens[1].equalsIgnoreCase("AllClassInfo")) {
+            return UMLClass.listAllClassesInfo();
         } else {
             return "Invalid command. Use: list classes.";
         }
