@@ -8,11 +8,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * GraphicalInterface class for creating and managing a GUI to edit and save UML class diagrams.
+ */
 public class GraphicalInterface extends JFrame {
     private JPanel canvas;
     private JPanel controlsPanel;
     private JPanel classesPanel;
 
+    /**
+     * Constructor that sets up the GUI with controls, canvas, and class manipulation buttons.
+     */
     public GraphicalInterface() {
         setTitle("Class Diagram Editor");
         setSize(800, 400);
@@ -101,22 +107,30 @@ public class GraphicalInterface extends JFrame {
         renameParameterButton.addActionListener(e -> renameParameter());
     }
 
-
+    /**
+     * Adds a method to a specified class.
+     */
     private void addMethod() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to add a method:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
         String parametersInput = JOptionPane.showInputDialog(this, "Enter parameters (comma-separated):");
 
         List<String> parameters = parametersInput == null ? new ArrayList<>() : List.of(parametersInput.split(","));
-        new UMLMethods().addMethod(className, methodName, parameters); // Directly calls UMLMethods
+        new UMLMethods().addMethod(className, methodName, parameters);
     }
 
+    /**
+     * Deletes a method from a specified class.
+     */
     private void deleteMethod() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to delete a method:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name to delete:");
         new UMLMethods().removeMethod(className, methodName);
     }
 
+    /**
+     * Renames a method in a specified class.
+     */
     private void renameMethod() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to rename a method:");
         String oldMethodName = JOptionPane.showInputDialog(this, "Enter the current method name:");
@@ -124,6 +138,9 @@ public class GraphicalInterface extends JFrame {
         new UMLMethods().renameMethod(className, oldMethodName, newMethodName);
     }
 
+    /**
+     * Adds a parameter to a specified method in a class.
+     */
     private void addParameter() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name to add a parameter:");
@@ -131,6 +148,9 @@ public class GraphicalInterface extends JFrame {
         new UMLMethods().addParameter(className, methodName, parameter);
     }
 
+    /**
+     * Deletes a parameter from a specified method in a class.
+     */
     private void deleteParameter() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name to delete a parameter:");
@@ -138,6 +158,9 @@ public class GraphicalInterface extends JFrame {
         new UMLMethods().removeParameter(className, methodName, parameter);
     }
 
+    /**
+     * Renames a parameter in a specified method in a class.
+     */
     private void renameParameter() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
@@ -146,6 +169,9 @@ public class GraphicalInterface extends JFrame {
         new UMLMethods().changeParameter(className, methodName, oldParameterName, newParameterName);
     }
 
+    /**
+     * Adds a class to the UML diagram.
+     */
     private void addClass() {
         String className = JOptionPane.showInputDialog(this, "Enter the name of the class to add:");
         if (className != null && !className.trim().isEmpty()) {
@@ -157,6 +183,9 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Deletes a class and its relationships from the UML diagram.
+     */
     private void deleteClass() {
         String className = JOptionPane.showInputDialog(this, "Enter the name of the class to delete:");
         if (className != null && !className.trim().isEmpty() && UMLClass.classMap.containsKey(className)) {
@@ -168,6 +197,9 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Renames a class in the UML diagram.
+     */
     private void renameClass() {
         String oldClassName = JOptionPane.showInputDialog(this, "Enter the name of the class to rename:");
         if (oldClassName != null && UMLClass.classMap.containsKey(oldClassName)) {
@@ -185,7 +217,9 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
-
+    /**
+     * Adds a field to a specified class.
+     */
     private void addField() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to add a field to:");
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
@@ -204,6 +238,9 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Deletes a field from a specified class.
+     */
     private void deleteField() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to delete a field from:");
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
@@ -223,6 +260,9 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Renames a field in a specified class.
+     */
     private void renameField() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to rename a field in:");
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
@@ -247,6 +287,9 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Adds a relationship between two classes in the UML diagram.
+     */
     private void addRelationship() {
         String sourceClass = JOptionPane.showInputDialog(this, "Enter the source class name for the relationship:");
         String destinationClass = JOptionPane.showInputDialog(this, "Enter the destination class name for the relationship:");
@@ -260,23 +303,17 @@ public class GraphicalInterface extends JFrame {
             JOptionPane.showMessageDialog(this, "Destination class '" + destinationClass + "' does not exist or is invalid.");
             return;
         }
-        if (sourceClass == null || sourceClass.trim().isEmpty() || !UMLClass.classMap.containsKey(sourceClass)) {
-            JOptionPane.showMessageDialog(this, "Source class '" + sourceClass + "' does not exist or is invalid.");
-            return;
-        }
 
-        if (destinationClass == null || destinationClass.trim().isEmpty() || !UMLClass.classMap.containsKey(destinationClass)) {
-            JOptionPane.showMessageDialog(this, "Destination class '" + destinationClass + "' does not exist or is invalid.");
-            return;
-        }
-
-        if (sourceClass != null && destinationClass != null && Relationship.addRelationship(sourceClass, destinationClass)) {
+        if (Relationship.addRelationship(sourceClass, destinationClass)) {
             JOptionPane.showMessageDialog(this, "Relationship added between '" + sourceClass + "' and '" + destinationClass + "'.");
         } else {
             JOptionPane.showMessageDialog(this, "Unable to add relationship. Check class names or existing relationships.");
         }
     }
 
+    /**
+     * Deletes a relationship between two classes in the UML diagram.
+     */
     private void deleteRelationship() {
         String sourceClass = JOptionPane.showInputDialog(this, "Enter the source class name for the relationship:");
         String destinationClass = JOptionPane.showInputDialog(this, "Enter the destination class name for the relationship:");
@@ -287,6 +324,9 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Saves the current UML diagram to a JSON file.
+     */
     private void saveDiagram() {
         String fileName = JOptionPane.showInputDialog(this, "Enter file name to save:");
         if (fileName != null && !fileName.trim().isEmpty()) {
@@ -301,6 +341,9 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Loads a UML diagram from a JSON file.
+     */
     private void loadDiagram() {
         String fileName = JOptionPane.showInputDialog(this, "Enter file name to load:");
         if (fileName != null && !fileName.trim().isEmpty()) {
@@ -315,6 +358,10 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Main method to initialize and display the GraphicalInterface.
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             GraphicalInterface window = new GraphicalInterface();
