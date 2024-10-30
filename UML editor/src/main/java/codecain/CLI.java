@@ -240,9 +240,7 @@ public class CLI extends JFrame {
         }
 
         String type = tokens[1].toLowerCase();
-
         String className = tokens[2];
-
 
         switch (type) {
             case "class":

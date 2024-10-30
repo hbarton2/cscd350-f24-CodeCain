@@ -10,13 +10,13 @@ public class MenuGUI extends JFrame {
 
     public MenuGUI() {
         setTitle("UML Manager");
-        setSize(400, 200);
+        setSize(1300, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Welcome message
         JLabel welcomeLabel = new JLabel("Welcome to Code Cain UML Editor", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(welcomeLabel, BorderLayout.NORTH);
 
         // Panel for buttons
