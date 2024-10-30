@@ -397,6 +397,8 @@ public class GraphicalInterface extends JFrame {
                 String newFieldName = JOptionPane.showInputDialog(this, "Enter the new name for the field:");
                 if (newFieldName != null && !newFieldName.trim().isEmpty()) {
                     fieldToRename.setFieldName(newFieldName);
+                    JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+                    updateClassBoxDetails(classInfo, detailsArea);
                     JOptionPane.showMessageDialog(this, "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.");
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid new field name. Rename canceled.");
