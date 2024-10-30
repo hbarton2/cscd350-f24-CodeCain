@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * GraphicalInterface class for creating and managing a GUI to edit and save UML class diagrams.
@@ -14,6 +15,7 @@ public class GraphicalInterface extends JFrame {
     private JPanel canvas;
     private JPanel controlsPanel;
     private JPanel classesPanel;
+    private HashMap<Object, JPanel> classPanels = new HashMap<>();
 
     /**
      * Constructor that sets up the GUI with controls, canvas, and class manipulation buttons.
@@ -117,12 +119,58 @@ public class GraphicalInterface extends JFrame {
         classBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         classBox.setBackground(Color.LIGHT_GRAY);
 
+        // Add class name label
         JLabel classNameLabel = new JLabel(String.valueOf(umlClassInfo.getClassName()), SwingConstants.CENTER);
         classBox.add(classNameLabel, BorderLayout.NORTH);
 
+        // Display fields and methods
         JTextArea detailsArea = new JTextArea();
         detailsArea.setEditable(false);
+        classBox.add(detailsArea, BorderLayout.CENTER);
 
+        canvas.setLayout(null); // Null layout for absolute positioning
+        canvas.add(classBox);
+        canvas.repaint();
+
+        // Store the reference to the class panel
+        classPanels.put(String.valueOf(umlClassInfo.getClassName()), classBox);
+
+        final Point initialClick = new Point();
+        classBox.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                initialClick.setLocation(e.getPoint());
+            }
+        });
+        classBox.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int xMove = e.getX() - initialClick.x;
+                int yMove = e.getY() - initialClick.y;
+
+                Point location = classBox.getLocation();
+
+                int newX = location.x + xMove;
+                int newY = location.y + yMove;
+
+                int canvasWidth = canvas.getWidth();
+                int canvasHeight = canvas.getHeight();
+                int boxWidth = classBox.getWidth();
+                int boxHeight = classBox.getHeight();
+
+                newX = Math.max(0, Math.min(newX, canvasWidth - boxWidth));
+                newY = Math.max(0, Math.min(newY, canvasHeight - boxHeight));
+
+                classBox.setLocation(newX, newY);
+                canvas.repaint();
+            }
+        });
+
+        // Populate details initially
+        updateClassBoxDetails(umlClassInfo, detailsArea);
+    }
+
+    private void updateClassBoxDetails(UMLClassInfo umlClassInfo, JTextArea detailsArea) {
         StringBuilder detailsText = new StringBuilder("Fields:\n");
         for (UMLFieldInfo field : umlClassInfo.getFields()) {
             detailsText.append(field.getFieldName()).append(": ").append(field.getFieldType()).append("\n");
@@ -133,51 +181,29 @@ public class GraphicalInterface extends JFrame {
             detailsText.append(String.join(", ", method.getParameters())).append(")\n");
         }
         detailsArea.setText(detailsText.toString());
-        classBox.add(detailsArea, BorderLayout.CENTER);
-
-        // Add to the main display panel (canvas)
-        canvas.setLayout(null); // Null layout for absolute positioning
-        canvas.add(classBox);
-        canvas.repaint();
-
-        // Variables to track mouse position for dragging
-        final Point initialClick = new Point();
-
-        // Mouse listener for dragging functionality
-        classBox.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                initialClick.setLocation(e.getPoint());
-            }
-        });
-
-        classBox.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                // Calculate new location
-                int xMove = e.getX() - initialClick.x;
-                int yMove = e.getY() - initialClick.y;
-
-                Point location = classBox.getLocation();
-                location.translate(xMove, yMove);
-                classBox.setLocation(location);
-
-                canvas.repaint();
-            }
-        });
     }
 
-    /**
-     * Adds a method to a specified class.
-     */
-    private void addMethod() {
-        String className = JOptionPane.showInputDialog(this, "Enter the class name to add a method:");
-        String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
-        String parametersInput = JOptionPane.showInputDialog(this, "Enter parameters (comma-separated):");
 
-        List<String> parameters = parametersInput == null ? new ArrayList<>() : List.of(parametersInput.split(","));
-        new UMLMethods().addMethod(className, methodName, parameters);
-    }
+        /**
+         * Adds a method to a specified class.
+         */
+        private void addMethod() {
+            String className = JOptionPane.showInputDialog(this, "Enter the class name to add a method:");
+            String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
+            String parametersInput = JOptionPane.showInputDialog(this, "Enter parameters (comma-separated):");
+
+            List<String> parameters = parametersInput == null ? new ArrayList<>() : List.of(parametersInput.split(","));
+            UMLClassInfo classInfo = UMLClass.classMap.get(className); // Get the class info
+            if (classInfo != null) {
+                new UMLMethods().addMethod(className, methodName, parameters);
+                // Update the class box details
+                JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+                updateClassBoxDetails(classInfo, detailsArea);
+                JOptionPane.showMessageDialog(this, "Method '" + methodName + "' added to class '" + className + "'.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Class not found. Method not added.");
+            }
+        }
 
     /**
      * Deletes a method from a specified class.
@@ -293,6 +319,9 @@ public class GraphicalInterface extends JFrame {
             if (fieldName != null && !fieldName.trim().isEmpty() && fieldType != null && !fieldType.trim().isEmpty()) {
                 UMLFieldInfo newField = new UMLFieldInfo(fieldName, fieldType);
                 classInfo.getFields().add(newField);
+                // Update the class box details
+                JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+                updateClassBoxDetails(classInfo, detailsArea);
                 JOptionPane.showMessageDialog(this, "Field '" + fieldName + "' added to class '" + className + "'.");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid field name or type. Field not added.");
