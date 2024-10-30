@@ -327,6 +327,16 @@ public class GraphicalInterface extends JFrame {
                 UMLClassInfo classInfo = UMLClass.classMap.remove(oldClassName);
                 classInfo.setClassName(newClassName);
                 UMLClass.classMap.put(newClassName, classInfo);
+                UMLClass.classMap.remove(oldClassName);
+                JPanel classPanel = classPanels.remove(oldClassName);
+                if (classPanel != null) {
+                    classPanels.put(newClassName, classPanel);
+                    classPanel.setName(newClassName);
+                    JLabel classLabel = (JLabel) classPanel.getComponent(0);
+                    classLabel.setText(newClassName);
+                    JTextArea detailsArea = (JTextArea) classPanel.getComponent(1);
+                    updateClassBoxDetails(classInfo, detailsArea);
+                }
                 JOptionPane.showMessageDialog(this, "Class '" + oldClassName + "' renamed to '" + newClassName + "'.");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid new class name. Rename canceled.");
