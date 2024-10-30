@@ -2,8 +2,7 @@ package codecain;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -108,6 +107,67 @@ public class GraphicalInterface extends JFrame {
     }
 
     /**
+     * Creates a draggable panel representing a UML class, displaying its fields and methods.
+     */
+    private void createClassBox(UMLClassInfo umlClassInfo) {
+        // Create a new JPanel for the class box
+        JPanel classBox = new JPanel();
+        classBox.setLayout(new BorderLayout());
+        classBox.setBounds(50, 50, 200, 150); // Set initial position and size
+        classBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        classBox.setBackground(Color.LIGHT_GRAY);
+
+        JLabel classNameLabel = new JLabel(String.valueOf(umlClassInfo.getClassName()), SwingConstants.CENTER);
+        classBox.add(classNameLabel, BorderLayout.NORTH);
+
+        JTextArea detailsArea = new JTextArea();
+        detailsArea.setEditable(false);
+
+        StringBuilder detailsText = new StringBuilder("Fields:\n");
+        for (UMLFieldInfo field : umlClassInfo.getFields()) {
+            detailsText.append(field.getFieldName()).append(": ").append(field.getFieldType()).append("\n");
+        }
+        detailsText.append("\nMethods:\n");
+        for (UMLMethodInfo method : umlClassInfo.getMethods()) {
+            detailsText.append(method.getMethodName()).append("(");
+            detailsText.append(String.join(", ", method.getParameters())).append(")\n");
+        }
+        detailsArea.setText(detailsText.toString());
+        classBox.add(detailsArea, BorderLayout.CENTER);
+
+        // Add to the main display panel (canvas)
+        canvas.setLayout(null); // Null layout for absolute positioning
+        canvas.add(classBox);
+        canvas.repaint();
+
+        // Variables to track mouse position for dragging
+        final Point initialClick = new Point();
+
+        // Mouse listener for dragging functionality
+        classBox.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                initialClick.setLocation(e.getPoint());
+            }
+        });
+
+        classBox.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                // Calculate new location
+                int xMove = e.getX() - initialClick.x;
+                int yMove = e.getY() - initialClick.y;
+
+                Point location = classBox.getLocation();
+                location.translate(xMove, yMove);
+                classBox.setLocation(location);
+
+                canvas.repaint();
+            }
+        });
+    }
+
+    /**
      * Adds a method to a specified class.
      */
     private void addMethod() {
@@ -177,6 +237,10 @@ public class GraphicalInterface extends JFrame {
         if (className != null && !className.trim().isEmpty()) {
             UMLClassInfo newClass = new UMLClassInfo(className);
             UMLClass.classMap.put(className, newClass);
+
+            // Create and add the class panel
+            createClassBox(newClass);
+
             JOptionPane.showMessageDialog(this, "Class '" + className + "' added.");
         } else {
             JOptionPane.showMessageDialog(this, "Invalid class name. Class not added.");
