@@ -605,12 +605,7 @@ public class CLI extends JFrame {
         if (UMLClass.classMap.isEmpty()) {
             return "No classes available.";
         } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Classes:\n");
-            for (Object className : UMLClass.classMap.keySet()) {
-                sb.append("- ").append(className).append("\n");
-            }
-            return sb.toString();
+         return UMLClass.listAllClassesInfo();
         }
     }
 
