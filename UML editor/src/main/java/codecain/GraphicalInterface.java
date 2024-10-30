@@ -219,9 +219,29 @@ public class GraphicalInterface extends JFrame {
      */
     private void renameMethod() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to rename a method:");
-        String oldMethodName = JOptionPane.showInputDialog(this, "Enter the current method name:");
-        String newMethodName = JOptionPane.showInputDialog(this, "Enter the new method name:");
-        new UMLMethods().renameMethod(className, oldMethodName, newMethodName);
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+        if (classInfo != null) {
+            String oldMethodName = JOptionPane.showInputDialog(this, "Enter the current method name:");
+            UMLMethodInfo methodToRename = classInfo.getMethods().stream()
+                    .filter(method -> method.getMethodName().equals(oldMethodName))
+                    .findFirst().orElse(null);
+            if (methodToRename != null) {
+                String newMethodName = JOptionPane.showInputDialog(this, "Enter the new method name:");
+                if (newMethodName != null && !newMethodName.trim().isEmpty()) {
+                    methodToRename.setMethodName(newMethodName);
+                    // Update the class box details
+                    JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+                    updateClassBoxDetails(classInfo, detailsArea);
+                    JOptionPane.showMessageDialog(this, "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid new method name. Rename canceled.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Method not found. Rename canceled.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found. Method not renamed.");
+        }
     }
 
     /**
