@@ -210,8 +210,23 @@ public class GraphicalInterface extends JFrame {
      */
     private void deleteMethod() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to delete a method:");
-        String methodName = JOptionPane.showInputDialog(this, "Enter the method name to delete:");
-        new UMLMethods().removeMethod(className, methodName);
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+        if (classInfo != null) {
+            String methodName = JOptionPane.showInputDialog(this, "Enter the name of the method to delete:");
+            UMLMethodInfo methodToDelete = classInfo.getMethods().stream()
+                    .filter(method -> method.getMethodName().equals(methodName))
+                    .findFirst().orElse(null);
+            if (methodToDelete != null) {
+                classInfo.getMethods().remove(methodToDelete);
+                JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+                updateClassBoxDetails(classInfo, detailsArea);
+                JOptionPane.showMessageDialog(this, "Method '" + methodName + "' deleted from class '" + className + "'.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Method not found. Deletion canceled.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found. Method not deleted.");
+        }
     }
 
     /**
