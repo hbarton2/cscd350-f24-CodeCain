@@ -112,18 +112,15 @@ public class GraphicalInterface extends JFrame {
      * Creates a draggable panel representing a UML class, displaying its fields and methods.
      */
     private void createClassBox(UMLClassInfo umlClassInfo) {
-        // Create a new JPanel for the class box
         JPanel classBox = new JPanel();
         classBox.setLayout(new BorderLayout());
         classBox.setBounds(50, 50, 200, 150); // Set initial position and size
         classBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         classBox.setBackground(Color.LIGHT_GRAY);
 
-        // Add class name label
         JLabel classNameLabel = new JLabel(String.valueOf(umlClassInfo.getClassName()), SwingConstants.CENTER);
         classBox.add(classNameLabel, BorderLayout.NORTH);
 
-        // Display fields and methods
         JTextArea detailsArea = new JTextArea();
         detailsArea.setEditable(false);
         classBox.add(detailsArea, BorderLayout.CENTER);
@@ -132,7 +129,6 @@ public class GraphicalInterface extends JFrame {
         canvas.add(classBox);
         canvas.repaint();
 
-        // Store the reference to the class panel
         classPanels.put(String.valueOf(umlClassInfo.getClassName()), classBox);
 
         final Point initialClick = new Point();
@@ -166,10 +162,14 @@ public class GraphicalInterface extends JFrame {
             }
         });
 
-        // Populate details initially
         updateClassBoxDetails(umlClassInfo, detailsArea);
     }
 
+    /**
+     * updateClassBoxDetails edits the fields and methods in each class.
+     * @param umlClassInfo
+     * @param detailsArea
+     */
     private void updateClassBoxDetails(UMLClassInfo umlClassInfo, JTextArea detailsArea) {
         StringBuilder detailsText = new StringBuilder("Fields:\n");
         for (UMLFieldInfo field : umlClassInfo.getFields()) {
@@ -299,7 +299,6 @@ public class GraphicalInterface extends JFrame {
             UMLClassInfo newClass = new UMLClassInfo(className);
             UMLClass.classMap.put(className, newClass);
 
-            // Create and add the class panel
             createClassBox(newClass);
 
             JOptionPane.showMessageDialog(this, "Class '" + className + "' added.");
@@ -373,7 +372,6 @@ public class GraphicalInterface extends JFrame {
             if (fieldName != null && !fieldName.trim().isEmpty() && fieldType != null && !fieldType.trim().isEmpty()) {
                 UMLFieldInfo newField = new UMLFieldInfo(fieldName, fieldType);
                 classInfo.getFields().add(newField);
-                // Update the class box details
                 JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
                 updateClassBoxDetails(classInfo, detailsArea);
                 JOptionPane.showMessageDialog(this, "Field '" + fieldName + "' added to class '" + className + "'.");
