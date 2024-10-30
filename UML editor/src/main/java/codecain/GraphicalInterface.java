@@ -398,6 +398,8 @@ public class GraphicalInterface extends JFrame {
                     .findFirst().orElse(null);
             if (fieldToRemove != null) {
                 classInfo.getFields().remove(fieldToRemove);
+                JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+                updateClassBoxDetails(classInfo, detailsArea);
                 JOptionPane.showMessageDialog(this, "Field '" + fieldName + "' deleted from class '" + className + "'.");
             } else {
                 JOptionPane.showMessageDialog(this, "Field not found. Deletion canceled.");
