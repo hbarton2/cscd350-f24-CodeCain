@@ -281,11 +281,20 @@ public class GraphicalInterface extends JFrame {
         if (className != null && !className.trim().isEmpty() && UMLClass.classMap.containsKey(className)) {
             UMLClass.classMap.remove(className);
             Relationship.removeAttachedRelationships(className);
+
+            JPanel classBox = classPanels.remove(className);
+            if (classBox != null) {
+                canvas.remove(classBox);
+            }
+
+            canvas.revalidate();
+            canvas.repaint();
             JOptionPane.showMessageDialog(this, "Class '" + className + "' deleted along with its relationships.");
         } else {
             JOptionPane.showMessageDialog(this, "Class not found or invalid name. Deletion canceled.");
         }
     }
+
 
     /**
      * Renames a class in the UML diagram.
