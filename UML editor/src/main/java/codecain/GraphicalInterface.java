@@ -247,7 +247,7 @@ public class GraphicalInterface extends JFrame {
                     .filter(field -> field.getFieldName().equals(fieldName))
                     .findFirst().orElse(null);
             if (fieldToRemove != null) {
-                classInfo.getFields().remove(fieldToRemove);
+                UMLFields.removeField(className, fieldName, fieldToRemove.getFieldType());
                 JOptionPane.showMessageDialog(this, "Field '" + fieldName + "' deleted from class '" + className + "'.");
             } else {
                 JOptionPane.showMessageDialog(this, "Field not found. Deletion canceled.");
@@ -271,7 +271,8 @@ public class GraphicalInterface extends JFrame {
             if (fieldToRename != null) {
                 String newFieldName = JOptionPane.showInputDialog(this, "Enter the new name for the field:");
                 if (newFieldName != null && !newFieldName.trim().isEmpty()) {
-                    fieldToRename.setFieldName(newFieldName);
+//                    fieldToRename.setFieldName(newFieldName);
+                    UMLFields.renameField(className, oldFieldName, fieldToRename.getFieldType(), newFieldName, fieldToRename.getFieldType());
                     JOptionPane.showMessageDialog(this, "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.");
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid new field name. Rename canceled.");

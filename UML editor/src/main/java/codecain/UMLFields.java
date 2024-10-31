@@ -32,7 +32,7 @@ public class UMLFields {
      * @param fieldName the name of the field to be removed
      * @param fieldType the type of the field to be removed
      */
-    public void removeField(String className, String fieldName, String fieldType) {
+    public static void removeField(String className, String fieldName, String fieldType) {
         if (isInputInvalid(className, fieldName, fieldType)) return;
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
@@ -55,7 +55,7 @@ public class UMLFields {
      * @param newFieldName the new name for the field
      * @param newFieldType the new type for the field
      */
-    public void renameField(String className, String oldFieldName, String oldFieldType, String newFieldName, String newFieldType) {
+    public static void renameField(String className, String oldFieldName, String oldFieldType, String newFieldName, String newFieldType) {
         if (isInputInvalid(className, oldFieldName, oldFieldType) || isInputInvalid(className, newFieldName, newFieldType)) {
             return;
         }
@@ -142,7 +142,7 @@ public class UMLFields {
      * @param fieldType the type of the field
      * @return the UMLFieldInfo object representing the field, or null if not found
      */
-    private UMLFieldInfo getFieldByNameAndType(UMLClassInfo classInfo, String fieldName, String fieldType) {
+    private static UMLFieldInfo getFieldByNameAndType(UMLClassInfo classInfo, String fieldName, String fieldType) {
         for (UMLFieldInfo field : classInfo.getFields()) {
             if (field.getFieldName().equals(fieldName) && field.getFieldType().equals(fieldType)) {
                 return field;
