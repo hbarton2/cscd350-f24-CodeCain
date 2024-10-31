@@ -175,8 +175,7 @@ public class GraphicalInterface extends JFrame {
     private void addClass() {
         String className = JOptionPane.showInputDialog(this, "Enter the name of the class to add:");
         if (className != null && !className.trim().isEmpty()) {
-            UMLClassInfo newClass = new UMLClassInfo(className);
-            UMLClass.classMap.put(className, newClass);
+            UMLClass.addClass(className);
             JOptionPane.showMessageDialog(this, "Class '" + className + "' added.");
         } else {
             JOptionPane.showMessageDialog(this, "Invalid class name. Class not added.");
@@ -189,7 +188,7 @@ public class GraphicalInterface extends JFrame {
     private void deleteClass() {
         String className = JOptionPane.showInputDialog(this, "Enter the name of the class to delete:");
         if (className != null && !className.trim().isEmpty() && UMLClass.classMap.containsKey(className)) {
-            UMLClass.classMap.remove(className);
+            UMLClass.removeClass(className);
             Relationship.removeAttachedRelationships(className);
             JOptionPane.showMessageDialog(this, "Class '" + className + "' deleted along with its relationships.");
         } else {
@@ -205,9 +204,7 @@ public class GraphicalInterface extends JFrame {
         if (oldClassName != null && UMLClass.classMap.containsKey(oldClassName)) {
             String newClassName = JOptionPane.showInputDialog(this, "Enter the new name for the class:");
             if (newClassName != null && !newClassName.trim().isEmpty()) {
-                UMLClassInfo classInfo = UMLClass.classMap.remove(oldClassName);
-                classInfo.setClassName(newClassName);
-                UMLClass.classMap.put(newClassName, classInfo);
+                UMLClass.renameClass(oldClassName, newClassName);
                 JOptionPane.showMessageDialog(this, "Class '" + oldClassName + "' renamed to '" + newClassName + "'.");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid new class name. Rename canceled.");
