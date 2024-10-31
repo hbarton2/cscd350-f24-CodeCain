@@ -13,7 +13,7 @@ public class UMLFields {
      * @param fieldName the name of the field being added
      * @param fieldType the type of the field being added
      */
-    public void addField(String className, String fieldName, String fieldType) {
+    public static void addField(String className, String fieldName, String fieldType) {
         if (isInputInvalid(className, fieldName, fieldType)) return;
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
@@ -86,7 +86,7 @@ public class UMLFields {
      * @param fieldType the type of the field
      * @return true if any of the inputs are invalid, false otherwise
      */
-    private boolean isInputInvalid(String className, String fieldName, String fieldType) {
+    private static boolean isInputInvalid(String className, String fieldName, String fieldType) {
         if (className == null || className.isBlank()) {
             System.out.println("Action Canceled: Class name is invalid");
             return true;
@@ -109,7 +109,7 @@ public class UMLFields {
      * @param className the name of the class
      * @return the UMLClassInfo object, or null if class does not exist
      */
-    private UMLClassInfo getClassInfo(String className) {
+    private static UMLClassInfo getClassInfo(String className) {
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
         if (classInfo == null) {
             System.out.println("Action Canceled: Class " + className + " does not exist");
@@ -125,7 +125,7 @@ public class UMLFields {
      * @param fieldType the type of the field
      * @return true if the field exists, false otherwise
      */
-    private boolean doesFieldExist(UMLClassInfo classInfo, String fieldName, String fieldType) {
+    private static boolean doesFieldExist(UMLClassInfo classInfo, String fieldName, String fieldType) {
         for (UMLFieldInfo field : classInfo.getFields()) {
             if (field.getFieldName().equals(fieldName) && field.getFieldType().equals(fieldType)) {
                 return true;

@@ -224,8 +224,8 @@ public class GraphicalInterface extends JFrame {
             String fieldName = JOptionPane.showInputDialog(this, "Enter the name of the field to add:");
             String fieldType = JOptionPane.showInputDialog(this, "Enter the type of the field:");
             if (fieldName != null && !fieldName.trim().isEmpty() && fieldType != null && !fieldType.trim().isEmpty()) {
-                UMLFieldInfo newField = new UMLFieldInfo(fieldName, fieldType);
-                classInfo.getFields().add(newField);
+
+                UMLFields.addField(className, fieldName, fieldType);
                 JOptionPane.showMessageDialog(this, "Field '" + fieldName + "' added to class '" + className + "'.");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid field name or type. Field not added.");
