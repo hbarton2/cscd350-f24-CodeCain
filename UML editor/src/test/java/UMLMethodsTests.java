@@ -153,12 +153,12 @@ public class UMLMethodsTests {
     @Test
     public void testAddParm(){
         UMLClass.addClass("Test");
-        umlMethods.addMethod("Test", "AddDog", Arrays.asList("int"));
+        umlMethods.addMethod("Test", "AddDog", Arrays.asList("DogCounter"));
 
-        umlMethods.addParameter("Test", "AddDog", "String");
+        umlMethods.addParameter("Test", "AddDog", "PuppyCounter");
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
-        assertTrue(methodInfo.getParameters().contains("String"));
+        assertTrue(methodInfo.getParameters().contains("PuppyCounter"));
     }
 
     /**
@@ -167,12 +167,12 @@ public class UMLMethodsTests {
     @Test
     public void testRemoveParm(){
         UMLClass.addClass("Test");
-        umlMethods.addMethod("Test", "AddDog", Arrays.asList("String"));
-        umlMethods.removeParameter("Test", "AddDog", "String");
+        umlMethods.addMethod("Test", "AddDog", Arrays.asList("DogCounter"));
+        umlMethods.removeParameter("Test", "AddDog", "DogCounter");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
-        assertFalse(methodInfo.getParameters().contains("String"));
+        assertFalse(methodInfo.getParameters().contains("DogCounter"));
     }
 
     /**
@@ -181,11 +181,12 @@ public class UMLMethodsTests {
     @Test
     public void testChangeParm(){
         UMLClass.addClass("Test");
-        umlMethods.addMethod("Test", "AddDog", Arrays.asList("int"));
-        umlMethods.changeParameters("Test", "AddDog", Arrays.asList("Double","String"));
+        umlMethods.addMethod("Test", "AddDog", Arrays.asList("DogCounter"));
+        umlMethods.addParameter("Test", "AddDog", "PuppyCounter");
+        umlMethods.changeParameter("Test", "AddDog", "PuppyCounter", "CutePuppyCounter");
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
-        List<String> expectedParameters = Arrays.asList("Double","String");
+        List<String> expectedParameters = Arrays.asList("DogCounter","CutPuppyCounter");
         assertEquals(expectedParameters, methodInfo.getParameters());
     }
 }
