@@ -96,14 +96,13 @@ public class UMLMethods {
     }
 
     /**
-     * Removes a parameter from a method.
+     * Removes a parameter from a method based on the parameter name.
      *
-     * @param className     The name of the class
-     * @param methodName    The name of the method to remove a parameter from
-     * @param parameterType The type of the parameter to remove
+     * @param className  The name of the class
+     * @param methodName The name of the method to remove a parameter from
      * @param parameterName The name of the parameter to remove
      */
-    public void removeParameter(String className, String methodName, String parameterType, String parameterName) {
+    public void removeParameter(String className, String methodName, String parameterName) {
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
         UMLMethodInfo method = classInfo.getMethodByName(methodName);
@@ -111,14 +110,15 @@ public class UMLMethods {
             System.out.println("Action Canceled: Method " + methodName + " does not exist in class " + className);
             return;
         }
-        UMLParameterInfo parameter = new UMLParameterInfo(parameterType, parameterName);
-        if (method.getParameters().contains(parameter)) {
-            method.removeParameter(parameter);
-            System.out.println("Parameter " + parameter + " removed from method " + methodName + " in class " + className);
+        UMLParameterInfo parameterToRemove = getParameterByName(method, parameterName);
+        if (parameterToRemove != null) {
+            method.removeParameter(parameterToRemove);
+            System.out.println("Parameter '" + parameterName + "' removed from method '" + methodName + "' in class '" + className + "'.");
         } else {
-            System.out.println("Action Canceled: Parameter " + parameter + " does not exist in method " + methodName);
+            System.out.println("Action Canceled: Parameter '" + parameterName + "' does not exist in method '" + methodName + "'.");
         }
     }
+
 
     /**
      * Changes all parameters of a method by replacing the current list with a new list of parameters.
@@ -229,5 +229,21 @@ public class UMLMethods {
             System.out.println("Action Canceled: Method " + methodName + " does not exist in class " + classInfo.getClassName());
         }
         return method;
+    }
+
+    /**
+     * Retrieves a parameter by its name from a method.
+     *
+     * @param method the UMLMethodInfo object representing the method
+     * @param parameterName the name of the parameter to find
+     * @return the UMLParameterInfo object representing the parameter, or null if not found
+     */
+    private UMLParameterInfo getParameterByName(UMLMethodInfo method, String parameterName) {
+        for (UMLParameterInfo parameter : method.getParameters()) {
+            if (parameter.getParameterName().equals(parameterName)) {
+                return parameter;
+            }
+        }
+        return null;
     }
 }
