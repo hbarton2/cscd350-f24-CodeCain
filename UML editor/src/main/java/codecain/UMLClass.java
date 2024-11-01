@@ -78,4 +78,44 @@ public class UMLClass {
             System.out.println("Class " + oldClassName + " renamed to " + newClassName);
         }
     }
+    public static String listAllClassesInfo() {
+        if (classMap.isEmpty()) {
+            return "No classes to display.";
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        for (Map.Entry<Object, UMLClassInfo> entry : classMap.entrySet()) {
+            UMLClassInfo classInfo = entry.getValue();
+
+            // Append class name
+            result.append("Class: ").append(classInfo.getClassName()).append("\n");
+
+            // Append fields
+            result.append("  Fields:\n");
+            for (UMLFieldInfo field : classInfo.getFields()) {
+                result.append("    - ").append(field.getFieldType()).append(" ").append(field.getFieldName()).append("\n");
+            }
+
+            // Append methods with parameters
+            result.append("  Methods:\n");
+            for (UMLMethodInfo method : classInfo.getMethods()) {
+                result.append("    - ").append(method.getMethodName())
+                        .append("(").append(String.join(", ", method.getParameters())).append(")\n");
+            }
+
+            result.append("\n");  // Separate classes visually
+        }
+
+        return result.toString();
+    }
+
+    public static boolean exists(String className) {
+        if (classMap.containsKey(className)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
