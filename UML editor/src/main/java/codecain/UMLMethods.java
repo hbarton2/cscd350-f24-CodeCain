@@ -13,9 +13,9 @@ public class UMLMethods {
      *
      * @param className   The name of the class to which the method is added
      * @param methodName  The name of the method being added
-     * @param parameters  A list of parameters for the method
+     * @param parameters  A list of UMLParameterInfo objects for the method
      */
-    public void addMethod(String className, String methodName, List<String> parameters) {
+    public void addMethod(String className, String methodName, List<UMLParameterInfo> parameters) {
         if (isInputInvalid(className, methodName)) return;
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
@@ -25,7 +25,7 @@ public class UMLMethods {
         } else {
             UMLMethodInfo newMethod = new UMLMethodInfo(methodName, parameters);
             classInfo.getMethods().add(newMethod);
-            System.out.println("Method " + methodName + " with" + parameters + " added to class " + className);
+            System.out.println("Method " + methodName + " with " + parameters + " added to class " + className);
         }
     }
 
@@ -72,11 +72,12 @@ public class UMLMethods {
     /**
      * Adds a parameter to a method.
      *
-     * @param className   The name of the class
-     * @param methodName  The name of the method to add a parameter to
-     * @param parameter   The new parameter to add
+     * @param className     The name of the class
+     * @param methodName    The name of the method to add a parameter to
+     * @param parameterType The type of the parameter to add
+     * @param parameterName The name of the parameter to add
      */
-    public void addParameter(String className, String methodName, String parameter) {
+    public void addParameter(String className, String methodName, String parameterType, String parameterName) {
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
         UMLMethodInfo method = classInfo.getMethodByName(methodName);
@@ -84,22 +85,25 @@ public class UMLMethods {
             System.out.println("Action Canceled: Method " + methodName + " does not exist in class " + className);
             return;
         }
-        if (!method.getParameters().contains(parameter)) {
-            method.addParameter(parameter);
-            System.out.println("Parameter " + parameter + " added to method " + methodName + " in class " + className);
+
+        UMLParameterInfo newParameter = new UMLParameterInfo(parameterType, parameterName);
+        if (!method.getParameters().contains(newParameter)) {
+            method.addParameter(newParameter);
+            System.out.println("Parameter " + newParameter + " added to method " + methodName + " in class " + className);
         } else {
-            System.out.println("Action Canceled: Parameter " + parameter + " already exists in method " + methodName);
+            System.out.println("Action Canceled: Parameter " + newParameter + " already exists in method " + methodName);
         }
     }
 
     /**
      * Removes a parameter from a method.
      *
-     * @param className  The name of the class
-     * @param methodName The name of the method to remove a parameter from
-     * @param parameter  The parameter to remove
+     * @param className     The name of the class
+     * @param methodName    The name of the method to remove a parameter from
+     * @param parameterType The type of the parameter to remove
+     * @param parameterName The name of the parameter to remove
      */
-    public void removeParameter(String className, String methodName, String parameter) {
+    public void removeParameter(String className, String methodName, String parameterType, String parameterName) {
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
         UMLMethodInfo method = classInfo.getMethodByName(methodName);
@@ -107,6 +111,8 @@ public class UMLMethods {
             System.out.println("Action Canceled: Method " + methodName + " does not exist in class " + className);
             return;
         }
+
+        UMLParameterInfo parameter = new UMLParameterInfo(parameterType, parameterName);
         if (method.getParameters().contains(parameter)) {
             method.removeParameter(parameter);
             System.out.println("Parameter " + parameter + " removed from method " + methodName + " in class " + className);
@@ -116,11 +122,12 @@ public class UMLMethods {
     }
 
     /**
-     * Changes all parameters of an existing method.
+     * Changes an existing parameter of a method.
      *
-     * @param className     The name of the class
-     * @param methodName    The name of the method to change parameters for
-     * @param newParameters The new list of parameters
+     * @param className        The name of the class
+     * @param methodName       The name of the method to change parameters for
+     * @param oldParameterName The current name of the parameter
+     * @param newParameterName The new name for the parameter
      */
     public void changeParameter(String className, String methodName, String oldParameterName, String newParameterName) {
         UMLClassInfo classInfo = getClassInfo(className);
@@ -130,8 +137,29 @@ public class UMLMethods {
             System.out.println("Action Canceled: Method " + methodName + " does not exist in class " + className);
             return;
         }
-        method.changeParameter(oldParameterName, newParameterName);
-        System.out.println("Parameter " + oldParameterName + " renamed to " + newParameterName + " in method " + methodName + " of class " + className);
+        if (renameParameter(method, oldParameterName, newParameterName)) {
+            System.out.println("Parameter " + oldParameterName + " renamed to " + newParameterName + " in method " + methodName + " of class " + className);
+        } else {
+            System.out.println("Action Canceled: Parameter " + oldParameterName + " does not exist in method " + methodName);
+        }
+    }
+
+    /**
+     * Helper method to rename a parameter within a UMLMethodInfo.
+     *
+     * @param method           The UMLMethodInfo object
+     * @param oldParameterName The current name of the parameter
+     * @param newParameterName The new name for the parameter
+     * @return true if the parameter was found and renamed, false otherwise
+     */
+    private boolean renameParameter(UMLMethodInfo method, String oldParameterName, String newParameterName) {
+        for (UMLParameterInfo param : method.getParameters()) {
+            if (param.getParameterName().equals(oldParameterName)) {
+                param.setParameterName(newParameterName);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
