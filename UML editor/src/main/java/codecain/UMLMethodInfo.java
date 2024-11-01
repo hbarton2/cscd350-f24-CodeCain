@@ -93,20 +93,19 @@ public class UMLMethodInfo {
     }
 
     /**
-     * Returns a string representation of the UMLMethodInfo object,
-     * including the method name and its parameters in a formatted string.
+     * Returns a string representation of the method with parameters in the format "name(type name, ...)".
      *
-     * @return a string in the format "methodName(param1, param2, ...)"
+     * @return formatted method as "name(type name, ...)"
      */
     @Override
     public String toString() {
-        StringBuilder paramList = new StringBuilder();
-        for (UMLParameterInfo param : parameters) {
-            paramList.append(param.toString()).append(", ");
+        StringBuilder parameterList = new StringBuilder();
+        for (int i = 0; i < parameters.size(); i++) {
+            parameterList.append(parameters.get(i).toString());
+            if (i < parameters.size() - 1) {
+                parameterList.append(", ");
+            }
         }
-        if (paramList.length() > 0) {
-            paramList.setLength(paramList.length() - 2);
-        }
-        return methodName + "(" + paramList + ")";
+        return methodName + "(" + parameterList + ")";
     }
 }
