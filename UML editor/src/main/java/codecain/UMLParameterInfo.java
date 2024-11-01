@@ -1,5 +1,7 @@
 package codecain;
 
+import java.util.Objects;
+
 /**
  * The UMLParameterInfo class represents a parameter in a UML class.
  * It includes the parameter name and the parameter type.
@@ -64,13 +66,38 @@ public class UMLParameterInfo {
     }
 
     /**
-     * Returns a string representation of the UMLParameterInfo object, showing the parameter name and type.
+     * Returns a string representation of the parameter in the format "type name".
      *
-     * @return a string in the format "parameterType : parameterName"
+     * @return formatted parameter as "type name"
      */
     @Override
     public String toString() {
-        return parameterType + " : " + parameterName;
+        return parameterType + " " + parameterName;
+    }
+
+    /**
+     * Compares this UMLParameterInfo object to another object for equality.
+     * Two UMLParameterInfo objects are considered equal if they have the same parameter type and name.
+     *
+     * @param o the object to compare with this UMLParameterInfo
+     * @return true if the specified object is equal to this UMLParameterInfo, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UMLParameterInfo that = (UMLParameterInfo) o;
+        return parameterType.equals(that.parameterType) && parameterName.equals(that.parameterName);
+    }
+
+    /**
+     * Returns the hash code value for this UMLParameterInfo object based on the name and type.
+     *
+     * @return the hash code value for this UMLParameterInfo
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(parameterType, parameterName);
     }
 }
 
