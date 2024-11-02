@@ -1,11 +1,12 @@
-
 package codecain;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * The GUI class represents a UML editor with a graphical user interface (GUI)
@@ -73,7 +74,7 @@ public class CLI extends JFrame {
      * @param command the input command entered by the user
      * @return the result of the command execution as a string
      */
-    private static String executeCommand(String command) {
+    public static String executeCommand(String command) {
         String[] tokens = command.split(" ");
         if (tokens.length == 0) {
             return "No command entered.";
@@ -91,7 +92,7 @@ public class CLI extends JFrame {
             case "rename":
                 return handleRenameCommand(tokens);
             case "list":
-                return handleListCommand(tokens);
+                return  handleListCommand(tokens);
             case "exit":
                 System.exit(0);
             case "save":
@@ -169,9 +170,9 @@ public class CLI extends JFrame {
                 2. delete relationship 'source' 'destination' - Deletes the relationship between 'source' and 'destination'.
 
                 Field Operations:
-                1. add field 'className' 'fieldName' 'fieldType'  - Adds a unique field to the specified class.
-                2. delete field 'className' 'fieldName''fieldType' - Removes a field from the specified class.
-                3. rename field 'className' 'oldFieldName' 'oldFieldType''newFieldName' 'newFieldType' - Renames a field and it's type in the specified class.
+                1. add field 'className' 'fieldType' 'fieldName'  - Adds a unique field to the specified class.
+                2. delete field 'className' 'fieldType' 'fieldName' - Removes a field from the specified class.
+                3. rename field 'className' 'oldFieldName' 'newFieldName' 'newFieldType' - Renames a field and it's type in the specified class.
 
                 Method Operations:
                 1. add method 'className' 'methodName' 'parameters' - Adds a unique method to the specified class.
@@ -269,16 +270,19 @@ public class CLI extends JFrame {
                 if (!UMLClass.exists(className)) {
                     return "Class '" + className + "' does not exist.";
                 }
-                if (tokens.length >= 5) {
-                    return addMethod(tokens[2], tokens[3], Arrays.copyOfRange(tokens, 4, tokens.length));
+                if (tokens.length == 6) {
+                    String methodName = tokens[3];
+                    String paramType = tokens[4];
+                    String paramName = tokens[5];
+                    return addMethod(className, methodName, paramType, paramName);
                 }
                 break;
             case "parameter":
                 if (!UMLClass.exists(className)) {
                     return "Class '" + className + "' does not exist.";
                 }
-                if (tokens.length == 5) {
-                    return addParameter(tokens[2], tokens[3], tokens[4]);
+                if (tokens.length == 6) {
+                    return addParameter(tokens[2], tokens[3], tokens[4], tokens[5]);
                 }
                 break;
             default:
@@ -321,52 +325,43 @@ public class CLI extends JFrame {
      * @param fieldName the name of the field to add
      * @return a message indicating the success of the operation
      */
-    private static String addField(String className, String fieldName, String fieldType) {
+    private static String addField(String className, String fieldType, String fieldName) {
         UMLFields fields = new UMLFields();
         fields.addField(className, fieldName, fieldType);
-        return "Field '" + fieldName + "' added to class '" + className + "'.";
+        return "Field '" + fieldName + "' of type '" + fieldType + "' added to class '" + className + "'.";
     }
 
     /**
-     * Adds a method to a class with parameters.
+     * Adds a method to a class with a single parameter.
      *
      * @param className the name of the class
      * @param methodName the name of the method
-     * @param parameters the parameters of the method
+     * @param paramType the type of the parameter
+     * @param paramName the name of the parameter
      * @return a message indicating the success of the operation
      */
-    private static String addMethod(String className, String methodName, String[] parameters) {
-        String parametersString = String.join(",", parameters);
-        return addMethod(className, methodName, parametersString);
-    }
-
-    /**
-     * Adds a method to a class.
-     *
-     * @param className the name of the class
-     * @param methodName the name of the method
-     * @param parametersString the parameters as a comma-separated string
-     * @return a message indicating the success of the operation
-     */
-    private static String addMethod(String className, String methodName, String parametersString) {
-        String[] parameters = parametersString.split("\\s*,\\s*");
+    private static String addMethod(String className, String methodName, String paramType, String paramName) {
         UMLMethods methods = new UMLMethods();
-        methods.addMethod(className, methodName, Arrays.asList(parameters));
-        return "Method '" + methodName + "' added to class '" + className + "' with parameters: " + Arrays.toString(parameters) + ".";
+        List<UMLParameterInfo> parameterList = new ArrayList<>();
+        parameterList.add(new UMLParameterInfo(paramType, paramName));
+
+        methods.addMethod(className, methodName, parameterList);
+        return "Method '" + methodName + "' added to class '" + className + "' with parameter: " + paramType + " " + paramName + ".";
     }
+
 
     /**
      * Adds a parameter to a method in a class.
      *
      * @param className the name of the class
      * @param methodName the name of the method
-     * @param parameter the parameter to add
+     * @param parameterName the parameter to add
      * @return a message indicating the success of the operation
      */
-    private static String addParameter(String className, String methodName, String parameter) {
+    private static String addParameter(String className, String methodName, String parameterType, String parameterName) {
         UMLMethods methods = new UMLMethods();
-        methods.addParameter(className, methodName, parameter);
-        return "Parameter '" + parameter + "' added to method '" + methodName + "' in class '" + className + "'.";
+        methods.addParameter(className, methodName, parameterType, parameterName);
+        return "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '" + className + "'.";
     }
 
     /**
@@ -401,8 +396,8 @@ public class CLI extends JFrame {
                 if (!UMLClass.exists(className)) {
                     return "Class '" + className + "' does not exist.";
                 }
-                if (tokens.length == 5) {
-                    return deleteField(tokens[2], tokens[3],tokens[4]);
+                if (tokens.length == 4) {
+                    return deleteField(tokens[2], tokens[3]);
                 }
                 break;
             case "method":
@@ -462,9 +457,9 @@ public class CLI extends JFrame {
      * @param fieldName the name of the field to delete
      * @return a message indicating the success of the operation
      */
-    private static String deleteField(String className, String fieldName, String fieldType) {
+    private static String deleteField(String className, String fieldName) {
         UMLFields fields = new UMLFields();
-        fields.removeField(className, fieldName, fieldType);
+        fields.removeField(className, fieldName);
         return "Field '" + fieldName + "' removed from class '" + className + "'.";
     }
 
@@ -486,13 +481,13 @@ public class CLI extends JFrame {
      *
      * @param className the name of the class
      * @param methodName the name of the method
-     * @param parameter the parameter to delete
+     * @param parameterName the parameter to delete
      * @return a message indicating the success of the operation
      */
-    private static String deleteParameter(String className, String methodName, String parameter) {
+    private static String deleteParameter(String className, String methodName, String parameterName) {
         UMLMethods methods = new UMLMethods();
-        methods.removeParameter(className, methodName, parameter);
-        return "Parameter '" + parameter + "' removed from method '" + methodName + "' in class '" + className + "'.";
+        methods.removeParameter(className, methodName, parameterName);
+        return "Parameter '" + parameterName + "' removed from method '" + methodName + "' in class '" + className + "'.";
     }
 
     /**
@@ -520,7 +515,7 @@ public class CLI extends JFrame {
                     return "Class '" + className + "' does not exist.";
                 }
                 if (tokens.length == 7) {
-                    return renameField(tokens[2], tokens[3], tokens[4], tokens[5],tokens[6]);
+                    return renameField(tokens[2], tokens[3], tokens[4], tokens[5]);
                 }
                 break;
             case "method":
@@ -536,7 +531,6 @@ public class CLI extends JFrame {
         }
         return "Invalid command. Use 'help' for available commands.";
     }
-
 
     /**
      * Renames a class.
@@ -558,9 +552,9 @@ public class CLI extends JFrame {
      * @param newFieldName the new name for the field
      * @return a message indicating the success of the operation
      */
-    private static String renameField(String className, String oldFieldName, String oldFieldType, String newFieldName, String newFieldType) {
+    private static String renameField(String className, String oldFieldName, String newFieldName, String newFieldType) {
         UMLFields fields = new UMLFields();
-        fields.renameField(className, oldFieldName, oldFieldType, newFieldName, newFieldType);
+        fields.renameField(className, oldFieldName, newFieldName, newFieldType);
         return "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.";
     }
 
@@ -577,6 +571,7 @@ public class CLI extends JFrame {
         methods.renameMethod(className, oldMethodName, newMethodName);
         return "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.";
     }
+
 
     /**
      * Handles the 'list' command for listing classes or relationships.
@@ -605,7 +600,7 @@ public class CLI extends JFrame {
         if (UMLClass.classMap.isEmpty()) {
             return "No classes available.";
         } else {
-         return UMLClass.listAllClassesInfo();
+            return UMLClass.listAllClassesInfo();
         }
     }
 

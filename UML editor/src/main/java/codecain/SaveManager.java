@@ -46,7 +46,7 @@ public class SaveManager {
         try {
             Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
 
-            UMLClass.classMap = (Map<Object, UMLClassInfo>) umlData.get("classes");
+            UMLClass.classMap = (Map<String, UMLClassInfo>) umlData.get("classes");
          //   UMLClass.classFields = (Map<Object, Map<Object, Object>>) umlData.get("fields");
            // UMLMethods.classMethods = (Map<Object, Map<Object, List<Object>>>) umlData.get("methods");
 

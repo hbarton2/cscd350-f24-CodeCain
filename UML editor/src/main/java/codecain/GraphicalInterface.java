@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * GraphicalInterface class for creating and managing a GUI to edit and save UML class diagrams.
@@ -178,32 +179,46 @@ public class GraphicalInterface extends JFrame {
         detailsText.append("\nMethods:\n");
         for (UMLMethodInfo method : umlClassInfo.getMethods()) {
             detailsText.append(method.getMethodName()).append("(");
-            detailsText.append(String.join(", ", method.getParameters())).append(")\n");
+            detailsText.append(method.getParameters().stream()
+                    .map(param -> param.getParameterType() + " " + param.getParameterName())
+                    .collect(Collectors.joining(", ")));
+            detailsText.append(")\n");
         }
         detailsArea.setText(detailsText.toString());
     }
 
 
-        /**
-         * Adds a method to a specified class.
-         */
-        private void addMethod() {
-            String className = JOptionPane.showInputDialog(this, "Enter the class name to add a method:");
-            String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
-            String parametersInput = JOptionPane.showInputDialog(this, "Enter parameters (comma-separated):");
 
-            List<String> parameters = parametersInput == null ? new ArrayList<>() : List.of(parametersInput.split(","));
-            UMLClassInfo classInfo = UMLClass.classMap.get(className); // Get the class info
-            if (classInfo != null) {
-                new UMLMethods().addMethod(className, methodName, parameters);
-                // Update the class box details
-                JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
-                updateClassBoxDetails(classInfo, detailsArea);
-                JOptionPane.showMessageDialog(this, "Method '" + methodName + "' added to class '" + className + "'.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Class not found. Method not added.");
+    /**
+     * Adds a method to a specified class.
+     */
+    private void addMethod() {
+        String className = JOptionPane.showInputDialog(this, "Enter the class name to add a method:");
+        String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
+        String parametersInput = JOptionPane.showInputDialog(this, "Enter parameters (comma-separated, format: type name):");
+        List<UMLParameterInfo> parameters = new ArrayList<>();
+        if (parametersInput != null && !parametersInput.trim().isEmpty()) {
+            for (String param : parametersInput.split(",")) {
+                String[] typeAndName = param.trim().split("\\s+");
+                if (typeAndName.length == 2) {
+                    parameters.add(new UMLParameterInfo(typeAndName[0], typeAndName[1]));
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid parameter format. Use 'type name' for each parameter.");
+                    return;
+                }
             }
         }
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+        if (classInfo != null) {
+            new UMLMethods().addMethod(className, methodName, parameters);
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
+            JOptionPane.showMessageDialog(this, "Method '" + methodName + "' added to class '" + className + "'.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found. Method not added.");
+        }
+    }
+
 
     /**
      * Deletes a method from a specified class.
@@ -265,8 +280,9 @@ public class GraphicalInterface extends JFrame {
     private void addParameter() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name to add a parameter:");
-        String parameter = JOptionPane.showInputDialog(this, "Enter the parameter to add:");
-        new UMLMethods().addParameter(className, methodName, parameter);
+        String parameterType = JOptionPane.showInputDialog(this, "Enter the parameterType to add:");
+        String parameterName = JOptionPane.showInputDialog(this, "Enter the parameterName to add:");
+        new UMLMethods().addParameter(className, methodName, parameterType, parameterName);
     }
 
     /**
@@ -287,7 +303,8 @@ public class GraphicalInterface extends JFrame {
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
         String oldParameterName = JOptionPane.showInputDialog(this, "Enter the current parameter name:");
         String newParameterName = JOptionPane.showInputDialog(this, "Enter the new parameter name:");
-        new UMLMethods().changeParameter(className, methodName, oldParameterName, newParameterName);
+        String newParameterType = JOptionPane.showInputDialog(this, "Enter the new parameter name:");
+        new UMLMethods().changeSingleParameter(className, methodName, oldParameterName, newParameterName, newParameterType);
     }
 
     /**
