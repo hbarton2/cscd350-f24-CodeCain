@@ -122,7 +122,7 @@ public class UMLMethods {
      * @param methodName    The name of the method to change parameters for
      * @param newParameters The new list of parameters
      */
-    public void changeParameters(String className, String methodName, List<String> newParameters) {
+    public void changeParameter(String className, String methodName, String oldParameterName, String newParameterName) {
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
         UMLMethodInfo method = classInfo.getMethodByName(methodName);
@@ -130,9 +130,8 @@ public class UMLMethods {
             System.out.println("Action Canceled: Method " + methodName + " does not exist in class " + className);
             return;
         }
-        method.getParameters().clear();
-        method.getParameters().addAll(newParameters);
-        System.out.println("Parameters for method " + methodName + " updated in class " + className);
+        method.changeParameter(oldParameterName, newParameterName);
+        System.out.println("Parameter " + oldParameterName + " renamed to " + newParameterName + " in method " + methodName + " of class " + className);
     }
 
     /**
