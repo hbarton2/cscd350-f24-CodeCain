@@ -245,4 +245,15 @@ public class Relationship {
     }
 
 
+    public ArrayList<Relationship> getAttachedRelationships(String className){
+        ArrayList<Relationship> relationships = new ArrayList<>();
+        for (Relationship r : relationshipList){
+            if (r.getClassNames().contains(className)){
+                relationships.add(r);
+            }
+        }
+        return relationships;
+    }
+
+
 }
