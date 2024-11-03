@@ -13,7 +13,7 @@ public class UMLFields {
      * @param fieldName the name of the field being added
      * @param fieldType the type of the field being added
      */
-    public void addField(String className, String fieldName, String fieldType) {
+    public void addField(String className, String fieldType, String fieldName) {
         if (isInputInvalid(className, fieldName)) return;
         if (fieldType == null || fieldType.isBlank()) {
             System.out.println("Action Canceled: Field type is invalid");
@@ -56,7 +56,7 @@ public class UMLFields {
      * @param newFieldName the new name for the field
      * @param newFieldType the new type for the field
      */
-    public void renameField(String className, String oldFieldName, String newFieldName, String newFieldType) {
+    public void renameField(String className, String oldFieldName, String newFieldType, String newFieldName) {
         if (isInputInvalid(className, oldFieldName) || isInputInvalid(className, newFieldName)) {
             return;
         }
