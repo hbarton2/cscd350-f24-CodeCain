@@ -11,22 +11,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The SaveManager class handles saving and loading UML diagrams in JSON format.
+ * It uses the Jackson library to serialize and deserialize UML data structures.
+ */
 public class SaveManager {
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
     /**
-     * Saves the current UML diagram, including classes, fields, and methods, into a JSON file.
+     * Saves the current UML diagram, including classes and relationships, into a JSON file.
      *
      * @param filePath The path to save the JSON file.
+     * @throws IOException If an I/O error occurs while saving the file.
      */
-
     public static void saveToJSON(String filePath) throws IOException {
         try {
             Map<String, Object> umlData = new HashMap<>();
             umlData.put("classes", UMLClass.classMap);
-    //        umlData.put("fields", UMLFields.classFields);
-     //       umlData.put("methods", UMLMethods.classMethods);
             umlData.put("relationships", Relationship.relationshipList);
 
             objectMapper.writeValue(new File(filePath), umlData);
@@ -37,18 +40,21 @@ public class SaveManager {
             throw new IOException(errorCatch);
         }
     }
+
     /**
      * Loads the UML diagram from a JSON file and restores its state.
      *
      * @param filePath The path of the JSON file to load.
+     * @throws IOException If an I/O error occurs while loading the file.
      */
     public static void loadFromJSON(String filePath) throws IOException {
         try {
             Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
 
-            UMLClass.classMap = (Map<String, UMLClassInfo>) umlData.get("classes");
-         //   UMLClass.classFields = (Map<Object, Map<Object, Object>>) umlData.get("fields");
-           // UMLMethods.classMethods = (Map<Object, Map<Object, List<Object>>>) umlData.get("methods");
+            Map<String, UMLClassInfo> classes = objectMapper.convertValue(
+                    umlData.get("classes"), new TypeReference<Map<String, UMLClassInfo>>() {}
+            );
+            UMLClass.classMap = classes;
 
             List<Relationship> relationships = objectMapper.convertValue(
                     umlData.get("relationships"), new TypeReference<List<Relationship>>() {}
