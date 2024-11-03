@@ -25,7 +25,19 @@ public class CLI extends JFrame {
     );
 
 
+    /**
+     * Holds the list of current autocomplete suggestions based on the user's input.
+     * Updated each time the input text changes.
+     * This list is used to provide matching commands for the autocomplete feature.
+     */
     private List<String> currentSuggestions = new ArrayList<>();
+
+
+    /**
+     * Index of the currently highlighted suggestion in the {@code currentSuggestions} list.
+     * Used to track which suggestion is displayed in the preview or selected for autocompletion.
+     * A value of -1 indicates that there are no valid suggestions.
+     */
     private int suggestionIndex = -1;
 
     /**
