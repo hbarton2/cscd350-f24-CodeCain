@@ -70,7 +70,7 @@ public class UMLFieldsTests {
     @Test
     public void testRemoveFieldFromClass() {
         UMLClass.addClass("Test");
-        umlFields.addField("Test", "DOG", "String");
+        umlFields.addField("Test", "String", "DOG");
         umlFields.removeField("Test", "DOG");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
@@ -104,8 +104,8 @@ public class UMLFieldsTests {
     @Test
     public void testRenameField() {
         UMLClass.addClass("Test");
-        umlFields.addField("Test", "DOG", "String");
-        umlFields.renameField("Test", "DOG",  "numOfCats", "Int");
+        umlFields.addField("Test", "String", "DOG");
+        umlFields.renameField("Test", "DOG",  "Int", "numOfCats");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         UMLFieldInfo newFieldName = classInfo.getFields().get(0);
