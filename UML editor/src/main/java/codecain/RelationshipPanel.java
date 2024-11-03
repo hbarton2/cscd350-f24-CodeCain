@@ -41,7 +41,7 @@ public class RelationshipPanel extends JPanel {
             Point c2Location = panel2.getLocation();
 
             int x1 = c1Location.x +panel1.getWidth()/2;
-            int y1 = c1Location.y +panel1.getHeight() + 24;
+            int y1 = c1Location.y +panel1.getHeight() +24;
             int x2 = c2Location.x + panel2.getWidth()/2;
             int y2 = c2Location.y + panel2.getHeight() +24;
 
@@ -68,7 +68,7 @@ public class RelationshipPanel extends JPanel {
     }
 
     private void drawArrow(RelationshipType type, int x, int y, Graphics2D g){
-        int[] diamondx = {x, x-6, x, x+6};
+        int[] diamondx = {x   , x-6 , x, x+6 };
         int[] diamondy = {y-24, y-12, y, y-12};
 
         switch(type){
@@ -90,7 +90,7 @@ public class RelationshipPanel extends JPanel {
             }
             case REALIZATION -> {
                 int[] trianglex = {x , x-12, x+12};
-                int[] triangley = {y, y+24, y+24};
+                int[] triangley = {y-24, y, y};
 
                 g.setColor(Color.BLACK);
                 g.drawPolygon(trianglex,triangley,3);
