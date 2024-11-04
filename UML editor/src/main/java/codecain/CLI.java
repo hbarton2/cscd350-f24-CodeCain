@@ -71,7 +71,7 @@ public class CLI extends JFrame {
         JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.setBackground(Color.BLACK);
         inputPanel.add(commandInput, BorderLayout.CENTER);
-        inputPanel.add(suggestionLabel, BorderLayout.EAST);
+        inputPanel.add(suggestionLabel, BorderLayout.NORTH);
 
         panel.add(inputPanel, BorderLayout.SOUTH);
 
