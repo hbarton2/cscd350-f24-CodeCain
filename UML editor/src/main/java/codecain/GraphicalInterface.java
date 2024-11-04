@@ -510,11 +510,18 @@ public class GraphicalInterface extends JFrame {
     /**
      * Loads a UML diagram from a JSON file.
      */
-    private void loadDiagram() {
+    public void loadDiagram() {
         String fileName = JOptionPane.showInputDialog(this, "Enter file name to load:");
         if (fileName != null && !fileName.trim().isEmpty()) {
             try {
                 SaveManager.loadFromJSON(fileName + ".json");
+
+                // Clear existing canvas and reload
+                canvas.removeAll();
+                UMLClass.classMap.values().forEach(this::createClassBox); // Recreate class boxes with saved positions
+
+                canvas.revalidate();
+                canvas.repaint();
                 JOptionPane.showMessageDialog(this, "Diagram loaded from " + fileName + ".json");
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error loading diagram: " + ex.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
@@ -523,7 +530,6 @@ public class GraphicalInterface extends JFrame {
             JOptionPane.showMessageDialog(this, "Invalid file name. Diagram not loaded.");
         }
     }
-
     /**
      * Main method to initialize and display the GraphicalInterface.
      * @param args command-line arguments
