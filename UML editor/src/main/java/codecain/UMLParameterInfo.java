@@ -19,10 +19,15 @@ public class UMLParameterInfo {
     private String parameterType;
 
     /**
-     * Constructs a UMLParameterInfo object with the specified field name and parameter type.
+     * No-argument constructor for Jackson deserialization.
+     */
+    public UMLParameterInfo() {}
+
+    /**
+     * Constructs a UMLParameterInfo object with the specified parameter type and parameter name.
      *
-     * @param parameterName the name of the parameter
      * @param parameterType the type of the parameter
+     * @param parameterName the name of the parameter
      */
     public UMLParameterInfo(String parameterType, String parameterName) {
         this.parameterType = parameterType;
@@ -39,21 +44,21 @@ public class UMLParameterInfo {
     }
 
     /**
-     * Gets the type of the parameter.
-     *
-     * @return the type of the parameter
-     */
-    public String getParameterType() {
-        return parameterType;
-    }
-
-    /**
      * Sets the name of the parameter.
      *
      * @param parameterName the new name of the parameter
      */
     public void setParameterName(String parameterName) {
         this.parameterName = parameterName;
+    }
+
+    /**
+     * Gets the type of the parameter.
+     *
+     * @return the type of the parameter
+     */
+    public String getParameterType() {
+        return parameterType;
     }
 
     /**
@@ -68,7 +73,7 @@ public class UMLParameterInfo {
     /**
      * Returns a string representation of the parameter in the format "type name".
      *
-     * @return formatted parameter as "type name"
+     * @return a formatted string representing the parameter as "type name"
      */
     @Override
     public String toString() {
@@ -80,7 +85,7 @@ public class UMLParameterInfo {
      * Two UMLParameterInfo objects are considered equal if they have the same parameter type and name.
      *
      * @param o the object to compare with this UMLParameterInfo
-     * @return true if the specified object is equal to this UMLParameterInfo, false otherwise
+     * @return true if the specified object is equal to this UMLParameterInfo; false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -91,7 +96,7 @@ public class UMLParameterInfo {
     }
 
     /**
-     * Returns the hash code value for this UMLParameterInfo object based on the name and type.
+     * Returns the hash code value for this UMLParameterInfo object based on the parameter type and name.
      *
      * @return the hash code value for this UMLParameterInfo
      */
@@ -100,4 +105,3 @@ public class UMLParameterInfo {
         return Objects.hash(parameterType, parameterName);
     }
 }
-

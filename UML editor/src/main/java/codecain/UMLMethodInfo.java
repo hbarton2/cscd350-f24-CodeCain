@@ -19,6 +19,15 @@ public class UMLMethodInfo {
      */
     private List<UMLParameterInfo> parameters;
 
+
+    /**
+     * Constructs a UMLMethodInfo object with an empty list of parameters.
+     */
+    public UMLMethodInfo() {
+        this.parameters = new ArrayList<>();
+    }
+
+
     /**
      * Constructs a UMLMethodInfo object with the specified method name and parameters.
      *
@@ -33,6 +42,7 @@ public class UMLMethodInfo {
             this.parameters = new ArrayList<>();
         }
     }
+
 
     /**
      * Gets the name of the method.
@@ -60,6 +70,13 @@ public class UMLMethodInfo {
     public List<UMLParameterInfo> getParameters() {
         return this.parameters;
     }
+
+    /**
+     * Sets the list of parameters for the method.
+     *
+     * @param parameters
+     */
+    public void setParameters(List<UMLParameterInfo> parameters) { this.parameters = parameters; }
 
     /**
      * Adds a parameter to the method.

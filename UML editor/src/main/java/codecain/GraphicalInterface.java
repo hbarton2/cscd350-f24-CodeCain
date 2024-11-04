@@ -197,6 +197,7 @@ public class GraphicalInterface extends JFrame {
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
         String parametersInput = JOptionPane.showInputDialog(this, "Enter parameters (comma-separated, format: type name):");
         List<UMLParameterInfo> parameters = new ArrayList<>();
+
         if (parametersInput != null && !parametersInput.trim().isEmpty()) {
             for (String param : parametersInput.split(",")) {
                 String[] typeAndName = param.trim().split("\\s+");
@@ -208,6 +209,7 @@ public class GraphicalInterface extends JFrame {
                 }
             }
         }
+
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
         if (classInfo != null) {
             new UMLMethods().addMethod(className, methodName, parameters);
@@ -219,26 +221,24 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
-
     /**
      * Deletes a method from a specified class.
      */
     private void deleteMethod() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to delete a method:");
+        String methodName = JOptionPane.showInputDialog(this, "Enter the name of the method to delete:");
+
+        if (className == null || className.trim().isEmpty() || methodName == null || methodName.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Class name and method name are required.");
+            return;
+        }
+
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
         if (classInfo != null) {
-            String methodName = JOptionPane.showInputDialog(this, "Enter the name of the method to delete:");
-            UMLMethodInfo methodToDelete = classInfo.getMethods().stream()
-                    .filter(method -> method.getMethodName().equals(methodName))
-                    .findFirst().orElse(null);
-            if (methodToDelete != null) {
-                classInfo.getMethods().remove(methodToDelete);
-                JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
-                updateClassBoxDetails(classInfo, detailsArea);
-                JOptionPane.showMessageDialog(this, "Method '" + methodName + "' deleted from class '" + className + "'.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Method not found. Deletion canceled.");
-            }
+            new UMLMethods().removeMethod(className, methodName);
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
+            JOptionPane.showMessageDialog(this, "Method '" + methodName + "' deleted from class '" + className + "'.");
         } else {
             JOptionPane.showMessageDialog(this, "Class not found. Method not deleted.");
         }
@@ -249,26 +249,20 @@ public class GraphicalInterface extends JFrame {
      */
     private void renameMethod() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to rename a method:");
+        String oldMethodName = JOptionPane.showInputDialog(this, "Enter the current method name:");
+        String newMethodName = JOptionPane.showInputDialog(this, "Enter the new method name:");
+
+        if (className == null || className.trim().isEmpty() || oldMethodName == null || oldMethodName.trim().isEmpty() || newMethodName == null || newMethodName.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All inputs are required.");
+            return;
+        }
+
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
         if (classInfo != null) {
-            String oldMethodName = JOptionPane.showInputDialog(this, "Enter the current method name:");
-            UMLMethodInfo methodToRename = classInfo.getMethods().stream()
-                    .filter(method -> method.getMethodName().equals(oldMethodName))
-                    .findFirst().orElse(null);
-            if (methodToRename != null) {
-                String newMethodName = JOptionPane.showInputDialog(this, "Enter the new method name:");
-                if (newMethodName != null && !newMethodName.trim().isEmpty()) {
-                    methodToRename.setMethodName(newMethodName);
-                    // Update the class box details
-                    JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
-                    updateClassBoxDetails(classInfo, detailsArea);
-                    JOptionPane.showMessageDialog(this, "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Invalid new method name. Rename canceled.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Method not found. Rename canceled.");
-            }
+            new UMLMethods().renameMethod(className, oldMethodName, newMethodName);
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
+            JOptionPane.showMessageDialog(this, "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.");
         } else {
             JOptionPane.showMessageDialog(this, "Class not found. Method not renamed.");
         }
@@ -280,9 +274,24 @@ public class GraphicalInterface extends JFrame {
     private void addParameter() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name to add a parameter:");
-        String parameterType = JOptionPane.showInputDialog(this, "Enter the parameterType to add:");
-        String parameterName = JOptionPane.showInputDialog(this, "Enter the parameterName to add:");
-        new UMLMethods().addParameter(className, methodName, parameterType, parameterName);
+        String parameterType = JOptionPane.showInputDialog(this, "Enter the parameter type:");
+        String parameterName = JOptionPane.showInputDialog(this, "Enter the parameter name:");
+
+        if (className == null || className.trim().isEmpty() || methodName == null || methodName.trim().isEmpty() ||
+                parameterType == null || parameterType.trim().isEmpty() || parameterName == null || parameterName.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All inputs are required.");
+            return;
+        }
+
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+        if (classInfo != null) {
+            new UMLMethods().addParameter(className, methodName, parameterType, parameterName);
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
+            JOptionPane.showMessageDialog(this, "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '" + className + "'.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found. Parameter not added.");
+        }
     }
 
     /**
@@ -291,8 +300,29 @@ public class GraphicalInterface extends JFrame {
     private void deleteParameter() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name to delete a parameter:");
-        String parameter = JOptionPane.showInputDialog(this, "Enter the parameter to delete:");
-        new UMLMethods().removeParameter(className, methodName, parameter);
+        String parameterName = JOptionPane.showInputDialog(this, "Enter the parameter name to delete:");
+
+        if (className == null || className.trim().isEmpty() || methodName == null || methodName.trim().isEmpty() || parameterName == null || parameterName.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All inputs are required.");
+            return;
+        }
+
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+        if (classInfo != null) {
+            new UMLMethods().removeParameter(className, methodName, parameterName);
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
+            JOptionPane.showMessageDialog(this, "Parameter '" + parameterName + "' deleted from method '" + methodName + "' in class '" + className + "'.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found. Parameter not deleted.");
+        }
+    }
+
+    private void Check(String className, String parameterType, String parameterName,String methodName) {
+        if (className == null || className.trim().isEmpty() || methodName == null || methodName.trim().isEmpty() ||
+                parameterType == null || parameterType.trim().isEmpty() || parameterName == null || parameterName.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All inputs are required.");
+        }
     }
 
     /**
@@ -302,9 +332,24 @@ public class GraphicalInterface extends JFrame {
         String className = JOptionPane.showInputDialog(this, "Enter the class name:");
         String methodName = JOptionPane.showInputDialog(this, "Enter the method name:");
         String oldParameterName = JOptionPane.showInputDialog(this, "Enter the current parameter name:");
+        String newParameterType = JOptionPane.showInputDialog(this, "Enter the new parameter type:");
         String newParameterName = JOptionPane.showInputDialog(this, "Enter the new parameter name:");
-        String newParameterType = JOptionPane.showInputDialog(this, "Enter the new parameter name:");
-        new UMLMethods().changeSingleParameter(className, methodName, oldParameterName, newParameterName, newParameterType);
+
+        if (className == null || className.trim().isEmpty() || methodName == null || methodName.trim().isEmpty() ||
+                oldParameterName == null || oldParameterName.trim().isEmpty() || newParameterType == null || newParameterType.trim().isEmpty() || newParameterName == null || newParameterName.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All inputs are required.");
+            return;
+        }
+
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+        if (classInfo != null) {
+            new UMLMethods().changeSingleParameter(className, methodName, oldParameterName, newParameterType, newParameterName);
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
+            JOptionPane.showMessageDialog(this, "Parameter '" + oldParameterName + "' renamed to '" + newParameterName + "' in method '" + methodName + "' of class '" + className + "'.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found. Parameter not renamed.");
+        }
     }
 
     /**
@@ -382,45 +427,44 @@ public class GraphicalInterface extends JFrame {
      */
     private void addField() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to add a field to:");
+        String fieldName = JOptionPane.showInputDialog(this, "Enter the name of the field to add:");
+        String fieldType = JOptionPane.showInputDialog(this, "Enter the type of the field:");
+
+        if (className == null || fieldName == null || fieldType == null) {
+            JOptionPane.showMessageDialog(this, "Operation canceled.");
+            return;
+        }
+
+        UMLFields fieldManager = new UMLFields();
+        fieldManager.addField(className, fieldType, fieldName);
+
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
         if (classInfo != null) {
-            String fieldName = JOptionPane.showInputDialog(this, "Enter the name of the field to add:");
-            String fieldType = JOptionPane.showInputDialog(this, "Enter the type of the field:");
-            if (fieldName != null && !fieldName.trim().isEmpty() && fieldType != null && !fieldType.trim().isEmpty()) {
-                UMLFieldInfo newField = new UMLFieldInfo(fieldName, fieldType);
-                classInfo.getFields().add(newField);
-                JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
-                updateClassBoxDetails(classInfo, detailsArea);
-                JOptionPane.showMessageDialog(this, "Field '" + fieldName + "' added to class '" + className + "'.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid field name or type. Field not added.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Class not found. Field not added.");
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
         }
     }
+
 
     /**
      * Deletes a field from a specified class.
      */
     private void deleteField() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to delete a field from:");
+        String fieldName = JOptionPane.showInputDialog(this, "Enter the name of the field to delete:");
+
+        if (className == null || fieldName == null) {
+            JOptionPane.showMessageDialog(this, "Operation canceled.");
+            return;
+        }
+
+        UMLFields fieldManager = new UMLFields();
+        fieldManager.removeField(className, fieldName);
+
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
         if (classInfo != null) {
-            String fieldName = JOptionPane.showInputDialog(this, "Enter the name of the field to delete:");
-            UMLFieldInfo fieldToRemove = classInfo.getFields().stream()
-                    .filter(field -> field.getFieldName().equals(fieldName))
-                    .findFirst().orElse(null);
-            if (fieldToRemove != null) {
-                classInfo.getFields().remove(fieldToRemove);
-                JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
-                updateClassBoxDetails(classInfo, detailsArea);
-                JOptionPane.showMessageDialog(this, "Field '" + fieldName + "' deleted from class '" + className + "'.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Field not found. Deletion canceled.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Class not found. Field not deleted.");
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
         }
     }
 
@@ -429,27 +473,22 @@ public class GraphicalInterface extends JFrame {
      */
     private void renameField() {
         String className = JOptionPane.showInputDialog(this, "Enter the class name to rename a field in:");
+        String oldFieldName = JOptionPane.showInputDialog(this, "Enter the current name of the field:");
+        String newFieldName = JOptionPane.showInputDialog(this, "Enter the new name for the field:");
+        String newFieldType = JOptionPane.showInputDialog(this, "Enter the new type for the field:");
+
+        if (className == null || oldFieldName == null || newFieldName == null || newFieldType == null) {
+            JOptionPane.showMessageDialog(this, "Operation canceled.");
+            return;
+        }
+
+        UMLFields fieldManager = new UMLFields();
+        fieldManager.renameField(className, oldFieldName, newFieldType, newFieldName);
+
         UMLClassInfo classInfo = UMLClass.classMap.get(className);
         if (classInfo != null) {
-            String oldFieldName = JOptionPane.showInputDialog(this, "Enter the current name of the field:");
-            UMLFieldInfo fieldToRename = classInfo.getFields().stream()
-                    .filter(field -> field.getFieldName().equals(oldFieldName))
-                    .findFirst().orElse(null);
-            if (fieldToRename != null) {
-                String newFieldName = JOptionPane.showInputDialog(this, "Enter the new name for the field:");
-                if (newFieldName != null && !newFieldName.trim().isEmpty()) {
-                    fieldToRename.setFieldName(newFieldName);
-                    JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
-                    updateClassBoxDetails(classInfo, detailsArea);
-                    JOptionPane.showMessageDialog(this, "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Invalid new field name. Rename canceled.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Field not found. Rename canceled.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Class not found. Field not renamed.");
+            JTextArea detailsArea = (JTextArea) classPanels.get(className).getComponent(1);
+            updateClassBoxDetails(classInfo, detailsArea);
         }
     }
 
