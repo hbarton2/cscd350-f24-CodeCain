@@ -7,6 +7,9 @@ you can find it here: https://www.java.com/en/download/.
 
 
 To start up the program:
-1. Run the GUI class to start the program. And make sure you enable Maven to run the program by right clicking on
-   pom.xml and add the project to maven.
-2. Use help menu to get started with the program.
+1. Navigate to the folder "umlEditor"
+2. Then look for the folder "out"
+3. Click on the folder named "artifacts"
+4. Open the file "umlEditor_jar"
+5. Make sure you have java installed on your computer linked above. Then double click the file inside named "umlEditor"
+6. You are done and the program should be running.
