@@ -27,49 +27,27 @@ public class SaveManager {
      * @throws IOException If an I/O error occurs while saving the file.
      */
     public static void saveToJSON(String filePath) throws IOException {
-        try {
-            Map<String, Object> umlData = new HashMap<>();
-            umlData.put("classes", UMLClass.classMap);
-            umlData.put("relationships", Relationship.relationshipList);
+        Map<String, Object> umlData = new HashMap<>();
+        umlData.put("classes", UMLClass.classMap);
+        umlData.put("relationships", Relationship.relationshipList);
 
-            objectMapper.writeValue(new File(filePath), umlData);
-            System.out.println("UML diagram saved successfully to JSON at " + filePath);
-        } catch (IOException e) {
-            String errorCatch = "Error saving UML diagram to JSON: " + e.getMessage();
-            System.err.println(errorCatch);
-            throw new IOException(errorCatch);
-        }
+        objectMapper.writeValue(new File(filePath), umlData);
+        System.out.println("UML diagram saved successfully to JSON at " + filePath);
     }
 
-    /**
-     * Loads the UML diagram from a JSON file and restores its state.
-     *
-     * @param filePath The path of the JSON file to load.
-     * @throws IOException If an I/O error occurs while loading the file.
-     */
     public static void loadFromJSON(String filePath) throws IOException {
-        try {
-            Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
+        Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
 
-            Map<String, UMLClassInfo> classes = objectMapper.convertValue(
-                    umlData.get("classes"), new TypeReference<Map<String, UMLClassInfo>>() {}
-            );
-            UMLClass.classMap = classes;
+        Map<String, UMLClassInfo> classes = objectMapper.convertValue(
+                umlData.get("classes"), new TypeReference<Map<String, UMLClassInfo>>() {}
+        );
+        UMLClass.classMap = classes;
 
-            List<Relationship> relationships = objectMapper.convertValue(
-                    umlData.get("relationships"), new TypeReference<List<Relationship>>() {}
-            );
-            Relationship.relationshipList = new ArrayList<>(relationships);
+        List<Relationship> relationships = objectMapper.convertValue(
+                umlData.get("relationships"), new TypeReference<List<Relationship>>() {}
+        );
+        Relationship.relationshipList = new ArrayList<>(relationships);
 
-            System.out.println("UML diagram loaded successfully from JSON.");
-        } catch (IOException e) {
-            String errorCatch = "Error loading UML diagram from JSON: " + e.getMessage();
-            System.err.println(errorCatch);
-            throw new IOException(errorCatch);
-        } catch (ClassCastException e) {
-            String errorCatch = "Error casting data from JSON to the expected structure: " + e.getMessage();
-            System.err.println(errorCatch);
-            throw new IOException(errorCatch);
-        }
+        System.out.println("UML diagram loaded successfully from JSON.");
     }
 }
