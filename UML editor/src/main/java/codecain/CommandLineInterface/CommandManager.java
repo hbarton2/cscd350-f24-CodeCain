@@ -1,8 +1,7 @@
 package codecain.CommandLineInterface;
 
 import codecain.BackendCode.*;
-
-import javax.swing.*;
+import javafx.scene.control.TextArea;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
  */
 public class CommandManager {
 
-    private JTextArea commandOutput;
+    private TextArea commandOutput;
     private FileOperations fileOperations;
 
     /**
@@ -19,11 +18,19 @@ public class CommandManager {
      *
      * @param commandOutput JTextArea to display command outputs
      */
-    public CommandManager(JTextArea commandOutput) {
+    public CommandManager(TextArea commandOutput) {
         this.commandOutput = commandOutput;
         this.fileOperations = new FileOperations();
     }
 
+    /**
+     * Appends text to the command output TextArea.
+     *
+     * @param text the text to append
+     */
+    private void appendToOutput(String text) {
+        commandOutput.appendText(text);
+    }
 
     /**
      * Parses and executes a given command by identifying its type and performing the corresponding operation.
@@ -33,18 +40,16 @@ public class CommandManager {
     public void parseAndExecute(String command) {
         String[] tokens = command.split(" ");
         if (tokens.length == 0 || tokens[0].isEmpty()) {
-            commandOutput.append("No command entered.\n");
+            appendToOutput("No command entered.\n");
             return;
         }
 
         String commandName = tokens[0].toLowerCase();
         String result;
-        int helpStartPosition = commandOutput.getDocument().getLength();
         switch (commandName) {
             case "help" -> {
                 result = DisplayHelper.showHelp();
-                commandOutput.append(">> " + command + "\n" + result + "\n");
-                commandOutput.setCaretPosition(helpStartPosition);
+                appendToOutput(">> " + command + "\n" + result + "\n");
                 return;
             }
             case "add", "delete", "rename", "list" -> result = handleCommand(tokens);
@@ -58,8 +63,7 @@ public class CommandManager {
         }
 
         if (!result.isEmpty()) {
-            commandOutput.append(">> " + command + "\n" + result + "\n");
-            commandOutput.setCaretPosition(commandOutput.getDocument().getLength()); // Default scroll behavior
+            appendToOutput( "\n" + result + "\n");
         }
     }
 

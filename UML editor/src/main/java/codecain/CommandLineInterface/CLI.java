@@ -1,217 +1,41 @@
 package codecain.CommandLineInterface;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
- * Command Line Interface (CLI) for the UML Editor application.
- * Provides a command-driven interface for interacting with the UML model.
+ * Main entry point for the UML Editor Command Line Interface application using JavaFX.
+ * This class initializes the CLI and starting the JavaFX application.
  */
-public class CLI extends JFrame {
-    private JTextArea commandOutput;
-    private JTextField commandInput;
-    private JLabel suggestionLabel;
-    private CommandManager commandManager;
-
-    private static final List<String> COMMANDS = List.of(
-            "add", "delete", "rename", "list", "help", "exit",
-            "add class", "add field", "add method", "add parameter", "add relationship",
-            "delete class", "delete field", "delete method", "delete parameter", "delete relationship",
-            "rename class", "rename field", "rename method", "rename parameter", "rename all_parameters",
-            "list classes", "list relationships"
-    );
-
+public class CLI extends Application {
 
     /**
-     * Holds the list of current autocomplete suggestions based on the user's input.
-     * Updated each time the input text changes.
-     * This list is used to provide matching commands for the autocomplete feature.
+     * The controller for this CLI application. Manages interactions between the CLIView and the underlying model.
      */
-    private List<String> currentSuggestions = new ArrayList<>();
-
+    private CLIController cliController;
 
     /**
-     * Index of the currently highlighted suggestion in the {@code currentSuggestions} list.
-     * Used to track which suggestion is displayed in the preview or selected for autocompletion.
-     * A value of -1 indicates that there are no valid suggestions.
+     * JavaFX lifecycle method that initializes the application stage and sets up the CLIView and CLIController.
+     * This method is automatically called by the JavaFX runtime when the application is launched.
+     * It creates the CLIView and CLIController instances, linking them to establish MVC relationships.
+     *
+     * @param primaryStage the main stage for this JavaFX application, provided by the JavaFX runtime.
      */
-    private int suggestionIndex = -1;
-
-    /**
-     * Constructs the CLI, initializing components and setting up the UI.
-     */
-    public CLI() {
-        setTitle("UML Editor Command Line");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.BLACK);
-        add(panel);
-
-        commandOutput = new JTextArea();
-        commandOutput.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        commandOutput.setEditable(false);
-        commandOutput.setBackground(Color.BLACK);
-        commandOutput.setForeground(Color.WHITE);
-        JScrollPane scrollPane = new JScrollPane(commandOutput);
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        commandInput = new JTextField();
-        commandInput.setBackground(Color.BLACK);
-        commandInput.setForeground(Color.WHITE);
-
-        suggestionLabel = new JLabel();
-        suggestionLabel.setForeground(Color.GRAY);
-        suggestionLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
-
-        JPanel inputPanel = new JPanel(new BorderLayout());
-        inputPanel.setBackground(Color.BLACK);
-        inputPanel.add(commandInput, BorderLayout.CENTER);
-        inputPanel.add(suggestionLabel, BorderLayout.NORTH);
-
-        panel.add(inputPanel, BorderLayout.SOUTH);
-
-        commandManager = new CommandManager(commandOutput);
-
-        setupCommandInputListener();
-        setupGlobalKeyDispatcher();
-
-        String welcomeMessage = """
-        Welcome to the CSCD 350 UML Editor!
-        
-        Developed by: Code Cain
-        
-        Type 'help' to view available commands and get started.
-        
-        Note: To use autocomplete, look to the right of the text box. 
-        When you see the word you want to autocomplete, press Tab.
-        
-        Enjoy designing your UML diagrams!
-        """;
-        commandOutput.append(welcomeMessage);
-
-        setResizable(true);
-        setVisible(true);
+    @Override
+    public void start(Stage primaryStage) {
+        CLIView view = new CLIView(primaryStage);
+        cliController = new CLIController(view);
+        view.setController(cliController);
+        cliController.initialize();
     }
 
     /**
-     * Sets up the command input listener to handle commands when the user presses Enter.
-     */
-    private void setupCommandInputListener() {
-        commandInput.addActionListener(e -> {
-            String inputCommand = commandInput.getText();
-            if (!inputCommand.trim().isEmpty()) {
-                commandManager.parseAndExecute(inputCommand);
-                commandInput.setText("");
-                resetAutocomplete();
-            }
-        });
-        commandInput.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            @Override
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                updateSuggestions(commandInput.getText().trim());
-            }
-            @Override
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                updateSuggestions(commandInput.getText().trim());
-            }
-            @Override
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                updateSuggestions(commandInput.getText().trim());
-            }
-        });
-    }
-
-    /**
-     * Sets up a global key dispatcher to handle special key events, such as confirming an autocomplete suggestion.
-     */
-    private void setupGlobalKeyDispatcher() {
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
-            if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_TAB) {
-                e.consume();
-                confirmSuggestion();
-                return true;
-            }
-            return false;
-        });
-    }
-
-    /**
-     * Updates the autocomplete suggestions based on the current text input by the user.
-     * @param currentText The current text in the command input field.
-     */
-    private void updateSuggestions(String currentText) {
-        currentSuggestions = getAutocompleteSuggestions(currentText);
-        suggestionIndex = currentSuggestions.isEmpty() ? -1 : 0;
-        showPreview();
-    }
-
-    /**
-     * Displays the current suggestion as a preview next to the command input field.
-     */
-    private void showPreview() {
-        if (suggestionIndex != -1 && suggestionIndex < currentSuggestions.size()) {
-            String suggestion = currentSuggestions.get(suggestionIndex);
-            suggestionLabel.setText(suggestion.substring(commandInput.getText().trim().length()));
-            suggestionLabel.setForeground(Color.CYAN);
-        } else {
-            suggestionLabel.setText("");
-        }
-    }
-
-    /**
-     * Confirms the current autocomplete suggestion by setting it as the command input's text.
-     */
-    private void confirmSuggestion() {
-        if (suggestionIndex != -1 && suggestionIndex < currentSuggestions.size()) {
-            String suggestion = currentSuggestions.get(suggestionIndex);
-            commandInput.setText(suggestion);
-        }
-        suggestionLabel.setText("");
-    }
-
-    /**
-     * Gets a list of autocomplete suggestions based on the current text input.
-     * @param currentText The current text in the command input field.
-     * @return A list of matching autocomplete suggestions.
-     */
-    private List<String> getAutocompleteSuggestions(String currentText) {
-        List<String> matches = new ArrayList<>();
-        for (String command : COMMANDS) {
-            if (command.startsWith(currentText)) {
-                matches.add(command);
-            }
-        }
-        return matches;
-    }
-
-    /**
-     * Resets the autocomplete suggestions, clearing any current suggestions and resetting the index.
-     */
-    private void resetAutocomplete() {
-        currentSuggestions.clear();
-        suggestionIndex = -1;
-        suggestionLabel.setText("");
-    }
-
-    /**
-     * Entry point of the CLI application.
-     * @param args Command-line arguments.
+     * Main method that serves as the entry point for the Java application.
+     * Calls {@link #launch(String...)} to start the JavaFX application.
+     *
+     * @param args command-line arguments passed to the application (not used).
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(CLI::new);
-    }
-
-    /**
-     * Gets the CommandManager instance associated with this CLI.
-     * Main use is for the CLI Testing Class.
-     * @return The CommandManager instance.
-     */
-    public CommandManager getCommandManager() {
-        return commandManager;
+        launch(args);
     }
 }
