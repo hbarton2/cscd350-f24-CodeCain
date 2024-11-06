@@ -1,4 +1,6 @@
-package codecain;
+package codecain.CommandLineInterface;
+
+import codecain.BackendCode.*;
 
 import javax.swing.*;
 import java.util.ArrayList;

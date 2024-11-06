@@ -1,4 +1,6 @@
-package codecain;
+package codecain.GraphicalUserInterface;
+
+import codecain.CommandLineInterface.CLI;
 
 import javax.swing.*;
 import java.awt.*;

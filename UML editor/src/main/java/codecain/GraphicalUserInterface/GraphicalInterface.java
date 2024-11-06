@@ -1,4 +1,6 @@
-package codecain;
+package codecain.GraphicalUserInterface;
+
+import codecain.BackendCode.*;
 
 import javax.swing.*;
 import java.awt.*;
