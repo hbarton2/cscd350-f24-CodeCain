@@ -15,7 +15,8 @@ public class Controller {
 
     @FXML
     private void addClassBtn() {
-        ClassNode classNode = new ClassNode("New Class");
+        String className = "New Class #" + (Storage.storage.size() + 1);
+        ClassNode classNode = new ClassNode(className);
 
         // Calculate the center of the canvas
         double centerX = (classContainer.getWidth() - classNode.getPrefWidth()) / 2;
@@ -26,8 +27,10 @@ public class Controller {
         classNode.setLayoutY(centerY);
 
         classNode.setOnMouseClicked(event -> selectClassNode(classNode));
-
         classContainer.getChildren().add(classNode);
+
+        Storage.addClass(className);
+        System.out.println("Storage size: " + Storage.storage.size());
 
 
     }

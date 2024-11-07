@@ -1,19 +1,17 @@
 package codecain;
 
-import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Callback;
 
 public class ClassNode extends VBox {
 
@@ -25,14 +23,18 @@ public class ClassNode extends VBox {
     private double mouseXOffset = 0;
     private double mouseYOffset = 0;
 
-    private Label className;
+    private Label classNameLabel;
+    private TextField classNameField;
     private final ListView<String> fields;
     private final ListView<String> methods;
 
     public ClassNode(String className) {
-        this.className = new Label(className);
+        this.classNameLabel = new Label(className);
+        this.classNameField = new TextField(className);
         this.fields = new ListView<>();
         this.methods = new ListView<>();
+
+        configureClassName();
 
         // Add dummy data to fields
         this.fields.getItems().addAll("int x", "String name", "double salary", "int y", "in age", "int hours", "String fullName");
@@ -41,14 +43,14 @@ public class ClassNode extends VBox {
 
 
         // Configure class name style
-        this.className.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 0 5 0;");
-        this.className.setAlignment(Pos.CENTER);
+        this.classNameLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 0 5 0;");
+        this.classNameLabel.setAlignment(Pos.CENTER);
 
         this.setAlignment(Pos.TOP_CENTER);
 
         this.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 4;");
         this.setPrefSize(200, 300);
-        this.getChildren().addAll(this.className, this.fields, this.methods);
+        this.getChildren().addAll(this.classNameLabel, this.fields, this.methods);
 
         // Configure the shadow effect
         shadowEffect.setRadius(10);
@@ -62,8 +64,59 @@ public class ClassNode extends VBox {
         // Draggable
         this.setOnMousePressed(this::onMousePressed);
         this.setOnMouseDragged(this::onMouseDragged);
+        this.classNameLabel.setOnMouseClicked(this::onLabelDoubleClick);
 
 
+    }
+
+    private void configureClassName() {
+        // Set up TextField for editing with actions
+        classNameField.setVisible(false);  // Initially hide TextField
+        classNameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                saveClassName();
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                cancelClassNameEdit();
+            }
+        });
+
+        classNameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                cancelClassNameEdit();  // Cancel edit when focus is lost
+            }
+        });
+    }
+
+    private void onLabelDoubleClick(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            startClassNameEdit();
+        }
+    }
+
+    private void startClassNameEdit() {
+        classNameField.setText(classNameLabel.getText());
+        classNameLabel.setVisible(false);
+        this.getChildren().set(0, classNameField);  // Replace label with TextField
+        classNameField.setVisible(true);
+        classNameField.requestFocus();
+    }
+
+    private void saveClassName() {
+        String newName = classNameField.getText().trim();
+        Result result = Storage.renameClass(newName);
+        if (result.getStatus() == Status.ERROR || result.getStatus() == Status.WARNING) {
+            alert("WARNING", result.getMessage());
+        } else {
+            classNameLabel.setText(newName);
+            cancelClassNameEdit();
+        }
+
+    }
+
+    private void cancelClassNameEdit() {
+        classNameField.setVisible(false);
+        this.getChildren().set(0, classNameLabel);  // Replace TextField with label
+        classNameLabel.setVisible(true);
     }
 
     public void select() {
@@ -113,5 +166,16 @@ public class ClassNode extends VBox {
         listView.setCellFactory(TextFieldListCell.forListView());
     }
 
+    private void alert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public String getName() {
+        return classNameLabel.getText();
+    }
 
 }
