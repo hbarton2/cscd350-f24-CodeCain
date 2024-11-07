@@ -10,10 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d97d09b8-ce59-4ac2-b037-c5781ec0cb86" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/ClassNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/main/resources/GraphicalInterface.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/resources/GraphicalInterface.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +90,7 @@
       <recent name="C:\Users\Michelle\Documents\School\year 4\CSCD350\projects\cscd350-f24-CodeCain" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.GraphicalInterface">
+  <component name="RunManager" selected="Maven.UMLeditor [clean,javafx:run]">
     <configuration name="CLI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="codecain.CLI" />
       <module name="UMLeditor" />
@@ -227,6 +225,9 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
