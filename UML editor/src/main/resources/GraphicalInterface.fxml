@@ -5,6 +5,7 @@
 
 <AnchorPane fx:id="classContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codecain.Controller">
    <children>
-      <Button layoutX="464.0" layoutY="538.0" mnemonicParsing="false" onAction="#addClassBtn" text="Add Class" />
+      <Button layoutX="704.0" layoutY="747.0" mnemonicParsing="false" onAction="#addClassBtn" text="Add Class" />
+      <Button layoutX="804.0" layoutY="747.0" mnemonicParsing="false" onAction="#deleteClassBtn" text="Delete Class" />
    </children>
 </AnchorPane>
