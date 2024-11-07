@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -56,6 +57,9 @@ public class ClassNode extends VBox {
         shadowEffect.setColor(Color.rgb(0, 0, 0, 0.2));  // Light gray shadow
 
         setEditableCellFactory(this.fields);
+        setEditableCellFactory(this.methods);
+
+        // Draggable
         this.setOnMousePressed(this::onMousePressed);
         this.setOnMouseDragged(this::onMouseDragged);
 
@@ -101,78 +105,13 @@ public class ClassNode extends VBox {
     private void onMouseDragged(MouseEvent event) {
         this.setLayoutX(event.getSceneX() - mouseXOffset);
         this.setLayoutY(event.getSceneY() - mouseYOffset);
-
     }
 
-    // Helper method to set editable cell factory
+    // Set TextFieldListCell for editable ListView
     private void setEditableCellFactory(ListView<String> listView) {
-        listView.setCellFactory(new Callback<>() {
-            @Override
-            public ListCell<String> call(ListView<String> listView) {
-                return new ListCell<>() {
-                    private final TextField textField = new TextField();
-
-                    {
-                        // Set up double-click to start editing
-                        setOnMouseClicked(event -> {
-                            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                                startEdit();
-                            }
-                        });
-
-                        // Commit edit on ENTER key press
-                        textField.setOnAction(event -> commitEdit(textField.getText()));
-
-                        // Cancel edit on losing focus
-                        textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-                            if (!isNowFocused) {
-                                cancelEdit();
-                            }
-                        });
-                    }
-
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                            setGraphic(null);
-                        } else if (isEditing()) {
-                            textField.setText(item);
-                            setText(null);
-                            setGraphic(textField);
-                        } else {
-                            setText(item);
-                            setGraphic(null);
-                        }
-                    }
-
-                    @Override
-                    public void startEdit() {
-                        super.startEdit();
-                        if (getItem() != null) {
-                            textField.setText(getItem());
-                            setGraphic(textField);
-                            textField.requestFocus();
-                            textField.selectAll();
-                        }
-                    }
-
-                    @Override
-                    public void cancelEdit() {
-                        super.cancelEdit();
-                        setText(getItem());
-                        setGraphic(null);
-                    }
-
-                    @Override
-                    public void commitEdit(String newValue) {
-                        super.commitEdit(newValue);
-                        // Update the list item with the new value
-                        listView.getItems().set(getIndex(), newValue);
-                    }
-                };
-            }
-        });
+        listView.setEditable(true);
+        listView.setCellFactory(TextFieldListCell.forListView());
     }
+
+
 }
