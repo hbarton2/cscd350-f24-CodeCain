@@ -1,6 +1,7 @@
 package codecain;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -10,6 +11,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 
 public class ClassNode extends VBox {
@@ -37,6 +39,12 @@ public class ClassNode extends VBox {
         this.methods.getItems().addAll("void setName(String name)", "int getX()", "double getSalary()");
 
 
+        // Configure class name style
+        this.className.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 0 5 0;");
+        this.className.setAlignment(Pos.CENTER);
+
+        this.setAlignment(Pos.TOP_CENTER);
+
         this.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 4;");
         this.setPrefSize(200, 300);
         this.getChildren().addAll(this.className, this.fields, this.methods);
@@ -58,7 +66,7 @@ public class ClassNode extends VBox {
         isSelected = true;
 
         // Apply a slight color change and shadow effect
-        this.setStyle("-fx-background-color: #e0f7fa; -fx-border-color: #00796b; -fx-border-width: 4;");
+        this.setStyle("-fx-background-color: #e0f7fa; -fx-border-color: #02769e; -fx-border-width: 4;");
         this.setEffect(shadowEffect);
     }
 
@@ -74,7 +82,7 @@ public class ClassNode extends VBox {
         System.out.println("toggleSelection called");
         isSelected = !isSelected;
         if (isSelected) {
-            this.setStyle("-fx-background-color: #e0f7fa; -fx-border-color: #00796b; -fx-border-width: 4;");
+            this.setStyle("-fx-background-color: #e0f7fa; -fx-border-color: #02769e; -fx-border-width: 4;");
         } else {
             this.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;");
         }
