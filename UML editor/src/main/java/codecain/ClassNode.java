@@ -25,8 +25,8 @@ public class ClassNode extends VBox {
 
     private Label classNameLabel;
     private TextField classNameField;
-    private final ListView<String> fields;
-    private final ListView<String> methods;
+    final ListView<String> fields;
+    final ListView<String> methods;
 
     public ClassNode(String className) {
         this.classNameLabel = new Label(className);
@@ -37,9 +37,9 @@ public class ClassNode extends VBox {
         configureClassName();
 
         // Add dummy data to fields
-        this.fields.getItems().addAll("int x", "String name", "double salary", "int y", "in age", "int hours", "String fullName");
+//        this.fields.getItems().addAll("int x", "String name", "double salary", "int y", "in age", "int hours", "String fullName");
         // Add dummy data to methods
-        this.methods.getItems().addAll("void setName(String name)", "int getX()", "double getSalary()");
+//        this.methods.getItems().addAll("void setName(String name)", "int getX()", "double getSalary()");
 
 
         // Configure class name style
@@ -176,6 +176,14 @@ public class ClassNode extends VBox {
 
     public String getName() {
         return classNameLabel.getText();
+    }
+
+    public ClassNodeDTO toDTO() {
+        return new ClassNodeDTO(
+                classNameLabel.getText(),
+                fields.getItems(),
+                methods.getItems()
+        );
     }
 
 }

@@ -1,0 +1,1 @@
+{"classes":[{"className":"New Class #10","fields":["String name sergei","String fullName","double salary","int y","int age","int hours","String fullName"],"methods":["void setName(String name)","int getX()","double getSalary()"]}]}
