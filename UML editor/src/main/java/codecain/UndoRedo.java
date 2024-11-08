@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public class UndoRedo {
     public Stack<Object> undoStack;
-    Stack<Object> redoStack;
+    public Stack<Object> redoStack;
 
     private History history;
 
