@@ -1,4 +1,8 @@
-import codecain.*;
+import codecain.BackendCode.Relationship;
+import codecain.BackendCode.UMLClass;
+import codecain.BackendCode.UMLClassInfo;
+import codecain.BackendCode.UMLMethodInfo;
+import codecain.CommandLineInterface.CLI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

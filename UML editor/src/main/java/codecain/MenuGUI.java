@@ -1,5 +1,8 @@
 package codecain;
 
+import codecain.CommandLineInterface.CLI;
+import codecain.GraphicalUserInterface.GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -44,7 +47,7 @@ public class MenuGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Open the graphical interface
-                GraphicalInterface gui = new GraphicalInterface();
+                GUI gui = new GUI();
                 gui.setVisible(true);
                 MenuGUI.this.setVisible(false);
             }
