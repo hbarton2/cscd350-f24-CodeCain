@@ -1,6 +1,9 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import codecain.*;
+import codecain.BackendCode.UMLClass;
+import codecain.BackendCode.UMLClassInfo;
+import codecain.BackendCode.UMLFieldInfo;
+import codecain.BackendCode.UMLFields;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
