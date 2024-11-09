@@ -1,4 +1,4 @@
-package codecain;
+package codecain.BackendCode;
 
 /**
  * The UMLFieldsInfo class represents a field in a UML class.

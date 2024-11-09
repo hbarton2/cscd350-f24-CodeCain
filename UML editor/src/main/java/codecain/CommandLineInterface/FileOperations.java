@@ -1,4 +1,6 @@
-package codecain;
+package codecain.CommandLineInterface;
+
+import codecain.BackendCode.SaveManager;
 
 /**
  * Handles saving and loading operations for UML diagrams.

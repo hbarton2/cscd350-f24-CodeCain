@@ -1,4 +1,4 @@
-package codecain;
+package codecain.CommandLineInterface;
 
 import javax.swing.*;
 import java.awt.*;

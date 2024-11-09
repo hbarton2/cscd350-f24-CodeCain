@@ -1,4 +1,4 @@
-package codecain;
+package codecain.CommandLineInterface;
 
 /**
  * Helper class providing display messages for various UML diagram operations.
