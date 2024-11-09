@@ -5,6 +5,13 @@ import codecain.BackendCode.UMLFields;
 import javax.swing.*;
 
 public class GUIFieldManager {
+
+    private final GUIClassManager classManager;
+
+    public GUIFieldManager(GUIClassManager classManager) {
+        this.classManager = classManager;
+    }
+
     public void addField() {
         String className = JOptionPane.showInputDialog("Enter the class name to add a field:");
         String fieldName = JOptionPane.showInputDialog("Enter the field name:");
@@ -17,6 +24,11 @@ public class GUIFieldManager {
 
         UMLFields fieldManager = new UMLFields();
         fieldManager.addField(className, fieldType, fieldName);
+
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
 
         JOptionPane.showMessageDialog(null, "Field '" + fieldName + "' added to class '" + className + "'.");
     }
@@ -32,6 +44,11 @@ public class GUIFieldManager {
 
         UMLFields fieldManager = new UMLFields();
         fieldManager.removeField(className, fieldName);
+
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
 
         JOptionPane.showMessageDialog(null, "Field '" + fieldName + "' deleted from class '" + className + "'.");
     }
@@ -49,6 +66,11 @@ public class GUIFieldManager {
 
         UMLFields fieldManager = new UMLFields();
         fieldManager.renameField(className, oldFieldName, newFieldType, newFieldName);
+
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
 
         JOptionPane.showMessageDialog(null, "Field '" + oldFieldName + "' renamed to '" + newFieldName + "' in class '" + className + "'.");
     }

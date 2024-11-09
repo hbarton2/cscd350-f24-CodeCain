@@ -8,6 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GUIMethodManager {
+
+    private final GUIClassManager classManager;
+
+    public GUIMethodManager(GUIClassManager classManager) {
+        this.classManager = classManager;
+    }
+
     public void addMethod() {
         String className = JOptionPane.showInputDialog("Enter the class name to add a method:");
         String methodName = JOptionPane.showInputDialog("Enter the method name:");
@@ -18,6 +25,11 @@ public class GUIMethodManager {
 
         UMLMethods methodManager = new UMLMethods();
         methodManager.addMethod(className, methodName, parameters);
+
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
 
         JOptionPane.showMessageDialog(null, "Method '" + methodName + "' added to class '" + className + "'.");
     }
@@ -34,6 +46,11 @@ public class GUIMethodManager {
         UMLMethods methodManager = new UMLMethods();
         methodManager.removeMethod(className, methodName);
 
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
+
         JOptionPane.showMessageDialog(null, "Method '" + methodName + "' deleted from class '" + className + "'.");
     }
 
@@ -49,6 +66,11 @@ public class GUIMethodManager {
 
         UMLMethods methodManager = new UMLMethods();
         methodManager.renameMethod(className, oldMethodName, newMethodName);
+
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
 
         JOptionPane.showMessageDialog(null, "Method '" + oldMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.");
     }
@@ -67,6 +89,11 @@ public class GUIMethodManager {
         UMLMethods methodManager = new UMLMethods();
         methodManager.addParameter(className, methodName, parameterType, parameterName);
 
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
+
         JOptionPane.showMessageDialog(null, "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '" + className + "'.");
     }
 
@@ -82,6 +109,11 @@ public class GUIMethodManager {
 
         UMLMethods methodManager = new UMLMethods();
         methodManager.removeParameter(className, methodName, parameterName);
+
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
 
         JOptionPane.showMessageDialog(null, "Parameter '" + parameterName + "' removed from method '" + methodName + "' in class '" + className + "'.");
     }
@@ -100,6 +132,11 @@ public class GUIMethodManager {
 
         UMLMethods methodManager = new UMLMethods();
         methodManager.changeSingleParameter(className, methodName, oldParameterName, newParameterType, newParameterName);
+
+        ClassBox classBox = (ClassBox) classManager.getClassPanels().get(className);
+        if (classBox != null) {
+            classBox.updateDetails();
+        }
 
         JOptionPane.showMessageDialog(null, "Parameter '" + oldParameterName + "' renamed to '" + newParameterName + "' in method '" + methodName + "' of class '" + className + "'.");
     }

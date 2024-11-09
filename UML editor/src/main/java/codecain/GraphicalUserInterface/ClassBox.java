@@ -74,7 +74,7 @@ public class ClassBox extends JPanel {
         });
     }
 
-    private void updateDetails() {
+    void updateDetails() {
         UMLClassInfo umlClassInfo = UMLClass.classMap.get(className);
         if (umlClassInfo == null) {
             detailsArea.setText("Class information not available.");

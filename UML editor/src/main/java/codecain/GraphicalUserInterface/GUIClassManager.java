@@ -81,4 +81,9 @@ public class GUIClassManager {
             JOptionPane.showMessageDialog(null, "Class '" + oldClassName + "' not found. Rename canceled.");
         }
     }
+
+    public HashMap<String, JPanel> getClassPanels() {
+        return classPanels;
+    }
+
 }

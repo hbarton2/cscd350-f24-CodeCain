@@ -19,8 +19,8 @@ public class GUI extends JFrame {
         canvas.setLayout(null);
 
         GUIClassManager classManager = new GUIClassManager(canvas);
-        GUIFieldManager fieldManager = new GUIFieldManager();
-        GUIMethodManager methodManager = new GUIMethodManager();
+        GUIFieldManager fieldManager = new GUIFieldManager(classManager);
+        GUIMethodManager methodManager = new GUIMethodManager(classManager);
         GUIRelationshipManager relationshipManager = new GUIRelationshipManager();
         controller = new GUIController(classManager, fieldManager, methodManager, relationshipManager);
 
