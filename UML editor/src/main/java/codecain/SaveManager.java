@@ -11,61 +11,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The SaveManager class handles saving and loading UML diagrams in JSON format.
+ * It uses the Jackson library to serialize and deserialize UML data structures.
+ */
 public class SaveManager {
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
     /**
-     * Saves the current UML diagram, including classes, fields, and methods, into a JSON file.
+     * Saves the current UML diagram, including classes and relationships, into a JSON file.
      *
      * @param filePath The path to save the JSON file.
+     * @throws IOException If an I/O error occurs while saving the file.
      */
-    public static void saveToJSON(String filePath) {
-        try {
-            // Create a map to hold all components of the UML diagram
-            Map<String, Object> umlData = new HashMap<>();
+    public static void saveToJSON(String filePath) throws IOException {
+        Map<String, Object> umlData = new HashMap<>();
+        umlData.put("classes", UMLClass.classMap);
+        umlData.put("relationships", Relationship.relationshipList);
 
-            // Save all UML classes, fields, methods, and relationships
-            umlData.put("classes", UMLClass.classMap);
-            umlData.put("fields", UMLFields.classFields);
-            umlData.put("methods", UMLMethods.classMethods);
-            umlData.put("relationships", Relationship.relationshipList);
-
-            // Write the UML diagram data to the specified JSON file
-            objectMapper.writeValue(new File(filePath), umlData);
-            System.out.println("UML diagram saved successfully to JSON at " + filePath);
-        } catch (IOException e) {
-            System.err.println("Error saving UML diagram to JSON: " + e.getMessage());
-        }
+        objectMapper.writeValue(new File(filePath), umlData);
+        System.out.println("UML diagram saved successfully to JSON at " + filePath);
     }
 
-    /**
-     * Loads the UML diagram from a JSON file and restores its state.
-     *
-     * @param filePath The path of the JSON file to load.
-     */
-    public static void loadFromJSON(String filePath) {
-        try {
-            // Read the UML data from the JSON file
-            Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
+    public static void loadFromJSON(String filePath) throws IOException {
+        Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
 
-            // Restore the classes, fields, and methods
-            UMLClass.classMap = (Map<Object, UMLClass>) umlData.get("classes");
-            UMLFields.classFields = (Map<Object, Map<Object, Object>>) umlData.get("fields");
-            UMLMethods.classMethods = (Map<Object, Map<Object, List<Object>>>) umlData.get("methods");
+        Map<String, UMLClassInfo> classes = objectMapper.convertValue(
+                umlData.get("classes"), new TypeReference<Map<String, UMLClassInfo>>() {}
+        );
+        UMLClass.classMap = classes;
 
-            // Deserialize relationships using TypeReference
-            List<Relationship> relationships = objectMapper.convertValue(
-                    umlData.get("relationships"), new TypeReference<List<Relationship>>() {}
-            );
-            Relationship.relationshipList = new ArrayList<>(relationships);
+        List<Relationship> relationships = objectMapper.convertValue(
+                umlData.get("relationships"), new TypeReference<List<Relationship>>() {}
+        );
+        Relationship.relationshipList = new ArrayList<>(relationships);
 
-            System.out.println("UML diagram loaded successfully from JSON.");
-        } catch (IOException e) {
-            System.err.println("Error loading UML diagram from JSON: " + e.getMessage());
-        } catch (ClassCastException e) {
-            System.err.println("Error casting data from JSON to the expected structure: " + e.getMessage());
-        }
+        System.out.println("UML diagram loaded successfully from JSON.");
     }
 }

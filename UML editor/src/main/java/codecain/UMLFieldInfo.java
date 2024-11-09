@@ -22,7 +22,7 @@ public class UMLFieldInfo {
      * @param fieldName the name of the field
      * @param fieldType the type of the field
      */
-    public UMLFieldInfo(String fieldName, String fieldType) {
+    public UMLFieldInfo(String fieldType, String fieldName) {
         this.fieldName = fieldName;
         this.fieldType = fieldType;
     }
@@ -66,10 +66,10 @@ public class UMLFieldInfo {
     /**
      * Returns a string representation of the UMLFieldsInfo object, showing the field name and type.
      *
-     * @return a string in the format "fieldType : fieldName"
+     * @return a string in the format "fieldType fieldName"
      */
     @Override
     public String toString() {
-        return fieldType + " : " + fieldName;
+        return fieldType + " " + fieldName;
     }
 }

@@ -12,8 +12,7 @@ public class UMLClassInfo {
     /**
      * The name of the UML class.
      */
-    private Object className;
-
+    private String className;
     /**
      * A list of fields (UMLFieldsInfo) in the UML class.
      */
@@ -25,16 +24,23 @@ public class UMLClassInfo {
     private List<UMLMethodInfo> methods;
 
     /**
+     * Default constructor for UMLClassInfo. Required for JSON deserialization.
+     * Initializes an instance of UMLClassInfo without any parameters.
+     */
+    public UMLClassInfo() {
+    }
+    /**
      * Constructs a UMLClassInfo object with the specified class name.
      * Initializes empty lists for fields and methods.
      *
      * @param className the name of the UML class
      */
-    public UMLClassInfo(Object className) {
+    public UMLClassInfo(String  className) {
         this.className = className;
         this.fields = new ArrayList<>();
         this.methods = new ArrayList<>();
     }
+
 
     /**
      * Gets the name of the UML class.
@@ -50,7 +56,7 @@ public class UMLClassInfo {
      *
      * @param className the new name of the class
      */
-    public void setClassName(Object className) {
+    public void setClassName(String className) {
         this.className = className;
     }
 
@@ -86,4 +92,5 @@ public class UMLClassInfo {
         }
         return null;
     }
+
 }
