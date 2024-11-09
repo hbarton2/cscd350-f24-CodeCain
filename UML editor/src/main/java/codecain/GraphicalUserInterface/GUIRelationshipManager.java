@@ -5,10 +5,18 @@ import codecain.BackendCode.UMLClass;
 
 import javax.swing.*;
 
+/**
+ * The {@code GUIRelationshipManager} class handles the creation and removal of relationships
+ * between UML classes in the Class Diagram Editor. It interacts with the backend to update
+ * relationships and provides user-friendly prompts for input.
+ */
 public class GUIRelationshipManager {
 
     /**
-     * Adds a relationship between two classes.
+     * Adds a relationship between two UML classes.
+     * Prompts the user for the source and destination class names. Validates the class names and
+     * ensures that both exist in the system. Updates the backend to add the relationship and
+     * displays a confirmation or error message based on the outcome.
      */
     public void addRelationship() {
         String sourceClass = JOptionPane.showInputDialog("Enter the source class name:");
@@ -38,7 +46,9 @@ public class GUIRelationshipManager {
     }
 
     /**
-     * Removes a relationship between two classes.
+     * Removes a relationship between two UML classes.
+     * Prompts the user for the source and destination class names. Updates the backend to remove
+     * the relationship and displays a confirmation or error message based on the outcome.
      */
     public void deleteRelationship() {
         String sourceClass = JOptionPane.showInputDialog("Enter the source class name:");

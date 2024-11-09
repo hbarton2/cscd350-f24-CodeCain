@@ -1,19 +1,37 @@
 package codecain.GraphicalUserInterface;
 
 import codecain.BackendCode.UMLClass;
-import codecain.BackendCode.UMLClassInfo;
 
 import javax.swing.*;
 import java.util.HashMap;
 
+/**
+ * The {@code GUIClassManager} class is responsible for managing the graphical representation
+ * and backend synchronization of classes in the Class Diagram Editor.
+ * It handles adding, deleting, and renaming class representations on the canvas.
+ */
 public class GUIClassManager {
+
+    /** A map linking class names to their corresponding {@code JPanel} representations. */
     private final HashMap<String, JPanel> classPanels = new HashMap<>();
+
+    /** The canvas panel where class representations are displayed. */
     private final JPanel canvas;
 
+    /**
+     * Constructs a {@code GUIClassManager} to manage class panels on the specified canvas.
+     *
+     * @param canvas the canvas panel where class boxes will be displayed.
+     */
     public GUIClassManager(JPanel canvas) {
         this.canvas = canvas;
     }
 
+    /**
+     * Prompts the user to add a new class.
+     * The class is added both to the backend and visually represented on the canvas as a {@code ClassBox}.
+     * Displays an error dialog if the operation fails.
+     */
     public void addClass() {
         String className = JOptionPane.showInputDialog("Enter the name of the class to add:");
         if (className != null && !className.trim().isEmpty()) {
@@ -33,11 +51,16 @@ public class GUIClassManager {
         }
     }
 
+    /**
+     * Prompts the user to delete an existing class.
+     * Removes the class from both the backend and the canvas.
+     * Displays an error dialog if the class does not exist or the operation is canceled.
+     */
     public void deleteClass() {
         String className = JOptionPane.showInputDialog("Enter the name of the class to delete:");
         if (className != null && !className.trim().isEmpty()) {
             if (UMLClass.exists(className)) {
-                UMLClass.removeClass(className); // Use UMLClass method to remove the class
+                UMLClass.removeClass(className);
 
                 JPanel classBox = classPanels.remove(className);
                 if (classBox != null) {
@@ -55,6 +78,11 @@ public class GUIClassManager {
         }
     }
 
+    /**
+     * Prompts the user to rename an existing class.
+     * Updates the backend and the visual representation on the canvas with the new class name.
+     * Displays an error dialog if the class does not exist or the operation fails.
+     */
     public void renameClass() {
         String oldClassName = JOptionPane.showInputDialog("Enter the name of the class to rename:");
         if (oldClassName != null && UMLClass.exists(oldClassName)) {
@@ -82,8 +110,13 @@ public class GUIClassManager {
         }
     }
 
+    /**
+     * Returns a map of class names to their corresponding {@code JPanel} representations.
+     *
+     * @return the map of class panels.
+     */
     public HashMap<String, JPanel> getClassPanels() {
         return classPanels;
     }
-
 }
+

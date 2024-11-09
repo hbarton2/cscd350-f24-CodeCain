@@ -9,38 +9,65 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.util.stream.Collectors;
 
+/**
+ * The {@code ClassBox} class represents a draggable, resizable box on a canvas
+ * that visually displays a UML class's details, such as its name, fields, and methods.
+ * It supports updating details dynamically and interacting with the user through drag-and-drop functionality.
+ */
 public class ClassBox extends JPanel {
+
+    /** The text area displaying the details (fields and methods) of the UML class. */
     private final JTextArea detailsArea;
+
+    /** The name of the UML class represented by this {@code ClassBox}. */
     private final String className;
 
+    /**
+     * Constructs a {@code ClassBox} with the given class name and adds it to the specified canvas.
+     * Initializes the layout, appearance, and drag-and-drop functionality.
+     *
+     * @param className the name of the UML class this box represents.
+     * @param canvas    the {@code JPanel} canvas to which this box is added.
+     */
     public ClassBox(String className, JPanel canvas) {
         this.className = className;
 
         setLayout(new BorderLayout());
-        setBounds(50, 50, 200, 150);
+        setBounds(50, 50, 200, 150); // Default size and position
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         setBackground(Color.LIGHT_GRAY);
 
+        // Add the class name label to the top
         JLabel classNameLabel = new JLabel(className, SwingConstants.CENTER);
         add(classNameLabel, BorderLayout.NORTH);
 
+        // Add the details area (fields and methods) to the center
         detailsArea = new JTextArea();
         detailsArea.setEditable(false);
         add(detailsArea, BorderLayout.CENTER);
 
+        // Configure canvas layout and add this component
         canvas.setLayout(null);
         canvas.add(this);
         canvas.repaint();
 
+        // Enable dragging functionality
         enableDragging(canvas);
 
+        // Update the details of the class
         updateDetails();
     }
 
+    /**
+     * Enables drag-and-drop functionality for the {@code ClassBox}.
+     * Ensures the box stays within the bounds of the canvas during movement.
+     *
+     * @param canvas the {@code JPanel} canvas containing this box.
+     */
     private void enableDragging(JPanel canvas) {
         final Point initialClick = new Point();
 
-        // Mouse press listener to track initial click point
+        // Track initial click location when the mouse is pressed
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
@@ -48,7 +75,7 @@ public class ClassBox extends JPanel {
             }
         });
 
-        // Mouse drag listener to update position
+        // Adjust the position of the box as the mouse is dragged
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(java.awt.event.MouseEvent e) {
@@ -59,7 +86,7 @@ public class ClassBox extends JPanel {
                 int newX = location.x + xMove;
                 int newY = location.y + yMove;
 
-                // Ensure box stays within canvas bounds
+                // Ensure the box stays within the canvas bounds
                 int canvasWidth = canvas.getWidth();
                 int canvasHeight = canvas.getHeight();
                 int boxWidth = getWidth();
@@ -74,6 +101,11 @@ public class ClassBox extends JPanel {
         });
     }
 
+    /**
+     * Updates the details (fields and methods) displayed in the {@code ClassBox}.
+     * Retrieves information about the UML class from the backend and refreshes the display.
+     * If the class information is unavailable, a default message is shown.
+     */
     void updateDetails() {
         UMLClassInfo umlClassInfo = UMLClass.classMap.get(className);
         if (umlClassInfo == null) {
@@ -81,6 +113,7 @@ public class ClassBox extends JPanel {
             return;
         }
 
+        // Build the details text
         StringBuilder detailsText = new StringBuilder("Fields:\n");
         umlClassInfo.getFields().forEach(field ->
                 detailsText.append(field.getFieldName()).append(": ").append(field.getFieldType()).append("\n"));
@@ -94,6 +127,7 @@ public class ClassBox extends JPanel {
             detailsText.append(")\n");
         });
 
+        // Update the text area
         detailsArea.setText(detailsText.toString());
     }
 }

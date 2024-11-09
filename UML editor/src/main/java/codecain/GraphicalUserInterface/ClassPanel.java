@@ -3,7 +3,21 @@ package codecain.GraphicalUserInterface;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The {@code ClassPanel} class represents a control panel in the Class Diagram Editor.
+ * It provides buttons for managing classes, fields, methods, parameters, and relationships.
+ * Each button is linked to specific actions in the {@code GUIController}.
+ */
 public class ClassPanel extends JPanel {
+
+    /**
+     * Constructs a {@code ClassPanel} and initializes its layout and buttons.
+     * The panel is organized using a vertical {@code BoxLayout}, and it provides
+     * buttons for various management operations related to classes, fields, methods,
+     * parameters, and relationships.
+     *
+     * @param controller the {@code GUIController} responsible for handling the actions triggered by the buttons.
+     */
     public ClassPanel(GUIController controller) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -67,7 +81,7 @@ public class ClassPanel extends JPanel {
 
         add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Relationship Management
+        // Relationship management
         JButton addRelationshipButton = new JButton("Add Relationship");
         JButton deleteRelationshipButton = new JButton("Remove Relationship");
 
@@ -76,6 +90,5 @@ public class ClassPanel extends JPanel {
 
         add(addRelationshipButton);
         add(deleteRelationshipButton);
-
     }
 }
