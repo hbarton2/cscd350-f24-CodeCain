@@ -1,5 +1,10 @@
 package codecain.GraphicalUserInterface;
 
+import codecain.BackendCode.SaveManager;
+
+import javax.swing.*;
+import java.io.IOException;
+
 public class GUIController {
     private final GUIClassManager classManager;
     private final GUIFieldManager fieldManager;
@@ -70,11 +75,38 @@ public class GUIController {
     }
 
 
+    /**
+     * Saves the current UML diagram to a JSON file.
+     */
     public void handleSave() {
-        // Save logic here
+        String fileName = JOptionPane.showInputDialog(null, "Enter file name to save:");
+        if (fileName != null && !fileName.trim().isEmpty()) {
+            try {
+                SaveManager.saveToJSON(fileName + ".json");
+                JOptionPane.showMessageDialog(null, "Diagram saved as " + fileName + ".json");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error saving diagram: " + ex.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid file name. Diagram not saved.");
+        }
     }
 
+
     public void handleLoad() {
-        // Load logic here
+        String fileName = JOptionPane.showInputDialog(null, "Enter file name to load:");
+        if (fileName != null && !fileName.trim().isEmpty()) {
+            try {
+                SaveManager.loadFromJSON(fileName + ".json");
+
+                // Backend updated, no need to modify canvas
+                JOptionPane.showMessageDialog(null, "Diagram loaded from " + fileName + ".json");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error loading diagram: " + ex.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid file name. Diagram not loaded.");
+        }
     }
+
 }
