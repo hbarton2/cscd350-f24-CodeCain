@@ -13,6 +13,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 public class ClassNode extends VBox {
 
     private boolean isSelected = false;
@@ -25,22 +27,20 @@ public class ClassNode extends VBox {
 
     private Label classNameLabel;
     private TextField classNameField;
-    final ListView<String> fields;
-    final ListView<String> methods;
+    final ListView<UMLFieldInfo> fields;
+    final ListView<UMLMethodInfo> methods;
 
-    public ClassNode(String className) {
-        this.classNameLabel = new Label(className);
-        this.classNameField = new TextField(className);
+    private UMLClassInfo classInfo;
+
+    public ClassNode(UMLClassInfo classInfo) {
+        this.classInfo = classInfo;
+        this.classNameLabel = new Label(classInfo.getClassName().toString());
+        this.classNameField = new TextField(classInfo.getClassName().toString());
         this.fields = new ListView<>();
         this.methods = new ListView<>();
 
         configureClassName();
-
-        // Add dummy data to fields
-//        this.fields.getItems().addAll("int x", "String name", "double salary", "int y", "in age", "int hours", "String fullName");
-        // Add dummy data to methods
-//        this.methods.getItems().addAll("void setName(String name)", "int getX()", "double getSalary()");
-
+        initializeFieldsAndMethods();
 
         // Configure class name style
         this.classNameLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 0 5 0;");
@@ -59,7 +59,7 @@ public class ClassNode extends VBox {
         shadowEffect.setColor(Color.rgb(0, 0, 0, 0.2));  // Light gray shadow
 
         setEditableCellFactory(this.fields);
-        setEditableCellFactory(this.methods);
+        setEditableCellFactoryForMethods(this.methods);
 
         // Draggable
         this.setOnMousePressed(this::onMousePressed);
@@ -67,6 +67,12 @@ public class ClassNode extends VBox {
         this.classNameLabel.setOnMouseClicked(this::onLabelDoubleClick);
 
 
+    }
+
+    // Load fields and methods from UMLClassInfo
+    private void initializeFieldsAndMethods() {
+        classInfo.getFields().forEach(field -> fields.getItems().add(field));
+        classInfo.getMethods().forEach(method -> methods.getItems().add(method));
     }
 
     private void configureClassName() {
@@ -102,14 +108,30 @@ public class ClassNode extends VBox {
     }
 
     private void saveClassName() {
-        String newName = classNameField.getText().trim();
-        Result result = Storage.renameClass(newName);
-        if (result.getStatus() == Status.ERROR || result.getStatus() == Status.WARNING) {
-            alert("WARNING", result.getMessage());
-        } else {
-            classNameLabel.setText(newName);
-            cancelClassNameEdit();
+        String newName = classNameField.getText().toLowerCase().trim();
+
+        // Check if the new name is already in use
+        if (UMLClass.exists(newName)) {
+            alert("Error", "Class name already exists. Choose a different name.");
+            return;
         }
+
+        // Attempt renaming in UMLClass map
+        String oldName = classInfo.getClassName().toString();
+        UMLClass.renameClass(oldName, newName);
+
+        // Reflect the change in ClassNode and UMLClassInfo
+        classInfo.setClassName(newName);
+        classNameLabel.setText(newName);
+        cancelClassNameEdit();
+//        String newName = classNameField.getText().trim();
+//        Result result = Storage.renameClass(newName);
+//        if (result.getStatus() == Status.ERROR || result.getStatus() == Status.WARNING) {
+//            alert("WARNING", result.getMessage());
+//        } else {
+//            classNameLabel.setText(newName);
+//            cancelClassNameEdit();
+//        }
 
     }
 
@@ -117,6 +139,14 @@ public class ClassNode extends VBox {
         classNameField.setVisible(false);
         this.getChildren().set(0, classNameLabel);  // Replace TextField with label
         classNameLabel.setVisible(true);
+    }
+
+    public void syncWithUMLClassInfo() {
+        classInfo.getFields().clear();
+        fields.getItems().forEach(fieldInfo -> classInfo.getFields().add(fieldInfo));
+
+        classInfo.getMethods().clear();
+        methods.getItems().forEach(methodInfo -> classInfo.getMethods().add(methodInfo));
     }
 
     public void select() {
@@ -161,9 +191,44 @@ public class ClassNode extends VBox {
     }
 
     // Set TextFieldListCell for editable ListView
-    private void setEditableCellFactory(ListView<String> listView) {
+    private void setEditableCellFactory(ListView<UMLFieldInfo> listView) {
         listView.setEditable(true);
-        listView.setCellFactory(TextFieldListCell.forListView());
+        listView.setCellFactory(TextFieldListCell.forListView(new javafx.util.StringConverter<UMLFieldInfo>() {
+            @Override
+            public String toString(UMLFieldInfo fieldInfo) {
+                return fieldInfo.toString();
+            }
+
+            @Override
+            public UMLFieldInfo fromString(String string) {
+                String[] parts = string.split(" ");
+                if (parts.length == 2) {
+                    return new UMLFieldInfo(parts[0], parts[1]);
+                }
+                return null;
+            }
+        }));
+    }
+
+    private void setEditableCellFactoryForMethods(ListView<UMLMethodInfo> listView) {
+        listView.setEditable(true);
+        listView.setCellFactory(TextFieldListCell.forListView(new javafx.util.StringConverter<UMLMethodInfo>() {
+            @Override
+            public String toString(UMLMethodInfo methodInfo) {
+                return methodInfo.toString();
+            }
+
+            @Override
+            public UMLMethodInfo fromString(String string) {
+                // Parse the method name and parameters
+                String[] parts = string.split("\\(");
+                if (parts.length > 0) {
+                    String methodName = parts[0].trim();
+                    return new UMLMethodInfo(methodName, new ArrayList<>()); // Replace with parameter parsing if needed
+                }
+                return null;
+            }
+        }));
     }
 
     private void alert(String title, String message) {
@@ -178,12 +243,12 @@ public class ClassNode extends VBox {
         return classNameLabel.getText();
     }
 
-    public ClassNodeDTO toDTO() {
-        return new ClassNodeDTO(
-                classNameLabel.getText(),
-                fields.getItems(),
-                methods.getItems()
-        );
-    }
+//    public ClassNodeDTO toDTO() {
+//        return new ClassNodeDTO(
+//                classNameLabel.getText(),
+//                fields.getItems(),
+//                methods.getItems()
+//        );
+//    }
 
 }
