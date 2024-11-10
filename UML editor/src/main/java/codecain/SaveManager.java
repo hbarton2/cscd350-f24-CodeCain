@@ -52,36 +52,36 @@ public class SaveManager {
         System.out.println("UML diagram loaded successfully from JSON.");
     }
 
-    public static void saveToJSONFX(String filePath) throws IOException {
-        Map<String, Object> umlData = new HashMap<>();
+//    public static void saveToJSONFX(String filePath) throws IOException {
+//        Map<String, Object> umlData = new HashMap<>();
+//
+//        // Convert each ClassNode in Storage to a DTO
+//        List<ClassNodeDTO> classNodeDTOs = Storage.storage.values().stream()
+//                .map(ClassNode::toDTO)
+//                .collect(Collectors.toList());
+//
+//        umlData.put("classes", classNodeDTOs);
+////        umlData.put("relationships", Relationship.relationshipList);
+//
+//        objectMapper.writeValue(new File(filePath), umlData);
+//        System.out.println("UML diagram saved successfully to JSON at " + filePath);
+//    }
 
-        // Convert each ClassNode in Storage to a DTO
-        List<ClassNodeDTO> classNodeDTOs = Storage.storage.values().stream()
-                .map(ClassNode::toDTO)
-                .collect(Collectors.toList());
-
-        umlData.put("classes", classNodeDTOs);
-//        umlData.put("relationships", Relationship.relationshipList);
-
-        objectMapper.writeValue(new File(filePath), umlData);
-        System.out.println("UML diagram saved successfully to JSON at " + filePath);
-    }
-
-    public static void loadFromJSONFX(String filePath) throws IOException {
-        Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
-
-        // Deserialize classes
-        List<ClassNodeDTO> classNodeDTOs = objectMapper.convertValue(
-                umlData.get("classes"), new TypeReference<List<ClassNodeDTO>>() {}
-        );
-
-        Storage.clear(); // Clear existing storage
-        for (ClassNodeDTO dto : classNodeDTOs) {
-            ClassNode classNode = new ClassNode(dto.getClassName());
-            classNode.fields.getItems().addAll(dto.getFields());
-            classNode.methods.getItems().addAll(dto.getMethods());
-            Storage.loadClass(dto.getClassName(), classNode);
-        }
+//    public static void loadFromJSONFX(String filePath) throws IOException {
+//        Map<String, Object> umlData = objectMapper.readValue(new File(filePath), Map.class);
+//
+//        // Deserialize classes
+//        List<ClassNodeDTO> classNodeDTOs = objectMapper.convertValue(
+//                umlData.get("classes"), new TypeReference<List<ClassNodeDTO>>() {}
+//        );
+//
+//        Storage.clear(); // Clear existing storage
+//        for (ClassNodeDTO dto : classNodeDTOs) {
+//            ClassNode classNode = new ClassNode(dto.getClassName());
+//            classNode.fields.getItems().addAll(dto.getFields());
+//            classNode.methods.getItems().addAll(dto.getMethods());
+//            Storage.loadClass(dto.getClassName(), classNode);
+//        }
 
 //        // Deserialize relationships (assuming `Relationship` class is serializable)
 //        List<Relationship> relationships = objectMapper.convertValue(
@@ -89,6 +89,6 @@ public class SaveManager {
 //        );
 //        Relationship.relationshipList = relationships;
 
-        System.out.println("UML diagram loaded successfully from JSON.");
-    }
+//        System.out.println("UML diagram loaded successfully from JSON.");
+//    }
 }
