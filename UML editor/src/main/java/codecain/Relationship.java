@@ -22,6 +22,9 @@ public class Relationship {
      */
     private String source;
 
+
+    private String destination;
+
     /**
      * ArrayList for every single relationship created.
      * This is a static list, so every relationship created only exists in this list
@@ -34,20 +37,30 @@ public class Relationship {
     public Relationship() {
         this.classNames = new HashSet<>();
         this.source = "";
+        this.destination = "";
+    }
+
+    /**
+     * getter for the destination string
+     * @return String
+     */
+    public String getDestination(){
+        return this.destination;
     }
 
     /**
      * Constructor for relationship class. This is private
      * and is only used by the addRelationship method
-     * @param class1 name of first class to add
-     * @param class2 name of second class to add
+     * @param source name of first class to add
+     * @param destination name of second class to add
      */
-    private Relationship(String class1, String class2, RelationshipType type) {
+    private Relationship(String source, String destination, RelationshipType type) {
         this.classNames = new HashSet<>();
         this.type = type;
-        this.classNames.add(class1);
-        this.classNames.add(class2);
-        this.source = class1;
+        this.classNames.add(source);
+        this.classNames.add(destination);
+        this.source = source;
+        this.destination = destination;
         relationshipList.add(this);
     }
 
