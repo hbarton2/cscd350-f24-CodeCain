@@ -1,6 +1,9 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import codecain.*;
+import codecain.BackendCode.UMLClass;
+import codecain.BackendCode.UMLClassInfo;
+import codecain.BackendCode.UMLFieldInfo;
+import codecain.BackendCode.UMLFields;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -70,8 +73,8 @@ public class UMLFieldsTests {
     @Test
     public void testRemoveFieldFromClass() {
         UMLClass.addClass("Test");
-        umlFields.addField("Test", "DOG", "String");
-        umlFields.removeField("Test", "DOG", "String");
+        umlFields.addField("Test", "String", "DOG");
+        umlFields.removeField("Test", "DOG");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         assertEquals(0, classInfo.getFields().size());
@@ -83,7 +86,7 @@ public class UMLFieldsTests {
     @Test
     public void testRemoveFieldFromNonExistingField() {
         UMLClass.addClass("Test");
-        umlFields.removeField("Test", "DOG", "String");
+        umlFields.removeField("Test", "DOG");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         assertEquals(0, classInfo.getFields().size(), "Should give error that you cannot remove a non-existing field from class");
@@ -94,7 +97,7 @@ public class UMLFieldsTests {
      */
     @Test
     public void testRemoveFieldFromNonExistingClass() {
-        umlFields.removeField("Test", "DOG", "String");
+        umlFields.removeField("Test", "DOG");
         assertFalse(UMLClass.classMap.containsKey("Test"), "Should be prompted that you can't remove from a non-existing class");
     }
 
@@ -104,8 +107,8 @@ public class UMLFieldsTests {
     @Test
     public void testRenameField() {
         UMLClass.addClass("Test");
-        umlFields.addField("Test", "DOG", "String");
-        umlFields.renameField("Test", "DOG", "String", "numOfCats", "Int");
+        umlFields.addField("Test", "String", "DOG");
+        umlFields.renameField("Test", "DOG",  "Int", "numOfCats");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         UMLFieldInfo newFieldName = classInfo.getFields().get(0);
@@ -119,7 +122,7 @@ public class UMLFieldsTests {
     @Test
     public void testRenameFieldFromNonExistingField() {
         UMLClass.addClass("Test");
-        umlFields.renameField("Test", "DOG", "String", "CAT", "String");
+        umlFields.renameField("Test", "DOG", "CAT", "String");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         assertEquals(0, classInfo.getFields().size());
@@ -133,7 +136,7 @@ public class UMLFieldsTests {
         UMLClass.addClass("Test");
         umlFields.addField("Test", "DOG", "String");
         umlFields.addField("Test", "numOfCats", "Int");
-        umlFields.renameField("Test", "DOG", "String", "numOfCats", "Int");
+        umlFields.renameField("Test", "DOG", "numOfCats", "Int");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
         assertEquals(2, classInfo.getFields().size(), "Should be prompted you cannot rename to an existing field name");
