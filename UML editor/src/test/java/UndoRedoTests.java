@@ -1,4 +1,4 @@
-import codecain.BackendCode.UndoRedo;
+import codecain.BackendCode.UndoRedo.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,11 +7,11 @@ import java.util.Stack;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UndoRedoTests {
-    private UndoRedo undoRedo;
+    private UndoRedoEditor undoRedo;
 
     @BeforeEach
     public void setUp() {
-        undoRedo = new UndoRedo();
+        undoRedo = new UndoRedoEditor();
     }
 
     @Test

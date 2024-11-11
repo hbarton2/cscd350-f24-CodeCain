@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:UML editor/src/main/java/codecain/BackendCode/UndoRedo/UndoRedoEditor.java
 package codecain.BackendCode.UndoRedo;
-========
-package codecain.BackendCode;
->>>>>>>> 4f69d146818359bc6d010738de4eab4b093a68d2:UML editor/src/main/java/codecain/BackendCode/UndoRedo.java
 
 import jline.console.history.History;
 
@@ -19,15 +15,7 @@ public class UndoRedoEditor {
         redoStack = new Stack<>();
     }
 
-    private void undo(){
-        if(undoStack.isEmpty()){
-            return;
-        }
-        Object o = undoStack.pop();
-        redoStack.push(o);
-    }
     public void undo() {
-        undo();
     }
 
 
