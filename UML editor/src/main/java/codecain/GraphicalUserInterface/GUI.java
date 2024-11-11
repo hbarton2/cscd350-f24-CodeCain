@@ -1,5 +1,7 @@
 package codecain.GraphicalUserInterface;
 
+import codecain.RelationshipCanvas;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,7 +13,7 @@ import java.awt.*;
 public class GUI extends JFrame {
 
     /** The canvas panel where the class diagram is displayed. */
-    private JPanel canvas;
+    private RelationshipCanvas canvas;
 
     /** The controller responsible for coordinating actions between the GUI and backend. */
     private GUIController controller;
@@ -27,15 +29,16 @@ public class GUI extends JFrame {
         setLayout(new BorderLayout());
 
         // Initialize canvas and controller
-        canvas = new JPanel();
+        canvas = new RelationshipCanvas();
         canvas.setBackground(Color.WHITE);
         canvas.setLayout(null);
 
         // Initialize managers and controller
         GUIClassManager classManager = new GUIClassManager(canvas);
+        canvas.setClassManager(classManager);
         GUIFieldManager fieldManager = new GUIFieldManager(classManager);
         GUIMethodManager methodManager = new GUIMethodManager(classManager);
-        GUIRelationshipManager relationshipManager = new GUIRelationshipManager();
+        GUIRelationshipManager relationshipManager = new GUIRelationshipManager(classManager);
         controller = new GUIController(classManager, fieldManager, methodManager, relationshipManager);
 
         // Add panels
