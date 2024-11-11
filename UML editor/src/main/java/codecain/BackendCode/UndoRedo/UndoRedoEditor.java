@@ -1,12 +1,8 @@
-<<<<<<< Updated upstream
-package codecain.BackendCode;
-=======
 <<<<<<<< HEAD:UML editor/src/main/java/codecain/BackendCode/UndoRedo/UndoRedoEditor.java
 package codecain.BackendCode.UndoRedo;
 ========
 package codecain.BackendCode;
 >>>>>>>> 4f69d146818359bc6d010738de4eab4b093a68d2:UML editor/src/main/java/codecain/BackendCode/UndoRedo.java
->>>>>>> Stashed changes
 
 import jline.console.history.History;
 
