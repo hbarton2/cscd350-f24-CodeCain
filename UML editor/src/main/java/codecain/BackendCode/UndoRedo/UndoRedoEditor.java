@@ -27,5 +27,12 @@ public class UndoRedoEditor {
 
     public void redo() {
     }
+
+    public String backup() {
+        return null;
+    }
+
+    public void restore(String backup) {
+    }
 }
 
