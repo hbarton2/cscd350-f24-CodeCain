@@ -1,5 +1,7 @@
 package codecain.BackendCode;
 
+import codecain.RelationshipType;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -250,7 +252,7 @@ public class Relationship {
      */
     public static Relationship getRelationship(String class1, String class2, RelationshipType type){
         for (Relationship r : relationshipList){
-            if (r.type.equals(type) && r.classNames.contains(class1) && r.classNames.contains(class2)){
+            if (/*r.type.equals(type) &&*/ r.classNames.contains(class1) && r.classNames.contains(class2)){
                 return r;
             }
         }
