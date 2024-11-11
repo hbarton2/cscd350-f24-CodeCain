@@ -1,5 +1,6 @@
 package codecain.GraphicalUserInterface;
 
+import codecain.BackendCode.Relationship;
 import codecain.BackendCode.UMLClass;
 import codecain.BackendCode.UMLClassInfo;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -23,6 +25,11 @@ public class ClassBox extends JPanel {
     private final String className;
 
     /**
+     * hashmap with each relationship attached to the classBox
+     */
+    public HashMap<Relationship, Integer> attachedRelationshipIndices;
+
+    /**
      * Constructs a {@code ClassBox} with the given class name and adds it to the specified canvas.
      * Initializes the layout, appearance, and drag-and-drop functionality.
      *
@@ -30,6 +37,8 @@ public class ClassBox extends JPanel {
      * @param canvas    the {@code JPanel} canvas to which this box is added.
      */
     public ClassBox(String className, JPanel canvas) {
+        attachedRelationshipIndices = new HashMap<>();
+
         this.className = className;
 
         setLayout(new BorderLayout());
@@ -128,4 +137,36 @@ public class ClassBox extends JPanel {
         });
         detailsArea.setText(detailsText.toString());
     }
+
+    /**
+     * adds a relationship arrow position to the classBox
+     * @param r the relationship that is being added
+     */
+    public void addRelationshipPoint(Relationship r){
+        attachedRelationshipIndices.put(r, getLowestIndex());
+        System.out.println("relationship added to class " + this.className);
+    }
+
+    /**
+     * removes the relationship point from the map
+     * @param r the relationship to remove
+     */
+    public void removeRelationshipPoint(Relationship r){
+        attachedRelationshipIndices.remove(r);
+        System.out.println("relationship removed from class " + this.className);
+    }
+
+    /**
+     * gets the lowest available value in the hashmap
+     * @return Integer
+     */
+    private Integer getLowestIndex(){
+        int i = 0;
+        for (; attachedRelationshipIndices.containsValue(i); i++);
+        System.out.println(i);
+        return i;
+    }
+
+
 }
+
