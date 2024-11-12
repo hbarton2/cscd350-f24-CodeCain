@@ -1,6 +1,7 @@
 package codecain.CommandLineInterface;
 
 import codecain.BackendCode.*;
+import codecain.RelationshipType;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -126,10 +127,10 @@ public class CommandManager {
      * @return message confirming or denying the addition of the relationship
      */
     private String handleAddRelationship(String[] tokens) {
-        if (tokens.length < 4) {
+        if (tokens.length < 5) {
             return "Usage: add relationship <class1> <class2>";
         }
-        boolean added = Relationship.addRelationship(tokens[2], tokens[3]);
+        boolean added = Relationship.addRelationship(tokens[2], tokens[3], RelationshipType.fromString(tokens[4]));
         if (added) {
             return DisplayHelper.relationshipAdded(tokens[2], tokens[3]);
         } else {
