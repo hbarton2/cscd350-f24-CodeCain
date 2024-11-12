@@ -29,6 +29,32 @@ public enum RelationshipType {
         return null;
     }
 
+    public static RelationshipType fromString(String type){
+        switch (type){
+            case "generalization"  -> {
+                return GENERALIZATION;
+            }
+            case "realization" -> {
+                return REALIZATION ;
+            }
+            case "composition" -> {
+                return COMPOSITION;
+            }
+            case "aggregation" -> {
+                return AGGREGATION;
+            }
+        }
+        return GENERALIZATION;
+    }
+
+    public static boolean typeExists(String typeName){
+        typeName = typeName.trim().toLowerCase();
+        return typeName.equals("composition")
+                || typeName.equals("aggregation")
+                || typeName.equals("realization")
+                || typeName.equals("generalization");
+    }
+
     /**
      * @return - returns an ascii representation of an arrow associated with the relationship
      * if the relationship type does not exist, it returns null
