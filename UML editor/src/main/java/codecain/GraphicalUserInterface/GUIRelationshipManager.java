@@ -54,8 +54,8 @@ public class GUIRelationshipManager {
         boolean added = Relationship.addRelationship(sourceClass, destinationClass, RelationshipType.fromString(type));
 
         if (added) {
-            classManager.getClassPanels().get(sourceClass).addRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,RelationshipType.fromString(type)));
-            classManager.getClassPanels().get(destinationClass).addRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,RelationshipType.fromString(type)));
+            UMLClass.classMap.get(sourceClass).addRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,RelationshipType.fromString(type)));
+            UMLClass.classMap.get(destinationClass).addRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,RelationshipType.fromString(type)));
             JOptionPane.showMessageDialog(null, "Relationship added between '" + sourceClass + "' and '" + destinationClass + "'.");
         } else {
             JOptionPane.showMessageDialog(null, "Unable to add relationship. It may already exist.");
@@ -76,8 +76,8 @@ public class GUIRelationshipManager {
             return;
         }
 
-        classManager.getClassPanels().get(sourceClass).removeRelationshipPoint(Relationship.getRelationship(sourceClass, destinationClass, null));
-        classManager.getClassPanels().get(destinationClass).removeRelationshipPoint(Relationship.getRelationship(sourceClass, destinationClass, null));
+        UMLClass.classMap.get(sourceClass).removeRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,null));
+        UMLClass.classMap.get(destinationClass).removeRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,null));
 
         boolean removed = Relationship.removeRelationship(sourceClass, destinationClass);
         if (removed) {
