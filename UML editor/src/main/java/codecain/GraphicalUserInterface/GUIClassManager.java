@@ -127,7 +127,7 @@ public class GUIClassManager extends JPanel {
      *
      * @param umlClassInfo the UMLClassInfo object containing details about the class.
      */
-    void createClassBox(UMLClassInfo umlClassInfo) {
+    public void createClassBox(UMLClassInfo umlClassInfo) {
         ClassBox classBox = new ClassBox(umlClassInfo.getClassName(), canvas);
         classPanels.put(umlClassInfo.getClassName(), classBox);
         classBox.updateDetails();
@@ -140,6 +140,15 @@ public class GUIClassManager extends JPanel {
     public void clearCanvas() {
         canvas.removeAll();
         classPanels.clear();
+    }
+
+    /**
+     * Returns the canvas panel managed by this {@code GUIClassManager}.
+     *
+     * @return the canvas panel
+     */
+    public JPanel getCanvas() {
+        return canvas;
     }
 }
 

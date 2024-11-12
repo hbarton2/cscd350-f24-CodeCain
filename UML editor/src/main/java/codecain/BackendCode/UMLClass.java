@@ -115,4 +115,14 @@ public class UMLClass {
     public static boolean exists(String className) {
         return classMap.containsKey(className);
     }
+
+    /**
+     * Checks if a class with the given name exists in the classMap.
+     *
+     * @param className the name of the class to check for existence
+     * @return the name if the class exists, null otherwise
+     */
+    public static UMLClassInfo getClassInfo(String className) {
+        return classMap.get(className);
+    }
 }
