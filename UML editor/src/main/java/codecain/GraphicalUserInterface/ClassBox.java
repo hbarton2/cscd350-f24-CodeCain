@@ -128,4 +128,11 @@ public class ClassBox extends JPanel {
         });
         detailsArea.setText(detailsText.toString());
     }
+
+    /**
+     * getter for the class name.
+     */
+    public String getClassName(){
+        return this.className;
+    }
 }
