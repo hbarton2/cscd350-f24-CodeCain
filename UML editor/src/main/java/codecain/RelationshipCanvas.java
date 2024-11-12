@@ -1,6 +1,8 @@
 package codecain;
 
 import codecain.BackendCode.Relationship;
+import codecain.BackendCode.UMLClass;
+import codecain.BackendCode.UMLClassInfo;
 import codecain.GraphicalUserInterface.ClassBox;
 import codecain.GraphicalUserInterface.GUIClassManager;
 
@@ -59,8 +61,8 @@ public class RelationshipCanvas extends JPanel {
         for (Relationship r : Relationship.relationshipList){
             String[] names = r.getClassNamesAsArray();
 
-            ClassBox panel1 = (ClassBox) gui.classPanels.get(names[0]);
-            ClassBox panel2 = (ClassBox) gui.classPanels.get(names[1]);
+            ClassBox panel1 = (ClassBox) gui.getClassPanels().get(names[0]);
+            ClassBox panel2 = (ClassBox) gui.getClassPanels().get(names[1]);
 
             Point c1Location = panel1.getLocation();
             Point c2Location = panel2.getLocation();
@@ -80,8 +82,14 @@ public class RelationshipCanvas extends JPanel {
      *
      */
     private int getXposition(ClassBox panel1, Relationship r){
-        int relationshipCount = panel1.attachedRelationshipIndices.size();
-        int index = panel1.attachedRelationshipIndices.get(r);
+
+        if (!UMLClass.classMap.containsKey(panel1.getClassName())){
+            throw new IllegalStateException("No class named " + panel1.getClassName() + " found");
+        }
+
+        UMLClassInfo panelInfo = UMLClass.classMap.get(panel1.getClassName());
+        int relationshipCount = panelInfo.attachedRelationshipIndices.size();
+        int index = panelInfo.attachedRelationshipIndices.get(r);
         return ( panel1.getWidth() / (2 + relationshipCount - 1) ) * (index+1);
 
     }
