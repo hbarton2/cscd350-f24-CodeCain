@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class GUIClassManager extends JPanel {
 
     /** A map linking class names to their corresponding {@code JPanel} representations. */
-    public final HashMap<String, ClassBox> classPanels = new HashMap<>();
+    private final HashMap<String, JPanel> classPanels = new HashMap<>();
 
     /** The canvas panel where class representations are displayed. */
     private final JPanel canvas;
@@ -92,7 +92,7 @@ public class GUIClassManager extends JPanel {
                 UMLClass.renameClass(oldClassName, newClassName);
 
                 if (UMLClass.exists(newClassName)) {
-                    ClassBox classPanel = classPanels.remove(oldClassName);
+                    JPanel classPanel = classPanels.remove(oldClassName);
                     if (classPanel != null) {
                         classPanels.put(newClassName, classPanel);
                         JLabel classLabel = (JLabel) classPanel.getComponent(0);
@@ -116,7 +116,7 @@ public class GUIClassManager extends JPanel {
      *
      * @return the map of class panels.
      */
-    public HashMap<String, ClassBox> getClassPanels() {
+    public HashMap<String, JPanel> getClassPanels() {
         return classPanels;
     }
 
