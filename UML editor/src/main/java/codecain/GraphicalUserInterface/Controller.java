@@ -5,8 +5,10 @@ import codecain.BackendCode.UMLClass;
 import codecain.BackendCode.UMLClassInfo;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 
@@ -23,25 +25,42 @@ public class Controller {
 
     @FXML
     private void addClassBtn() {
-        String className = "New Class #" + (UMLClass.classMap.size() + 1);
-        ClassNode classNode = new ClassNode(new UMLClassInfo(className));
 
-        // Calculate the center of the canvas
-        double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
-        double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Add Class");
+        dialog.setHeaderText("Enter the name of the class to add:");
+        dialog.setContentText("Class Name:");
 
-        // Set the position of the classNode to the center of the canvas
-        classNode.setLayoutX(centerX);
-        classNode.setLayoutY(centerY);
+        String className = dialog.showAndWait().orElse(null);
+        if(className == null || className.trim().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid class name");
+            alert.setContentText("Class not added.");
+            alert.showAndWait();
+        } else {
+            
+            if(UMLClass.addClass(className)) {
+                ClassNode classNode = new ClassNode(UMLClass.classMap.get(className));
 
-        classNode.setOnMouseClicked(event -> selectClassNode(classNode));
-        nodeContainer.getChildren().add(classNode);
+                // Position nodes (e.g., center as a placeholder; adjust as needed)
+                double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
+                double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
+                classNode.setLayoutX(centerX);
+                classNode.setLayoutY(centerY);
 
-//        Storage.addClass(className);
-        UMLClass.addClass(className);
-        System.out.println("Storage size: " + UMLClass.classMap.size());
+                // Add click event for selection
+                classNode.setOnMouseClicked(event -> selectClassNode(classNode));
 
-
+                // Add the new ClassNode to the node container
+                nodeContainer.getChildren().add(classNode);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Class '" + className + "' could not be added.");
+                alert.showAndWait();
+            }
+        }
     }
 
     @FXML
