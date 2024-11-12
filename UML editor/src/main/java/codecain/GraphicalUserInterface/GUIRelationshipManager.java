@@ -2,6 +2,7 @@ package codecain.GraphicalUserInterface;
 
 import codecain.BackendCode.Relationship;
 import codecain.BackendCode.UMLClass;
+import codecain.RelationshipType;
 
 import javax.swing.*;
 
@@ -12,6 +13,12 @@ import javax.swing.*;
  */
 public class GUIRelationshipManager {
 
+    private GUIClassManager classManager;
+
+    public GUIRelationshipManager(GUIClassManager classManager){
+        this.classManager = classManager;
+    }
+
     /**
      * Adds a relationship between two UML classes.
      * Prompts the user for the source and destination class names. Validates the class names and
@@ -21,6 +28,12 @@ public class GUIRelationshipManager {
     public void addRelationship() {
         String sourceClass = JOptionPane.showInputDialog("Enter the source class name:");
         String destinationClass = JOptionPane.showInputDialog("Enter the destination class name:");
+        String type = JOptionPane.showInputDialog("Enter the type of relationship");
+
+        if (!RelationshipType.typeExists(type)){
+            JOptionPane.showMessageDialog(null, type + " is not a valid relationship type.");
+            return;
+        }
 
         if (sourceClass == null || destinationClass == null || sourceClass.trim().isEmpty() || destinationClass.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Both class names are required.");
@@ -37,8 +50,12 @@ public class GUIRelationshipManager {
             return;
         }
 
-        boolean added = Relationship.addRelationship(sourceClass, destinationClass);
+
+        boolean added = Relationship.addRelationship(sourceClass, destinationClass, RelationshipType.fromString(type));
+
         if (added) {
+            classManager.getClassPanels().get(sourceClass).addRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,RelationshipType.fromString(type)));
+            classManager.getClassPanels().get(destinationClass).addRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,RelationshipType.fromString(type)));
             JOptionPane.showMessageDialog(null, "Relationship added between '" + sourceClass + "' and '" + destinationClass + "'.");
         } else {
             JOptionPane.showMessageDialog(null, "Unable to add relationship. It may already exist.");
@@ -58,6 +75,9 @@ public class GUIRelationshipManager {
             JOptionPane.showMessageDialog(null, "Both class names are required.");
             return;
         }
+
+        classManager.getClassPanels().get(sourceClass).removeRelationshipPoint(Relationship.getRelationship(sourceClass, destinationClass, null));
+        classManager.getClassPanels().get(destinationClass).removeRelationshipPoint(Relationship.getRelationship(sourceClass, destinationClass, null));
 
         boolean removed = Relationship.removeRelationship(sourceClass, destinationClass);
         if (removed) {
