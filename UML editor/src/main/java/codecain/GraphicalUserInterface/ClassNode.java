@@ -14,6 +14,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -190,8 +191,21 @@ public class ClassNode extends VBox {
     }
 
     private void onMouseDragged(MouseEvent event) {
-        this.setLayoutX(event.getSceneX() - mouseXOffset);
-        this.setLayoutY(event.getSceneY() - mouseYOffset);
+        double newX = event.getSceneX() - mouseXOffset;
+        double newY = event.getSceneY() - mouseYOffset;
+
+        // Get pane's width and height from the parent (nodeContainer should be the parent)
+        Pane parentPane = (Pane) this.getParent();
+        double maxX = parentPane.getWidth() - this.getPrefWidth();
+        double maxY = parentPane.getHeight() - this.getPrefHeight();
+
+        // Restrict movement within pane boundaries
+        if (newX >= 0 && newX <= maxX) {
+            this.setLayoutX(newX);
+        }
+        if (newY >= 0 && newY <= maxY) {
+            this.setLayoutY(newY);
+        }
     }
 
     // Set TextFieldListCell for editable ListView

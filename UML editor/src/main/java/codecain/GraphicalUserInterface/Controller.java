@@ -6,6 +6,7 @@ import codecain.BackendCode.UMLClassInfo;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class Controller {
     private AnchorPane classContainer;
 
     @FXML
-    private AnchorPane nodeContainer;
+    private Pane nodeContainer;
 
     @FXML
     private void addClassBtn() {
