@@ -1,8 +1,10 @@
-package codecain;
+package codecain.GraphicalUserInterface;
 
+import codecain.BackendCode.SaveManager;
+import codecain.BackendCode.UMLClass;
+import codecain.BackendCode.UMLClassInfo;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;

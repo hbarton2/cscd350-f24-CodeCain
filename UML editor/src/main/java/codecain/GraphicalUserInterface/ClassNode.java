@@ -1,5 +1,9 @@
-package codecain;
+package codecain.GraphicalUserInterface;
 
+import codecain.BackendCode.UMLClass;
+import codecain.BackendCode.UMLClassInfo;
+import codecain.BackendCode.UMLFieldInfo;
+import codecain.BackendCode.UMLMethodInfo;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;

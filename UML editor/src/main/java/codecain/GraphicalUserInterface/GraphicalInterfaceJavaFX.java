@@ -1,4 +1,4 @@
-package codecain;
+package codecain.GraphicalUserInterface;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +13,8 @@ public class GraphicalInterfaceJavaFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("GraphicalInterface.fxml"));
-            String css = Objects.requireNonNull(this.getClass().getResource("application.css")).toExternalForm();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/codecain/GraphicalInterface.fxml"));
+            String css = Objects.requireNonNull(this.getClass().getResource("/codecain/application.css")).toExternalForm();
             Parent root = loader.load();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(css);
