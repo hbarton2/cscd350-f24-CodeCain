@@ -1,71 +1,41 @@
 package codecain.BackendCode.UndoRedo;
 
-import java.util.*;
-import codecain.BackendCode.UndoRedo.Command;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class History {
-    private List<Pair> history = new ArrayList<Pair>();
-    private int size = 0;
+    private Stack<Memento> undoStack = new Stack<>();
+    private Stack<Memento> redoStack = new Stack<>();
 
-    private class Pair {
-        Memento memento;
-        Command command;
+    public void save(Memento memento) {
+        undoStack.push(memento);
+        redoStack.clear();  // Clear redo stack on new action.
+    }
 
-        public Pair(Memento m, Command c) {
-            memento = m;
-            command = c;
-        }
-        private Command getCommand() {
-            return command;
-        }
-        private Memento getMemento() {
+    public Memento undo() {
+        if (!undoStack.isEmpty()) {
+            Memento memento = undoStack.pop();
+            redoStack.push(memento);
             return memento;
         }
+        return null;  // Or throw exception.
     }
 
-    public void Push(Command c, Memento m) {
-        if (size != history.size() && size > 0) {
-            history = history.subList(0, size - 1);
+    public Memento redo() {
+        if (!redoStack.isEmpty()) {
+            Memento memento = redoStack.pop();
+            undoStack.push(memento);
+            return memento;
         }
-        history.add(new Pair(m, c));
-        size = history.size();
+        return null;  // Or throw exception.
     }
 
-    public boolean redo(){
-        Pair pair = getRedo();
-        if (pair == null) {
-            return false;
-        }
-        System.out.println("Redoing: " + pair.getCommand().getName());
-        pair.getMemento().restore();
-        pair.getCommand().execute();
-        return true;
+    public boolean canUndo() {
+        return !undoStack.isEmpty();
     }
 
-    private Pair getRedo(){
-        if (size == history.size()) {
-            return null;
-        }
-        size = Math.min(size, history.size() + 1);
-        return history.get(size - 1);
+    public boolean canRedo() {
+        return !redoStack.isEmpty();
     }
-
-    public boolean undo(){
-        Pair pair = getUndo();
-        if (pair == null) {
-            return false;
-        }
-        System.out.println("Undoing: " + pair.getCommand().getName());
-        pair.getMemento().restore();
-        return true;
-    }
-
-    private Pair getUndo(){
-        if (size == history.size()) {
-            return null;
-        }
-        size = Math.min(size, history.size() - 1);
-        return history.get(size);
-    }
-
 }

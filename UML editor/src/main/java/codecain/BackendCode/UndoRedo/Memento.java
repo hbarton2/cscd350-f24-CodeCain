@@ -1,15 +1,12 @@
 package codecain.BackendCode.UndoRedo;
-
 public class Memento {
-        private String backup;
-        private UndoRedoEditor editor;
+    private final String state;  // Change type based on what state is stored.
 
-        public Memento(UndoRedoEditor editor) {
-            this.editor = editor;
-            this.backup = editor.backup();
-        }
+    public Memento(String state) {
+        this.state = state;
+    }
 
-        public void restore() {
-            editor.restore(backup);
-        }
+    public String getState() {
+        return state;
+    }
 }

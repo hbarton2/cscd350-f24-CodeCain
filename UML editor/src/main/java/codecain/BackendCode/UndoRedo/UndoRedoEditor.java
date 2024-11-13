@@ -1,38 +1,21 @@
 package codecain.BackendCode.UndoRedo;
 
-import jline.console.history.History;
-
-import java.util.Stack;
-
 public class UndoRedoEditor {
-    public Stack<Object> undoStack;
-    public Stack<Object> redoStack;
+    private String state;
 
-    private History history;
-
-    public UndoRedoEditor() {
-        undoStack = new Stack<>();
-        redoStack = new Stack<>();
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public void undo() {
+    public String getState() {
+        return state;
     }
 
-
-    public void addToRedoStack(Object o) {
+    public Memento saveStateToMemento() {
+        return new Memento(state);
     }
 
-    public void addToUndoStack(Object o) {
-    }
-
-    public void redo() {
-    }
-
-    public String backup() {
-        return null;
-    }
-
-    public void restore(String backup) {
+    public void getStateFromMemento(Memento memento) {
+        state = memento.getState();
     }
 }
-
