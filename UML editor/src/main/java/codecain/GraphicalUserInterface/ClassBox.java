@@ -66,8 +66,6 @@ public class ClassBox extends JPanel {
      */
     private void enableDragging(JPanel canvas) {
         final Point initialClick = new Point();
-
-        // Track initial click location when the mouse is pressed
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
@@ -75,7 +73,6 @@ public class ClassBox extends JPanel {
             }
         });
 
-        // Adjust the position of the box as the mouse is dragged
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(java.awt.event.MouseEvent e) {
@@ -86,16 +83,22 @@ public class ClassBox extends JPanel {
                 int newX = location.x + xMove;
                 int newY = location.y + yMove;
 
-                // Ensure the box stays within the canvas bounds
                 int canvasWidth = canvas.getWidth();
                 int canvasHeight = canvas.getHeight();
                 int boxWidth = getWidth();
                 int boxHeight = getHeight();
-
+                
                 newX = Math.max(0, Math.min(newX, canvasWidth - boxWidth));
                 newY = Math.max(0, Math.min(newY, canvasHeight - boxHeight));
 
                 setLocation(newX, newY);
+
+                UMLClassInfo umlClassInfo = UMLClass.classMap.get(className);
+                if (umlClassInfo != null) {
+                    umlClassInfo.setX(newX);
+                    umlClassInfo.setY(newY);
+                }
+
                 canvas.repaint();
             }
         });
@@ -112,12 +115,9 @@ public class ClassBox extends JPanel {
             detailsArea.setText("Class information not available.");
             return;
         }
-
-        // Build the details text
         StringBuilder detailsText = new StringBuilder("Fields:\n");
         umlClassInfo.getFields().forEach(field ->
                 detailsText.append(field.getFieldName()).append(": ").append(field.getFieldType()).append("\n"));
-
         detailsText.append("\nMethods:\n");
         umlClassInfo.getMethods().forEach(method -> {
             detailsText.append(method.getMethodName()).append("(");
@@ -126,8 +126,6 @@ public class ClassBox extends JPanel {
                     .collect(Collectors.joining(", ")));
             detailsText.append(")\n");
         });
-
-        // Update the text area
         detailsArea.setText(detailsText.toString());
     }
 }

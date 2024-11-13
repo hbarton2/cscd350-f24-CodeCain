@@ -1,9 +1,14 @@
 package codecain.GraphicalUserInterface;
 
 import codecain.BackendCode.SaveManager;
+import codecain.BackendCode.UMLClass;
+import codecain.BackendCode.UMLClassInfo;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
+import codecain.GraphicalUserInterface.GUIClassManager;
+
 
 /**
  * The {@code GUIController} class serves as the central controller for the Class Diagram Editor.
@@ -168,6 +173,16 @@ public class GUIController {
         if (fileName != null && !fileName.trim().isEmpty()) {
             try {
                 SaveManager.loadFromJSON(fileName + ".json");
+                classManager.clearCanvas();
+                UMLClass.classMap.values().forEach(classInfo -> {
+                    classManager.createClassBox(classInfo);
+                    JPanel classBox = classManager.getClassPanels().get(classInfo.getClassName());
+                    if (classBox != null) {
+                        classBox.setLocation(classInfo.getX(), classInfo.getY());
+                    }
+                });
+                classManager.revalidate();
+                classManager.repaint();
                 JOptionPane.showMessageDialog(null, "Diagram loaded from " + fileName + ".json");
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Error loading diagram: " + ex.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);

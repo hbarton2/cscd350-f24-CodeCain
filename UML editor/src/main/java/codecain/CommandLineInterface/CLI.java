@@ -1,5 +1,7 @@
 package codecain.CommandLineInterface;
 
+import codecain.GraphicalUserInterface.GUIClassManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -11,11 +13,23 @@ import java.util.List;
  * Provides a command-driven interface for interacting with the UML model.
  */
 public class CLI extends JFrame {
+
+    /** Text area to display command outputs and logs. */
     private JTextArea commandOutput;
+
+    /** Text field for user input commands. */
     private JTextField commandInput;
+
+    /** Label for displaying autocomplete suggestions. */
     private JLabel suggestionLabel;
+
+    /** The CommandManager instance responsible for parsing and executing commands. */
     private CommandManager commandManager;
 
+    /** The GUIClassManager instance for managing the graphical representation of classes. */
+    private GUIClassManager classManager;
+
+    /** List of available commands for the autocomplete feature. */
     private static final List<String> COMMANDS = List.of(
             "add", "delete", "rename", "list", "help", "exit",
             "add class", "add field", "add method", "add parameter", "add relationship",
@@ -75,7 +89,9 @@ public class CLI extends JFrame {
 
         panel.add(inputPanel, BorderLayout.SOUTH);
 
-        commandManager = new CommandManager(commandOutput);
+        JPanel canvas = new JPanel();
+        classManager = new GUIClassManager(canvas);
+        commandManager = new CommandManager(commandOutput, classManager);
 
         setupCommandInputListener();
         setupGlobalKeyDispatcher();
@@ -214,4 +230,6 @@ public class CLI extends JFrame {
     public CommandManager getCommandManager() {
         return commandManager;
     }
+
+
 }
