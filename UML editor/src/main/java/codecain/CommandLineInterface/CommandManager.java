@@ -2,6 +2,8 @@ package codecain.CommandLineInterface;
 
 import codecain.BackendCode.*;
 import codecain.RelationshipType;
+import codecain.GraphicalUserInterface.ClassBox;
+import codecain.GraphicalUserInterface.GUIClassManager;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -12,17 +14,20 @@ import java.util.List;
  */
 public class CommandManager {
 
-    private JTextArea commandOutput;
-    private FileOperations fileOperations;
+    private final JTextArea commandOutput;
+    private final FileOperations fileOperations;
+    private final GUIClassManager classManager;
 
     /**
-     * Initializes a new instance of the CommandManager with the specified JTextArea for command output.
+     * Initializes a new instance of the CommandManager with the specified JTextArea for command output and GUIClassManager.
      *
      * @param commandOutput JTextArea to display command outputs
+     * @param classManager  GUIClassManager to manage the graphical representation of classes
      */
-    public CommandManager(JTextArea commandOutput) {
+    public CommandManager(JTextArea commandOutput, GUIClassManager classManager) {
         this.commandOutput = commandOutput;
         this.fileOperations = new FileOperations();
+        this.classManager = classManager;
     }
 
 
@@ -109,16 +114,21 @@ public class CommandManager {
     }
 
     /**
-     * Adds a new UML class with the specified name.
+     * Adds a new UML class with the specified name and creates a corresponding GUI box on the canvas.
      *
      * @param className name of the class to add
      * @return message confirming the addition of the class
      */
     private String handleAddClass(String className) {
         UMLClass.addClass(className);
-        return DisplayHelper.classAdded(className);
+        if (UMLClass.exists(className)) {
+            UMLClassInfo classInfo = UMLClass.getClassInfo(className);
+            classManager.createClassBox(classInfo);
+            return DisplayHelper.classAdded(className);
+        } else {
+            return "Failed to add class: " + className;
+        }
     }
-
 
     /**
      * Adds a relationship between two classes.
