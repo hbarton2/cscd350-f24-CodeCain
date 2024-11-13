@@ -236,13 +236,9 @@ public class Controller {
         // After loading, add the ClassNodes to the AnchorPane
         nodeContainer.getChildren().clear();
         UMLClass.classMap.values().forEach(classInfo -> {
-           ClassNode classNode = new ClassNode(classInfo);
-
-            // Position nodes (e.g., center as a placeholder; adjust as needed)
-            double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
-            double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
-            classNode.setLayoutX(centerX);
-            classNode.setLayoutY(centerY);
+            ClassNode classNode = new ClassNode(classInfo);
+            classNode.setLayoutX(classInfo.getX());
+            classNode.setLayoutY(classInfo.getY());
 
             // Add click event for selection
             classNode.setOnMouseClicked(event -> selectClassNode(classNode));
