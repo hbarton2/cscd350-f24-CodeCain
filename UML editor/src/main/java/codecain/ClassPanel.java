@@ -1,6 +1,13 @@
 package codecain;
 
+
+/**
+ * this is a useless class. Would delete, but i still need it to make sure that i still have this code in case I need to copy it somewhere
+ */
+
+
 import javax.swing.*;
+import codecain.BackendCode.*;
 import java.util.HashMap;
 
 public class ClassPanel extends JPanel {
