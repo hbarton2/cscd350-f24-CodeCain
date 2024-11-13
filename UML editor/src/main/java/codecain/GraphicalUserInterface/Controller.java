@@ -111,7 +111,7 @@ public class Controller {
 
     @FXML
     public void renameClassBtn() {
-        if(currentlySelectedNode == null) {
+        if(currentlySelectedNode != null) {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Rename Class");
             dialog.setHeaderText("Enter the name of the class to rename:");
