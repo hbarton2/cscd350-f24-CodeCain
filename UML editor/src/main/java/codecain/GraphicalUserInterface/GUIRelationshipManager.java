@@ -2,6 +2,7 @@ package codecain.GraphicalUserInterface;
 
 import codecain.BackendCode.Relationship;
 import codecain.BackendCode.UMLClass;
+import codecain.RelationshipCanvas;
 import codecain.RelationshipType;
 
 import javax.swing.*;
@@ -14,9 +15,11 @@ import javax.swing.*;
 public class GUIRelationshipManager {
 
     private GUIClassManager classManager;
+    private RelationshipCanvas canvas;
 
-    public GUIRelationshipManager(GUIClassManager classManager){
+    public GUIRelationshipManager(GUIClassManager classManager, RelationshipCanvas canvas){
         this.classManager = classManager;
+        this.canvas = canvas;
     }
 
     /**
@@ -57,6 +60,7 @@ public class GUIRelationshipManager {
             UMLClass.classMap.get(sourceClass).addRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,RelationshipType.fromString(type)));
             UMLClass.classMap.get(destinationClass).addRelationshipPoint(Relationship.getRelationship(sourceClass,destinationClass,RelationshipType.fromString(type)));
             JOptionPane.showMessageDialog(null, "Relationship added between '" + sourceClass + "' and '" + destinationClass + "'.");
+            canvas.repaint();
         } else {
             JOptionPane.showMessageDialog(null, "Unable to add relationship. It may already exist.");
         }
@@ -81,6 +85,7 @@ public class GUIRelationshipManager {
 
         boolean removed = Relationship.removeRelationship(sourceClass, destinationClass);
         if (removed) {
+            canvas.repaint();
             JOptionPane.showMessageDialog(null, "Relationship removed between '" + sourceClass + "' and '" + destinationClass + "'.");
         } else {
             JOptionPane.showMessageDialog(null, "Relationship not found or could not be removed.");
