@@ -507,67 +507,73 @@ public class Controller {
 
     @FXML
     private void renameMethodBtn() {
-        for (Node classNode : nodeContainer.getChildren()) {
-            if (classNode instanceof ClassNode && ((ClassNode) classNode).isSelected()) {
-                ClassNode selectedClassNode = (ClassNode) classNode;
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Rename Method");
+        dialog.setHeaderText("Enter the class name, current method name, and new method name:");
 
-                Dialog<ButtonType> dialog = new Dialog<>();
-                dialog.setTitle("Rename Method");
-                dialog.setHeaderText("Enter the method name to rename:");
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
 
-                GridPane grid = new GridPane();
-                grid.setHgap(10);
-                grid.setVgap(10);
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
 
-                TextField oldMethodNameField = new TextField();
-                oldMethodNameField.setPromptText("Current Method Name");
+        TextField oldMethodNameField = new TextField();
+        oldMethodNameField.setPromptText("Current Method Name");
 
-                TextField newMethodNameField = new TextField();
-                newMethodNameField.setPromptText("New Method Name");
+        TextField newMethodNameField = new TextField();
+        newMethodNameField.setPromptText("New Method Name");
 
-                grid.add(new Label("Current Method Name:"), 0, 0);
-                grid.add(oldMethodNameField, 1, 0);
-                grid.add(new Label("New Method Name:"), 0, 1);
-                grid.add(newMethodNameField, 1, 1);
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Current Method Name:"), 0, 1);
+        grid.add(oldMethodNameField, 1, 1);
+        grid.add(new Label("New Method Name:"), 0, 2);
+        grid.add(newMethodNameField, 1, 2);
 
-                dialog.getDialogPane().setContent(grid);
-                dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-                Optional<ButtonType> result = dialog.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    String oldMethodName = oldMethodNameField.getText().trim();
-                    String newMethodName = newMethodNameField.getText().trim();
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String oldMethodName = oldMethodNameField.getText().trim();
+            String newMethodName = newMethodNameField.getText().trim();
 
-                    if (oldMethodName.isEmpty() || newMethodName.isEmpty()) {
-                        showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input", "Both method names must be provided.");
-                        return;
-                    }
-
-                    String className = selectedClassNode.getName();
-
-// Update backend
-                    UMLMethods methodsManager = new UMLMethods();
-                    methodsManager.renameMethod(className, oldMethodName, newMethodName);
-
-// Update GUI
-                    boolean renamed = selectedClassNode.renameMethod(oldMethodName, newMethodName);
-                    if (renamed) {
-                        // Sync the GUI with backend data
-                        selectedClassNode.syncWithUMLClassInfo();
-                        showAlert(Alert.AlertType.INFORMATION, "Success", "Method Renamed",
-                                "Method '" + oldMethodName + "' renamed to '" + newMethodName + "'.");
-                    } else {
-                        showAlert(Alert.AlertType.ERROR, "Error", "Rename Failed",
-                                "Method '" + oldMethodName + "' could not be renamed in the GUI.");
-                    }
-
-                }
+            if (className.isEmpty() || oldMethodName.isEmpty() || newMethodName.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input", "All fields are required.");
                 return;
             }
-        }
 
-        showAlert(Alert.AlertType.ERROR, "Error", "No Class Selected", "Please select a class to rename a method.");
+            ClassNode targetClassNode = null;
+            for (Node classNode : nodeContainer.getChildren()) {
+                if (classNode instanceof ClassNode && ((ClassNode) classNode).getName().equals(className)) {
+                    targetClassNode = (ClassNode) classNode;
+                    break;
+                }
+            }
+
+            if (targetClassNode == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Class Not Found",
+                        "Class '" + className + "' does not exist.");
+                return;
+            }
+
+            UMLMethods methodsManager = new UMLMethods();
+            methodsManager.renameMethod(className, oldMethodName, newMethodName);
+
+            boolean renamed = targetClassNode.renameMethod(oldMethodName, newMethodName);
+            if (renamed) {
+                targetClassNode.syncWithUMLClassInfo(); // Sync changes with backend
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Method Renamed",
+                        "Method '" + oldMethodName + "' renamed to '" + newMethodName + "'.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Rename Failed",
+                        "Method '" + oldMethodName + "' could not be renamed in the GUI.");
+            }
+        }
     }
+
 
 
 
