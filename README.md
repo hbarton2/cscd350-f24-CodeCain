@@ -7,4 +7,9 @@ you can find it here: https://www.java.com/en/download/.
 
 
 To start up the program:
-1. Double click the "cscd350-f24-CodeCain" to open the program of our UML editor.
+1. Navigate to the folder "umlEditor"
+2. Then look for the folder "out"
+3. Click on the folder named "artifacts"
+4. Open the file "umlEditor_jar"
+5. Make sure you have java installed on your computer linked above. Then double click the file inside named "umlEditor"
+6. You are done and the program should be running.
