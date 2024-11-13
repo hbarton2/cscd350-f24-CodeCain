@@ -78,8 +78,9 @@ public class RelationshipCanvas extends JPanel {
         }
     }
 
+
     /**
-     *
+     * 
      */
     private int getXposition(ClassBox panel1, Relationship r){
 
@@ -96,7 +97,7 @@ public class RelationshipCanvas extends JPanel {
 
 
     /**
-     *
+     *  draws the UML line with the arrow
      */
     private void drawUMLLine(RelationshipType type, int x1, int y1, int x2, int y2, Graphics g){
         Graphics2D g2d = (Graphics2D) g.create();
@@ -115,6 +116,13 @@ public class RelationshipCanvas extends JPanel {
     }
 
 
+    /**
+     * draws an arrow
+     * @param type type of arrow
+     * @param x the x position for the arrow
+     * @param y the y position for the arrow
+     * @param g graphics
+     */
     private void drawArrow(RelationshipType type, int x, int y, Graphics2D g){
         int[] diamondx = {x   , x-6 , x, x+6 };
         int[] diamondy = {y-24, y-12, y, y-12};
