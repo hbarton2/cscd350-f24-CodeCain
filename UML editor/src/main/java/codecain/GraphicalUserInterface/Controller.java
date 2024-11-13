@@ -208,9 +208,9 @@ public class Controller {
 
         // Bind the start and end coordinates of the line to the centers of the class nodes
         line.startXProperty().bind(sourceNode.layoutXProperty().add(sourceNode.getWidth() / 2));
-        line.startYProperty().bind(sourceNode.layoutYProperty().add(sourceNode.getHeight() / 2));
+        line.startYProperty().bind(sourceNode.layoutYProperty().add(sourceNode.getHeight()));
         line.endXProperty().bind(destNode.layoutXProperty().add(destNode.getWidth() / 2));
-        line.endYProperty().bind(destNode.layoutYProperty().add(destNode.getHeight() / 2));
+        line.endYProperty().bind(destNode.layoutYProperty().add(destNode.getHeight()));
 
         // Add the line to the container
         nodeContainer.getChildren().add(line);
