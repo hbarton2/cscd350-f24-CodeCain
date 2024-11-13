@@ -564,7 +564,7 @@ public class Controller {
 
             boolean renamed = targetClassNode.renameMethod(oldMethodName, newMethodName);
             if (renamed) {
-                targetClassNode.syncWithUMLClassInfo(); // Sync changes with backend
+                targetClassNode.syncWithUMLClassInfo();
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Method Renamed",
                         "Method '" + oldMethodName + "' renamed to '" + newMethodName + "'.");
             } else {
@@ -573,12 +573,6 @@ public class Controller {
             }
         }
     }
-
-
-
-
-
-
 
     @FXML
     private void addParameterBtn() {
@@ -738,19 +732,16 @@ public class Controller {
                 }
             }
 
-            // If the class was not found in the GUI
             showAlert(Alert.AlertType.ERROR, "Error", "GUI Update Failed", "Parameter was deleted from the backend but the GUI could not be updated.");
         }
     }
 
     @FXML
     private void changeParameterBtn() {
-        // Dialog to gather class name, method name, and parameter details
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Change Parameter");
         dialog.setHeaderText("Enter details for the parameter to change");
 
-        // Set up the input fields and grid layout
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -830,6 +821,77 @@ public class Controller {
         }
     }
 
+    @FXML
+    private void changeAllParametersBtn() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Change All Parameters");
+        dialog.setHeaderText("Enter details for the method to replace its parameters");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
+        TextField methodNameField = new TextField();
+        methodNameField.setPromptText("Method Name");
+        TextField parameterField = new TextField();
+        parameterField.setPromptText("New Parameters (comma-separated, e.g., int x, String y)");
+        parameterField.setPrefWidth(300);
+
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Method Name:"), 0, 1);
+        grid.add(methodNameField, 1, 1);
+        grid.add(new Label("New Parameters:"), 0, 2);
+        grid.add(parameterField, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String methodName = methodNameField.getText().trim();
+            String parametersInput = parameterField.getText().trim();
+
+            if (className.isEmpty() || methodName.isEmpty()) {
+                showAlert(AlertType.ERROR, "Error", "All fields are required", "Parameters not changed.");
+                return;
+            }
+
+            UMLClassInfo classInfo = UMLClass.getClassInfo(className);
+            if (classInfo == null) {
+                showAlert(AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                return;
+            }
+
+            UMLMethodInfo methodInfo = classInfo.getMethodByName(methodName);
+            if (methodInfo == null) {
+                showAlert(AlertType.ERROR, "Error", "Method not found", "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                return;
+            }
+
+            List<UMLParameterInfo> newParameters = parseParameters(parametersInput);
+
+            UMLMethods methodManager = new UMLMethods();
+            methodManager.changeAllParameters(className, methodName, newParameters);
+
+            for (Node node : nodeContainer.getChildren()) {
+                if (node instanceof ClassNode) {
+                    ClassNode classNode = (ClassNode) node;
+                    if (classNode.getName().equals(className)) {
+                        methodInfo.getParameters().clear();
+                        methodInfo.getParameters().addAll(newParameters);
+                        classNode.updateMethod(methodInfo); // Update the specific method in the UI
+                        showAlert(AlertType.INFORMATION, "Success", "Parameters Changed",
+                                "All parameters replaced for method '" + methodName + "' in class '" + className + "'.");
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
 
 
@@ -863,6 +925,8 @@ public class Controller {
 
         System.out.println("GUI populated from class map.");
     }
+
+
 
     private void selectClassNode(ClassNode classNode) {
         // Deselect the previously selected node, if any
