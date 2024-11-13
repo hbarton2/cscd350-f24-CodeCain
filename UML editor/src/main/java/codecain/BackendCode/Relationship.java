@@ -152,6 +152,8 @@ public class Relationship {
         }
 
         Relationship newRelationship = new Relationship(class1, class2, type);
+        UMLClass.classMap.get(class1).addRelationshipPoint(newRelationship);
+        UMLClass.classMap.get(class2).addRelationshipPoint(newRelationship);
         System.out.println("Relationship between " + class1 + " and " + class2 + " added");
         return true;
     }
@@ -165,6 +167,8 @@ public class Relationship {
     public static boolean removeRelationship(String class1, String class2) {
         for (Relationship r : relationshipList) {
             if (r.classNames.contains(class1) && r.classNames.contains(class2)) {
+                UMLClass.classMap.get(class1).removeRelationshipPoint(r);
+                UMLClass.classMap.get(class2).removeRelationshipPoint(r);
                 relationshipList.remove(r);
                 System.out.println("Relationship between " + class1 + " and " + class2 + " removed");
                 return true;
