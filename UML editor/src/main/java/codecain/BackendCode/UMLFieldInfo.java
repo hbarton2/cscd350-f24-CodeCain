@@ -1,5 +1,9 @@
 package codecain.BackendCode;
 
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * The UMLFieldsInfo class represents a field in a UML class.
  * It includes the field name and the field type.
@@ -17,12 +21,22 @@ public class UMLFieldInfo {
     private String fieldType;
 
     /**
+
+     * Constructs a UMLFieldsInfo object with default values for the field name and field type.
+     * Required for serialization by Jackson.
+     */
+    public UMLFieldInfo() {
+    }
+    /**
      * Constructs a UMLFieldsInfo object with the specified field name and field type.
      *
      * @param fieldName the name of the field
      * @param fieldType the type of the field
      */
-    public UMLFieldInfo(String fieldType, String fieldName) {
+
+    @JsonCreator
+    public UMLFieldInfo(@JsonProperty("fieldType") String fieldType,
+                        @JsonProperty("fieldName") String fieldName) {
         this.fieldName = fieldName;
         this.fieldType = fieldType;
     }

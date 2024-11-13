@@ -49,9 +49,9 @@ public class CommandManager {
         switch (commandName) {
             case "help" -> {
                 result = DisplayHelper.showHelp();
-                int helpStartPosition = commandOutput.getLength(); // Save the start position of the 'help' content
+                int helpStartPosition = commandOutput.getLength(); 
                 commandOutput.appendText(">> " + command + "\n" + result + "\n");
-                commandOutput.positionCaret(helpStartPosition); // Move the caret back to the start of the 'help' content
+                commandOutput.positionCaret(helpStartPosition); 
                 return;
             }
             case "add", "delete", "rename", "list" -> result = handleCommand(tokens);
@@ -165,6 +165,7 @@ public class CommandManager {
         String fieldName = tokens[4];
 
         String errorMessage = checkClassExists(className);
+
         if (errorMessage != null) {
             return errorMessage;
         }
@@ -177,6 +178,7 @@ public class CommandManager {
         fields.addField(className, fieldType, fieldName);
         return DisplayHelper.fieldAdded(fieldName, fieldType, className);
     }
+
 
 
     /**
@@ -507,4 +509,5 @@ public class CommandManager {
         }
         return classInfo;
     }
+
 }

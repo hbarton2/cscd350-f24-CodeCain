@@ -22,6 +22,7 @@ public class UMLFields {
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
         if (doesFieldExist(classInfo, fieldName)) {
+
             System.out.println("Action Canceled: Field of type " + fieldType + " " + fieldName + " already exists in class " + className);
             return;
         }

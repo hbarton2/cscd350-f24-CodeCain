@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+
 public class MenuGUI extends Application {
 
     @Override
