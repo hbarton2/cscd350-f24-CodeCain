@@ -306,70 +306,70 @@ public class Controller {
 
     @FXML
     private void renameFieldBtn() {
-        for (Node classNode : nodeContainer.getChildren()) {
-            if (classNode instanceof ClassNode && ((ClassNode) classNode).isSelected()) {
-                ClassNode selectedClassNode = (ClassNode) classNode;
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Rename Field");
+        dialog.setHeaderText("Enter the class name, current field name, new field name, and new field type:");
 
-                // Prompt for current field name
-                TextInputDialog currentFieldDialog = new TextInputDialog();
-                currentFieldDialog.setTitle("Rename Field");
-                currentFieldDialog.setHeaderText("Enter the current name of the field:");
-                currentFieldDialog.setContentText("Current Field Name:");
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
 
-                Optional<String> currentFieldNameResult = currentFieldDialog.showAndWait();
-                currentFieldNameResult.ifPresent(oldFieldName -> {
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
+        TextField oldFieldNameField = new TextField();
+        oldFieldNameField.setPromptText("Current Field Name");
+        TextField newFieldNameField = new TextField();
+        newFieldNameField.setPromptText("New Field Name");
+        TextField newFieldTypeField = new TextField();
+        newFieldTypeField.setPromptText("New Field Type");
 
-                    // Prompt for new field name and type
-                    Dialog<ButtonType> dialog = new Dialog<>();
-                    dialog.setTitle("Rename Field");
-                    dialog.setHeaderText("Enter the new name and type for the field:");
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Current Field Name:"), 0, 1);
+        grid.add(oldFieldNameField, 1, 1);
+        grid.add(new Label("New Field Name:"), 0, 2);
+        grid.add(newFieldNameField, 1, 2);
+        grid.add(new Label("New Field Type:"), 0, 3);
+        grid.add(newFieldTypeField, 1, 3);
 
-                    GridPane grid = new GridPane();
-                    grid.setHgap(10);
-                    grid.setVgap(10);
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-                    TextField newFieldNameField = new TextField();
-                    newFieldNameField.setPromptText("New Field Name");
-                    TextField newFieldTypeField = new TextField();
-                    newFieldTypeField.setPromptText("New Field Type");
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String oldFieldName = oldFieldNameField.getText().trim();
+            String newFieldName = newFieldNameField.getText().trim();
+            String newFieldType = newFieldTypeField.getText().trim();
 
-                    grid.add(new Label("New Field Name:"), 0, 0);
-                    grid.add(newFieldNameField, 1, 0);
-                    grid.add(new Label("New Field Type:"), 0, 1);
-                    grid.add(newFieldTypeField, 1, 1);
-
-                    dialog.getDialogPane().setContent(grid);
-                    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-                    Optional<ButtonType> dialogResult = dialog.showAndWait();
-                    if (dialogResult.isPresent() && dialogResult.get() == ButtonType.OK) {
-                        String newFieldName = newFieldNameField.getText().trim();
-                        String newFieldType = newFieldTypeField.getText().trim();
-
-                        if (newFieldName.isEmpty() || newFieldType.isEmpty()) {
-                            showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input", "Both field name and type are required.");
-                            return;
-                        }
-
-                        boolean renamed = selectedClassNode.renameField(oldFieldName, newFieldType, newFieldName);
-
-                        if (renamed) {
-                            selectedClassNode.syncWithUMLClassInfo(); // Sync changes with backend
-                            showAlert(Alert.AlertType.INFORMATION, "Field Renamed", "Success",
-                                    "The field '" + oldFieldName + "' was renamed to '" + newFieldName + "' with type '" + newFieldType + "'.");
-                        } else {
-                            showAlert(Alert.AlertType.ERROR, "Error", "Rename Failed",
-                                    "The field '" + oldFieldName + "' could not be renamed.");
-                        }
-                    }
-                });
+            if (className.isEmpty() || oldFieldName.isEmpty() || newFieldName.isEmpty() || newFieldType.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input", "All fields are required.");
                 return;
             }
+            ClassNode targetClassNode = null;
+            for (Node classNode : nodeContainer.getChildren()) {
+                if (classNode instanceof ClassNode && ((ClassNode) classNode).getName().equals(className)) {
+                    targetClassNode = (ClassNode) classNode;
+                    break;
+                }
+            }
+            if (targetClassNode == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Class Not Found",
+                        "Class '" + className + "' does not exist.");
+                return;
+            }
+            boolean renamed = targetClassNode.renameField(oldFieldName, newFieldType, newFieldName);
+            if (renamed) {
+                targetClassNode.syncWithUMLClassInfo(); // Sync changes with backend
+                showAlert(Alert.AlertType.INFORMATION, "Field Renamed", "Success",
+                        "The field '" + oldFieldName + "' was renamed to '" + newFieldName + "' with type '" + newFieldType + "'.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Rename Failed",
+                        "The field '" + oldFieldName + "' could not be renamed. Ensure it exists in the class.");
+            }
         }
-
-        // If no ClassNode is selected, show an error
-        showAlert(Alert.AlertType.ERROR, "Error", "No Class Selected", "Please select a class to rename a field.");
     }
+
 
 
 
