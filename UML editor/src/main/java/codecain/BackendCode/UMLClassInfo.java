@@ -94,10 +94,6 @@ public class UMLClassInfo {
     }
 
 
-     * Gets the x-coordinate of the class box position.
-     *
-     * @return the x-coordinate
-     */
     public int getX() {
         return x;
     }
