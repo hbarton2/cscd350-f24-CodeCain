@@ -261,6 +261,10 @@ public class ClassNode extends VBox {
         return classNameLabel.getText();
     }
 
+    public void setName(String name) {
+        classNameLabel.setText(name);
+    }
+
 //    public ClassNodeDTO toDTO() {
 //        return new ClassNodeDTO(
 //                classNameLabel.getText(),

@@ -27,7 +27,7 @@
             <children>
                 <Button mnemonicParsing="false" onAction="#addClassBtn" text="Add Class" />
                 <Button mnemonicParsing="false" onAction="#deleteClassBtn" text="Delete Class" />
-                <Button mnemonicParsing="false" text="Rename Class" />
+                <Button mnemonicParsing="false" onAction="#renameClassBtn" text="Rename Class" />
                 <Button mnemonicParsing="false" text="Add Field" />
                 <Button mnemonicParsing="false" text="Delete Field" />
                 <Button mnemonicParsing="false" text="Rename Field" />

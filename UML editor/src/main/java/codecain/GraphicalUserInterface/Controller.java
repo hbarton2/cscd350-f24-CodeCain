@@ -95,6 +95,45 @@ public class Controller {
     }
 
     @FXML
+    public void renameClassBtn() {
+        if(currentlySelectedNode == null) {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Rename Class");
+            dialog.setHeaderText("Enter the name of the class to rename:");
+            dialog.setContentText("Class Name:");
+
+            String oldClassName = dialog.showAndWait().orElse(null);
+            if(oldClassName == null || oldClassName.trim().isEmpty()) {
+                showAlert("Error", "Invalid class name", "Rename canceled.");
+            } else if(!UMLClass.exists(oldClassName)) {
+                showAlert("Error", "Class '" + oldClassName + "' does not exist.", "Rename canceled.");
+            } else {
+                dialog = new TextInputDialog();
+                dialog.setTitle("Rename Class");
+                dialog.setHeaderText("Enter the new name for the class:");
+                dialog.setContentText("New Class Name:");
+
+                String newClassName = dialog.showAndWait().orElse(null);
+                if(newClassName == null || newClassName.trim().isEmpty()) {
+                    showAlert("Error", "Invalid class name", "Rename canceled.");
+                } else if(UMLClass.exists(newClassName)) {
+                    showAlert("Error", "Class '" + newClassName + "' already exists.", "Rename canceled.");
+                } else {
+                    UMLClass.renameClass(oldClassName, newClassName);
+                    for(Node classNode : nodeContainer.getChildren()) {
+                        if(classNode instanceof ClassNode) {
+                            if(((ClassNode) classNode).getName().equals(oldClassName)) {
+                                ((ClassNode) classNode).setName(newClassName);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+
+    @FXML
     private void saveBtn() throws IOException {
         nodeContainer.getChildren().forEach(node -> {
            if (node instanceof ClassNode) {
