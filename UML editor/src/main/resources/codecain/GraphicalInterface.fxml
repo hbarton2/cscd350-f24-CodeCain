@@ -37,7 +37,7 @@
                 <Button mnemonicParsing="false" text="Delete Parameter" />
                 <Button mnemonicParsing="false" text="Rename Parameter" />
                 <Button mnemonicParsing="false" onAction="#addRelationshipBtn" text="Add Relationship" />
-                <Button mnemonicParsing="false" text="Remove Relationship" />
+                <Button mnemonicParsing="false" onAction="#removeRelationshipBtn" text="Remove Relationship" />
             </children>
         </VBox>
     </right>
