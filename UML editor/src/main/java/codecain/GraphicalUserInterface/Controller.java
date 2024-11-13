@@ -1,33 +1,25 @@
 package codecain.GraphicalUserInterface;
 
-import codecain.BackendCode.SaveManager;
-import codecain.BackendCode.UMLClass;
-import codecain.BackendCode.UMLClassInfo;
-import codecain.BackendCode.UMLFieldInfo;
-import codecain.BackendCode.UMLFields;
-import codecain.BackendCode.UMLMethodInfo;
-import codecain.BackendCode.UMLMethods;
-import codecain.BackendCode.UMLParameterInfo;
+import codecain.BackendCode.*;
+import codecain.RelationshipType;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 import javafx.util.Pair;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class Controller {
+
 
     @FXML
     private ClassNode currentlySelectedNode = null;
@@ -146,6 +138,96 @@ public class Controller {
                 }
             }
         } 
+    }
+
+    private ClassNode findClassNode(String className){
+        for(Node classNode : nodeContainer.getChildren()){
+            if (classNode instanceof ClassNode){
+                if (((ClassNode)classNode).getName().equals(className)){
+                    return (ClassNode)classNode;
+                }
+            }
+        }
+        return null;
+    }
+
+    @FXML
+    private void addRelationshipBtn() {
+
+        TextInputDialog sourceDialog = new TextInputDialog();
+        sourceDialog.setTitle("Source Input");
+        sourceDialog.setHeaderText("Enter the source of the relationship");
+        sourceDialog.setContentText("Source Class:");
+
+        Optional<String> sourceResult = sourceDialog.showAndWait();
+        if (sourceResult.isEmpty()) {
+            showErrorDialog("Source input is required.");
+            return;
+        }
+        String source = sourceResult.get();
+        if (!UMLClass.classMap.containsKey(source)){
+            showErrorDialog("Source class does not exist");
+            return;
+        }
+
+        TextInputDialog destinationDialog = new TextInputDialog();
+        destinationDialog.setTitle("Destination Input");
+        destinationDialog.setHeaderText("Enter the destination of the relationship");
+        destinationDialog.setContentText("Destination Class:");
+
+        Optional<String> destinationResult = destinationDialog.showAndWait();
+        if (destinationResult.isEmpty()) {
+            showErrorDialog("Destination input is required.");
+            return;
+        }
+        String destination = destinationResult.get();
+        if (!UMLClass.classMap.containsKey(destination)){
+            showErrorDialog("Destination class does not exist");
+            return;
+        }
+
+        List<String> relationshipTypes = Arrays.asList("COMPOSITION", "AGGREGATION", "GENERALIZATION", "REALIZATION");
+        ChoiceDialog<String> typeDialog = new ChoiceDialog<>("COMPOSITION", relationshipTypes);
+        typeDialog.setTitle("Relationship Type");
+        typeDialog.setHeaderText("Select the type of relationship");
+        typeDialog.setContentText("Relationship Type:");
+
+        Optional<String> typeResult = typeDialog.showAndWait();
+        if (typeResult.isEmpty()) {
+            showErrorDialog("Relationship type is required.");
+            return;
+        }
+        String relationshipType = typeResult.get();
+        RelationshipType type = RelationshipType.fromString(relationshipType);
+
+        Relationship.addRelationship(source,destination, type);
+        ClassNode sourceNode = findClassNode(source);
+        ClassNode destNode = findClassNode(destination);
+
+        Line line = new Line();
+
+        // Bind the start and end coordinates of the line to the centers of the class nodes
+        line.startXProperty().bind(sourceNode.layoutXProperty().add(sourceNode.getWidth() / 2));
+        line.startYProperty().bind(sourceNode.layoutYProperty().add(sourceNode.getHeight() / 2));
+        line.endXProperty().bind(destNode.layoutXProperty().add(destNode.getWidth() / 2));
+        line.endYProperty().bind(destNode.layoutYProperty().add(destNode.getHeight() / 2));
+
+        // Add the line to the container
+        nodeContainer.getChildren().add(line);
+        line.toBack();
+
+    }
+
+    private boolean doesClassExist(String className){
+        return UMLClass.classMap.containsKey(className);
+    }
+
+    // Utility method to show error dialogs
+    private void showErrorDialog(String message) {
+        Alert alert = new Alert(AlertType.ERROR, message, ButtonType.OK);
+        alert.setTitle("Error");
+        alert.setHeaderText("Invalid Input");
+        alert.showAndWait();
     }
 
     @FXML
