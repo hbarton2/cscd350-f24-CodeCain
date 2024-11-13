@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codecain.GraphicalUserInterface.Controller">
+
+    <!-- Top Toolbar -->
+    <top>
+        <ToolBar>
+            <items>
+                <Button mnemonicParsing="false" onAction="#saveBtn" styleClass="toolbar-button" text="Save" />
+                <Button mnemonicParsing="false" onAction="#loadBtn" styleClass="toolbar-button" text="Load" />
+                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Help" />
+                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Exit" />
+                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Redo" />
+                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Undo" />
+            </items>
+        </ToolBar>
+    </top>
+
+    <!-- Right Toolbar -->
+    <right>
+        <VBox fx:id="rightToolbar" alignment="TOP_CENTER" prefWidth="200.0" spacing="10">
+            <children>
+                <Button mnemonicParsing="false" onAction="#addClassBtn" text="Add Class" />
+                <Button mnemonicParsing="false" onAction="#deleteClassBtn" text="Delete Class" />
+                <Button mnemonicParsing="false" onAction="#renameClassBtn" text="Rename Class" />
+                <Button mnemonicParsing="false" onAction="#addFieldBtn" text="Add Field" />
+                <Button mnemonicParsing="false" onAction="#deleteFieldBtn" text="Delete Field" />
+                <Button mnemonicParsing="false" onAction="#renameFieldBtn" text="Rename Field" />
+                <Button mnemonicParsing="false" onAction="#addMethodBtn" text="Add Method" />
+                <Button mnemonicParsing="false" onAction="#deleteMethodBtn" text="Delete Method" />
+                <Button mnemonicParsing="false" onAction="#renameMethodBtn" text="Rename Method" />
+                <Button mnemonicParsing="false" onAction="#addParameterBtn" text="Add Parameter" />
+                <Button mnemonicParsing="false" onAction="#deleteParameterBtn" text="Delete Parameter" />
+                <Button mnemonicParsing="false" onAction="#changeParameterBtn" text="Rename Parameter" />
+                <Button mnemonicParsing="false" text="Add Relationship" />
+                <Button mnemonicParsing="false" text="Remove Relationship" />
+
+            </children>
+        </VBox>
+    </right>
+
+    <!-- Center Content (Main Canvas) -->
+    <center>
+        <Pane fx:id="nodeContainer" prefHeight="800.0" prefWidth="800.0" />
+    </center>
+
+</BorderPane>
