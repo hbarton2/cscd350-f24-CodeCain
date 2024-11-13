@@ -11,21 +11,21 @@ import java.util.Objects;
 public class GraphicalInterfaceJavaFX extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/codecain/GraphicalInterface.fxml"));
             String css = Objects.requireNonNull(this.getClass().getResource("/codecain/application.css")).toExternalForm();
             Parent root = loader.load();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(css);
-
+            Controller controller = loader.getController();
+            controller.populateGUIFromClassMap();
             stage.setTitle("UML Editor");
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {

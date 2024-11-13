@@ -401,24 +401,21 @@ public class Controller {
 
     @FXML
     private void loadBtn() throws IOException {
-        String filePath = "new_uml_diagram.json"; // Set your file path
-        SaveManager.loadFromJSON(filePath);
+        SaveManager.loadFromJSON("new_uml_diagram.json");
+        populateGUIFromClassMap();
+    }
 
-        // After loading, add the ClassNodes to the AnchorPane
+    public void populateGUIFromClassMap() {
         nodeContainer.getChildren().clear();
         UMLClass.classMap.values().forEach(classInfo -> {
             ClassNode classNode = new ClassNode(classInfo);
             classNode.setLayoutX(classInfo.getX());
             classNode.setLayoutY(classInfo.getY());
-
-            // Add click event for selection
             classNode.setOnMouseClicked(event -> selectClassNode(classNode));
-
-            // Add the new ClassNode to the node container
             nodeContainer.getChildren().add(classNode);
         });
 
-        System.out.println("UML diagram loaded and nodes displayed.");
+        System.out.println("GUI populated from class map.");
     }
 
     private void selectClassNode(ClassNode classNode) {

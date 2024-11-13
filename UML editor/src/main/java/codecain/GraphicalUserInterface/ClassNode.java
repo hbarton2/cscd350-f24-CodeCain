@@ -212,6 +212,8 @@ public class ClassNode extends VBox {
         if (newY >= 0 && newY <= maxY) {
             this.setLayoutY(newY);
         }
+
+        syncWithUMLClassInfo();
     }
 
     // Set TextFieldListCell for editable ListView
