@@ -1,75 +1,113 @@
-import codecain.BackendCode.UndoRedo.*;
+
+import codecain.BackendCode.UndoRedo.History;
+import codecain.BackendCode.UndoRedo.Memento;
+import codecain.BackendCode.UndoRedo.UndoRedoEditor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Stack;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UndoRedoTests {
-    private UndoRedoEditor undoRedo;
+
+    private History history;
+    private UndoRedoEditor editor;
 
     @BeforeEach
     public void setUp() {
-        undoRedo = new UndoRedoEditor();
+        history = new History();
+        editor = new UndoRedoEditor();
     }
 
     @Test
-    public void testUndoStackInitializesEmpty() {
-        assertTrue(undoRedo.undoStack.isEmpty(), "Undo stack should be initialized empty");
+    public void testSave() {
+        editor.setState("State1");
+        Memento memento = editor.saveStateToMemento();
+        history.save(memento);
+
+        assertTrue(history.canUndo());
+        assertFalse(history.canRedo());
     }
 
     @Test
-    public void testRedoStackInitializesEmpty() {
-        Stack<Object> redoStack = undoRedo.redoStack;
-        assertTrue(redoStack.isEmpty(), "Redo stack should be initialized empty");
+    public void testUndo() {
+        editor.setState("State1");
+        Memento memento1 = editor.saveStateToMemento();
+        history.save(memento1);
+
+        editor.setState("State2");
+        Memento memento2 = editor.saveStateToMemento();
+        history.save(memento2);
+
+        Memento undoneMemento = history.undo();
+        assertEquals("State2", undoneMemento.getState());
+        assertTrue(history.canRedo());
     }
 
     @Test
-    public void testAddToUndoStack() {
-        Object state = "Test State";
-        undoRedo.addToUndoStack(state);
-        assertFalse(undoRedo.undoStack.isEmpty(), "Undo stack should not be empty after adding state");
-        assertEquals(state, undoRedo.undoStack.peek(), "Undo stack should contain the last added state");
+    public void testRedo() {
+        editor.setState("State1");
+        Memento memento1 = editor.saveStateToMemento();
+        history.save(memento1);
+
+        editor.setState("State2");
+        Memento memento2 = editor.saveStateToMemento();
+        history.save(memento2);
+
+        history.undo();
+        Memento redoneMemento = history.redo();
+
+        assertEquals("State2", redoneMemento.getState());
+        assertTrue(history.canUndo());
     }
 
     @Test
-    public void testAddToRedoStack() {
-        Object state = "Redo State";
-        undoRedo.addToRedoStack(state);
-        assertFalse(undoRedo.redoStack.isEmpty(), "Redo stack should not be empty after adding state");
-        assertEquals(state, undoRedo.redoStack.peek(), "Redo stack should contain the last added state");
+    public void testUndoWhenEmpty() {
+        assertNull(history.undo());
+        assertFalse(history.canUndo());
     }
 
     @Test
-    public void testUndoMovesStateToRedoStack() {
-        Object state = "Undo State";
-        undoRedo.addToUndoStack(state);
-        undoRedo.undo();
-        assertTrue(undoRedo.undoStack.isEmpty(), "Undo stack should be empty after undo");
-        assertFalse(undoRedo.redoStack.isEmpty(), "Redo stack should not be empty after undo");
-        assertEquals(state, undoRedo.redoStack.peek(), "Redo stack should contain the undone state");
+    public void testRedoWhenEmpty() {
+        assertNull(history.redo());
+        assertFalse(history.canRedo());
     }
 
     @Test
-    public void testRedoMovesStateToUndoStack() {
-        Object state = "Redo State";
-        undoRedo.addToRedoStack(state);
-        undoRedo.redo();
-        assertTrue(undoRedo.redoStack.isEmpty(), "Redo stack should be empty after redo");
-        assertFalse(undoRedo.undoStack.isEmpty(), "Undo stack should not be empty after redo");
-        assertEquals(state, undoRedo.undoStack.peek(), "Undo stack should contain the redone state");
+    public void testCanUndoAndRedo() {
+        assertFalse(history.canUndo());
+        assertFalse(history.canRedo());
+
+        editor.setState("State1");
+        Memento memento = editor.saveStateToMemento();
+        history.save(memento);
+
+        assertTrue(history.canUndo());
+        assertFalse(history.canRedo());
+
+        history.undo();
+        assertTrue(history.canRedo());
     }
 
     @Test
-    public void testUndoDoesNothingWhenUndoStackIsEmpty() {
-        undoRedo.undo();
-        assertTrue(undoRedo.redoStack.isEmpty(), "Redo stack should remain empty if undo is called with empty undo stack");
-    }
+    public void testMultipleUndoRedo() {
+        editor.setState("State1");
+        history.save(editor.saveStateToMemento());
 
-    @Test
-    public void testRedoDoesNothingWhenRedoStackIsEmpty() {
-        undoRedo.redo();
-        assertTrue(undoRedo.undoStack.isEmpty(), "Undo stack should remain empty if redo is called with empty redo stack");
+        editor.setState("State2");
+        history.save(editor.saveStateToMemento());
+
+        editor.setState("State3");
+        history.save(editor.saveStateToMemento());
+
+        assertEquals("State3", history.undo().getState());
+        assertEquals("State2", history.undo().getState());
+        assertEquals("State1", history.undo().getState());
+
+        assertTrue(history.canRedo());
+
+        assertEquals("State1", history.redo().getState());
+        assertEquals("State2", history.redo().getState());
+        assertEquals("State3", history.redo().getState());
+
+        assertFalse(history.canRedo());
     }
 }
