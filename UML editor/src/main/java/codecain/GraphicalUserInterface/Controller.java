@@ -33,11 +33,7 @@ public class Controller {
 
         String className = dialog.showAndWait().orElse(null);
         if(className == null || className.trim().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Invalid class name");
-            alert.setContentText("Class not added.");
-            alert.showAndWait();
+            showAlert("Error", "Invalid class name", "Class not added.");
         } else {
             
             if(UMLClass.addClass(className)) {
@@ -55,10 +51,7 @@ public class Controller {
                 // Add the new ClassNode to the node container
                 nodeContainer.getChildren().add(classNode);
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Class '" + className + "' could not be added.");
-                alert.showAndWait();
+                showAlert("Error", "Class '" + className + "' could not be added.", "");
             }
         }
     }
@@ -123,5 +116,13 @@ public class Controller {
         // Select the new node
         classNode.select();
         currentlySelectedNode = classNode;
+    }
+
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
