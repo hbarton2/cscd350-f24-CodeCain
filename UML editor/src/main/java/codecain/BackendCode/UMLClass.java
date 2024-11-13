@@ -21,34 +21,32 @@ public class UMLClass {
      *
      * @param className the name of the class to be added
      */
-    public static boolean addClass(String className) {
+    public static void addClass(String className) {
 
         // new logic for addClass. Old logic was incorrect.
-        boolean result = false;
-        if (className == null || className.isBlank()) {
-            System.out.println("Canceled: Inputted Class Name is Blank");
-        } else if (exists(className)) {
-            System.out.println("Class " + className + " already exists");
-        } else {
-            classMap.put(className, new UMLClassInfo(className));
-            System.out.println("Class " + className + " added");
-            result = true;
-        }
-
-        return result;
-
-        // Old logic for addClass
-
+        // boolean result = false;
         // if (className == null || className.isBlank()) {
         //     System.out.println("Canceled: Inputted Class Name is Blank");
-        //     return;
-        // }
-        // if (exists(className)) {
+        // } else if (exists(className)) {
         //     System.out.println("Class " + className + " already exists");
         // } else {
         //     classMap.put(className, new UMLClassInfo(className));
         //     System.out.println("Class " + className + " added");
+        //     result = true;
         // }
+
+        // Old logic for addClass
+
+        if (className == null || className.isBlank()) {
+            System.out.println("Canceled: Inputted Class Name is Blank");
+            return;
+        }
+        if (exists(className)) {
+            System.out.println("Class " + className + " already exists");
+        } else {
+            classMap.put(className, new UMLClassInfo(className));
+            System.out.println("Class " + className + " added");
+        }
     }
 
     /**

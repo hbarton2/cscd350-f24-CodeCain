@@ -34,10 +34,11 @@ public class Controller {
         String className = dialog.showAndWait().orElse(null);
         if(className == null || className.trim().isEmpty()) {
             showAlert("Error", "Invalid class name", "Class not added.");
+        } else if(UMLClass.exists(className)) {
+            showAlert("Error", "Class '" + className + "' already exists.", "");
         } else {
-            
-            if(UMLClass.addClass(className)) {
-                ClassNode classNode = new ClassNode(UMLClass.classMap.get(className));
+                UMLClass.addClass(className);
+                ClassNode classNode = new ClassNode(UMLClass.getClassInfo(className));
 
                 // Position nodes (e.g., center as a placeholder; adjust as needed)
                 double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
@@ -50,9 +51,6 @@ public class Controller {
 
                 // Add the new ClassNode to the node container
                 nodeContainer.getChildren().add(classNode);
-            } else {
-                showAlert("Error", "Class '" + className + "' could not be added.", "");
-            }
         }
     }
 
