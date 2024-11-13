@@ -56,16 +56,42 @@ public class Controller {
 
     @FXML
     private void deleteClassBtn() {
-        for(Node classNode : nodeContainer.getChildren()) {
-            if(classNode instanceof ClassNode) {
-                if(((ClassNode) classNode).isSelected()) {
-                    nodeContainer.getChildren().remove(classNode);
-                    UMLClass.removeClass(((ClassNode) classNode).getName());
-                    System.out.println("Storage size: " + UMLClass.classMap.size());
-                    break;
+        if(currentlySelectedNode == null) {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Delete Class");
+            dialog.setHeaderText("Enter the name of the class to delete:");
+            dialog.setContentText("Class Name:");
+
+            String className = dialog.showAndWait().orElse(null);
+            if(className == null || className.trim().isEmpty()) {
+                showAlert("Error", "Invalid class name", "Deletion canceled.");
+            } else if(!UMLClass.exists(className)) {
+                showAlert("Error", "Class '" + className + "' does not exist.", "Deletion canceled.");
+            } else {
+                UMLClass.removeClass(className);
+                for(Node classNode : nodeContainer.getChildren()) {
+                    if(classNode instanceof ClassNode) {
+                        if(((ClassNode) classNode).getName().equals(className)) {
+                            nodeContainer.getChildren().remove(classNode);
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+        } else {
+            for(Node classNode : nodeContainer.getChildren()) {
+                if(classNode instanceof ClassNode) {
+                    if(((ClassNode) classNode).isSelected()) {
+                        nodeContainer.getChildren().remove(classNode);
+                        UMLClass.removeClass(((ClassNode) classNode).getName());
+                        System.out.println("Storage size: " + UMLClass.classMap.size());
+                        break;
+                    }
                 }
             }
-        }
+        }        
     }
 
     @FXML
