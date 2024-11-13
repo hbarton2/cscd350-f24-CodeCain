@@ -275,6 +275,10 @@ public class ClassNode extends VBox {
         fields.getItems().add(fieldInfo);
     }
 
+    public void addMethod(UMLMethodInfo method) {
+        methods.getItems().add(method); // Add the method to the ListView in ClassNode
+    }
+
 //    public ClassNodeDTO toDTO() {
 //        return new ClassNodeDTO(
 //                classNameLabel.getText(),

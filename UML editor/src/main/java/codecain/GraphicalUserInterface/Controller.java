@@ -5,6 +5,9 @@ import codecain.BackendCode.UMLClass;
 import codecain.BackendCode.UMLClassInfo;
 import codecain.BackendCode.UMLFieldInfo;
 import codecain.BackendCode.UMLFields;
+import codecain.BackendCode.UMLMethodInfo;
+import codecain.BackendCode.UMLMethods;
+import codecain.BackendCode.UMLParameterInfo;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputDialog;
@@ -20,6 +23,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Controller {
@@ -216,6 +221,84 @@ public class Controller {
         }
     }
 
+    @FXML
+    private void addMethodBtn() {
+        // Dialog to gather class name, method name, and parameters
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Add Method");
+        dialog.setHeaderText("Enter details for the new method");
+
+        // Set up the input fields
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
+        TextField methodNameField = new TextField();
+        methodNameField.setPromptText("Method Name");
+        TextField parameterField = new TextField();
+        parameterField.setPromptText("Parameters (comma-separated, e.g., int x, String y)");
+        parameterField.setPrefWidth(300);
+
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Method Name:"), 0, 1);
+        grid.add(methodNameField, 1, 1);
+        grid.add(new Label("Parameters:"), 0, 2);
+        grid.add(parameterField, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Show dialog and get user input
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String methodName = methodNameField.getText().trim();
+            String parametersInput = parameterField.getText().trim();
+
+            if (className.isEmpty() || methodName.isEmpty()) {
+                showAlert(AlertType.ERROR, "Error", "All fields are required", "Method not added.");
+                return;
+            }
+
+            UMLClassInfo classInfo = UMLClass.getClassInfo(className);
+            if (classInfo == null) {
+                showAlert(AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                return;
+            }
+
+            // Parse parameters
+            List<UMLParameterInfo> parameters = parseParameters(parametersInput);
+
+            // Check if method already exists
+            UMLMethods methodManager = new UMLMethods();
+            if (classInfo.getMethods().stream().anyMatch(m -> m.getMethodName().equals(methodName) && m.getParameters().equals(parameters))) {
+                showAlert(AlertType.WARNING, "Duplicate Method", "Method already exists", 
+                    "A method with name '" + methodName + "' and the same parameters already exists in the class.");
+                return;
+            }
+
+            // Add method to the class
+            methodManager.addMethod(className, methodName, parameters);
+
+            // Find the ClassNode and update its methods
+            for (Node node : nodeContainer.getChildren()) {
+                if (node instanceof ClassNode) {
+                    ClassNode classNode = (ClassNode) node;
+                    if (classNode.getName().equals(className)) {
+                        UMLMethodInfo newMethod = new UMLMethodInfo(methodName, parameters);
+                        classNode.addMethod(newMethod); // Add method to the UI component
+                        showAlert(AlertType.INFORMATION, "Success", "Method Added", 
+                                "Method '" + methodName + "' added to class '" + className + "'.");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
 
     @FXML
     private void saveBtn() throws IOException {
@@ -260,6 +343,27 @@ public class Controller {
         classNode.select();
         currentlySelectedNode = classNode;
     }
+
+    private List<UMLParameterInfo> parseParameters(String parametersInput) {
+    List<UMLParameterInfo> parameters = new ArrayList<>();
+    if (parametersInput.isEmpty()) {
+        return parameters; // No parameters to add
+    }
+
+    // Split parameters by comma and process each
+    String[] paramParts = parametersInput.split(",");
+    for (String part : paramParts) {
+        String[] typeAndName = part.trim().split(" ");
+        if (typeAndName.length == 2) {
+            String type = typeAndName[0].trim();
+            String name = typeAndName[1].trim();
+            parameters.add(new UMLParameterInfo(type, name));
+        } else {
+            System.out.println("Invalid parameter format: " + part);
+        }
+    }
+    return parameters;
+}
 
     private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
         Alert alert = new Alert(alertType);

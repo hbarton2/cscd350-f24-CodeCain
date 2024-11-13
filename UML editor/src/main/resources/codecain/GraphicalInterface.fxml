@@ -30,7 +30,7 @@
                 <Button mnemonicParsing="false" onAction="#addFieldBtn" text="Add Field" />
                 <Button mnemonicParsing="false" text="Delete Field" />
                 <Button mnemonicParsing="false" text="Rename Field" />
-                <Button mnemonicParsing="false" text="Add Method" />
+                <Button mnemonicParsing="false" onAction="#addMethodBtn" text="Add Method" />
                 <Button mnemonicParsing="false" text="Delete Method" />
                 <Button mnemonicParsing="false" text="Rename Method" />
                 <Button mnemonicParsing="false" text="Add Parameter" />
