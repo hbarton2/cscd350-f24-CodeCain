@@ -265,6 +265,10 @@ public class ClassNode extends VBox {
         classNameLabel.setText(name);
     }
 
+    public void addField(UMLFieldInfo fieldInfo) {
+        fields.getItems().add(fieldInfo);
+    }
+
 //    public ClassNodeDTO toDTO() {
 //        return new ClassNodeDTO(
 //                classNameLabel.getText(),
