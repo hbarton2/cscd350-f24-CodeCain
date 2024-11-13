@@ -110,8 +110,8 @@ public class Controller {
     }
 
     @FXML
-    public void renameClassBtn() {
-        if(currentlySelectedNode != null) {
+    private void renameClassBtn() {
+        if(currentlySelectedNode == null) {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Rename Class");
             dialog.setHeaderText("Enter the name of the class to rename:");
@@ -119,9 +119,9 @@ public class Controller {
 
             String oldClassName = dialog.showAndWait().orElse(null);
             if(oldClassName == null || oldClassName.trim().isEmpty()) {
-                showAlert(AlertType.ERROR,"Error", "Invalid class name", "Rename canceled.");
+                showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
             } else if(!UMLClass.exists(oldClassName)) {
-                showAlert(AlertType.ERROR,"Error", "Class '" + oldClassName + "' does not exist.", "Rename canceled.");
+                showAlert(AlertType.ERROR, "Error", "Class '" + oldClassName + "' does not exist.", "Rename canceled.");
             } else {
                 dialog = new TextInputDialog();
                 dialog.setTitle("Rename Class");
@@ -130,9 +130,9 @@ public class Controller {
 
                 String newClassName = dialog.showAndWait().orElse(null);
                 if(newClassName == null || newClassName.trim().isEmpty()) {
-                    showAlert(AlertType.ERROR,"Error", "Invalid class name", "Rename canceled.");
+                    showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
                 } else if(UMLClass.exists(newClassName)) {
-                    showAlert(AlertType.ERROR,"Error", "Class '" + newClassName + "' already exists.", "Rename canceled.");
+                    showAlert(AlertType.ERROR, "Error", "Class '" + newClassName + "' already exists.", "Rename canceled.");
                 } else {
                     UMLClass.renameClass(oldClassName, newClassName);
                     for(Node classNode : nodeContainer.getChildren()) {
@@ -145,8 +145,31 @@ public class Controller {
                     }
                 }
             }
+        } else {
+            for(Node classNode : nodeContainer.getChildren()) {
+                if(classNode instanceof ClassNode) {
+                    if(((ClassNode) classNode).isSelected()) {
+                        TextInputDialog dialog = new TextInputDialog();
+                        dialog.setTitle("Rename Class");
+                        dialog.setHeaderText("Enter the new name for the selected class:");
+                        dialog.setContentText("New Class Name:");
+
+                        String newClassName = dialog.showAndWait().orElse(null);
+                        if(newClassName == null || newClassName.trim().isEmpty()) {
+                            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
+                        } else if(UMLClass.exists(newClassName)) {
+                            showAlert(AlertType.ERROR, "Error", "Class '" + newClassName + "' already exists.", "Rename canceled.");
+                        } else {
+                            UMLClass.renameClass(((ClassNode) classNode).getName(), newClassName);
+                            ((ClassNode) classNode).setName(newClassName);
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
+
 
     @FXML
     private void addFieldBtn() {
