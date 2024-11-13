@@ -299,6 +299,94 @@ public class Controller {
         }
     }
 
+    @FXML
+    private void addParameterBtn() {
+        // Dialog to gather class name, method name, parameter type, and parameter name
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Add Parameter");
+        dialog.setHeaderText("Enter details for the new parameter");
+
+        // Set up the input fields and grid layout
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
+        TextField methodNameField = new TextField();
+        methodNameField.setPromptText("Method Name");
+        TextField parameterTypeField = new TextField();
+        parameterTypeField.setPromptText("Parameter Type");
+        TextField parameterNameField = new TextField();
+        parameterNameField.setPromptText("Parameter Name");
+
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Method Name:"), 0, 1);
+        grid.add(methodNameField, 1, 1);
+        grid.add(new Label("Parameter Type:"), 0, 2);
+        grid.add(parameterTypeField, 1, 2);
+        grid.add(new Label("Parameter Name:"), 0, 3);
+        grid.add(parameterNameField, 1, 3);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.getDialogPane().setPrefWidth(400); // Set preferred width for the dialog pane
+
+        // Show dialog and get user input
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String methodName = methodNameField.getText().trim();
+            String parameterType = parameterTypeField.getText().trim();
+            String parameterName = parameterNameField.getText().trim();
+
+            if (className.isEmpty() || methodName.isEmpty() || parameterType.isEmpty() || parameterName.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "All fields are required", "Parameter not added.");
+                return;
+            }
+
+            UMLClassInfo classInfo = UMLClass.getClassInfo(className);
+            if (classInfo == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                return;
+            }
+
+            UMLMethodInfo methodInfo = classInfo.getMethodByName(methodName);
+            if (methodInfo == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Method not found", "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                return;
+            }
+
+            // Check if the parameter already exists
+            UMLParameterInfo newParameter = new UMLParameterInfo(parameterType, parameterName);
+            if (methodInfo.getParameters().contains(newParameter)) {
+                showAlert(Alert.AlertType.WARNING, "Duplicate Parameter", "Parameter already exists", 
+                        "A parameter with type '" + parameterType + "' and name '" + parameterName + "' already exists in the method.");
+                return;
+            }
+
+            // Add parameter to the method
+            UMLMethods methodManager = new UMLMethods();
+            methodManager.addParameter(className, methodName, parameterType, parameterName);
+
+            // Update the UI
+            for (Node node : nodeContainer.getChildren()) {
+                if (node instanceof ClassNode) {
+                    ClassNode classNode = (ClassNode) node;
+                    if (classNode.getName().equals(className)) {
+                        classNode.updateMethod(methodInfo); // Update the specific method in the UI
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Parameter Added", 
+                                "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '" + className + "'.");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
 
     @FXML
     private void saveBtn() throws IOException {
