@@ -38,7 +38,7 @@ public class GUI extends JFrame {
         canvas.setClassManager(classManager);
         GUIFieldManager fieldManager = new GUIFieldManager(classManager);
         GUIMethodManager methodManager = new GUIMethodManager(classManager);
-        GUIRelationshipManager relationshipManager = new GUIRelationshipManager(classManager);
+        GUIRelationshipManager relationshipManager = new GUIRelationshipManager(classManager, canvas);
         controller = new GUIController(classManager, fieldManager, methodManager, relationshipManager);
 
         // Add panels
