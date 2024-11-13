@@ -247,36 +247,61 @@ public class Controller {
 
     @FXML
     private void deleteFieldBtn() {
-        for (Node classNode : nodeContainer.getChildren()) {
-            if (classNode instanceof ClassNode && ((ClassNode) classNode).isSelected()) {
-                ClassNode selectedClassNode = (ClassNode) classNode;
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Delete Field");
+        dialog.setHeaderText("Enter the class name and field name to delete:");
 
-                // Prompt the user to enter the field name to delete
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("Delete Field");
-                dialog.setHeaderText("Enter the name of the field to delete:");
-                dialog.setContentText("Field Name:");
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
 
-                Optional<String> result = dialog.showAndWait();
-                result.ifPresent(fieldName -> {
-                    boolean removed = selectedClassNode.removeField(fieldName);
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
+        TextField fieldNameField = new TextField();
+        fieldNameField.setPromptText("Field Name");
 
-                    if (removed) {
-                        selectedClassNode.syncWithUMLClassInfo(); // Sync changes to the backend
-                        showAlert(Alert.AlertType.INFORMATION, "Field Deleted", "Success",
-                                "Field '" + fieldName + "' was successfully deleted.");
-                    } else {
-                        showAlert(Alert.AlertType.ERROR, "Error", "Field Not Found",
-                                "Field '" + fieldName + "' does not exist in the selected class.");
-                    }
-                });
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Field Name:"), 0, 1);
+        grid.add(fieldNameField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String fieldName = fieldNameField.getText().trim();
+            if (className.isEmpty() || fieldName.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "All fields are required", "Field not deleted.");
                 return;
             }
+            ClassNode targetClassNode = null;
+            for (Node classNode : nodeContainer.getChildren()) {
+                if (classNode instanceof ClassNode && ((ClassNode) classNode).getName().equals(className)) {
+                    targetClassNode = (ClassNode) classNode;
+                    break;
+                }
+            }
+            if (targetClassNode == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Class Not Found",
+                        "Class '" + className + "' does not exist.");
+                return;
+            }
+            boolean removed = targetClassNode.removeField(fieldName);
+            if (removed) {
+                targetClassNode.syncWithUMLClassInfo(); // Sync changes to the backend
+                showAlert(Alert.AlertType.INFORMATION, "Field Deleted", "Success",
+                        "Field '" + fieldName + "' was successfully deleted.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Field Not Found",
+                        "Field '" + fieldName + "' does not exist in the class '" + className + "'.");
+            }
         }
-
-        // If no ClassNode is selected, show an error
-        showAlert(Alert.AlertType.ERROR, "Error", "No Class Selected", "Please select a class to delete a field from.");
     }
+
+
+
 
 
     @FXML
