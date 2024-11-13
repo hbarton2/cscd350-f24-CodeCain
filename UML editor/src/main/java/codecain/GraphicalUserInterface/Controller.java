@@ -106,7 +106,7 @@ public class Controller {
                     }
                 }
             }
-        }        
+        }
     }
 
     @FXML
@@ -145,7 +145,7 @@ public class Controller {
                     }
                 }
             }
-        } 
+        }
     }
 
     @FXML
@@ -198,7 +198,7 @@ public class Controller {
             // Check if field already exists in the class
             if (classInfo.getFields().stream()
                 .anyMatch(f -> f.getFieldName().equals(fieldName) && f.getFieldType().equals(fieldType))) {
-                showAlert(Alert.AlertType.WARNING, "Duplicate Field", "Field already exists", 
+                showAlert(Alert.AlertType.WARNING, "Duplicate Field", "Field already exists",
                 "A field with name '" + fieldName + "' and type '" + fieldType + "' already exists in the class.");
                 return;
             }
@@ -220,6 +220,111 @@ public class Controller {
             }
         }
     }
+
+
+    @FXML
+    private void deleteFieldBtn() {
+        for (Node classNode : nodeContainer.getChildren()) {
+            if (classNode instanceof ClassNode && ((ClassNode) classNode).isSelected()) {
+                ClassNode selectedClassNode = (ClassNode) classNode;
+
+                // Prompt the user to enter the field name to delete
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Delete Field");
+                dialog.setHeaderText("Enter the name of the field to delete:");
+                dialog.setContentText("Field Name:");
+
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(fieldName -> {
+                    boolean removed = selectedClassNode.removeField(fieldName);
+
+                    if (removed) {
+                        selectedClassNode.syncWithUMLClassInfo(); // Sync changes to the backend
+                        showAlert(Alert.AlertType.INFORMATION, "Field Deleted", "Success",
+                                "Field '" + fieldName + "' was successfully deleted.");
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Error", "Field Not Found",
+                                "Field '" + fieldName + "' does not exist in the selected class.");
+                    }
+                });
+                return;
+            }
+        }
+
+        // If no ClassNode is selected, show an error
+        showAlert(Alert.AlertType.ERROR, "Error", "No Class Selected", "Please select a class to delete a field from.");
+    }
+
+
+    @FXML
+    private void renameFieldBtn() {
+        for (Node classNode : nodeContainer.getChildren()) {
+            if (classNode instanceof ClassNode && ((ClassNode) classNode).isSelected()) {
+                ClassNode selectedClassNode = (ClassNode) classNode;
+
+                // Prompt for current field name
+                TextInputDialog currentFieldDialog = new TextInputDialog();
+                currentFieldDialog.setTitle("Rename Field");
+                currentFieldDialog.setHeaderText("Enter the current name of the field:");
+                currentFieldDialog.setContentText("Current Field Name:");
+
+                Optional<String> currentFieldNameResult = currentFieldDialog.showAndWait();
+                currentFieldNameResult.ifPresent(oldFieldName -> {
+
+                    // Prompt for new field name and type
+                    Dialog<ButtonType> dialog = new Dialog<>();
+                    dialog.setTitle("Rename Field");
+                    dialog.setHeaderText("Enter the new name and type for the field:");
+
+                    GridPane grid = new GridPane();
+                    grid.setHgap(10);
+                    grid.setVgap(10);
+
+                    TextField newFieldNameField = new TextField();
+                    newFieldNameField.setPromptText("New Field Name");
+                    TextField newFieldTypeField = new TextField();
+                    newFieldTypeField.setPromptText("New Field Type");
+
+                    grid.add(new Label("New Field Name:"), 0, 0);
+                    grid.add(newFieldNameField, 1, 0);
+                    grid.add(new Label("New Field Type:"), 0, 1);
+                    grid.add(newFieldTypeField, 1, 1);
+
+                    dialog.getDialogPane().setContent(grid);
+                    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+                    Optional<ButtonType> dialogResult = dialog.showAndWait();
+                    if (dialogResult.isPresent() && dialogResult.get() == ButtonType.OK) {
+                        String newFieldName = newFieldNameField.getText().trim();
+                        String newFieldType = newFieldTypeField.getText().trim();
+
+                        if (newFieldName.isEmpty() || newFieldType.isEmpty()) {
+                            showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input", "Both field name and type are required.");
+                            return;
+                        }
+
+                        boolean renamed = selectedClassNode.renameField(oldFieldName, newFieldType, newFieldName);
+
+                        if (renamed) {
+                            selectedClassNode.syncWithUMLClassInfo(); // Sync changes with backend
+                            showAlert(Alert.AlertType.INFORMATION, "Field Renamed", "Success",
+                                    "The field '" + oldFieldName + "' was renamed to '" + newFieldName + "' with type '" + newFieldType + "'.");
+                        } else {
+                            showAlert(Alert.AlertType.ERROR, "Error", "Rename Failed",
+                                    "The field '" + oldFieldName + "' could not be renamed.");
+                        }
+                    }
+                });
+                return;
+            }
+        }
+
+        // If no ClassNode is selected, show an error
+        showAlert(Alert.AlertType.ERROR, "Error", "No Class Selected", "Please select a class to rename a field.");
+    }
+
+
+
 
     @FXML
     private void addMethodBtn() {
@@ -275,7 +380,7 @@ public class Controller {
             // Check if method already exists
             UMLMethods methodManager = new UMLMethods();
             if (classInfo.getMethods().stream().anyMatch(m -> m.getMethodName().equals(methodName) && m.getParameters().equals(parameters))) {
-                showAlert(AlertType.WARNING, "Duplicate Method", "Method already exists", 
+                showAlert(AlertType.WARNING, "Duplicate Method", "Method already exists",
                     "A method with name '" + methodName + "' and the same parameters already exists in the class.");
                 return;
             }
@@ -290,7 +395,7 @@ public class Controller {
                     if (classNode.getName().equals(className)) {
                         UMLMethodInfo newMethod = new UMLMethodInfo(methodName, parameters);
                         classNode.addMethod(newMethod); // Add method to the UI component
-                        showAlert(AlertType.INFORMATION, "Success", "Method Added", 
+                        showAlert(AlertType.INFORMATION, "Success", "Method Added",
                                 "Method '" + methodName + "' added to class '" + className + "'.");
                         break;
                     }
@@ -298,6 +403,115 @@ public class Controller {
             }
         }
     }
+
+    @FXML
+    private void deleteMethodBtn() {
+        for (Node classNode : nodeContainer.getChildren()) {
+            if (classNode instanceof ClassNode && ((ClassNode) classNode).isSelected()) {
+                ClassNode selectedClassNode = (ClassNode) classNode;
+
+                // Prompt the user to enter the name of the method to delete
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Delete Method");
+                dialog.setHeaderText("Enter the name of the method to delete:");
+                dialog.setContentText("Method Name:");
+
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(methodName -> {
+                    String className = selectedClassNode.getName();
+                    UMLMethods methodManager = new UMLMethods();
+
+                    // Remove the method in the backend
+                    methodManager.removeMethod(className, methodName);
+
+                    // Remove the method from the GUI
+                    boolean removed = selectedClassNode.removeMethod(methodName);
+                    if (removed) {
+                        selectedClassNode.syncWithUMLClassInfo(); // Sync changes to the backend
+                        showAlert(Alert.AlertType.INFORMATION, "Method Deleted", "Success",
+                                "Method '" + methodName + "' was successfully deleted from class '" + className + "'.");
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Error", "Method Not Found",
+                                "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                    }
+                });
+                return;
+            }
+        }
+
+        // If no ClassNode is selected, show an error alert
+        showAlert(Alert.AlertType.ERROR, "Error", "No Class Selected", "Please select a class to delete a method from.");
+    }
+
+
+    @FXML
+    private void renameMethodBtn() {
+        for (Node classNode : nodeContainer.getChildren()) {
+            if (classNode instanceof ClassNode && ((ClassNode) classNode).isSelected()) {
+                ClassNode selectedClassNode = (ClassNode) classNode;
+
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("Rename Method");
+                dialog.setHeaderText("Enter the method name to rename:");
+
+                GridPane grid = new GridPane();
+                grid.setHgap(10);
+                grid.setVgap(10);
+
+                TextField oldMethodNameField = new TextField();
+                oldMethodNameField.setPromptText("Current Method Name");
+
+                TextField newMethodNameField = new TextField();
+                newMethodNameField.setPromptText("New Method Name");
+
+                grid.add(new Label("Current Method Name:"), 0, 0);
+                grid.add(oldMethodNameField, 1, 0);
+                grid.add(new Label("New Method Name:"), 0, 1);
+                grid.add(newMethodNameField, 1, 1);
+
+                dialog.getDialogPane().setContent(grid);
+                dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+                Optional<ButtonType> result = dialog.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    String oldMethodName = oldMethodNameField.getText().trim();
+                    String newMethodName = newMethodNameField.getText().trim();
+
+                    if (oldMethodName.isEmpty() || newMethodName.isEmpty()) {
+                        showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input", "Both method names must be provided.");
+                        return;
+                    }
+
+                    String className = selectedClassNode.getName();
+
+// Update backend
+                    UMLMethods methodsManager = new UMLMethods();
+                    methodsManager.renameMethod(className, oldMethodName, newMethodName);
+
+// Update GUI
+                    boolean renamed = selectedClassNode.renameMethod(oldMethodName, newMethodName);
+                    if (renamed) {
+                        // Sync the GUI with backend data
+                        selectedClassNode.syncWithUMLClassInfo();
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Method Renamed",
+                                "Method '" + oldMethodName + "' renamed to '" + newMethodName + "'.");
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Error", "Rename Failed",
+                                "Method '" + oldMethodName + "' could not be renamed in the GUI.");
+                    }
+
+                }
+                return;
+            }
+        }
+
+        showAlert(Alert.AlertType.ERROR, "Error", "No Class Selected", "Please select a class to rename a method.");
+    }
+
+
+
+
+
 
     @FXML
     private void addParameterBtn() {
@@ -362,7 +576,7 @@ public class Controller {
             // Check if the parameter already exists
             UMLParameterInfo newParameter = new UMLParameterInfo(parameterType, parameterName);
             if (methodInfo.getParameters().contains(newParameter)) {
-                showAlert(Alert.AlertType.WARNING, "Duplicate Parameter", "Parameter already exists", 
+                showAlert(Alert.AlertType.WARNING, "Duplicate Parameter", "Parameter already exists",
                         "A parameter with type '" + parameterType + "' and name '" + parameterName + "' already exists in the method.");
                 return;
             }
@@ -377,7 +591,7 @@ public class Controller {
                     ClassNode classNode = (ClassNode) node;
                     if (classNode.getName().equals(className)) {
                         classNode.updateMethod(methodInfo); // Update the specific method in the UI
-                        showAlert(Alert.AlertType.INFORMATION, "Success", "Parameter Added", 
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Parameter Added",
                                 "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '" + className + "'.");
                         break;
                     }
@@ -385,6 +599,171 @@ public class Controller {
             }
         }
     }
+
+
+    @FXML
+    private void deleteParameterBtn() {
+        // Dialog to gather class name, method name, and parameter name
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Delete Parameter");
+        dialog.setHeaderText("Enter details for the parameter to delete");
+
+        // Set up the input fields and grid layout
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
+        TextField methodNameField = new TextField();
+        methodNameField.setPromptText("Method Name");
+        TextField parameterNameField = new TextField();
+        parameterNameField.setPromptText("Parameter Name");
+
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Method Name:"), 0, 1);
+        grid.add(methodNameField, 1, 1);
+        grid.add(new Label("Parameter Name:"), 0, 2);
+        grid.add(parameterNameField, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Show dialog and get user input
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String methodName = methodNameField.getText().trim();
+            String parameterName = parameterNameField.getText().trim();
+
+            if (className.isEmpty() || methodName.isEmpty() || parameterName.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "All fields are required", "Parameter not deleted.");
+                return;
+            }
+
+            UMLClassInfo classInfo = UMLClass.getClassInfo(className);
+            if (classInfo == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                return;
+            }
+
+            UMLMethodInfo methodInfo = classInfo.getMethodByName(methodName);
+            if (methodInfo == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Method not found", "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                return;
+            }
+
+            // Remove the parameter from the backend
+            UMLMethods methodManager = new UMLMethods();
+            methodManager.removeParameter(className, methodName, parameterName);
+
+            // Update the GUI
+            for (Node node : nodeContainer.getChildren()) {
+                if (node instanceof ClassNode) {
+                    ClassNode classNode = (ClassNode) node;
+                    if (classNode.getName().equals(className)) {
+                        classNode.updateMethod(methodInfo); // Update the method in the GUI
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Parameter Deleted",
+                                "Parameter '" + parameterName + "' deleted from method '" + methodName + "' in class '" + className + "'.");
+                        return;
+                    }
+                }
+            }
+
+            // If the class was not found in the GUI
+            showAlert(Alert.AlertType.ERROR, "Error", "GUI Update Failed", "Parameter was deleted from the backend but the GUI could not be updated.");
+        }
+    }
+
+    @FXML
+    private void changeParameterBtn() {
+        // Dialog to gather class name, method name, and parameter details
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Change Parameter");
+        dialog.setHeaderText("Enter details for the parameter to change");
+
+        // Set up the input fields and grid layout
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
+        TextField methodNameField = new TextField();
+        methodNameField.setPromptText("Method Name");
+        TextField oldParameterNameField = new TextField();
+        oldParameterNameField.setPromptText("Old Parameter Name");
+        TextField newParameterTypeField = new TextField();
+        newParameterTypeField.setPromptText("New Parameter Type");
+        TextField newParameterNameField = new TextField();
+        newParameterNameField.setPromptText("New Parameter Name");
+
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Method Name:"), 0, 1);
+        grid.add(methodNameField, 1, 1);
+        grid.add(new Label("Old Parameter Name:"), 0, 2);
+        grid.add(oldParameterNameField, 1, 2);
+        grid.add(new Label("New Parameter Type:"), 0, 3);
+        grid.add(newParameterTypeField, 1, 3);
+        grid.add(new Label("New Parameter Name:"), 0, 4);
+        grid.add(newParameterNameField, 1, 4);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.getDialogPane().setPrefWidth(400); // Set preferred width for the dialog pane
+
+        // Show dialog and get user input
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String methodName = methodNameField.getText().trim();
+            String oldParameterName = oldParameterNameField.getText().trim();
+            String newParameterType = newParameterTypeField.getText().trim();
+            String newParameterName = newParameterNameField.getText().trim();
+
+            if (className.isEmpty() || methodName.isEmpty() || oldParameterName.isEmpty() ||
+                    newParameterType.isEmpty() || newParameterName.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "All fields are required", "Parameter not changed.");
+                return;
+            }
+
+            UMLClassInfo classInfo = UMLClass.getClassInfo(className);
+            if (classInfo == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                return;
+            }
+
+            UMLMethodInfo methodInfo = classInfo.getMethodByName(methodName);
+            if (methodInfo == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Method not found", "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                return;
+            }
+
+            UMLMethods methodManager = new UMLMethods();
+            methodManager.changeSingleParameter(className, methodName, oldParameterName, newParameterType, newParameterName);
+
+            // Update the UI
+            for (Node node : nodeContainer.getChildren()) {
+                if (node instanceof ClassNode) {
+                    ClassNode classNode = (ClassNode) node;
+                    if (classNode.getName().equals(className)) {
+                        classNode.updateMethod(methodInfo); // Update the specific method in the UI
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Parameter Changed",
+                                "Parameter '" + oldParameterName + "' updated to '" + newParameterName + "' with type '" + newParameterType +
+                                        "' in method '" + methodName + "' of class '" + className + "'.");
+                        return;
+                    }
+                }
+            }
+
+            showAlert(Alert.AlertType.ERROR, "Error", "GUI Update Failed", "Failed to update the method in the GUI.");
+        }
+    }
+
+
 
 
 
@@ -457,5 +836,5 @@ public class Controller {
         alert.setContentText(content);
         alert.showAndWait();
     }
-    
+
 }
