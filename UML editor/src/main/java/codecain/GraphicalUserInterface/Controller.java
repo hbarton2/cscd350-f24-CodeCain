@@ -376,12 +376,10 @@ public class Controller {
 
     @FXML
     private void addMethodBtn() {
-        // Dialog to gather class name, method name, and parameters
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Add Method");
         dialog.setHeaderText("Enter details for the new method");
 
-        // Set up the input fields
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -404,7 +402,6 @@ public class Controller {
         dialog.getDialogPane().setContent(grid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        // Show dialog and get user input
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             String className = classNameField.getText().trim();
@@ -422,10 +419,8 @@ public class Controller {
                 return;
             }
 
-            // Parse parameters
             List<UMLParameterInfo> parameters = parseParameters(parametersInput);
 
-            // Check if method already exists
             UMLMethods methodManager = new UMLMethods();
             if (classInfo.getMethods().stream().anyMatch(m -> m.getMethodName().equals(methodName) && m.getParameters().equals(parameters))) {
                 showAlert(AlertType.WARNING, "Duplicate Method", "Method already exists",
@@ -433,10 +428,7 @@ public class Controller {
                 return;
             }
 
-            // Add method to the class
             methodManager.addMethod(className, methodName, parameters);
-
-            // Find the ClassNode and update its methods
             for (Node node : nodeContainer.getChildren()) {
                 if (node instanceof ClassNode) {
                     ClassNode classNode = (ClassNode) node;
@@ -454,42 +446,63 @@ public class Controller {
 
     @FXML
     private void deleteMethodBtn() {
-        for (Node classNode : nodeContainer.getChildren()) {
-            if (classNode instanceof ClassNode && ((ClassNode) classNode).isSelected()) {
-                ClassNode selectedClassNode = (ClassNode) classNode;
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Delete Method");
+        dialog.setHeaderText("Enter the class name and the name of the method to delete:");
 
-                // Prompt the user to enter the name of the method to delete
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("Delete Method");
-                dialog.setHeaderText("Enter the name of the method to delete:");
-                dialog.setContentText("Method Name:");
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
 
-                Optional<String> result = dialog.showAndWait();
-                result.ifPresent(methodName -> {
-                    String className = selectedClassNode.getName();
-                    UMLMethods methodManager = new UMLMethods();
+        TextField classNameField = new TextField();
+        classNameField.setPromptText("Class Name");
+        TextField methodNameField = new TextField();
+        methodNameField.setPromptText("Method Name");
 
-                    // Remove the method in the backend
-                    methodManager.removeMethod(className, methodName);
+        grid.add(new Label("Class Name:"), 0, 0);
+        grid.add(classNameField, 1, 0);
+        grid.add(new Label("Method Name:"), 0, 1);
+        grid.add(methodNameField, 1, 1);
 
-                    // Remove the method from the GUI
-                    boolean removed = selectedClassNode.removeMethod(methodName);
-                    if (removed) {
-                        selectedClassNode.syncWithUMLClassInfo(); // Sync changes to the backend
-                        showAlert(Alert.AlertType.INFORMATION, "Method Deleted", "Success",
-                                "Method '" + methodName + "' was successfully deleted from class '" + className + "'.");
-                    } else {
-                        showAlert(Alert.AlertType.ERROR, "Error", "Method Not Found",
-                                "Method '" + methodName + "' does not exist in class '" + className + "'.");
-                    }
-                });
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String className = classNameField.getText().trim();
+            String methodName = methodNameField.getText().trim();
+
+            if (className.isEmpty() || methodName.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input", "Both class name and method name are required.");
                 return;
             }
-        }
 
-        // If no ClassNode is selected, show an error alert
-        showAlert(Alert.AlertType.ERROR, "Error", "No Class Selected", "Please select a class to delete a method from.");
+            ClassNode targetClassNode = null;
+            for (Node classNode : nodeContainer.getChildren()) {
+                if (classNode instanceof ClassNode && ((ClassNode) classNode).getName().equals(className)) {
+                    targetClassNode = (ClassNode) classNode;
+                    break;
+                }
+            }
+            if (targetClassNode == null) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Class Not Found",
+                        "Class '" + className + "' does not exist.");
+                return;
+            }
+            UMLMethods methodManager = new UMLMethods();
+            methodManager.removeMethod(className, methodName);
+            boolean removed = targetClassNode.removeMethod(methodName);
+            if (removed) {
+                targetClassNode.syncWithUMLClassInfo();
+                showAlert(Alert.AlertType.INFORMATION, "Method Deleted", "Success",
+                        "Method '" + methodName + "' was successfully deleted from class '" + className + "'.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Method Not Found",
+                        "Method '" + methodName + "' does not exist in class '" + className + "'.");
+            }
+        }
     }
+
 
 
     @FXML
