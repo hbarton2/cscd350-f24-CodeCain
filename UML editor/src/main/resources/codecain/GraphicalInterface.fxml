@@ -16,6 +16,8 @@
                 <Button mnemonicParsing="false" onAction="#loadBtn" styleClass="toolbar-button" text="Load" />
                 <Button mnemonicParsing="false" styleClass="toolbar-button" text="Help" />
                 <Button mnemonicParsing="false" styleClass="toolbar-button" text="Exit" />
+                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Redo" />
+                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Undo" />
             </items>
         </ToolBar>
     </top>
@@ -38,6 +40,7 @@
                 <Button mnemonicParsing="false" onAction="#changeParameterBtn" text="Rename Parameter" />
                 <Button mnemonicParsing="false" text="Add Relationship" />
                 <Button mnemonicParsing="false" text="Remove Relationship" />
+
             </children>
         </VBox>
     </right>
