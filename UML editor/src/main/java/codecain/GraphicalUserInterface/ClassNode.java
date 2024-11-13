@@ -66,6 +66,9 @@ public class ClassNode extends VBox {
         setEditableCellFactory(this.fields);
         setEditableCellFactoryForMethods(this.methods);
 
+        this.setLayoutX(classInfo.getX());
+        this.setLayoutY(classInfo.getY());
+
         // Draggable
         this.setOnMousePressed(this::onMousePressed);
         this.setOnMouseDragged(this::onMouseDragged);
@@ -152,6 +155,9 @@ public class ClassNode extends VBox {
 
         classInfo.getMethods().clear();
         methods.getItems().forEach(methodInfo -> classInfo.getMethods().add(methodInfo));
+
+        classInfo.setX((int) this.getLayoutX());
+        classInfo.setY((int) this.getLayoutY());
     }
 
     public void select() {
