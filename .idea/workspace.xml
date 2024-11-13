@@ -10,62 +10,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d97d09b8-ce59-4ac2-b037-c5781ec0cb86" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/cscd350_f24_CodeCain_jar2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/cscd350_f24_CodeCain_jar2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/cscd350-f24-CodeCain.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cscd350-f24-CodeCain.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]1/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]1/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM_[Changes]/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]1/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]1/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]2/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]2/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]1/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]1/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_22_PM__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_24_PM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM_[Changes]2/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_25_PM__Changes_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_19_2024_11_45_PM__Changes_1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Group Roles.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Group Roles.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Class.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Class.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Fields.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Fields.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Methods.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Methods.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Relationship.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/Relationship.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/SaveManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/SaveManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML editor/src/test/java/UMLClassTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/test/java/UMLClassTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Class.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Class.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Fields.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Fields.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Methods.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Methods.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Relationship.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/Relationship.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/SaveManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Java/SaveManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/ClassTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/ClassTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/DemoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/DemoTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/TestUML.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/TestUML.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/relationshiptests.java" beforeDir="false" afterPath="$PROJECT_DIR$/codeCainUmlEditor/src/main/Test/relationshiptests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/BackendCode/UMLClassInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/BackendCode/UMLClassInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/BackendCode/UMLFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/BackendCode/UMLFields.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/CLI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/CommandLineInterface/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/CommandLineInterface/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/CommandLineInterface/DisplayHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/CommandLineInterface/DisplayHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/GraphicalInterface.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/main/java/codecain/GraphicalUserInterface/MenuGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/java/codecain/MenuGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UML editor/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/UML editor/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,12 +49,12 @@
     &quot;assignee&quot;: &quot;mmoua10&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/hbarton2/cscd350-f24-CodeCain.git&quot;,
-    &quot;accountId&quot;: &quot;7fea6072-2701-4c0c-90b7-046e6aed4572&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/hbarton2/cscd350-f24-CodeCain.git",
+    "accountId": "030d7e1d-a2a1-476d-bbb6-b521646eae1c"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 2
@@ -101,33 +64,55 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.GUI.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Develop&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Michelle/Documents/School/year 4/CSCD350/projects/cscd350-f24-CodeCain&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.GUI.executor": "Run",
+    "Maven.UMLeditor [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "Feature-CLIRefactor__UsingJavaFX",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Michelle/Documents/School/year 4/CSCD350/projects/cscd350-f24-CodeCain",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Michelle\Documents\School\year 4\CSCD350\projects\cscd350-f24-CodeCain" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="codecain" />
+    </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="GUI" />
+      <module name="cscd350-f24-CodeCain" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="GUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="GUI" />
       <module name="cscd350-f24-CodeCain" />
@@ -153,14 +138,6 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -174,6 +151,7 @@
       <workItem from="1728874546267" duration="85000" />
       <workItem from="1728874699646" duration="30000" />
       <workItem from="1728925383070" duration="6363000" />
+      <workItem from="1731521799938" duration="1891000" />
     </task>
     <servers />
   </component>

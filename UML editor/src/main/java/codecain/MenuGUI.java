@@ -1,7 +1,9 @@
-package codecain.GraphicalUserInterface;
+package codecain;
 
 import codecain.CommandLineInterface.CLI;
+/*
 import codecain.GraphicalInterfaceJavaFX;
+*/
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -37,7 +39,7 @@ public class MenuGUI extends Application {
 
         // GUI Button
         Button guiButton = new Button("Graphical Interface");
-        guiButton.setOnAction(event -> {
+/*        guiButton.setOnAction(event -> {
             try {
                 Stage guiStage = new Stage();
                 GraphicalInterfaceJavaFX gui = new GraphicalInterfaceJavaFX();
@@ -49,7 +51,7 @@ public class MenuGUI extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
+        });*/
 
         // Layout setup
         VBox layout = new VBox(20, welcomeText, cliButton, guiButton);

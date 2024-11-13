@@ -21,7 +21,7 @@ public class UMLFields {
         }
         UMLClassInfo classInfo = getClassInfo(className);
         if (classInfo == null) return;
-        if (doesFieldExist(classInfo, fieldType, fieldName)) {
+        if (doesFieldExist(classInfo, fieldName)) {
             System.out.println("Action Canceled: Field of type " + fieldType + " " + fieldName + " already exists in class " + className);
             return;
         }
@@ -115,13 +115,12 @@ public class UMLFields {
      * Helper method to check if a field with the given type and name exists in the class.
      *
      * @param classInfo the UMLClassInfo object for the class
-     * @param fieldType the type of the field
      * @param fieldName the name of the field
      * @return true if the field exists, false otherwise
      */
-    private boolean doesFieldExist(UMLClassInfo classInfo, String fieldType, String fieldName) {
+    public boolean doesFieldExist(UMLClassInfo classInfo, String fieldName) {
         for (UMLFieldInfo field : classInfo.getFields()) {
-            if (field.getFieldType().equals(fieldType) && field.getFieldName().equals(fieldName)) {
+            if (field.getFieldName().equals(fieldName)) {
                 return true;
             }
         }
