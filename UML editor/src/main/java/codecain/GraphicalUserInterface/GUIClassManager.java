@@ -1,7 +1,6 @@
 package codecain.GraphicalUserInterface;
 
 import codecain.BackendCode.UMLClass;
-import codecain.BackendCode.UMLClassInfo;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -11,7 +10,7 @@ import java.util.HashMap;
  * and backend synchronization of classes in the Class Diagram Editor.
  * It handles adding, deleting, and renaming class representations on the canvas.
  */
-public class GUIClassManager extends JPanel {
+public class GUIClassManager {
 
     /** A map linking class names to their corresponding {@code JPanel} representations. */
     private final HashMap<String, JPanel> classPanels = new HashMap<>();
@@ -118,37 +117,6 @@ public class GUIClassManager extends JPanel {
      */
     public HashMap<String, JPanel> getClassPanels() {
         return classPanels;
-    }
-
-
-    /**
-     * Creates a {@code ClassBox} for the given {@code UMLClassInfo} and adds it to the canvas.
-     * Updates the classPanels map with the new class box.
-     *
-     * @param umlClassInfo the UMLClassInfo object containing details about the class.
-     */
-    public void createClassBox(UMLClassInfo umlClassInfo) {
-        ClassBox classBox = new ClassBox(umlClassInfo.getClassName(), canvas);
-        classPanels.put(umlClassInfo.getClassName(), classBox);
-        classBox.updateDetails();
-    }
-
-    /**
-     * Clears all class boxes from the canvas and resets the {@code classPanels} map.
-     * This method is typically used before loading a new diagram to ensure the canvas is clean.
-     */
-    public void clearCanvas() {
-        canvas.removeAll();
-        classPanels.clear();
-    }
-
-    /**
-     * Returns the canvas panel managed by this {@code GUIClassManager}.
-     *
-     * @return the canvas panel
-     */
-    public JPanel getCanvas() {
-        return canvas;
     }
 }
 

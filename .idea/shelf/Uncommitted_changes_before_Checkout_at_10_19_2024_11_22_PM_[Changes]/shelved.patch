@@ -1,0 +1,45 @@
+Index: codeCainUmlEditor/src/main/Java/Class.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\n\r\n/**\r\n * Represents a UML class and provides methods for managing a collection of classes.\r\n * Each class is identified by its name, and all classes are stored in a shared static map.\r\n */\r\npublic class Class {\r\n    private String className;\r\n\r\n    /**\r\n     * Constructs a new Class with the specified name.\r\n     *\r\n     * @param className the name of the class\r\n     */\r\n    public Class(String className) {\r\n        this.className = className;\r\n    }\r\n\r\n    /**\r\n     * Returns the name of the class.\r\n     *\r\n     * @return the class name\r\n     */\r\n    public String getClassName() {\r\n        return this.className;\r\n    }\r\n\r\n    /**\r\n     * A static map that stores all classes by their name.\r\n     * The key is the class name, and the value is the corresponding Class object.\r\n     */\r\n    public static Map<String, Class> classMap = new HashMap<>();\r\n\r\n    /**\r\n     * Adds a class with the specified name to the classMap.\r\n     * If the class already exists, an error message is printed.\r\n     *\r\n     * @param className the name of the class to be added\r\n     */\r\n    public static void addClass(String className) {\r\n        if (classMap.containsKey(className)) {\r\n            System.out.println(\"Error: Class \" + className + \" already exists\");\r\n        } else {\r\n            classMap.put(className, new Class(className));\r\n            Methods.classMethods.put(className, new HashMap<>());\r\n            Fields.classFields.put(className, new HashMap<>());\r\n            System.out.println(\"Class \" + className + \" added\");\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Removes the class with the specified name from the classMap.\r\n     * If the class does not exist, an error message is printed.\r\n     *\r\n     * @param className the name of the class to be removed\r\n     */\r\n    public static void removeClass(String className) {\r\n        if (!classMap.containsKey(className)) {\r\n            System.out.println(\"Error: Class \" + className + \" does not exist\");\r\n        } else {\r\n            classMap.remove(className);\r\n            Methods.classMethods.remove(className);\r\n            Fields.classFields.remove(className);\r\n            System.out.println(\"Class \" + className + \" removed\");\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Renames a class by changing its key in the classMap.\r\n     * If the old class name does not exist or the new class name already exists, an error message is printed.\r\n     *\r\n     * @param oldClassName the current name of the class to be renamed\r\n     * @param newClassName the new name for the class\r\n     */\r\n    public static void renameClass(String oldClassName, String newClassName) {\r\n        if (!classMap.containsKey(oldClassName)) {\r\n            System.out.println(\"Error: Class \" + oldClassName + \" does not exist\");\r\n        } else if (classMap.containsKey(newClassName)) {\r\n            System.out.println(\"Error: Class \" + newClassName + \" already exists\");\r\n        } else {\r\n            Class classObj = classMap.remove(oldClassName);\r\n            classObj.className = newClassName;\r\n            classMap.put(newClassName, classObj);\r\n            Map<String, List<String>> methods = Methods.classMethods.remove(oldClassName);\r\n            Methods.classMethods.put(newClassName, methods);\r\n            Map<String, String> fields = Fields.classFields.remove(oldClassName);\r\n            Fields.classFields.put(newClassName, fields);\r\n            System.out.println(\"Class \" + oldClassName + \" renamed to \" + newClassName);\r\n        }\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/codeCainUmlEditor/src/main/Java/Class.java b/codeCainUmlEditor/src/main/Java/Class.java
+--- a/codeCainUmlEditor/src/main/Java/Class.java	
++++ b/codeCainUmlEditor/src/main/Java/Class.java	
+@@ -44,8 +44,8 @@
+             System.out.println("Error: Class " + className + " already exists");
+         } else {
+             classMap.put(className, new Class(className));
+-            Methods.classMethods.put(className, new HashMap<>());
+-            Fields.classFields.put(className, new HashMap<>());
++            //Methods.classMethods.put(className, new HashMap<>());
++            //Fields.classFields.put(className, new HashMap<>());
+             System.out.println("Class " + className + " added");
+         }
+     }
+@@ -61,8 +61,8 @@
+             System.out.println("Error: Class " + className + " does not exist");
+         } else {
+             classMap.remove(className);
+-            Methods.classMethods.remove(className);
+-            Fields.classFields.remove(className);
++            //Methods.classMethods.remove(className);
++            //Fields.classFields.remove(className);
+             System.out.println("Class " + className + " removed");
+         }
+     }
+@@ -83,10 +83,10 @@
+             Class classObj = classMap.remove(oldClassName);
+             classObj.className = newClassName;
+             classMap.put(newClassName, classObj);
+-            Map<String, List<String>> methods = Methods.classMethods.remove(oldClassName);
+-            Methods.classMethods.put(newClassName, methods);
+-            Map<String, String> fields = Fields.classFields.remove(oldClassName);
+-            Fields.classFields.put(newClassName, fields);
++            //Map<String, List<String>> methods = Methods.classMethods.remove(oldClassName);
++            //Methods.classMethods.put(newClassName, methods);
++            //Map<String, String> fields = Fields.classFields.remove(oldClassName);
++            //Fields.classFields.put(newClassName, fields);
+             System.out.println("Class " + oldClassName + " renamed to " + newClassName);
+         }
+     }

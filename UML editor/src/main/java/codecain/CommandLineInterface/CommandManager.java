@@ -1,8 +1,6 @@
 package codecain.CommandLineInterface;
 
 import codecain.BackendCode.*;
-import codecain.GraphicalUserInterface.ClassBox;
-import codecain.GraphicalUserInterface.GUIClassManager;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -13,20 +11,17 @@ import java.util.List;
  */
 public class CommandManager {
 
-    private final JTextArea commandOutput;
-    private final FileOperations fileOperations;
-    private final GUIClassManager classManager;
+    private JTextArea commandOutput;
+    private FileOperations fileOperations;
 
     /**
-     * Initializes a new instance of the CommandManager with the specified JTextArea for command output and GUIClassManager.
+     * Initializes a new instance of the CommandManager with the specified JTextArea for command output.
      *
      * @param commandOutput JTextArea to display command outputs
-     * @param classManager  GUIClassManager to manage the graphical representation of classes
      */
-    public CommandManager(JTextArea commandOutput, GUIClassManager classManager) {
+    public CommandManager(JTextArea commandOutput) {
         this.commandOutput = commandOutput;
         this.fileOperations = new FileOperations();
-        this.classManager = classManager;
     }
 
 
@@ -113,21 +108,16 @@ public class CommandManager {
     }
 
     /**
-     * Adds a new UML class with the specified name and creates a corresponding GUI box on the canvas.
+     * Adds a new UML class with the specified name.
      *
      * @param className name of the class to add
      * @return message confirming the addition of the class
      */
     private String handleAddClass(String className) {
         UMLClass.addClass(className);
-        if (UMLClass.exists(className)) {
-            UMLClassInfo classInfo = UMLClass.getClassInfo(className);
-            classManager.createClassBox(classInfo);
-            return DisplayHelper.classAdded(className);
-        } else {
-            return "Failed to add class: " + className;
-        }
+        return DisplayHelper.classAdded(className);
     }
+
 
     /**
      * Adds a relationship between two classes.

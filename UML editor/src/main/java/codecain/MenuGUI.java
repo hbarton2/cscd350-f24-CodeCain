@@ -1,68 +1,66 @@
 package codecain;
 
 import codecain.CommandLineInterface.CLI;
-import codecain.GraphicalUserInterface.GraphicalInterfaceJavaFX;
-import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import codecain.GraphicalUserInterface.GUI;
 
-public class MenuGUI extends Application {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-    @Override
-    public void start(Stage primaryStage) {
+public class MenuGUI extends JFrame {
+    private CLI cli; // Declare CLI without instantiation
+
+    public MenuGUI() {
+        setTitle("UML Manager");
+        setSize(1300, 800);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
         // Welcome message
-        Text welcomeText = new Text("Welcome to Code Cain UML Editor");
-        welcomeText.setFont(Font.font("Arial", 20));
+        JLabel welcomeLabel = new JLabel("Welcome to Code Cain UML Editor", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        add(welcomeLabel, BorderLayout.NORTH);
+
+        // Panel for buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
 
         // CLI Button
-        Button cliButton = new Button("CLI");
-/*        cliButton.setOnAction(event -> {
-            try {
-                Stage cliStage = new Stage();
-                CLI cli = new CLI();
-                cli.start(cliStage); // Launch CLI directly
-                primaryStage.hide(); // Hide the main menu
-
-                // Show the main menu again when the CLI stage is closed
-                cliStage.setOnCloseRequest(event1 -> primaryStage.show());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });*/
-
-        // GUI Button
-        Button guiButton = new Button("Graphical Interface");
-        guiButton.setOnAction(event -> {
-            try {
-                Stage guiStage = new Stage();
-                GraphicalInterfaceJavaFX gui = new GraphicalInterfaceJavaFX();
-                gui.start(guiStage); // Launch GUI directly
-                primaryStage.hide(); // Hide the main menu
-
-                // Show the main menu again when the GUI stage is closed
-                guiStage.setOnCloseRequest(event1 -> primaryStage.show());
-            } catch (Exception e) {
-                e.printStackTrace();
+        JButton cliButton = new JButton("CLI");
+        cliButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Instantiate CLI when the button is clicked
+                if (cli == null) {
+                    cli = new CLI(); // Create CLI instance
+                }
+                cli.setVisible(true); // Show the CLI interface
+                MenuGUI.this.setVisible(false);
             }
         });
+        buttonPanel.add(cliButton);
 
-        // Layout setup
-        VBox layout = new VBox(20, welcomeText, cliButton, guiButton);
-        layout.setAlignment(Pos.CENTER); // Center everything horizontally and vertically
+        // GUI Button
+        JButton guiButton = new JButton("Graphical Interface");
+        guiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Open the graphical interface
+                GUI gui = new GUI();
+                gui.setVisible(true);
+                MenuGUI.this.setVisible(false);
+            }
+        });
+        buttonPanel.add(guiButton);
 
-        // Scene setup
-        Scene scene = new Scene(layout, 400, 300);
-        primaryStage.setTitle("UML Manager");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        add(buttonPanel, BorderLayout.CENTER);
     }
 
     public static void main(String[] args) {
-        launch(args);
+        SwingUtilities.invokeLater(() -> {
+            MenuGUI mainMenu = new MenuGUI();
+            mainMenu.setVisible(true);
+        });
     }
 }

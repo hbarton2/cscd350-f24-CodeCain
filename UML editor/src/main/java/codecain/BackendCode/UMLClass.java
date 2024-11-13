@@ -22,21 +22,6 @@ public class UMLClass {
      * @param className the name of the class to be added
      */
     public static void addClass(String className) {
-
-        // new logic for addClass. Old logic was incorrect.
-        // boolean result = false;
-        // if (className == null || className.isBlank()) {
-        //     System.out.println("Canceled: Inputted Class Name is Blank");
-        // } else if (exists(className)) {
-        //     System.out.println("Class " + className + " already exists");
-        // } else {
-        //     classMap.put(className, new UMLClassInfo(className));
-        //     System.out.println("Class " + className + " added");
-        //     result = true;
-        // }
-
-        // Old logic for addClass
-
         if (className == null || className.isBlank()) {
             System.out.println("Canceled: Inputted Class Name is Blank");
             return;
@@ -129,15 +114,5 @@ public class UMLClass {
      */
     public static boolean exists(String className) {
         return classMap.containsKey(className);
-    }
-
-    /**
-     * Checks if a class with the given name exists in the classMap.
-     *
-     * @param className the name of the class to check for existence
-     * @return the name if the class exists, null otherwise
-     */
-    public static UMLClassInfo getClassInfo(String className) {
-        return classMap.get(className);
     }
 }
