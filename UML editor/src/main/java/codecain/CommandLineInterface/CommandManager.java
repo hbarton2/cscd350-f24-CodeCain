@@ -1,10 +1,7 @@
 package codecain.CommandLineInterface;
 
 import codecain.BackendCode.*;
-import codecain.GraphicalUserInterface.ClassBox;
-import codecain.GraphicalUserInterface.GUIClassManager;
-
-import javax.swing.*;
+import javafx.scene.control.TextArea;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,22 +10,27 @@ import java.util.List;
  */
 public class CommandManager {
 
-    private final JTextArea commandOutput;
-    private final FileOperations fileOperations;
-    private final GUIClassManager classManager;
+    private TextArea commandOutput;
+    private FileOperations fileOperations;
 
     /**
-     * Initializes a new instance of the CommandManager with the specified JTextArea for command output and GUIClassManager.
+     * Initializes a new instance of the CommandManager with the specified JTextArea for command output.
      *
      * @param commandOutput JTextArea to display command outputs
-     * @param classManager  GUIClassManager to manage the graphical representation of classes
      */
-    public CommandManager(JTextArea commandOutput, GUIClassManager classManager) {
+    public CommandManager(TextArea commandOutput) {
         this.commandOutput = commandOutput;
         this.fileOperations = new FileOperations();
-        this.classManager = classManager;
     }
 
+    /**
+     * Appends text to the command output TextArea.
+     *
+     * @param text the text to append
+     */
+    private void appendToOutput(String text) {
+        commandOutput.appendText(text);
+    }
 
     /**
      * Parses and executes a given command by identifying its type and performing the corresponding operation.
@@ -38,18 +40,18 @@ public class CommandManager {
     public void parseAndExecute(String command) {
         String[] tokens = command.split(" ");
         if (tokens.length == 0 || tokens[0].isEmpty()) {
-            commandOutput.append("No command entered.\n");
+            appendToOutput("No command entered.\n");
             return;
         }
 
         String commandName = tokens[0].toLowerCase();
         String result;
-        int helpStartPosition = commandOutput.getDocument().getLength();
         switch (commandName) {
             case "help" -> {
                 result = DisplayHelper.showHelp();
-                commandOutput.append(">> " + command + "\n" + result + "\n");
-                commandOutput.setCaretPosition(helpStartPosition);
+                int helpStartPosition = commandOutput.getLength(); 
+                commandOutput.appendText(">> " + command + "\n" + result + "\n");
+                commandOutput.positionCaret(helpStartPosition); 
                 return;
             }
             case "add", "delete", "rename", "list" -> result = handleCommand(tokens);
@@ -63,8 +65,7 @@ public class CommandManager {
         }
 
         if (!result.isEmpty()) {
-            commandOutput.append(">> " + command + "\n" + result + "\n");
-            commandOutput.setCaretPosition(commandOutput.getDocument().getLength()); // Default scroll behavior
+            appendToOutput( "\n" + result + "\n");
         }
     }
 
@@ -113,24 +114,23 @@ public class CommandManager {
     }
 
     /**
-     * Adds a new UML class with the specified name and creates a corresponding GUI box on the canvas.
+     * Adds a new UML class with the specified name.
      *
      * @param className name of the class to add
-     * @return message confirming the addition of the class
+     * @return message confirming the addition of the class or notifying if it already exists
      */
     private String handleAddClass(String className) {
-        UMLClass.addClass(className);
         if (UMLClass.exists(className)) {
-            UMLClassInfo classInfo = UMLClass.getClassInfo(className);
-            classManager.createClassBox(classInfo);
-            return DisplayHelper.classAdded(className);
-        } else {
-            return "Failed to add class: " + className;
+            return DisplayHelper.classAlreadyExists(className);
         }
+        UMLClass.addClass(className);
+        return DisplayHelper.classAdded(className);
     }
 
+
+
     /**
-     * Adds a relationship between two classes.
+     * Adds a relationship between two classes if it does not already exist.
      *
      * @param tokens command parts specifying the classes involved in the relationship
      * @return message confirming or denying the addition of the relationship
@@ -139,30 +139,47 @@ public class CommandManager {
         if (tokens.length < 4) {
             return "Usage: add relationship <class1> <class2>";
         }
+        if (Relationship.relationshipExists(tokens[2], tokens[3])) {
+            return "Relationship between '" + tokens[2] + "' and '" + tokens[3] + "' already exists.";
+        }
         boolean added = Relationship.addRelationship(tokens[2], tokens[3]);
         if (added) {
             return DisplayHelper.relationshipAdded(tokens[2], tokens[3]);
         } else {
-            return "Failed to add relationship. Ensure both classes exist and relationship does not already exist.";
+            return "Failed to add relationship. Ensure both classes exist and the relationship is valid.";
         }
     }
 
     /**
-     * Adds a field to a specified UML class.
+     * Adds a field to a specified UML class if it does not already exist.
      *
      * @param tokens command parts specifying class, field type, and field name
      * @return message confirming or denying the addition of the field
      */
     private String handleAddField(String[] tokens) {
-        String errorMessage = checkClassExists(tokens[2]);
+        if (tokens.length < 5) {
+            return "Usage: add field <className> <fieldType> <fieldName>";
+        }
+        String className = tokens[2];
+        String fieldType = tokens[3];
+        String fieldName = tokens[4];
+
+        String errorMessage = checkClassExists(className);
+
         if (errorMessage != null) {
             return errorMessage;
         }
 
         UMLFields fields = new UMLFields();
-        fields.addField(tokens[2], tokens[3], tokens[4]);
-        return DisplayHelper.fieldAdded(tokens[4], tokens[3], tokens[2]);
+        if (fields.doesFieldExist(getClassInfo(className), fieldName)) {
+            return "Field '" + fieldName + "' already exists in class '" + className + "'.";
+        }
+
+        fields.addField(className, fieldType, fieldName);
+        return DisplayHelper.fieldAdded(fieldName, fieldType, className);
     }
+
+
 
     /**
      * Adds a method to a specified UML class.
@@ -478,4 +495,19 @@ public class CommandManager {
         }
         return parameters;
     }
+
+    /**
+     * Helper method to get UMLClassInfo for a class.
+     *
+     * @param className the name of the class
+     * @return the UMLClassInfo object, or null if class does not exist
+     */
+    private UMLClassInfo getClassInfo(String className) {
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+        if (classInfo == null) {
+            System.out.println("Class '" + className + "' does not exist.");
+        }
+        return classInfo;
+    }
+
 }

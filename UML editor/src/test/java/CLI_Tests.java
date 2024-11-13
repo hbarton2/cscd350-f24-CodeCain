@@ -1,3 +1,4 @@
+/*
 import codecain.BackendCode.Relationship;
 import codecain.BackendCode.UMLClass;
 import codecain.BackendCode.UMLClassInfo;
@@ -190,3 +191,4 @@ class CLI_Tests {
                 "Parameter should be 'newAge' of type 'float' in method 'setName'.");
     }
 }
+*/

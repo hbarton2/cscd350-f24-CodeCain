@@ -1,5 +1,6 @@
 package codecain.BackendCode;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -20,6 +21,7 @@ public class UMLFieldInfo {
     private String fieldType;
 
     /**
+
      * Constructs a UMLFieldsInfo object with default values for the field name and field type.
      * Required for serialization by Jackson.
      */
@@ -31,6 +33,7 @@ public class UMLFieldInfo {
      * @param fieldName the name of the field
      * @param fieldType the type of the field
      */
+
     @JsonCreator
     public UMLFieldInfo(@JsonProperty("fieldType") String fieldType,
                         @JsonProperty("fieldName") String fieldName) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+
  * The UMLClassInfo class represents the details of a UML class, including its name, fields, methods, and position.
  */
 public class UMLClassInfo {
@@ -60,6 +61,7 @@ public class UMLClassInfo {
      *
      * @return the name of the class
      */
+
     public String getClassName() {
         return this.className;
     }
@@ -91,7 +93,7 @@ public class UMLClassInfo {
         return this.methods;
     }
 
-    /**
+
      * Gets the x-coordinate of the class box position.
      *
      * @return the x-coordinate

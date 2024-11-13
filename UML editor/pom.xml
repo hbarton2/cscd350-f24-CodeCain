@@ -65,6 +65,8 @@
             <version>23</version>
         </dependency>
     </dependencies>
+<<<<<<< HEAD
+=======
 
     <!-- JavaFX setup -->
     <build>
@@ -80,4 +82,5 @@
         </plugins>
     </build>
 
+>>>>>>> Develop
 </project>
