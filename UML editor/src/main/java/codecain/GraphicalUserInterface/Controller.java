@@ -151,6 +151,24 @@ public class Controller {
         return null;
     }
 
+    private Line findRelationshipLine(String source, String destination) {
+        ClassNode sourceNode = findClassNode(source);
+        ClassNode destNode = findClassNode(destination);
+
+        if (sourceNode == null || destNode == null) return null;
+        for (Node node : nodeContainer.getChildren()) {
+            if (node instanceof Line line) {
+                if (line.getStartX() == sourceNode.getLayoutX() + sourceNode.getWidth() / 2
+                        && line.getStartY() == sourceNode.getLayoutY() + sourceNode.getHeight()
+                        && line.getEndX() == destNode.getLayoutX() + destNode.getWidth() / 2
+                        && line.getEndY() == destNode.getLayoutY() + destNode.getHeight()) {
+                    return line;
+                }
+            }
+        }
+        return null;
+    }
+
     @FXML
     private void addRelationshipBtn() {
 
@@ -217,6 +235,67 @@ public class Controller {
         line.toBack();
 
     }
+
+    @FXML
+    private void removeRelationshipBtn() {
+
+        TextInputDialog sourceDialog = new TextInputDialog();
+        sourceDialog.setTitle("Source Input");
+        sourceDialog.setHeaderText("Enter the source of the relationship");
+        sourceDialog.setContentText("Source Class:");
+
+        Optional<String> sourceResult = sourceDialog.showAndWait();
+        if (sourceResult.isEmpty()) {
+            showErrorDialog("Source input is required.");
+            return;
+        }
+        String source = sourceResult.get();
+        if (!UMLClass.classMap.containsKey(source)){
+            showErrorDialog("Source class does not exist");
+            return;
+        }
+
+        TextInputDialog destinationDialog = new TextInputDialog();
+        destinationDialog.setTitle("Destination Input");
+        destinationDialog.setHeaderText("Enter the destination of the relationship");
+        destinationDialog.setContentText("Destination Class:");
+
+        Optional<String> destinationResult = destinationDialog.showAndWait();
+        if (destinationResult.isEmpty()) {
+            showErrorDialog("Destination input is required.");
+            return;
+        }
+        String destination = destinationResult.get();
+        if (!UMLClass.classMap.containsKey(destination)){
+            showErrorDialog("Destination class does not exist");
+            return;
+        }
+
+        List<String> relationshipTypes = Arrays.asList("COMPOSITION", "AGGREGATION", "GENERALIZATION", "REALIZATION");
+        ChoiceDialog<String> typeDialog = new ChoiceDialog<>("COMPOSITION", relationshipTypes);
+        typeDialog.setTitle("Relationship Type");
+        typeDialog.setHeaderText("Select the type of relationship");
+        typeDialog.setContentText("Relationship Type:");
+
+        Optional<String> typeResult = typeDialog.showAndWait();
+        if (typeResult.isEmpty()) {
+            showErrorDialog("Relationship type is required.");
+            return;
+        }
+        String relationshipType = typeResult.get();
+        RelationshipType type = RelationshipType.fromString(relationshipType);
+
+        Relationship.removeRelationship(source,destination);
+        ClassNode sourceNode = findClassNode(source);
+        ClassNode destNode = findClassNode(destination);
+
+
+        nodeContainer.getChildren().remove(findRelationshipLine(source, destination));
+
+
+    }
+
+
 
     private boolean doesClassExist(String className){
         return UMLClass.classMap.containsKey(className);
