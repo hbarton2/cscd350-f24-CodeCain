@@ -924,17 +924,6 @@ public class Controller {
         if(file != null) {
             SaveManager.saveToJSON(file.getAbsolutePath());
         }
-       
-
-
-        // Old code
-        // nodeContainer.getChildren().forEach(node -> {
-        //    if (node instanceof ClassNode) {
-        //        ((ClassNode) node).syncWithUMLClassInfo();
-        //    }
-        // });
-
-        // SaveManager.saveToJSON("new_uml_diagram.json");
     }
 
     @FXML
@@ -957,10 +946,6 @@ public class Controller {
             SaveManager.loadFromJSON(file.getAbsolutePath());
             populateGUIFromClassMap();
         }
-
-        // Old code
-        // SaveManager.loadFromJSON("new_uml_diagram.json");
-        // populateGUIFromClassMap();
     }
 
     public void populateGUIFromClassMap() {
