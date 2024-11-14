@@ -21,7 +21,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -898,19 +901,66 @@ public class Controller {
 
     @FXML
     private void saveBtn() throws IOException {
+
+        // Synchronize GUI with the backend model
         nodeContainer.getChildren().forEach(node -> {
-           if (node instanceof ClassNode) {
-               ((ClassNode) node).syncWithUMLClassInfo();
-           }
+            if (node instanceof ClassNode) {
+                ((ClassNode) node).syncWithUMLClassInfo();
+            }
         });
 
-        SaveManager.saveToJSON("new_uml_diagram.json");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save UML Diagram File");
+
+        // Set filter for JSON files
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        
+        // Set the initial directory to the current working directory
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+
+        Window window = nodeContainer.getScene().getWindow();
+
+        File file = fileChooser.showSaveDialog(window);
+        if(file != null) {
+            SaveManager.saveToJSON(file.getAbsolutePath());
+        }
+       
+
+
+        // Old code
+        // nodeContainer.getChildren().forEach(node -> {
+        //    if (node instanceof ClassNode) {
+        //        ((ClassNode) node).syncWithUMLClassInfo();
+        //    }
+        // });
+
+        // SaveManager.saveToJSON("new_uml_diagram.json");
     }
 
     @FXML
     private void loadBtn() throws IOException {
-        SaveManager.loadFromJSON("new_uml_diagram.json");
-        populateGUIFromClassMap();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open UML Diagram File");
+
+        // Set filter for JSON files
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+
+        // Set the initial directory to the current working directory
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+
+        // Get the main window for the file chooser
+        Window window = nodeContainer.getScene().getWindow();
+
+        File file = fileChooser.showOpenDialog(window);
+        if(file != null) {
+            SaveManager.loadFromJSON(file.getAbsolutePath());
+            populateGUIFromClassMap();
+        }
+
+        // Old code
+        // SaveManager.loadFromJSON("new_uml_diagram.json");
+        // populateGUIFromClassMap();
     }
 
     public void populateGUIFromClassMap() {
