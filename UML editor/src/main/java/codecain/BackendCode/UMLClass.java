@@ -131,6 +131,7 @@ public class UMLClass {
         return classMap.containsKey(className);
     }
 
+
     /**
      * Checks if a class with the given name exists in the classMap.
      *
@@ -140,4 +141,5 @@ public class UMLClass {
     public static UMLClassInfo getClassInfo(String className) {
         return classMap.get(className);
     }
+
 }

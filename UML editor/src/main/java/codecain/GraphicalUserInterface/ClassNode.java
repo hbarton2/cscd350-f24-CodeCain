@@ -1,9 +1,6 @@
 package codecain.GraphicalUserInterface;
 
-import codecain.BackendCode.UMLClass;
-import codecain.BackendCode.UMLClassInfo;
-import codecain.BackendCode.UMLFieldInfo;
-import codecain.BackendCode.UMLMethodInfo;
+import codecain.BackendCode.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -277,22 +274,102 @@ public class ClassNode extends VBox {
         fields.getItems().add(fieldInfo);
     }
 
+    public boolean removeField(String fieldName) {
+        // Check if the field exists in the GUI ListView
+        boolean removedFromListView = fields.getItems().removeIf(field -> field.getFieldName().equals(fieldName));
+
+        if (removedFromListView) {
+            // If removed from ListView, also remove it from the backend classInfo
+            boolean removedFromBackend = classInfo.getFields().removeIf(field -> field.getFieldName().equals(fieldName));
+
+            if (removedFromBackend) {
+                System.out.println("Field '" + fieldName + "' successfully removed from both GUI and backend.");
+            } else {
+                System.err.println("Field '" + fieldName + "' was removed from GUI but not found in the backend.");
+            }
+
+            return true; // Field removed successfully
+        }
+
+        System.err.println("Field '" + fieldName + "' not found in the GUI or backend.");
+        return false; // Field not found
+    }
+
+
+    public boolean renameField(String oldFieldName, String newFieldType, String newFieldName) {
+        UMLFields fieldManager = new UMLFields();
+        String className = classInfo.getClassName();
+
+        // Use the UMLFields.renameField method to update the backend
+        fieldManager.renameField(className, oldFieldName, newFieldType, newFieldName);
+
+        // Check if the field exists in the backend with the new name and type
+        UMLFieldInfo renamedField = classInfo.getFields().stream()
+                .filter(field -> field.getFieldName().equals(newFieldName) && field.getFieldType().equals(newFieldType))
+                .findFirst()
+                .orElse(null);
+
+        if (renamedField != null) {
+            // Update the ListView (fields) to reflect the renamed field
+            fields.getItems().clear(); // Clear all items in the ListView
+            fields.getItems().addAll(classInfo.getFields()); // Reload fields from the backend
+
+            fields.refresh(); // Refresh the ListView to reflect the changes
+            return true; // Rename successful
+        }
+
+        return false; // Rename failed
+    }
+
+
+
+
+
     public void addMethod(UMLMethodInfo method) {
         methods.getItems().add(method); // Add the method to the ListView in ClassNode
     }
+    public boolean removeMethod(String methodName) {
+        // Use update-like logic to handle removal
+        boolean removed = methods.getItems().removeIf(m -> m.getMethodName().equals(methodName));
+        if (removed) {
+            classInfo.getMethods().removeIf(m -> m.getMethodName().equals(methodName)); // Sync with backend
+        }
+        return removed;
+    }
+
+    public boolean renameMethod(String oldMethodName, String newMethodName) {
+        // Find the method to rename in ListView
+        UMLMethodInfo methodToRename = methods.getItems().stream()
+                .filter(method -> method.getMethodName().equals(oldMethodName))
+                .findFirst()
+                .orElse(null);
+
+        if (methodToRename == null) {
+            System.out.println("Error: Method '" + oldMethodName + "' not found in GUI.");
+            return false; // Method not found
+        }
+
+        // Check for duplicate method names
+        boolean duplicate = methods.getItems().stream()
+                .anyMatch(method -> method.getMethodName().equals(newMethodName));
+        if (duplicate) {
+            System.out.println("Error: Method '" + newMethodName + "' already exists in GUI.");
+            return false; // Prevent duplicate names
+        }
+
+        // Update the method name in GUI
+        methodToRename.setMethodName(newMethodName);
+        methods.refresh(); // Refresh the ListView
+
+        return true; // Renamed successfully
+    }
+
+
+
+
 
     public void updateMethod(UMLMethodInfo method) {
         methods.getItems().removeIf(m -> m.getMethodName().equals(method.getMethodName())); // Remove old method
         methods.getItems().add(method); // Add updated method with new parameter
     }
-    
-
-//    public ClassNodeDTO toDTO() {
-//        return new ClassNodeDTO(
-//                classNameLabel.getText(),
-//                fields.getItems(),
-//                methods.getItems()
-//        );
-//    }
-
 }

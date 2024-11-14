@@ -21,7 +21,7 @@ public class MenuGUI extends Application {
 
         // CLI Button
         Button cliButton = new Button("CLI");
-/*        cliButton.setOnAction(event -> {
+        cliButton.setOnAction(event -> {
             try {
                 Stage cliStage = new Stage();
                 CLI cli = new CLI();
@@ -33,7 +33,7 @@ public class MenuGUI extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });*/
+        });
 
         // GUI Button
         Button guiButton = new Button("Graphical Interface");

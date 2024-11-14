@@ -285,4 +285,15 @@ public class DisplayHelper {
     public static String insufficientParameters() {
         return "Insufficient parameters. Type 'help' for more info.";
     }
+
+    /**
+     * Returns a message indicating that a class already exists.
+     *
+     * @param className the name of the existing class
+     * @return a message indicating the class already exists
+     */
+    public static String classAlreadyExists(String className) {
+        return "Class '" + className + "' already exists.";
+    }
+
 }

@@ -16,6 +16,8 @@
                 <Button mnemonicParsing="false" onAction="#loadBtn" styleClass="toolbar-button" text="Load" />
                 <Button mnemonicParsing="false" styleClass="toolbar-button" text="Help" />
                 <Button mnemonicParsing="false" styleClass="toolbar-button" text="Exit" />
+                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Redo" />
+                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Undo" />
             </items>
         </ToolBar>
     </top>
@@ -28,16 +30,19 @@
                 <Button mnemonicParsing="false" onAction="#deleteClassBtn" text="Delete Class" />
                 <Button mnemonicParsing="false" onAction="#renameClassBtn" text="Rename Class" />
                 <Button mnemonicParsing="false" onAction="#addFieldBtn" text="Add Field" />
-                <Button mnemonicParsing="false" text="Delete Field" />
-                <Button mnemonicParsing="false" text="Rename Field" />
+                <Button mnemonicParsing="false" onAction="#deleteFieldBtn" text="Delete Field" />
+                <Button mnemonicParsing="false" onAction="#renameFieldBtn" text="Rename Field" />
                 <Button mnemonicParsing="false" onAction="#addMethodBtn" text="Add Method" />
-                <Button mnemonicParsing="false" text="Delete Method" />
-                <Button mnemonicParsing="false" text="Rename Method" />
+                <Button mnemonicParsing="false" onAction="#deleteMethodBtn" text="Delete Method" />
+                <Button mnemonicParsing="false" onAction="#renameMethodBtn" text="Rename Method" />
                 <Button mnemonicParsing="false" onAction="#addParameterBtn" text="Add Parameter" />
-                <Button mnemonicParsing="false" text="Delete Parameter" />
-                <Button mnemonicParsing="false" text="Rename Parameter" />
+                <Button mnemonicParsing="false" onAction="#deleteParameterBtn" text="Delete Parameter" />
+                <Button mnemonicParsing="false" onAction="#changeParameterBtn" text="Rename Single Parameter" />
+                <Button mnemonicParsing="false" onAction="#changeAllParametersBtn" text="Rename All Parameters" />
+
                 <Button mnemonicParsing="false" onAction="#addRelationshipBtn" text="Add Relationship" />
                 <Button mnemonicParsing="false" onAction="#removeRelationshipBtn" text="Remove Relationship" />
+
             </children>
         </VBox>
     </right>
