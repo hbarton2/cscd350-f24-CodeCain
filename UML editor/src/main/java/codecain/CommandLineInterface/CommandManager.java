@@ -2,9 +2,6 @@ package codecain.CommandLineInterface;
 
 import codecain.BackendCode.*;
 import codecain.RelationshipType;
-import codecain.GraphicalUserInterface.ClassBox;
-import codecain.GraphicalUserInterface.GUIClassManager;
-
 import javax.swing.*;
 import javafx.scene.control.TextArea;
 import java.util.ArrayList;
