@@ -9,15 +9,10 @@ public class AggregationArrow extends GUIArrow{
         getPoints().clear();
 
         getPoints().addAll(
-                0.0, 0.0,
-                100.0, 0.0
-        );
-
-        getPoints().addAll(
-                90.0, -5.0,
-                110.0, 0.0,
-                90.0, 5.0,
-                110.0, 0.0
+                0.0,0.0,
+                -12.0,6.0,
+                0.0,24.0,
+                12.0,6.0
         );
 
         setStroke(Color.BLACK);
