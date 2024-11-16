@@ -3,6 +3,7 @@ package codecain.GraphicalUserInterface;
 import codecain.BackendCode.*;
 import codecain.RelationshipType;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -325,7 +326,27 @@ public class Controller {
 
     }
 
+    private void setRelationshipLines(ClassNode node){
+        UMLClassInfo info = UMLClass.classMap.get(node.getName());
+        Relationship[] relationships = (Relationship[]) info.attachedRelationshipIndices.keySet().toArray();
+        for (Relationship r: relationships){
+            // maybe I need a subclass of a line that way I can keep track of it in a collection
+            // of some kind, or maybe the relationships class needs to extend line?
+        }
+    }
 
+    private int getXposition(ClassNode node, Relationship r){
+
+        if (!UMLClass.classMap.containsKey(node.getName())){
+            throw new IllegalStateException("No class named " + node.getName() + " found");
+        }
+
+        UMLClassInfo classInfo = UMLClass.classMap.get(node.getName());
+        int relationshipCount = classInfo.attachedRelationshipIndices.size();
+        int index = classInfo.attachedRelationshipIndices.get(r);
+        return (int) (( node.getWidth() / (2 + relationshipCount - 1) ) * (index+1));
+
+    }
 
     private boolean doesClassExist(String className){
         return UMLClass.classMap.containsKey(className);
