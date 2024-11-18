@@ -1,6 +1,8 @@
 package codecain.BackendCode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
 
@@ -152,7 +154,7 @@ public class UMLClassInfo {
      */
     public void addRelationshipPoint(Relationship r){
         attachedRelationshipIndices.put(r, getLowestValue());
-        System.out.println("relationship point added to class " + this.className);
+        System.out.println("relationship added to class " + this.className);
     }
 
 
@@ -162,8 +164,7 @@ public class UMLClassInfo {
      */
     public void removeRelationshipPoint(Relationship r){
         attachedRelationshipIndices.remove(r);
-        repositionPoints();
-        System.out.println("relationship point removed from class " + this.className);
+        System.out.println("relationship removed from class " + this.className);
     }
 
 
@@ -177,18 +178,4 @@ public class UMLClassInfo {
         System.out.println(i);
         return i;
     }
-
-
-    /**
-     * repositions the points after a relationship is removed
-     */
-    private void repositionPoints(){
-        Collection<Relationship> relationships = attachedRelationshipIndices.keySet();
-        Object[] relationshipArray = relationships.toArray();
-        attachedRelationshipIndices.clear();
-        for (int i = 0; i < relationshipArray.length; i++){
-            attachedRelationshipIndices.put((Relationship) relationshipArray[i],i);
-        }
-    }
-
 }
