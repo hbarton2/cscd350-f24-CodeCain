@@ -1,0 +1,45 @@
+Design Patterns
+
+Pattern 1: Composite
+UMLClassInfo.java: Lines 20, 25
+Justification: The UMLClassInfo class represents a component in a composite structure. 
+It contains collections for fields and methods (fields and methods) which act as child components. 
+
+Pattern 2: Composite (2)
+UMLMethodsInfo.java: Line 20
+Justification: The UMLMethodsInfo class handles a list of methods, each of which can include nested parameters.
+
+Pattern 3: Singleton
+UMLClass.java: Line 17
+Justification: The UMLClass class maintains a static map (classMap) that acts as a single source of storage for all UML classes. This ensures that only one instance of the map exists, providing centralized management and preventing duplication.
+
+Pattern 4: Singleton (2)
+Relationship.java: Line 18
+Justification: The Relationship class uses a static list (relationshipList) to manage all relationships globally. This ensures consistent access and modification, avoiding multiple instances of the relationship list.
+
+Pattern 5: Singleton (3)
+File: Caretaker.java: All Lines
+Justification: The Caretaker class could use a singleton pattern to ensure a single instance manages the undo and redo stacks globally.
+
+Pattern 6: Facade
+SaveManager.java: Lines 30-37, 39-53
+Justification: SaveManager abstracts the complexities of saving and loading UML data. It hides details of serialization and deserialization using Jackson, providing a unified interface for file operations like saving UML diagrams as JSON.
+
+Pattern 7: Facade (2)
+StateManager.java: All Lines
+Justification: The StateManager implements a facade pattern to encapsulate the undo and redo functionality. It centralizes state management operations by providing a unified interface to interact with the memento objects (Memento) and their storage (Caretaker).
+
+Pattern 8: Facade (3)
+CommandManager.java: All Lines
+Justification: The CommandManager provides a simplified interface for managing command-related functionality.
+
+Pattern 9: Memento
+Memento.java, Caretaker.java, StateManager.java: All Lines
+Justification:
+Memento.java: Implements the memento pattern to store the state of UML objects, allowing rollback functionality.
+Caretaker.java: Manages the history of states, enabling undo/redo operations by maintaining a stack of mementos.
+StateManager.java: Acts as the originator, capturing its current state into mementos and restoring them when necessary.
+
+Pattern 10: MVC
+
+Justification:
