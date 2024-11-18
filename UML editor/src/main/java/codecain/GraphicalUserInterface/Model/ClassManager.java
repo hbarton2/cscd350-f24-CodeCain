@@ -1,7 +1,9 @@
 package codecain.GraphicalUserInterface.Model;
 
 import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.UMLClassInfo;
 import codecain.GraphicalUserInterface.View.ClassNode;
+import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
@@ -31,12 +33,14 @@ public class ClassManager {
         }
         UMLClass.addClass(className);
         ClassNode classNode = new ClassNode(UMLClass.getClassInfo(className));
+        UMLClassInfo classInfo = UMLClass.getClassInfo(className);
 
         // Position nodes (e.g., center as a placeholder; adjust as needed)
         double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
         double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
         classNode.setLayoutX(centerX);
         classNode.setLayoutY(centerY);
+        PositionUtils.calculateAndSetPosition(classNode, classInfo, nodeContainer);
 
         // Add the new ClassNode to the node container
         nodeContainer.getChildren().add(classNode);
