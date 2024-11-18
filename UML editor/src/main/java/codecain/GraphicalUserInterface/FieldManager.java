@@ -10,12 +10,28 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+/**
+ * The {@code FieldManager} class provides functionality to manage UML class
+ * fields
+ * in the UML editor. It includes methods to add, delete, and rename fields in a
+ * UML class,
+ * with updates to both the GUI and the backend data model.
+ */
 public class FieldManager {
+
+	/**
+	 * Adds a new field to a specified UML class.
+	 * <p>
+	 * Displays a dialog for the user to input the class name, field name, and field
+	 * type.
+	 * Validates the input and updates the backend and GUI accordingly.
+	 *
+	 * @param nodeContainer The container holding the class nodes in the GUI.
+	 */
 	public static void addField(Pane nodeContainer) {
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -25,7 +41,8 @@ public class FieldManager {
 		TextField fieldNameField = DialogUtils.addTextField(grid, "Field Name", 1);
 		TextField fieldTypeField = DialogUtils.addTextField(grid, "Field Type", 2);
 
-		Dialog<ButtonType> dialog = DialogUtils.createDialog("Add Field", "Enter the class name, field name, and field type:", grid);
+		Dialog<ButtonType> dialog = DialogUtils.createDialog("Add Field",
+				"Enter the class name, field name, and field type:", grid);
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -69,6 +86,14 @@ public class FieldManager {
 		}
 	}
 
+	/**
+	 * Deletes a field from a specified UML class.
+	 * <p>
+	 * Displays a dialog for the user to input the class name and field name.
+	 * Validates the input and updates the backend and GUI accordingly.
+	 *
+	 * @param nodeContainer The container holding the class nodes in the GUI.
+	 */
 	public static void deleteField(Pane nodeContainer) {
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -77,7 +102,8 @@ public class FieldManager {
 		TextField classNameField = DialogUtils.addTextField(grid, "Class Name", 0);
 		TextField fieldNameField = DialogUtils.addTextField(grid, "Field Name", 1);
 
-		Dialog<ButtonType> dialog = DialogUtils.createDialog("Delete Field", "Enter the class name and field name to delete:", grid);
+		Dialog<ButtonType> dialog = DialogUtils.createDialog("Delete Field",
+				"Enter the class name and field name to delete:", grid);
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -111,6 +137,15 @@ public class FieldManager {
 		}
 	}
 
+	/**
+	 * Renames a field in a specified UML class.
+	 * <p>
+	 * Displays a dialog for the user to input the class name, current field name,
+	 * new field name, and new field type.
+	 * Validates the input and updates the backend and GUI accordingly.
+	 *
+	 * @param nodeContainer The container holding the class nodes in the GUI.
+	 */
 	public static void renameField(Pane nodeContainer) {
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -164,23 +199,4 @@ public class FieldManager {
 			}
 		}
 	}
-
-	// // Reusable method to create a dialog with a grid
-	// private static Dialog<ButtonType> createDialog(String title, String headerText, GridPane grid) {
-	// 	Dialog<ButtonType> dialog = new Dialog<>();
-	// 	dialog.setTitle(title);
-	// 	dialog.setHeaderText(headerText);
-	// 	dialog.getDialogPane().setContent(grid);
-	// 	dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-	// 	return dialog;
-	// }
-
-	// // Reusable method to create a labeled TextField and add it to the grid
-	// private static TextField addTextField(GridPane grid, String label, int row) {
-	// 	TextField textField = new TextField();
-	// 	textField.setPromptText(label);
-	// 	grid.add(new Label(label + ":"), 0, row);
-	// 	grid.add(textField, 1, row);
-	// 	return textField;
-	// }
 }
