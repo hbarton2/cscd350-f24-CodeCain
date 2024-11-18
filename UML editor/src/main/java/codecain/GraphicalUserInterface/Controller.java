@@ -1082,4 +1082,25 @@ public class Controller {
         alert.showAndWait();
     }
 
+    @FXML
+    private void exitBtn() {
+        // Create a confirmation alert
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit Confirmation");
+        alert.setHeaderText("Are you sure you want to exit?");
+        alert.setContentText("Unsaved changes will be lost.");
+
+        // Show the confirmation dialog and wait for the user's response
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Perform cleanup tasks here if necessary
+            System.out.println("Application is exiting...");
+
+            // Exit the application
+            System.exit(0);
+        } else {
+            System.out.println("Exit canceled.");
+        }
+    }
+
 }
