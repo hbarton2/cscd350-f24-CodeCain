@@ -243,7 +243,7 @@ public class Controller {
         UMLClass.classMap.values().forEach(classInfo -> {
             ClassNode classNode = new ClassNode(classInfo);
             if (classInfo.getX() == 0 && classInfo.getY() == 0) {
-                calculateAndSetPosition(classNode, classInfo, nodeContainer);
+                PositionUtils.calculateAndSetPosition(classNode, classInfo, nodeContainer);
             } else {
                 classNode.setLayoutX(classInfo.getX());
                 classNode.setLayoutY(classInfo.getY());
