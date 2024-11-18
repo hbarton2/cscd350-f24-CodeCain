@@ -43,136 +43,88 @@ public class Controller {
 
     @FXML
     private void addClassBtn() {
-
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Add Class");
-        dialog.setHeaderText("Enter the name of the class to add:");
-        dialog.setContentText("Class Name:");
-
-        String className = dialog.showAndWait().orElse(null);
-        if(className == null || className.trim().isEmpty()) {
-            showAlert(AlertType.ERROR,"Error", "Invalid class name", "Class not added.");
-        } else if(UMLClass.exists(className)) {
-            showAlert(AlertType.ERROR,"Error", "Class '" + className + "' already exists.", "");
-        } else {
-                UMLClass.addClass(className);
-                ClassNode classNode = new ClassNode(UMLClass.getClassInfo(className));
-
-                // Position nodes (e.g., center as a placeholder; adjust as needed)
-                double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
-                double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
-                classNode.setLayoutX(centerX);
-                classNode.setLayoutY(centerY);
-
-                // Add click event for selection
-                classNode.setOnMouseClicked(event -> selectClassNode(classNode));
-
-                // Add the new ClassNode to the node container
-                nodeContainer.getChildren().add(classNode);
+        String className = showTextInputDialog("Add Class", "Enter the name of the class to add:", "Class Name:");
+        if (className == null || className.trim().isEmpty()) {
+            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Class not added.");
+            return;
         }
+        if (UMLClass.exists(className)) {
+            showAlert(AlertType.ERROR, "Error", "Class '" + className + "' already exists.", "");
+            return;
+        }
+
+        UMLClass.addClass(className);
+        ClassNode classNode = new ClassNode(UMLClass.getClassInfo(className));
+
+        // Position nodes (e.g., center as a placeholder; adjust as needed)
+        double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
+        double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
+        classNode.setLayoutX(centerX);
+        classNode.setLayoutY(centerY);
+
+        // Add click event for selection
+        classNode.setOnMouseClicked(event -> selectClassNode(classNode));
+
+        // Add the new ClassNode to the node container
+        nodeContainer.getChildren().add(classNode);
     }
 
     @FXML
     private void deleteClassBtn() {
-        if(currentlySelectedNode == null) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Delete Class");
-            dialog.setHeaderText("Enter the name of the class to delete:");
-            dialog.setContentText("Class Name:");
+        String className = currentlySelectedNode != null
+                ? currentlySelectedNode.getName()
+                : showTextInputDialog("Delete Class", "Enter the name of the class to delete:", "Class Name:");
 
-            String className = dialog.showAndWait().orElse(null);
-            if(className == null || className.trim().isEmpty()) {
-                showAlert(AlertType.ERROR,"Error", "Invalid class name", "Deletion canceled.");
-            } else if(!UMLClass.exists(className)) {
-                showAlert(AlertType.ERROR,"Error", "Class '" + className + "' does not exist.", "Deletion canceled.");
-            } else {
-                UMLClass.removeClass(className);
-                for(Node classNode : nodeContainer.getChildren()) {
-                    if(classNode instanceof ClassNode) {
-                        if(((ClassNode) classNode).getName().equals(className)) {
-                            nodeContainer.getChildren().remove(classNode);
-                            break;
-                        }
-                    }
-                }
-
-            }
-
-        } else {
-            for(Node classNode : nodeContainer.getChildren()) {
-                if(classNode instanceof ClassNode) {
-                    if(((ClassNode) classNode).isSelected()) {
-                        nodeContainer.getChildren().remove(classNode);
-                        UMLClass.removeClass(((ClassNode) classNode).getName());
-                        System.out.println("Storage size: " + UMLClass.classMap.size());
-                        break;
-                    }
-                }
-            }
+        if (className == null || className.trim().isEmpty()) {
+            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Deletion canceled.");
+            return;
         }
+
+        if (!UMLClass.exists(className)) {
+            showAlert(AlertType.ERROR, "Error", "Class '" + className + "' does not exist.", "Deletion canceled.");
+            return;
+        }
+
+        UMLClass.removeClass(className);
+        nodeContainer.getChildren()
+                .removeIf(node -> node instanceof ClassNode && ((ClassNode) node).getName().equals(className));
     }
 
     @FXML
     private void renameClassBtn() {
-        if(currentlySelectedNode == null) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Rename Class");
-            dialog.setHeaderText("Enter the name of the class to rename:");
-            dialog.setContentText("Class Name:");
+        String oldClassName = currentlySelectedNode != null
+                ? currentlySelectedNode.getName()
+                : showTextInputDialog("Rename Class", "Enter the name of the class to rename:", "Class Name:");
 
-            String oldClassName = dialog.showAndWait().orElse(null);
-            if(oldClassName == null || oldClassName.trim().isEmpty()) {
-                showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
-            } else if(!UMLClass.exists(oldClassName)) {
-                showAlert(AlertType.ERROR, "Error", "Class '" + oldClassName + "' does not exist.", "Rename canceled.");
-            } else {
-                dialog = new TextInputDialog();
-                dialog.setTitle("Rename Class");
-                dialog.setHeaderText("Enter the new name for the class:");
-                dialog.setContentText("New Class Name:");
-
-                String newClassName = dialog.showAndWait().orElse(null);
-                if(newClassName == null || newClassName.trim().isEmpty()) {
-                    showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
-                } else if(UMLClass.exists(newClassName)) {
-                    showAlert(AlertType.ERROR, "Error", "Class '" + newClassName + "' already exists.", "Rename canceled.");
-                } else {
-                    UMLClass.renameClass(oldClassName, newClassName);
-                    for(Node classNode : nodeContainer.getChildren()) {
-                        if(classNode instanceof ClassNode) {
-                            if(((ClassNode) classNode).getName().equals(oldClassName)) {
-                                ((ClassNode) classNode).setName(newClassName);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            for(Node classNode : nodeContainer.getChildren()) {
-                if(classNode instanceof ClassNode) {
-                    if(((ClassNode) classNode).isSelected()) {
-                        TextInputDialog dialog = new TextInputDialog();
-                        dialog.setTitle("Rename Class");
-                        dialog.setHeaderText("Enter the new name for the selected class:");
-                        dialog.setContentText("New Class Name:");
-
-                        String newClassName = dialog.showAndWait().orElse(null);
-                        if(newClassName == null || newClassName.trim().isEmpty()) {
-                            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
-                        } else if(UMLClass.exists(newClassName)) {
-                            showAlert(AlertType.ERROR, "Error", "Class '" + newClassName + "' already exists.", "Rename canceled.");
-                        } else {
-                            UMLClass.renameClass(((ClassNode) classNode).getName(), newClassName);
-                            ((ClassNode) classNode).setName(newClassName);
-                            break;
-                        }
-                    }
-                }
-            }
+        if (oldClassName == null || oldClassName.trim().isEmpty()) {
+            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
+            return;
         }
-    }
 
+        if (!UMLClass.exists(oldClassName)) {
+            showAlert(AlertType.ERROR, "Error", "Class '" + oldClassName + "' does not exist.", "Rename canceled.");
+            return;
+        }
+
+        String newClassName = showTextInputDialog("Rename Class", "Enter the new name for the class:",
+                "New Class Name:");
+
+        if (newClassName == null || newClassName.trim().isEmpty()) {
+            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
+            return;
+        }
+
+        if (UMLClass.exists(newClassName)) {
+            showAlert(AlertType.ERROR, "Error", "Class '" + newClassName + "' already exists.", "Rename canceled.");
+            return;
+        }
+
+        UMLClass.renameClass(oldClassName, newClassName);
+        nodeContainer.getChildren().stream()
+                .filter(node -> node instanceof ClassNode && ((ClassNode) node).getName().equals(oldClassName))
+                .findFirst()
+                .ifPresent(node -> ((ClassNode) node).setName(newClassName));
+    }
 
     @FXML
     private void addFieldBtn() {
@@ -211,21 +163,23 @@ public class Controller {
             String fieldType = fieldTypeField.getText().trim();
 
             if (className.isEmpty() || fieldName.isEmpty() || fieldType.isEmpty()) {
-                showAlert( AlertType.ERROR,"Error", "All fields are required", "Field not added.");
+                showAlert(AlertType.ERROR, "Error", "All fields are required", "Field not added.");
                 return;
             }
 
             UMLClassInfo classInfo = UMLClass.getClassInfo(className);
             if (classInfo == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Class not found",
+                        "Class '" + className + "' does not exist.");
                 return;
             }
 
             // Check if field already exists in the class
             if (classInfo.getFields().stream()
-                .anyMatch(f -> f.getFieldName().equals(fieldName) && f.getFieldType().equals(fieldType))) {
+                    .anyMatch(f -> f.getFieldName().equals(fieldName) && f.getFieldType().equals(fieldType))) {
                 showAlert(Alert.AlertType.WARNING, "Duplicate Field", "Field already exists",
-                "A field with name '" + fieldName + "' and type '" + fieldType + "' already exists in the class.");
+                        "A field with name '" + fieldName + "' and type '" + fieldType
+                                + "' already exists in the class.");
                 return;
             }
 
@@ -246,7 +200,6 @@ public class Controller {
             }
         }
     }
-
 
     @FXML
     private void deleteFieldBtn() {
@@ -302,10 +255,6 @@ public class Controller {
             }
         }
     }
-
-
-
-
 
     @FXML
     private void renameFieldBtn() {
@@ -365,17 +314,14 @@ public class Controller {
             if (renamed) {
                 targetClassNode.syncWithUMLClassInfo(); // Sync changes with backend
                 showAlert(Alert.AlertType.INFORMATION, "Field Renamed", "Success",
-                        "The field '" + oldFieldName + "' was renamed to '" + newFieldName + "' with type '" + newFieldType + "'.");
+                        "The field '" + oldFieldName + "' was renamed to '" + newFieldName + "' with type '"
+                                + newFieldType + "'.");
             } else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Rename Failed",
                         "The field '" + oldFieldName + "' could not be renamed. Ensure it exists in the class.");
             }
         }
     }
-
-
-
-
 
     @FXML
     private void addMethodBtn() {
@@ -425,9 +371,10 @@ public class Controller {
             List<UMLParameterInfo> parameters = parseParameters(parametersInput);
 
             UMLMethods methodManager = new UMLMethods();
-            if (classInfo.getMethods().stream().anyMatch(m -> m.getMethodName().equals(methodName) && m.getParameters().equals(parameters))) {
+            if (classInfo.getMethods().stream()
+                    .anyMatch(m -> m.getMethodName().equals(methodName) && m.getParameters().equals(parameters))) {
                 showAlert(AlertType.WARNING, "Duplicate Method", "Method already exists",
-                    "A method with name '" + methodName + "' and the same parameters already exists in the class.");
+                        "A method with name '" + methodName + "' and the same parameters already exists in the class.");
                 return;
             }
 
@@ -476,7 +423,8 @@ public class Controller {
             String methodName = methodNameField.getText().trim();
 
             if (className.isEmpty() || methodName.isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input", "Both class name and method name are required.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Invalid Input",
+                        "Both class name and method name are required.");
                 return;
             }
 
@@ -505,8 +453,6 @@ public class Controller {
             }
         }
     }
-
-
 
     @FXML
     private void renameMethodBtn() {
@@ -627,13 +573,15 @@ public class Controller {
 
             UMLClassInfo classInfo = UMLClass.getClassInfo(className);
             if (classInfo == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Class not found",
+                        "Class '" + className + "' does not exist.");
                 return;
             }
 
             UMLMethodInfo methodInfo = classInfo.getMethodByName(methodName);
             if (methodInfo == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Method not found", "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Method not found",
+                        "Method '" + methodName + "' does not exist in class '" + className + "'.");
                 return;
             }
 
@@ -641,7 +589,8 @@ public class Controller {
             UMLParameterInfo newParameter = new UMLParameterInfo(parameterType, parameterName);
             if (methodInfo.getParameters().contains(newParameter)) {
                 showAlert(Alert.AlertType.WARNING, "Duplicate Parameter", "Parameter already exists",
-                        "A parameter with type '" + parameterType + "' and name '" + parameterName + "' already exists in the method.");
+                        "A parameter with type '" + parameterType + "' and name '" + parameterName
+                                + "' already exists in the method.");
                 return;
             }
 
@@ -656,14 +605,14 @@ public class Controller {
                     if (classNode.getName().equals(className)) {
                         classNode.updateMethod(methodInfo); // Update the specific method in the UI
                         showAlert(Alert.AlertType.INFORMATION, "Success", "Parameter Added",
-                                "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '" + className + "'.");
+                                "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '"
+                                        + className + "'.");
                         break;
                     }
                 }
             }
         }
     }
-
 
     @FXML
     private void deleteParameterBtn() {
@@ -708,13 +657,15 @@ public class Controller {
 
             UMLClassInfo classInfo = UMLClass.getClassInfo(className);
             if (classInfo == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Class not found",
+                        "Class '" + className + "' does not exist.");
                 return;
             }
 
             UMLMethodInfo methodInfo = classInfo.getMethodByName(methodName);
             if (methodInfo == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Method not found", "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Method not found",
+                        "Method '" + methodName + "' does not exist in class '" + className + "'.");
                 return;
             }
 
@@ -729,13 +680,15 @@ public class Controller {
                     if (classNode.getName().equals(className)) {
                         classNode.updateMethod(methodInfo); // Update the method in the GUI
                         showAlert(Alert.AlertType.INFORMATION, "Success", "Parameter Deleted",
-                                "Parameter '" + parameterName + "' deleted from method '" + methodName + "' in class '" + className + "'.");
+                                "Parameter '" + parameterName + "' deleted from method '" + methodName + "' in class '"
+                                        + className + "'.");
                         return;
                     }
                 }
             }
 
-            showAlert(Alert.AlertType.ERROR, "Error", "GUI Update Failed", "Parameter was deleted from the backend but the GUI could not be updated.");
+            showAlert(Alert.AlertType.ERROR, "Error", "GUI Update Failed",
+                    "Parameter was deleted from the backend but the GUI could not be updated.");
         }
     }
 
@@ -793,18 +746,21 @@ public class Controller {
 
             UMLClassInfo classInfo = UMLClass.getClassInfo(className);
             if (classInfo == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Class not found", "Class '" + className + "' does not exist.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Class not found",
+                        "Class '" + className + "' does not exist.");
                 return;
             }
 
             UMLMethodInfo methodInfo = classInfo.getMethodByName(methodName);
             if (methodInfo == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Method not found", "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Method not found",
+                        "Method '" + methodName + "' does not exist in class '" + className + "'.");
                 return;
             }
 
             UMLMethods methodManager = new UMLMethods();
-            methodManager.changeSingleParameter(className, methodName, oldParameterName, newParameterType, newParameterName);
+            methodManager.changeSingleParameter(className, methodName, oldParameterName, newParameterType,
+                    newParameterName);
 
             // Update the UI
             for (Node node : nodeContainer.getChildren()) {
@@ -813,7 +769,8 @@ public class Controller {
                     if (classNode.getName().equals(className)) {
                         classNode.updateMethod(methodInfo); // Update the specific method in the UI
                         showAlert(Alert.AlertType.INFORMATION, "Success", "Parameter Changed",
-                                "Parameter '" + oldParameterName + "' updated to '" + newParameterName + "' with type '" + newParameterType +
+                                "Parameter '" + oldParameterName + "' updated to '" + newParameterName + "' with type '"
+                                        + newParameterType +
                                         "' in method '" + methodName + "' of class '" + className + "'.");
                         return;
                     }
@@ -871,7 +828,8 @@ public class Controller {
 
             UMLMethodInfo methodInfo = classInfo.getMethodByName(methodName);
             if (methodInfo == null) {
-                showAlert(AlertType.ERROR, "Error", "Method not found", "Method '" + methodName + "' does not exist in class '" + className + "'.");
+                showAlert(AlertType.ERROR, "Error", "Method not found",
+                        "Method '" + methodName + "' does not exist in class '" + className + "'.");
                 return;
             }
 
@@ -888,16 +846,14 @@ public class Controller {
                         methodInfo.getParameters().addAll(newParameters);
                         classNode.updateMethod(methodInfo); // Update the specific method in the UI
                         showAlert(AlertType.INFORMATION, "Success", "Parameters Changed",
-                                "All parameters replaced for method '" + methodName + "' in class '" + className + "'.");
+                                "All parameters replaced for method '" + methodName + "' in class '" + className
+                                        + "'.");
                         break;
                     }
                 }
             }
         }
     }
-
-
-
 
     @FXML
     private void saveBtn() throws IOException {
@@ -914,14 +870,14 @@ public class Controller {
 
         // Set filter for JSON files
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
-        
+
         // Set the initial directory to the current working directory
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
 
         Window window = nodeContainer.getScene().getWindow();
 
         File file = fileChooser.showSaveDialog(window);
-        if(file != null) {
+        if (file != null) {
             SaveManager.saveToJSON(file.getAbsolutePath());
         }
     }
@@ -942,7 +898,7 @@ public class Controller {
         Window window = nodeContainer.getScene().getWindow();
 
         File file = fileChooser.showOpenDialog(window);
-        if(file != null) {
+        if (file != null) {
             SaveManager.loadFromJSON(file.getAbsolutePath());
             populateGUIFromClassMap();
         }
@@ -961,8 +917,6 @@ public class Controller {
         System.out.println("GUI populated from class map.");
     }
 
-
-
     private void selectClassNode(ClassNode classNode) {
         // Deselect the previously selected node, if any
         if (currentlySelectedNode != null) {
@@ -975,25 +929,25 @@ public class Controller {
     }
 
     private List<UMLParameterInfo> parseParameters(String parametersInput) {
-    List<UMLParameterInfo> parameters = new ArrayList<>();
-    if (parametersInput.isEmpty()) {
-        return parameters; // No parameters to add
-    }
-
-    // Split parameters by comma and process each
-    String[] paramParts = parametersInput.split(",");
-    for (String part : paramParts) {
-        String[] typeAndName = part.trim().split(" ");
-        if (typeAndName.length == 2) {
-            String type = typeAndName[0].trim();
-            String name = typeAndName[1].trim();
-            parameters.add(new UMLParameterInfo(type, name));
-        } else {
-            System.out.println("Invalid parameter format: " + part);
+        List<UMLParameterInfo> parameters = new ArrayList<>();
+        if (parametersInput.isEmpty()) {
+            return parameters; // No parameters to add
         }
+
+        // Split parameters by comma and process each
+        String[] paramParts = parametersInput.split(",");
+        for (String part : paramParts) {
+            String[] typeAndName = part.trim().split(" ");
+            if (typeAndName.length == 2) {
+                String type = typeAndName[0].trim();
+                String name = typeAndName[1].trim();
+                parameters.add(new UMLParameterInfo(type, name));
+            } else {
+                System.out.println("Invalid parameter format: " + part);
+            }
+        }
+        return parameters;
     }
-    return parameters;
-}
 
     private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
         Alert alert = new Alert(alertType);
@@ -1001,6 +955,16 @@ public class Controller {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private String showTextInputDialog(String title, String header, String content) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+        dialog.setContentText(content);
+
+        // Return the user's input, or null if canceled
+        return dialog.showAndWait().orElse(null);
     }
 
 }
