@@ -5,6 +5,7 @@ import codecain.BackendCode.UndoRedo.StateManager;
 import javafx.scene.control.TextArea;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Manages and executes user commands for UML diagram operations.
@@ -209,9 +210,6 @@ public class CommandManager {
         fields.addField(className, fieldType, fieldName);
         return DisplayHelper.fieldAdded(fieldName, fieldType, className);
     }
-
-
-
     /**
      * Adds a method to a specified UML class.
      *
@@ -219,14 +217,38 @@ public class CommandManager {
      * @return message confirming or denying the addition of the method
      */
     private String handleAddMethod(String[] tokens) {
-        stateManager.saveState();
-        String errorMessage = checkClassExists(tokens[2]);
+        if (tokens.length < 4) {
+            return "Usage: add method <className> <methodName> [<parameterType> <parameterName>]. Type 'help' for more info.";
+        }
+
+        String className = tokens[2];
+        String methodName = tokens[3];
+
+        // Validate if the class exists
+        String errorMessage = checkClassExists(className);
         if (errorMessage != null) {
             return errorMessage;
         }
+
+        List<UMLParameterInfo> parameters = new ArrayList<>();
+
+        // Ensure parameters are provided in pairs
+        if (tokens.length > 4) {
+            if ((tokens.length - 4) % 2 != 0) {
+                return "Invalid number of parameters. Parameters must be provided in <parameterType> <parameterName> pairs.";
+            }
+
+            for (int i = 4; i < tokens.length; i += 2) {
+                String parameterType = tokens[i];
+                String parameterName = tokens[i + 1];
+                parameters.add(new UMLParameterInfo(parameterType, parameterName));
+            }
+        }
+
         UMLMethods methods = new UMLMethods();
-        methods.addMethod(tokens[2], tokens[3], List.of(new UMLParameterInfo(tokens[4], tokens[5])));
-        return DisplayHelper.methodAdded(tokens[3], tokens[2]);
+        methods.addMethod(className, methodName, parameters);
+
+        return DisplayHelper.methodAdded(methodName, className);
     }
 
     /**
@@ -323,24 +345,6 @@ public class CommandManager {
      *
      * @param tokens command parts specifying class and method name
      * @return message confirming or denying the deletion of the method
-     */
-    private String handleDeleteMethod(String[] tokens) {
-        stateManager.saveState();
-        String errorMessage = checkClassExists(tokens[2]);
-        if (errorMessage != null) {
-            return errorMessage;
-        }
-
-        UMLMethods methods = new UMLMethods();
-        methods.removeMethod(tokens[2], tokens[3]);
-        return DisplayHelper.methodRemoved(tokens[3], tokens[2]);
-    }
-
-    /**
-     * Deletes a parameter from a specified method of a class.
-     *
-     * @param tokens command parts specifying class, method, and parameter name
-     * @return message confirming or denying the deletion of the parameter
      */
     private String handleDeleteParameter(String[] tokens) {
         stateManager.saveState();
@@ -552,5 +556,54 @@ public class CommandManager {
         }
         return classInfo;
     }
+    private String handleDeleteMethod(String[] tokens) {
+        if (tokens.length < 3) {
+            return "Usage: delete method <className> <methodName>";
+        }
 
+        String className = tokens[2];
+        String methodName = tokens[3];
+
+        String errorMessage = checkClassExists(className);
+        if (errorMessage != null) {
+            return errorMessage;
+        }
+
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) {
+            return "Class '" + className + "' not found.";
+        }
+
+        var matchingMethods = classInfo.getMethods().stream()
+                .filter(method -> method.getMethodName().equals(methodName))
+                .toList();
+
+        if (matchingMethods.isEmpty()) {
+            return "No method named '" + methodName + "' found in class '" + className + "'.";
+        } else if (matchingMethods.size() == 1) {
+            classInfo.getMethods().remove(matchingMethods.get(0));
+            return "Method '" + methodName + "' removed from class '" + className + "'.";
+        } else {
+            StringBuilder prompt = new StringBuilder("Multiple methods named '" + methodName + "' found. Please choose which one to delete:\n");
+            for (int i = 0; i < matchingMethods.size(); i++) {
+                prompt.append((i + 1)).append(": ").append(matchingMethods.get(i)).append("\n");
+            }
+
+            CLIView.promptForInput(prompt.toString() + "Enter the number:", userInput -> {
+                try {
+                    int choice = Integer.parseInt(userInput);
+                    if (choice > 0 && choice <= matchingMethods.size()) {
+                        classInfo.getMethods().remove(matchingMethods.get(choice - 1));
+                        CLIView.getCommandOutput().appendText("Method '" + methodName + "' (option " + choice + ") removed from class '" + className + "'.\n");
+                    } else {
+                        CLIView.getCommandOutput().appendText("Invalid choice. No method removed.\n");
+                    }
+                } catch (NumberFormatException e) {
+                    CLIView.getCommandOutput().appendText("Invalid input. Please enter a valid number.\n");
+                }
+            });
+
+            return ""; // Empty string to prevent immediate output
+        }
+    }
 }

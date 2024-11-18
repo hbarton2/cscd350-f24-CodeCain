@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * View component for the UML Editor Command Line Interface.
@@ -19,12 +20,12 @@ public class CLIView {
     /**
      * TextArea for displaying command output to the user.
      */
-    private final TextArea commandOutput;
+    private static  TextArea commandOutput;
 
     /**
      * TextField for accepting command input from the user.
      */
-    private final TextField commandInput;
+    private static  TextField commandInput;
 
     /**
      * Controller associated with this view, which handles command processing and logic.
@@ -40,6 +41,23 @@ public class CLIView {
      * Tracks the current index of autocomplete suggestions, allowing for cycling through suggestions.
      */
     private int suggestionIndex = -1;
+
+    /**
+     * Prompts the user for input with a message and passes the input to the provided callback.
+     *
+     * @param prompt the message to display to the user
+     * @param callback a callback function to handle the user's input
+     */
+    public static void promptForInput(String prompt, Consumer<String> callback) {
+        commandOutput.appendText(prompt + "\n");
+        commandInput.setOnAction(event -> {
+            String userInput = commandInput.getText().trim();
+            commandInput.clear();
+            commandInput.setOnAction(null);  // Remove this handler after input
+            callback.accept(userInput);
+        });
+    }
+
 
     /**
      * Constructs the CLIView and sets up the GUI components.
@@ -138,7 +156,7 @@ public class CLIView {
      *
      * @return the command output TextArea.
      */
-    public TextArea getCommandOutput() {
+    public static TextArea getCommandOutput() {
         return commandOutput;
     }
 
