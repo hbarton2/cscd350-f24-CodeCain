@@ -1,10 +1,10 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import codecain.UMLClass;
-import codecain.UMLClassInfo;
+import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.UMLClassInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import codecain.Relationship;
+import codecain.BackendCode.Model.Relationship;
 import org.junit.jupiter.api.AfterEach;
 import java.util.ArrayList;
 
