@@ -17,30 +17,15 @@ import javafx.scene.layout.Pane;
 
 public class FieldManager {
 	public static void addField(Pane nodeContainer) {
-		Dialog<ButtonType> dialog = new Dialog<>();
-		dialog.setTitle("Add Field");
-		dialog.setHeaderText("Enter the class name, field name, and field type:");
-
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		TextField classNameField = new TextField();
-		classNameField.setPromptText("Class Name");
-		TextField fieldNameField = new TextField();
-		fieldNameField.setPromptText("Field Name");
-		TextField fieldTypeField = new TextField();
-		fieldTypeField.setPromptText("Field Type");
+		TextField classNameField = addTextField(grid, "Class Name", 0);
+		TextField fieldNameField = addTextField(grid, "Field Name", 1);
+		TextField fieldTypeField = addTextField(grid, "Field Type", 2);
 
-		grid.add(new Label("Class Name:"), 0, 0);
-		grid.add(classNameField, 1, 0);
-		grid.add(new Label("Field Name:"), 0, 1);
-		grid.add(fieldNameField, 1, 1);
-		grid.add(new Label("Field Type:"), 0, 2);
-		grid.add(fieldTypeField, 1, 2);
-
-		dialog.getDialogPane().setContent(grid);
-		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		Dialog<ButtonType> dialog = createDialog("Add Field", "Enter the class name, field name, and field type:", grid);
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -85,26 +70,14 @@ public class FieldManager {
 	}
 
 	public static void deleteField(Pane nodeContainer) {
-		Dialog<ButtonType> dialog = new Dialog<>();
-		dialog.setTitle("Delete Field");
-		dialog.setHeaderText("Enter the class name and field name to delete:");
-
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		TextField classNameField = new TextField();
-		classNameField.setPromptText("Class Name");
-		TextField fieldNameField = new TextField();
-		fieldNameField.setPromptText("Field Name");
+		TextField classNameField = addTextField(grid, "Class Name", 0);
+		TextField fieldNameField = addTextField(grid, "Field Name", 1);
 
-		grid.add(new Label("Class Name:"), 0, 0);
-		grid.add(classNameField, 1, 0);
-		grid.add(new Label("Field Name:"), 0, 1);
-		grid.add(fieldNameField, 1, 1);
-
-		dialog.getDialogPane().setContent(grid);
-		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		Dialog<ButtonType> dialog = createDialog("Delete Field", "Enter the class name and field name to delete:", grid);
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -139,34 +112,17 @@ public class FieldManager {
 	}
 
 	public static void renameField(Pane nodeContainer) {
-		Dialog<ButtonType> dialog = new Dialog<>();
-		dialog.setTitle("Rename Field");
-		dialog.setHeaderText("Enter the class name, current field name, new field name, and new field type:");
-
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		TextField classNameField = new TextField();
-		classNameField.setPromptText("Class Name");
-		TextField oldFieldNameField = new TextField();
-		oldFieldNameField.setPromptText("Current Field Name");
-		TextField newFieldNameField = new TextField();
-		newFieldNameField.setPromptText("New Field Name");
-		TextField newFieldTypeField = new TextField();
-		newFieldTypeField.setPromptText("New Field Type");
+		TextField classNameField = addTextField(grid, "Class Name", 0);
+		TextField oldFieldNameField = addTextField(grid, "Current Field Name", 1);
+		TextField newFieldNameField = addTextField(grid, "New Field Name", 2);
+		TextField newFieldTypeField = addTextField(grid, "New Field Type", 3);
 
-		grid.add(new Label("Class Name:"), 0, 0);
-		grid.add(classNameField, 1, 0);
-		grid.add(new Label("Current Field Name:"), 0, 1);
-		grid.add(oldFieldNameField, 1, 1);
-		grid.add(new Label("New Field Name:"), 0, 2);
-		grid.add(newFieldNameField, 1, 2);
-		grid.add(new Label("New Field Type:"), 0, 3);
-		grid.add(newFieldTypeField, 1, 3);
-
-		dialog.getDialogPane().setContent(grid);
-		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		Dialog<ButtonType> dialog = createDialog("Rename Field",
+				"Enter the class name, current field name, new field name, and new field type:", grid);
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -207,5 +163,24 @@ public class FieldManager {
 						"The field '" + oldFieldName + "' could not be renamed. Ensure it exists in the class.");
 			}
 		}
+	}
+
+	// Reusable method to create a dialog with a grid
+	private static Dialog<ButtonType> createDialog(String title, String headerText, GridPane grid) {
+		Dialog<ButtonType> dialog = new Dialog<>();
+		dialog.setTitle(title);
+		dialog.setHeaderText(headerText);
+		dialog.getDialogPane().setContent(grid);
+		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		return dialog;
+	}
+
+	// Reusable method to create a labeled TextField and add it to the grid
+	private static TextField addTextField(GridPane grid, String label, int row) {
+		TextField textField = new TextField();
+		textField.setPromptText(label);
+		grid.add(new Label(label + ":"), 0, row);
+		grid.add(textField, 1, row);
+		return textField;
 	}
 }
