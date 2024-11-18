@@ -1,8 +1,7 @@
 package codecain.CommandLineInterface;
 
 import codecain.BackendCode.*;
-import codecain.RelationshipType;
-import javax.swing.*;
+import codecain.BackendCode.UndoRedo.StateManager;
 import javafx.scene.control.TextArea;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +13,7 @@ public class CommandManager {
 
     private TextArea commandOutput;
     private FileOperations fileOperations;
+    private final StateManager stateManager; // Centralized StateManager for undo/redo
 
     /**
      * Initializes a new instance of the CommandManager with the specified JTextArea for command output.
@@ -23,7 +23,7 @@ public class CommandManager {
     public CommandManager(TextArea commandOutput) {
         this.commandOutput = commandOutput;
         this.fileOperations = new FileOperations();
-    }
+        this.stateManager = new StateManager();    }
 
     /**
      * Appends text to the command output TextArea.
@@ -47,18 +47,20 @@ public class CommandManager {
         }
 
         String commandName = tokens[0].toLowerCase();
-        String result;
+        String result = "";
         switch (commandName) {
             case "help" -> {
                 result = DisplayHelper.showHelp();
-                int helpStartPosition = commandOutput.getLength(); 
+                int helpStartPosition = commandOutput.getLength();
                 commandOutput.appendText(">> " + command + "\n" + result + "\n");
-                commandOutput.positionCaret(helpStartPosition); 
+                commandOutput.positionCaret(helpStartPosition);
                 return;
             }
             case "add", "delete", "rename", "list" -> result = handleCommand(tokens);
             case "save" -> result = fileOperations.saveDiagram(getFileName(tokens));
             case "load" -> result = fileOperations.loadDiagram(getFileName(tokens));
+            case "undo" -> undo();
+            case "redo" -> redo();
             case "exit" -> {
                 System.exit(0);
                 return;
@@ -70,6 +72,30 @@ public class CommandManager {
             appendToOutput( "\n" + result + "\n");
         }
     }
+
+    /**
+     * Undo the last action.
+     */
+    private void undo() {
+        if (stateManager.undo()) {
+            appendToOutput("Undo successful.\n");
+        } else {
+            appendToOutput("No actions to undo.\n");
+        }
+    }
+
+    /**
+     * Redo the last undone action.
+     */
+    private void redo() {
+        if (stateManager.redo()) {
+            appendToOutput("Redo successful.\n");
+        } else {
+            appendToOutput("No actions to redo.\n");
+        }
+    }
+
+
 
 
     /**
@@ -122,6 +148,7 @@ public class CommandManager {
      * @return message confirming the addition of the class or notifying if it already exists
      */
     private String handleAddClass(String className) {
+        stateManager.saveState();
         if (UMLClass.exists(className)) {
             return DisplayHelper.classAlreadyExists(className);
         }
@@ -137,8 +164,9 @@ public class CommandManager {
      * @param tokens command parts specifying the classes involved in the relationship
      * @return message confirming or denying the addition of the relationship
      */
-    private String handleAddRelationship(String[] tokens) {
-        if (tokens.length < 5) {
+    private String handleAddRelationship(String[] tokens) {        
+        stateManager.saveState();
+        if (tokens.length < 4) {
             return "Usage: add relationship <class1> <class2>";
         }
         
@@ -160,6 +188,7 @@ public class CommandManager {
      * @return message confirming or denying the addition of the field
      */
     private String handleAddField(String[] tokens) {
+        stateManager.saveState();
         if (tokens.length < 5) {
             return "Usage: add field <className> <fieldType> <fieldName>";
         }
@@ -191,6 +220,7 @@ public class CommandManager {
      * @return message confirming or denying the addition of the method
      */
     private String handleAddMethod(String[] tokens) {
+        stateManager.saveState();
         String errorMessage = checkClassExists(tokens[2]);
         if (errorMessage != null) {
             return errorMessage;
@@ -207,6 +237,7 @@ public class CommandManager {
      * @return message confirming or denying the addition of the parameter
      */
     private String handleAddParameter(String[] tokens) {
+        stateManager.saveState();
         String errorMessage = checkClassExists(tokens[2]);
         if (errorMessage != null) {
             return errorMessage;
@@ -245,6 +276,7 @@ public class CommandManager {
      * @return message confirming the deletion of the class
      */
     private String handleDeleteClass(String className) {
+        stateManager.saveState();
         UMLClass.removeClass(className);
         Relationship.removeAttachedRelationships(className);
         return DisplayHelper.classRemoved(className);
@@ -257,6 +289,7 @@ public class CommandManager {
      * @return message confirming or denying the deletion of the relationship
      */
     private String handleDeleteRelationship(String[] tokens) {
+        stateManager.saveState();
         if (tokens.length < 4) {
             return "Usage: delete relationship <class1> <class2>";
         }
@@ -275,6 +308,7 @@ public class CommandManager {
      * @return message confirming or denying the deletion of the field
      */
     private String handleDeleteField(String[] tokens) {
+        stateManager.saveState();
         String errorMessage = checkClassExists(tokens[2]);
         if (errorMessage != null) {
             return errorMessage;
@@ -292,6 +326,7 @@ public class CommandManager {
      * @return message confirming or denying the deletion of the method
      */
     private String handleDeleteMethod(String[] tokens) {
+        stateManager.saveState();
         String errorMessage = checkClassExists(tokens[2]);
         if (errorMessage != null) {
             return errorMessage;
@@ -309,6 +344,7 @@ public class CommandManager {
      * @return message confirming or denying the deletion of the parameter
      */
     private String handleDeleteParameter(String[] tokens) {
+        stateManager.saveState();
         String errorMessage = checkClassExists(tokens[2]);
         if (errorMessage != null) {
             return errorMessage;
@@ -349,6 +385,7 @@ public class CommandManager {
      * @return message confirming the renaming of the class
      */
     private String handleRenameClass(String oldName, String newName) {
+        stateManager.saveState();
         UMLClass.renameClass(oldName, newName);
         return DisplayHelper.classRenamed(oldName, newName);
     }
@@ -360,6 +397,7 @@ public class CommandManager {
      * @return message confirming the renaming of the field, or an error message if the class does not exist
      */
     private String handleRenameField(String[] tokens) {
+        stateManager.saveState();
         String errorMessage = checkClassExists(tokens[2]);
         if (errorMessage != null) {
             return errorMessage;
@@ -377,6 +415,7 @@ public class CommandManager {
      * @return message confirming the renaming of the method, or an error message if the class does not exist
      */
     private String handleRenameMethod(String[] tokens) {
+        stateManager.saveState();
         String errorMessage = checkClassExists(tokens[2]);
         if (errorMessage != null) {
             return errorMessage;
@@ -395,6 +434,7 @@ public class CommandManager {
      * @return message confirming the renaming of the parameter, or an error message if the class does not exist
      */
     private String handleRenameParameter(String[] tokens) {
+        stateManager.saveState();
         if (tokens.length < 6) {
             return "Usage: rename parameter <className> <methodName> <oldParameterName> <newParameterType> <newParameterName>";
         }
@@ -416,6 +456,7 @@ public class CommandManager {
      * @return message confirming the parameter changes, or an error message if the class does not exist
      */
     private String handleChangeAllParameters(String[] tokens) {
+        stateManager.saveState();
         if (tokens.length < 5) {
             return "Usage: change parameters <className> <methodName> <parameterType1> <parameterName1> ...";
         }

@@ -1,0 +1,32 @@
+Design Patterns
+
+Composite Pattern
+
+UMLClassInfo.java
+Lines: 20, 25
+UMLMethodsInfo.java
+Line: 20
+
+Singleton Pattern
+
+UMLClass.java
+Line: 17
+Relationship.java
+Line: 18
+
+
+Facade Pattern
+
+SaveManager.java
+Lines: 30-37, 39-53
+StateManager.java
+All Lines
+CommandManager.java
+All Lines
+FileOperations
+Lines: 16, 34
+
+Memento Pattern
+
+Memento.java, Caretaker.java, StateManager.java
+All Lines
