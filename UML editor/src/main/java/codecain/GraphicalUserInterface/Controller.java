@@ -14,12 +14,12 @@ import java.io.IOException;
 
 /**
  * Controller class for managing user interactions with the UML editor GUI.
- * This class handles user actions, such as adding, deleting, renaming classes, fields, methods, and parameters,
+ * This class handles user actions, such as adding, deleting, renaming classes,
+ * fields, methods, and parameters,
  * as well as saving and loading UML diagrams.
  */
 public class Controller {
 
-    
     /**
      * The currently selected ClassNode in the GUI.
      * This is used to track which class node is being interacted with.
@@ -36,10 +36,33 @@ public class Controller {
 
     /**
      * The container for the graphical nodes representing UML elements.
-     * This pane is used to add and manage visual representations of UML classes, fields, and relationships.
+     * This pane is used to add and manage visual representations of UML classes,
+     * fields, and relationships.
      */
     @FXML
     private Pane nodeContainer;
+
+    /**
+     * Initializes the controller after the FXML file has been loaded.
+     * <p>
+     * Sets up event handlers for the GUI, including:
+     * - Handling clicks on the {@code nodeContainer} to deselect the currently
+     * selected {@code ClassNode}.
+     * - Ensuring proper interactions between the UI and the backend.
+     * </p>
+     */
+    @FXML
+    public void initialize() {
+        // Handle clicks on empty space in nodeContainer to deselect the selected node
+        nodeContainer.setOnMouseClicked(event -> {
+            // Check if the click was directly on the nodeContainer (empty space) and a node
+            // is currently selected
+            if (event.getTarget() == nodeContainer && currentlySelectedNode != null) {
+                currentlySelectedNode.deselect(); // Deselect the currently selected node
+                currentlySelectedNode = null; // Reset the currently selected node
+            }
+        });
+    }
 
     /**
      * Handles the action of adding a new class to the diagram.
@@ -54,7 +77,8 @@ public class Controller {
     }
 
     /**
-     * Handles the action of deleting the selected class or a specified class from the diagram.
+     * Handles the action of deleting the selected class or a specified class from
+     * the diagram.
      */
     @FXML
     private void deleteClassBtn() {
@@ -74,7 +98,8 @@ public class Controller {
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Rename Class", "Enter the name of the class to rename:", "Class Name:");
 
-        String newClassName = showTextInputDialog("Rename Class", "Enter the new name for the class:", "New Class Name:");
+        String newClassName = showTextInputDialog("Rename Class", "Enter the new name for the class:",
+                "New Class Name:");
 
         ClassManager.renameClass(oldClassName, newClassName, nodeContainer);
     }
@@ -208,7 +233,8 @@ public class Controller {
 
     /**
      * Populates the GUI with data from the backend UML class map.
-     * Clears the existing nodes in the GUI and repopulates them based on the backend state.
+     * Clears the existing nodes in the GUI and repopulates them based on the
+     * backend state.
      */
     public void populateGUIFromClassMap() {
         nodeContainer.getChildren().clear();
