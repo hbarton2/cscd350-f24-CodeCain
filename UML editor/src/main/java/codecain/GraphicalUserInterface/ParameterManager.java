@@ -19,7 +19,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+/**
+ * The {@code ParameterManager} class provides methods for managing parameters
+ * in UML methods. It allows adding, deleting, changing, and replacing
+ * parameters
+ * through both the backend and GUI of the UML editor.
+ */
 public class ParameterManager {
+
+	/**
+	 * Adds a new parameter to a method in a specified UML class.
+	 * <p>
+	 * Displays a dialog to gather the class name, method name, parameter type, and
+	 * parameter name.
+	 * Validates the input and updates both the backend and GUI accordingly.
+	 *
+	 * @param nodeContainer The container holding the class nodes in the GUI.
+	 */
 	public static void addParameter(Pane nodeContainer) {
 		// Dialog to gather class name, method name, parameter type, and parameter name
 		Dialog<ButtonType> dialog = new Dialog<>();
@@ -110,6 +126,14 @@ public class ParameterManager {
 		}
 	}
 
+	/**
+	 * Deletes a parameter from a method in a specified UML class.
+	 * <p>
+	 * Displays a dialog to gather the class name, method name, and parameter name.
+	 * Validates the input and updates both the backend and GUI accordingly.
+	 *
+	 * @param nodeContainer The container holding the class nodes in the GUI.
+	 */
 	public static void deleteParameter(Pane nodeContainer) {
 		// Dialog to gather class name, method name, and parameter name
 		Dialog<ButtonType> dialog = new Dialog<>();
@@ -276,6 +300,17 @@ public class ParameterManager {
 		}
 	}
 
+	/**
+	 * Replaces all parameters in a method of a specified UML class.
+	 * <p>
+	 * Displays a dialog to gather the class name, method name, and new parameters.
+	 * The new parameters should be provided as a comma-separated string in the
+	 * format
+	 * "type name". Validates the input and updates both the backend and GUI
+	 * accordingly.
+	 *
+	 * @param nodeContainer The container holding the class nodes in the GUI.
+	 */
 	public static void changeAllParameters(Pane nodeContainer) {
 		Dialog<ButtonType> dialog = new Dialog<>();
 		dialog.setTitle("Change All Parameters");
@@ -349,6 +384,15 @@ public class ParameterManager {
 		}
 	}
 
+	/**
+	 * Parses a string of parameters into a list of {@code UMLParameterInfo}.
+	 * <p>
+	 * The input should be a comma-separated string of parameters in the format
+	 * "type name".
+	 *
+	 * @param parametersInput The input string of parameters.
+	 * @return A list of parsed {@code UMLParameterInfo} objects.
+	 */
 	private static List<UMLParameterInfo> parseParameters(String parametersInput) {
 		List<UMLParameterInfo> parameters = new ArrayList<>();
 		if (parametersInput.isEmpty()) {
