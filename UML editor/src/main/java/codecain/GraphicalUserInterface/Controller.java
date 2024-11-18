@@ -44,29 +44,10 @@ public class Controller {
     @FXML
     private void addClassBtn() {
         String className = showTextInputDialog("Add Class", "Enter the name of the class to add:", "Class Name:");
-        if (className == null || className.trim().isEmpty()) {
-            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Class not added.");
-            return;
+        ClassNode classNode = ClassManager.addClass(className, nodeContainer);
+        if (classNode != null) {
+            classNode.setOnMouseClicked(event -> selectClassNode(classNode));
         }
-        if (UMLClass.exists(className)) {
-            showAlert(AlertType.ERROR, "Error", "Class '" + className + "' already exists.", "");
-            return;
-        }
-
-        UMLClass.addClass(className);
-        ClassNode classNode = new ClassNode(UMLClass.getClassInfo(className));
-
-        // Position nodes (e.g., center as a placeholder; adjust as needed)
-        double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
-        double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
-        classNode.setLayoutX(centerX);
-        classNode.setLayoutY(centerY);
-
-        // Add click event for selection
-        classNode.setOnMouseClicked(event -> selectClassNode(classNode));
-
-        // Add the new ClassNode to the node container
-        nodeContainer.getChildren().add(classNode);
     }
     
     
@@ -77,19 +58,8 @@ public class Controller {
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Delete Class", "Enter the name of the class to delete:", "Class Name:");
 
-        if (className == null || className.trim().isEmpty()) {
-            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Deletion canceled.");
-            return;
-        }
-
-        if (!UMLClass.exists(className)) {
-            showAlert(AlertType.ERROR, "Error", "Class '" + className + "' does not exist.", "Deletion canceled.");
-            return;
-        }
-
-        UMLClass.removeClass(className);
-        nodeContainer.getChildren()
-                .removeIf(node -> node instanceof ClassNode && ((ClassNode) node).getName().equals(className));
+        ClassManager.removeClass(className, nodeContainer);
+        
     }
 
     @FXML
@@ -98,34 +68,10 @@ public class Controller {
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Rename Class", "Enter the name of the class to rename:", "Class Name:");
 
-        if (oldClassName == null || oldClassName.trim().isEmpty()) {
-            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
-            return;
-        }
-
-        if (!UMLClass.exists(oldClassName)) {
-            showAlert(AlertType.ERROR, "Error", "Class '" + oldClassName + "' does not exist.", "Rename canceled.");
-            return;
-        }
-
         String newClassName = showTextInputDialog("Rename Class", "Enter the new name for the class:",
                 "New Class Name:");
 
-        if (newClassName == null || newClassName.trim().isEmpty()) {
-            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Rename canceled.");
-            return;
-        }
-
-        if (UMLClass.exists(newClassName)) {
-            showAlert(AlertType.ERROR, "Error", "Class '" + newClassName + "' already exists.", "Rename canceled.");
-            return;
-        }
-
-        UMLClass.renameClass(oldClassName, newClassName);
-        nodeContainer.getChildren().stream()
-                .filter(node -> node instanceof ClassNode && ((ClassNode) node).getName().equals(oldClassName))
-                .findFirst()
-                .ifPresent(node -> ((ClassNode) node).setName(newClassName));
+        ClassManager.renameClass(oldClassName, newClassName, nodeContainer);
     }
 
     @FXML
