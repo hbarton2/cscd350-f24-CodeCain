@@ -43,34 +43,35 @@ public class Controller {
 
     @FXML
     private void addClassBtn() {
-
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Add Class");
         dialog.setHeaderText("Enter the name of the class to add:");
         dialog.setContentText("Class Name:");
-
+    
         String className = dialog.showAndWait().orElse(null);
-        if(className == null || className.trim().isEmpty()) {
-            showAlert(AlertType.ERROR,"Error", "Invalid class name", "Class not added.");
-        } else if(UMLClass.exists(className)) {
-            showAlert(AlertType.ERROR,"Error", "Class '" + className + "' already exists.", "");
-        } else {
-                UMLClass.addClass(className);
-                ClassNode classNode = new ClassNode(UMLClass.getClassInfo(className));
-
-                // Position nodes (e.g., center as a placeholder; adjust as needed)
-                double centerX = (nodeContainer.getWidth() - classNode.getPrefWidth()) / 2;
-                double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
-                classNode.setLayoutX(centerX);
-                classNode.setLayoutY(centerY);
-
-                // Add click event for selection
-                classNode.setOnMouseClicked(event -> selectClassNode(classNode));
-
-                // Add the new ClassNode to the node container
-                nodeContainer.getChildren().add(classNode);
+        if (className == null || className.trim().isEmpty()) {
+            showAlert(AlertType.ERROR, "Error", "Invalid class name", "Class not added.");
+            return;
+        } else if (UMLClass.exists(className)) {
+            showAlert(AlertType.ERROR, "Error", "Class '" + className + "' already exists.", "");
+            return;
         }
+    
+        UMLClass.addClass(className);
+        UMLClassInfo classInfo = UMLClass.getClassInfo(className);
+        ClassNode classNode = new ClassNode(classInfo);
+    
+        // Use the reusable positioning method
+        calculateAndSetPosition(classNode, classInfo, nodeContainer);
+    
+        // Add click event for selection
+        classNode.setOnMouseClicked(event -> selectClassNode(classNode));
+    
+        // Add the new ClassNode to the node container
+        nodeContainer.getChildren().add(classNode);
     }
+    
+    
 
     @FXML
     private void deleteClassBtn() {
@@ -948,12 +949,26 @@ public class Controller {
         }
     }
 
+
+    /**
+     * Populates the GUI with `ClassNode` instances based on the current state of the UML class map.
+     * 
+     * This method clears the `nodeContainer` and iterates over all `UMLClassInfo` instances
+     * in the `UMLClass.classMap`. If a class has default coordinates (0, 0), it calculates
+     * and assigns a new non-overlapping position using {@link #calculateAndSetPosition(ClassNode, UMLClassInfo, Pane)}.
+     * Otherwise, it uses the existing coordinates stored in the `UMLClassInfo`.
+     * Each `ClassNode` is also set up with a click event for selection and added to the container.
+     */
     public void populateGUIFromClassMap() {
         nodeContainer.getChildren().clear();
         UMLClass.classMap.values().forEach(classInfo -> {
             ClassNode classNode = new ClassNode(classInfo);
-            classNode.setLayoutX(classInfo.getX());
-            classNode.setLayoutY(classInfo.getY());
+            if (classInfo.getX() == 0 && classInfo.getY() == 0) {
+                calculateAndSetPosition(classNode, classInfo, nodeContainer);
+            } else {
+                classNode.setLayoutX(classInfo.getX());
+                classNode.setLayoutY(classInfo.getY());
+            }
             classNode.setOnMouseClicked(event -> selectClassNode(classNode));
             nodeContainer.getChildren().add(classNode);
         });
@@ -962,7 +977,71 @@ public class Controller {
     }
 
 
+ 
+    /**
+     * Calculates and assigns a non-overlapping position for a `ClassNode` within the specified container.
+     *
+     * This method calculates an appropriate (x, y) position for the given `ClassNode`
+     * within the `container`. It ensures that no `ClassNode` overlaps with existing nodes
+     * by iterating over all current nodes and adjusting the position accordingly.
+     * The calculated position is also synchronized with the corresponding `UMLClassInfo`
+     * by updating its `x` and `y` attributes.
+     * 
+     * @param classNode   the `ClassNode` to position
+     * @param classInfo   the `UMLClassInfo` object associated with the node
+     * @param container   the `Pane` container where the node will be placed
+     */
+    private void calculateAndSetPosition(ClassNode classNode, UMLClassInfo classInfo, Pane container) {
+        double x = 0, y = 0;
+        double padding = 20; 
+        double nodeWidth;
+        if (classNode.getPrefWidth() > 0) {
+            nodeWidth = classNode.getPrefWidth();
+        } else {
+            nodeWidth = 200;
+        }
+        
+        double nodeHeight;
+        if (classNode.getPrefHeight() > 0) {
+            nodeHeight = classNode.getPrefHeight();
+        } else {
+            nodeHeight = 300; 
+        }
+        
+        double containerWidth;
+        if (container.getWidth() > 0) {
+            containerWidth = container.getWidth();
+        } else {
+            containerWidth = 800;
+        }
+        
+        boolean positionFound = false;
+        while (!positionFound) {
+            positionFound = true; 
+            for (Node node : container.getChildren()) {
+                if (node instanceof ClassNode) {
+                    double otherX = node.getLayoutX();
+                    double otherY = node.getLayoutY();
+                    if (Math.abs(x - otherX) < nodeWidth + padding && Math.abs(y - otherY) < nodeHeight + padding) {
+                        positionFound = false;
+                        x += nodeWidth + padding; 
+                        if (x + nodeWidth > containerWidth) {
+                            x = 0; 
+                            y += nodeHeight + padding; 
+                        }
+                        break;
+                    }
+                }
+            }
+        }
 
+        classNode.setLayoutX(x);
+        classNode.setLayoutY(y);
+
+        classInfo.setX((int) x);
+        classInfo.setY((int) y);
+    }
+    
     private void selectClassNode(ClassNode classNode) {
         // Deselect the previously selected node, if any
         if (currentlySelectedNode != null) {

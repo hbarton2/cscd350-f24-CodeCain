@@ -17,15 +17,32 @@ public class CalculateAndSetPositionTest {
     }
 
     /**
-     * Helper method: Simulates calculateAndSetPosition logic.
+     * Helper method: Simulates logic.
      */
     private void calculateAndSetPosition(ClassNode classNode, UMLClassInfo classInfo, Pane container) {
         double x = 0, y = 0;
         double padding = 20; 
-        double nodeWidth = classNode.getPrefWidth() > 0 ? classNode.getPrefWidth() : 200; // Default width
-        double nodeHeight = classNode.getPrefHeight() > 0 ? classNode.getPrefHeight() : 300; // Default height
-        double containerWidth = container.getWidth() > 0 ? container.getWidth() : 800; // Default container width
-
+        double nodeWidth;
+        if (classNode.getPrefWidth() > 0) {
+            nodeWidth = classNode.getPrefWidth();
+        } else {
+            nodeWidth = 200;
+        }
+        
+        double nodeHeight;
+        if (classNode.getPrefHeight() > 0) {
+            nodeHeight = classNode.getPrefHeight();
+        } else {
+            nodeHeight = 300; 
+        }
+        
+        double containerWidth;
+        if (container.getWidth() > 0) {
+            containerWidth = container.getWidth();
+        } else {
+            containerWidth = 800;
+        }
+        
         boolean positionFound = false;
         while (!positionFound) {
             positionFound = true; 
@@ -46,9 +63,11 @@ public class CalculateAndSetPositionTest {
             }
         }
 
+        // Set calculated position
         classNode.setLayoutX(x);
         classNode.setLayoutY(y);
 
+        // Sync the calculated position with classInfo
         classInfo.setX((int) x);
         classInfo.setY((int) y);
     }
@@ -113,5 +132,6 @@ public class CalculateAndSetPositionTest {
 
         assertEquals(220, newClassInfo.getX());
         assertEquals(0, newClassInfo.getY());
-    }    
+    }
+    
 }
