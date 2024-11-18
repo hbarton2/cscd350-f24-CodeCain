@@ -1,4 +1,4 @@
-package codecain.BackendCode;
+package codecain.BackendCode.Model;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;

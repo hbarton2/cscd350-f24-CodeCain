@@ -74,7 +74,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>codecain.MenuGUI</mainClass>
+                    <mainClass>codecain.GraphicalUserInterface.View.MenuGUI</mainClass>
                 </configuration>
             </plugin>
             <plugin>

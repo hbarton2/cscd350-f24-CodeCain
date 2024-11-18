@@ -1,4 +1,4 @@
-package codecain.BackendCode;
+package codecain.BackendCode.Model;
 
 /**
  * The UMLFields class provides functionality to manage fields in a UML class.

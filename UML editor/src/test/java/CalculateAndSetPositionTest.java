@@ -1,6 +1,6 @@
+import codecain.BackendCode.Model.UMLClassInfo;
 import javafx.application.Platform;
-import codecain.GraphicalUserInterface.ClassNode;
-import codecain.BackendCode.*;
+import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.scene.layout.Pane;
 import javafx.scene.Node;
 import org.junit.BeforeClass;

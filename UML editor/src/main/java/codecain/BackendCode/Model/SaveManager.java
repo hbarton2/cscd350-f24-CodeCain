@@ -1,4 +1,4 @@
-package codecain.BackendCode;
+package codecain.BackendCode.Model;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * The SaveManager class handles saving and loading UML diagrams in JSON format.

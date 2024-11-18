@@ -1,7 +1,6 @@
-package codecain;
+package codecain.GraphicalUserInterface.View;
 
-import codecain.CommandLineInterface.CLI;
-import codecain.GraphicalUserInterface.GraphicalInterfaceJavaFX;
+import codecain.CommandLineInterface.View.CLI;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

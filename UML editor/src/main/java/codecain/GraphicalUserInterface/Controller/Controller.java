@@ -1,8 +1,16 @@
-package codecain.GraphicalUserInterface;
+package codecain.GraphicalUserInterface.Controller;
 
-import codecain.BackendCode.SaveManager;
-import codecain.BackendCode.UMLClass;
+import codecain.BackendCode.Model.SaveManager;
+import codecain.BackendCode.Model.UMLClass;
+import codecain.GraphicalUserInterface.Model.FieldManager;
+import codecain.GraphicalUserInterface.Model.MethodManager;
+import codecain.GraphicalUserInterface.Model.ClassManager;
+import codecain.GraphicalUserInterface.Model.ParameterManager;
+import codecain.GraphicalUserInterface.View.PositionUtils;
+import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -11,6 +19,7 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Controller class for managing user interactions with the UML editor GUI.

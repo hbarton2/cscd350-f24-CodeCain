@@ -1,6 +1,6 @@
 package codecain;
 
-import codecain.GraphicalUserInterface.GraphicalInterfaceJavaFX;
+import codecain.GraphicalUserInterface.View.MenuGUI;
 
 public class Main {
     public static void main(String[] args) {

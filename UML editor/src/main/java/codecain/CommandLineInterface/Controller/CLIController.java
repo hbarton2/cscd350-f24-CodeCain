@@ -1,4 +1,7 @@
-package codecain.CommandLineInterface;
+package codecain.CommandLineInterface.Controller;
+
+import codecain.CommandLineInterface.View.CLIView;
+import codecain.CommandLineInterface.Model.CommandManager;
 
 import java.util.List;
 import java.util.stream.Collectors;

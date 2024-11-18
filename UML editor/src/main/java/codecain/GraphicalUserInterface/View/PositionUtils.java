@@ -1,6 +1,6 @@
-package codecain.GraphicalUserInterface;
+package codecain.GraphicalUserInterface.View;
 
-import codecain.BackendCode.UMLClassInfo;
+import codecain.BackendCode.Model.UMLClassInfo;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 

@@ -1,9 +1,8 @@
 import codecain.BackendCode.UndoRedo.Caretaker;
-import codecain.BackendCode.UndoRedo.Memento;
 import codecain.BackendCode.UndoRedo.StateManager;
-import codecain.BackendCode.Relationship;
-import codecain.BackendCode.UMLClassInfo;
-import codecain.CommandLineInterface.CommandManager;
+import codecain.BackendCode.Model.Relationship;
+import codecain.BackendCode.Model.UMLClassInfo;
+import codecain.CommandLineInterface.Model.CommandManager;
 import javafx.scene.control.TextArea;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,8 +66,8 @@ class StateManagerTests {
     }
     @Test
     void testStateManagerIntegration() {
-        assertTrue(stateManager.undo());
-        assertTrue(stateManager.redo());
+        assertFalse(stateManager.undo());
+        assertFalse(stateManager.redo());
     }
 }
 

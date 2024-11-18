@@ -1,5 +1,6 @@
-package codecain.CommandLineInterface;
+package codecain.CommandLineInterface.View;
 
+import codecain.CommandLineInterface.Controller.CLIController;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;

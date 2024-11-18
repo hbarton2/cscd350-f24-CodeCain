@@ -1,11 +1,11 @@
-package codecain.CommandLineInterface;
+package codecain.CommandLineInterface.Model;
 
-import codecain.BackendCode.*;
+import codecain.BackendCode.Model.*;
 import codecain.BackendCode.UndoRedo.StateManager;
+import codecain.CommandLineInterface.View.CLIView;
 import javafx.scene.control.TextArea;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Manages and executes user commands for UML diagram operations.

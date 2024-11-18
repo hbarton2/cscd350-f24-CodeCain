@@ -1,5 +1,6 @@
-package codecain.CommandLineInterface;
+package codecain.CommandLineInterface.View;
 
+import codecain.CommandLineInterface.Controller.CLIController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -1,6 +1,6 @@
-package codecain.GraphicalUserInterface;
+package codecain.GraphicalUserInterface.View;
 
-import codecain.BackendCode.*;
+import codecain.BackendCode.Model.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -17,6 +17,12 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a visual node in the UML editor for a single UML class.
+ * The ClassNode includes a class name, a list of fields, and a list of methods.
+ * It is designed to be editable and draggable, with features for renaming,
+ * adding, and removing fields and methods.
+ */
 public class ClassNode extends VBox {
 
     private boolean isSelected = false;
@@ -34,6 +40,11 @@ public class ClassNode extends VBox {
 
     private UMLClassInfo classInfo;
 
+    /**
+     * Constructs a ClassNode instance for a specific UML class.
+     *
+     * @param classInfo The {@link UMLClassInfo} containing the data for the class.
+     */
     public ClassNode(UMLClassInfo classInfo) {
         this.classInfo = classInfo;
         this.classNameLabel = new Label(classInfo.getClassName().toString());
@@ -58,7 +69,7 @@ public class ClassNode extends VBox {
         shadowEffect.setRadius(10);
         shadowEffect.setOffsetX(5);
         shadowEffect.setOffsetY(5);
-        shadowEffect.setColor(Color.rgb(0, 0, 0, 0.2));  // Light gray shadow
+        shadowEffect.setColor(Color.rgb(0, 0, 0, 0.2)); // Light gray shadow
 
         setEditableCellFactory(this.fields);
         setEditableCellFactoryForMethods(this.methods);
@@ -71,18 +82,22 @@ public class ClassNode extends VBox {
         this.setOnMouseDragged(this::onMouseDragged);
         this.classNameLabel.setOnMouseClicked(this::onLabelDoubleClick);
 
-
     }
 
-    // Load fields and methods from UMLClassInfo
+    /**
+     * Initializes the fields and methods from the underlying {@link UMLClassInfo}.
+     */
     private void initializeFieldsAndMethods() {
         classInfo.getFields().forEach(field -> fields.getItems().add(field));
         classInfo.getMethods().forEach(method -> methods.getItems().add(method));
     }
 
+    /**
+     * Configures the class name label and TextField for editing functionality.
+     */
     private void configureClassName() {
         // Set up TextField for editing with actions
-        classNameField.setVisible(false);  // Initially hide TextField
+        classNameField.setVisible(false); // Initially hide TextField
         classNameField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 saveClassName();
@@ -93,25 +108,36 @@ public class ClassNode extends VBox {
 
         classNameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
-                cancelClassNameEdit();  // Cancel edit when focus is lost
+                cancelClassNameEdit(); // Cancel edit when focus is lost
             }
         });
     }
 
+    /**
+     * Handles double-clicking the class name label to start editing.
+     *
+     * @param event The mouse event that triggered the action.
+     */
     private void onLabelDoubleClick(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             startClassNameEdit();
         }
     }
 
+    /**
+     * Starts editing the class name by displaying a TextField.
+     */
     private void startClassNameEdit() {
         classNameField.setText(classNameLabel.getText());
         classNameLabel.setVisible(false);
-        this.getChildren().set(0, classNameField);  // Replace label with TextField
+        this.getChildren().set(0, classNameField); // Replace label with TextField
         classNameField.setVisible(true);
         classNameField.requestFocus();
     }
 
+    /**
+     * Saves the edited class name and updates the underlying {@link UMLClassInfo}.
+     */
     private void saveClassName() {
         String newName = classNameField.getText().toLowerCase().trim();
 
@@ -129,23 +155,22 @@ public class ClassNode extends VBox {
         classInfo.setClassName(newName);
         classNameLabel.setText(newName);
         cancelClassNameEdit();
-//        String newName = classNameField.getText().trim();
-//        Result result = Storage.renameClass(newName);
-//        if (result.getStatus() == Status.ERROR || result.getStatus() == Status.WARNING) {
-//            alert("WARNING", result.getMessage());
-//        } else {
-//            classNameLabel.setText(newName);
-//            cancelClassNameEdit();
-//        }
 
     }
 
+    /**
+     * Cancels the class name editing and restores the label.
+     */
     private void cancelClassNameEdit() {
         classNameField.setVisible(false);
-        this.getChildren().set(0, classNameLabel);  // Replace TextField with label
+        this.getChildren().set(0, classNameLabel); // Replace TextField with label
         classNameLabel.setVisible(true);
     }
 
+    /**
+     * Synchronizes the node's position, fields, and methods with the underlying
+     * {@link UMLClassInfo}.
+     */
     public void syncWithUMLClassInfo() {
         classInfo.getFields().clear();
         fields.getItems().forEach(fieldInfo -> classInfo.getFields().add(fieldInfo));
@@ -157,6 +182,10 @@ public class ClassNode extends VBox {
         classInfo.setY((int) this.getLayoutY());
     }
 
+    /**
+     * Selects the ClassNode, applying a shadow effect and highlighting the
+     * background.
+     */
     public void select() {
         isSelected = true;
 
@@ -165,6 +194,10 @@ public class ClassNode extends VBox {
         this.setEffect(shadowEffect);
     }
 
+    /**
+     * Deselects the ClassNode, removing the shadow effect and restoring the default
+     * background.
+     */
     public void deselect() {
         isSelected = false;
         // Revert to the default background and remove shadow
@@ -172,7 +205,11 @@ public class ClassNode extends VBox {
         this.setEffect(null);
     }
 
-    // Toggle selection on mouse click
+    /**
+     * Toggles the selection state of the ClassNode.
+     *
+     * @param event The mouse event that triggered the toggle.
+     */
     public void toggleSelection(MouseEvent event) {
         System.out.println("toggleSelection called");
         isSelected = !isSelected;
@@ -183,21 +220,40 @@ public class ClassNode extends VBox {
         }
     }
 
+    /**
+     * Checks if the ClassNode is currently selected.
+     *
+     * @return {@code true} if the node is selected, otherwise {@code false}.
+     */
     public boolean isSelected() {
         return isSelected;
         // Apply a slight color change and shadow effect
     }
 
+    /**
+     * Handles the initial press of the mouse when dragging the ClassNode.
+     * Records the offset between the mouse position and the node's position
+     * to ensure smooth dragging.
+     *
+     * @param event The {@link MouseEvent} that triggered this action.
+     */
     private void onMousePressed(MouseEvent event) {
         mouseXOffset = event.getSceneX() - this.getLayoutX();
         mouseYOffset = event.getSceneY() - this.getLayoutY();
     }
 
+    /**
+     * Handles the dragging of the ClassNode by updating its position on the screen.
+     * Ensures the node stays within the boundaries of its parent container.
+     *
+     * @param event The {@link MouseEvent} that triggered this action.
+     */
     private void onMouseDragged(MouseEvent event) {
         double newX = event.getSceneX() - mouseXOffset;
         double newY = event.getSceneY() - mouseYOffset;
 
-        // Get pane's width and height from the parent (nodeContainer should be the parent)
+        // Get pane's width and height from the parent (nodeContainer should be the
+        // parent)
         Pane parentPane = (Pane) this.getParent();
         double maxX = parentPane.getWidth() - this.getPrefWidth();
         double maxY = parentPane.getHeight() - this.getPrefHeight();
@@ -213,7 +269,12 @@ public class ClassNode extends VBox {
         syncWithUMLClassInfo();
     }
 
-    // Set TextFieldListCell for editable ListView
+    /**
+     * Configures a {@link ListView} for editing fields of a UML class.
+     * Converts user input into {@link UMLFieldInfo} objects and updates the view.
+     *
+     * @param listView The {@link ListView} to make editable.
+     */
     private void setEditableCellFactory(ListView<UMLFieldInfo> listView) {
         listView.setEditable(true);
         listView.setCellFactory(TextFieldListCell.forListView(new javafx.util.StringConverter<UMLFieldInfo>() {
@@ -233,6 +294,12 @@ public class ClassNode extends VBox {
         }));
     }
 
+    /**
+     * Configures a {@link ListView} for editing methods of a UML class.
+     * Converts user input into {@link UMLMethodInfo} objects and updates the view.
+     *
+     * @param listView The {@link ListView} to make editable.
+     */
     private void setEditableCellFactoryForMethods(ListView<UMLMethodInfo> listView) {
         listView.setEditable(true);
         listView.setCellFactory(TextFieldListCell.forListView(new javafx.util.StringConverter<UMLMethodInfo>() {
@@ -254,6 +321,12 @@ public class ClassNode extends VBox {
         }));
     }
 
+    /**
+     * Displays an informational alert dialog to the user.
+     *
+     * @param title   The title of the alert window.
+     * @param message The content of the alert message.
+     */
     private void alert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -262,25 +335,48 @@ public class ClassNode extends VBox {
         alert.showAndWait();
     }
 
+    /**
+     * Retrieves the name of the class represented by this ClassNode.
+     *
+     * @return The name of the class as a {@link String}.
+     */
     public String getName() {
         return classNameLabel.getText();
     }
 
+    /**
+     * Updates the name of the class represented by this ClassNode.
+     *
+     * @param name The new name of the class.
+     */
     public void setName(String name) {
         classNameLabel.setText(name);
     }
 
+    /**
+     * Adds a field to the UML class represented by this ClassNode.
+     *
+     * @param fieldInfo The {@link UMLFieldInfo} representing the field to add.
+     */
     public void addField(UMLFieldInfo fieldInfo) {
         fields.getItems().add(fieldInfo);
     }
 
+    /**
+     * Removes a field from the UML class represented by this ClassNode.
+     *
+     * @param fieldName The name of the field to remove.
+     * @return {@code true} if the field was removed successfully, otherwise
+     *         {@code false}.
+     */
     public boolean removeField(String fieldName) {
         // Check if the field exists in the GUI ListView
         boolean removedFromListView = fields.getItems().removeIf(field -> field.getFieldName().equals(fieldName));
 
         if (removedFromListView) {
             // If removed from ListView, also remove it from the backend classInfo
-            boolean removedFromBackend = classInfo.getFields().removeIf(field -> field.getFieldName().equals(fieldName));
+            boolean removedFromBackend = classInfo.getFields()
+                    .removeIf(field -> field.getFieldName().equals(fieldName));
 
             if (removedFromBackend) {
                 System.out.println("Field '" + fieldName + "' successfully removed from both GUI and backend.");
@@ -295,7 +391,15 @@ public class ClassNode extends VBox {
         return false; // Field not found
     }
 
-
+    /**
+     * Renames a field in the UML class represented by this ClassNode.
+     *
+     * @param oldFieldName The current name of the field.
+     * @param newFieldType The new type of the field.
+     * @param newFieldName The new name of the field.
+     * @return {@code true} if the field was renamed successfully, otherwise
+     *         {@code false}.
+     */
     public boolean renameField(String oldFieldName, String newFieldType, String newFieldName) {
         UMLFields fieldManager = new UMLFields();
         String className = classInfo.getClassName();
@@ -321,13 +425,22 @@ public class ClassNode extends VBox {
         return false; // Rename failed
     }
 
-
-
-
-
+    /**
+     * Adds a method to the UML class represented by this ClassNode.
+     *
+     * @param method The {@link UMLMethodInfo} representing the method to add.
+     */
     public void addMethod(UMLMethodInfo method) {
         methods.getItems().add(method); // Add the method to the ListView in ClassNode
     }
+
+    /**
+     * Removes a method from the UML class represented by this ClassNode.
+     *
+     * @param methodName The name of the method to remove.
+     * @return {@code true} if the method was removed successfully, otherwise
+     *         {@code false}.
+     */
     public boolean removeMethod(String methodName) {
         // Use update-like logic to handle removal
         boolean removed = methods.getItems().removeIf(m -> m.getMethodName().equals(methodName));
@@ -337,6 +450,14 @@ public class ClassNode extends VBox {
         return removed;
     }
 
+    /**
+     * Renames a method in the UML class represented by this ClassNode.
+     *
+     * @param oldMethodName The current name of the method.
+     * @param newMethodName The new name of the method.
+     * @return {@code true} if the method was renamed successfully, otherwise
+     *         {@code false}.
+     */
     public boolean renameMethod(String oldMethodName, String newMethodName) {
         // Find the method to rename in ListView
         UMLMethodInfo methodToRename = methods.getItems().stream()
@@ -364,10 +485,13 @@ public class ClassNode extends VBox {
         return true; // Renamed successfully
     }
 
-
-
-
-
+    /**
+     * Updates an existing method in the UML class represented by this ClassNode.
+     * Replaces the old method with the updated method in the {@link ListView}.
+     *
+     * @param method The {@link UMLMethodInfo} object representing the updated
+     *               method.
+     */
     public void updateMethod(UMLMethodInfo method) {
         methods.getItems().removeIf(m -> m.getMethodName().equals(method.getMethodName())); // Remove old method
         methods.getItems().add(method); // Add updated method with new parameter

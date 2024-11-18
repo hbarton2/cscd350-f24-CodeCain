@@ -1,4 +1,4 @@
-package codecain.BackendCode;
+package codecain.BackendCode.Model;
 
 import java.util.List;
 

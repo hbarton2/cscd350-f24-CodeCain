@@ -1,14 +1,16 @@
-package codecain.GraphicalUserInterface;
+package codecain.GraphicalUserInterface.Model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import codecain.BackendCode.UMLClass;
-import codecain.BackendCode.UMLClassInfo;
-import codecain.BackendCode.UMLMethodInfo;
-import codecain.BackendCode.UMLMethods;
-import codecain.BackendCode.UMLParameterInfo;
+import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.UMLClassInfo;
+import codecain.BackendCode.Model.UMLMethodInfo;
+import codecain.BackendCode.Model.UMLMethods;
+import codecain.BackendCode.Model.UMLParameterInfo;
+import codecain.GraphicalUserInterface.View.AlertHelper;
+import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

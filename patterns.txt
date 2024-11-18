@@ -41,5 +41,9 @@ Caretaker.java: Manages the history of states, enabling undo/redo operations by 
 StateManager.java: Acts as the originator, capturing its current state into mementos and restoring them when necessary.
 
 Pattern 10: MVC
+All files
+Justification: It is the format of the 
 
-Justification:
+Pattern 11: Factory
+ClassNode.java: Lines 278-295, 303-322
+Justification: It is the proper extension for custom behavior in ListView class from JavaFX

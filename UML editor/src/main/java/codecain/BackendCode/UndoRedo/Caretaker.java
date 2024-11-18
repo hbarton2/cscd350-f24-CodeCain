@@ -1,8 +1,8 @@
 package codecain.BackendCode.UndoRedo;
 
-import codecain.BackendCode.Relationship;
-import codecain.BackendCode.UMLClass;
-import codecain.BackendCode.UMLClassInfo;
+import codecain.BackendCode.Model.Relationship;
+import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.UMLClassInfo;
 
 import java.util.*;
 

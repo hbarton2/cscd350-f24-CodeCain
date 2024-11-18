@@ -1,4 +1,4 @@
-package codecain.GraphicalUserInterface;
+package codecain.GraphicalUserInterface.View;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
