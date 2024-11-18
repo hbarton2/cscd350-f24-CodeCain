@@ -2,34 +2,15 @@ package codecain.GraphicalUserInterface;
 
 import codecain.BackendCode.SaveManager;
 import codecain.BackendCode.UMLClass;
-import codecain.BackendCode.UMLClassInfo;
-import codecain.BackendCode.UMLFieldInfo;
-import codecain.BackendCode.UMLFields;
-import codecain.BackendCode.UMLMethodInfo;
-import codecain.BackendCode.UMLMethods;
-import codecain.BackendCode.UMLParameterInfo;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.util.Pair;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class Controller {
 
@@ -210,35 +191,6 @@ public class Controller {
         // Select the new node
         classNode.select();
         currentlySelectedNode = classNode;
-    }
-
-    private List<UMLParameterInfo> parseParameters(String parametersInput) {
-        List<UMLParameterInfo> parameters = new ArrayList<>();
-        if (parametersInput.isEmpty()) {
-            return parameters; // No parameters to add
-        }
-
-        // Split parameters by comma and process each
-        String[] paramParts = parametersInput.split(",");
-        for (String part : paramParts) {
-            String[] typeAndName = part.trim().split(" ");
-            if (typeAndName.length == 2) {
-                String type = typeAndName[0].trim();
-                String name = typeAndName[1].trim();
-                parameters.add(new UMLParameterInfo(type, name));
-            } else {
-                System.out.println("Invalid parameter format: " + part);
-            }
-        }
-        return parameters;
-    }
-
-    private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     private String showTextInputDialog(String title, String header, String content) {
