@@ -1,7 +1,6 @@
 package codecain.BackendCode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -9,11 +8,6 @@ import java.util.List;
  * The UMLClassInfo class represents the details of a UML class, including its name, fields, methods, and position.
  */
 public class UMLClassInfo {
-
-    /**
-     * hashmap containing attached relationships
-     */
-    public HashMap<Relationship, Integer> attachedRelationshipIndices;
 
     /**
      * The name of the UML class.
@@ -46,7 +40,6 @@ public class UMLClassInfo {
     public UMLClassInfo() {
         this.fields = new ArrayList<>();
         this.methods = new ArrayList<>();
-        this.attachedRelationshipIndices = new HashMap<>();
     }
 
     /**
@@ -61,7 +54,6 @@ public class UMLClassInfo {
         this.methods = new ArrayList<>();
         this.x = 0;
         this.y = 0;
-        this.attachedRelationshipIndices = new HashMap<>();
     }
 
     /**
@@ -146,36 +138,5 @@ public class UMLClassInfo {
             }
         }
         return null;
-    }
-
-    /**
-     * attaches a relationship to the class
-     * @param r
-     */
-    public void addRelationshipPoint(Relationship r){
-        attachedRelationshipIndices.put(r, getLowestValue());
-        System.out.println("relationship added to class " + this.className);
-    }
-
-
-    /**
-     * removes an attached relationship from the class
-     * @param r
-     */
-    public void removeRelationshipPoint(Relationship r){
-        attachedRelationshipIndices.remove(r);
-        System.out.println("relationship removed from class " + this.className);
-    }
-
-
-    /**
-     * for GUI. gets the lowest empty index in the hashmap
-     * @return Integer
-     */
-    private Integer getLowestValue(){
-        int i = 0;
-        for (; attachedRelationshipIndices.containsValue(i); i++);
-        System.out.println(i);
-        return i;
     }
 }
