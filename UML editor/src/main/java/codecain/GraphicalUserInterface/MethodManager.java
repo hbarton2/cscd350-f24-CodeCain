@@ -21,31 +21,16 @@ import javafx.scene.layout.Pane;
 
 public class MethodManager {
 	public static void addMethod(Pane nodeContainer) {
-		Dialog<ButtonType> dialog = new Dialog<>();
-		dialog.setTitle("Add Method");
-		dialog.setHeaderText("Enter details for the new method");
-
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		TextField classNameField = new TextField();
-		classNameField.setPromptText("Class Name");
-		TextField methodNameField = new TextField();
-		methodNameField.setPromptText("Method Name");
-		TextField parameterField = new TextField();
-		parameterField.setPromptText("Parameters (comma-separated, e.g., int x, String y)");
+		TextField classNameField = DialogUtils.addTextField(grid, "Class Name", 0);
+		TextField methodNameField = DialogUtils.addTextField(grid, "Method Name", 1);
+		TextField parameterField = DialogUtils.addTextField(grid, "Parameters (comma-separated, e.g., int x, String y)", 2);
 		parameterField.setPrefWidth(300);
 
-		grid.add(new Label("Class Name:"), 0, 0);
-		grid.add(classNameField, 1, 0);
-		grid.add(new Label("Method Name:"), 0, 1);
-		grid.add(methodNameField, 1, 1);
-		grid.add(new Label("Parameters:"), 0, 2);
-		grid.add(parameterField, 1, 2);
-
-		dialog.getDialogPane().setContent(grid);
-		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		Dialog<ButtonType> dialog = DialogUtils.createDialog("Add Method", "Enter details for the new method", grid);
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -91,26 +76,15 @@ public class MethodManager {
 	}
 
 	public static void deleteMethod(Pane nodeContainer) {
-		Dialog<ButtonType> dialog = new Dialog<>();
-		dialog.setTitle("Delete Method");
-		dialog.setHeaderText("Enter the class name and the name of the method to delete:");
-
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		TextField classNameField = new TextField();
-		classNameField.setPromptText("Class Name");
-		TextField methodNameField = new TextField();
-		methodNameField.setPromptText("Method Name");
+		TextField classNameField = DialogUtils.addTextField(grid, "Class Name", 0);
+		TextField methodNameField = DialogUtils.addTextField(grid, "Method Name", 1);
 
-		grid.add(new Label("Class Name:"), 0, 0);
-		grid.add(classNameField, 1, 0);
-		grid.add(new Label("Method Name:"), 0, 1);
-		grid.add(methodNameField, 1, 1);
-
-		dialog.getDialogPane().setContent(grid);
-		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		Dialog<ButtonType> dialog = DialogUtils.createDialog("Delete Method",
+				"Enter the class name and method name to delete:", grid);
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -150,32 +124,16 @@ public class MethodManager {
 	}
 
 	public static void renameMethod(Pane nodeContainer) {
-		Dialog<ButtonType> dialog = new Dialog<>();
-		dialog.setTitle("Rename Method");
-		dialog.setHeaderText("Enter the class name, current method name, and new method name:");
-
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		TextField classNameField = new TextField();
-		classNameField.setPromptText("Class Name");
+		TextField classNameField = DialogUtils.addTextField(grid, "Class Name", 0);
+		TextField oldMethodNameField = DialogUtils.addTextField(grid, "Current Method Name", 1);
+		TextField newMethodNameField = DialogUtils.addTextField(grid, "New Method Name", 2);
 
-		TextField oldMethodNameField = new TextField();
-		oldMethodNameField.setPromptText("Current Method Name");
-
-		TextField newMethodNameField = new TextField();
-		newMethodNameField.setPromptText("New Method Name");
-
-		grid.add(new Label("Class Name:"), 0, 0);
-		grid.add(classNameField, 1, 0);
-		grid.add(new Label("Current Method Name:"), 0, 1);
-		grid.add(oldMethodNameField, 1, 1);
-		grid.add(new Label("New Method Name:"), 0, 2);
-		grid.add(newMethodNameField, 1, 2);
-
-		dialog.getDialogPane().setContent(grid);
-		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		Dialog<ButtonType> dialog = DialogUtils.createDialog("Rename Method",
+				"Enter the class name, current method name, and new method name:", grid);
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
