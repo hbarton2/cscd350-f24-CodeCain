@@ -1,6 +1,7 @@
 package codecain.GraphicalUserInterface.View;
 
 import codecain.BackendCode.Model.*;
+import codecain.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -496,4 +497,6 @@ public class ClassNode extends VBox {
         methods.getItems().removeIf(m -> m.getMethodName().equals(method.getMethodName())); // Remove old method
         methods.getItems().add(method); // Add updated method with new parameter
     }
+
+
 }

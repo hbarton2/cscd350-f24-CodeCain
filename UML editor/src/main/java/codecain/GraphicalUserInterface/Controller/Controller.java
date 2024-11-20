@@ -2,6 +2,7 @@ package codecain.GraphicalUserInterface.Controller;
 
 import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.UndoRedo.StateManager;
 import codecain.GraphicalUserInterface.Model.FieldManager;
 import codecain.GraphicalUserInterface.Model.MethodManager;
 import codecain.GraphicalUserInterface.Model.ClassManager;
@@ -16,6 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import codecain.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +54,13 @@ public class Controller {
     private Pane nodeContainer;
 
     /**
+     * The StateManager instance for managing undo and redo operations.
+     */
+    @FXML
+    private final StateManager stateManager = new StateManager(); // Centralized StateManager for undo/redo
+
+
+    /**
      * Initializes the controller after the FXML file has been loaded.
      * <p>
      * Sets up event handlers for the GUI, including:
@@ -78,11 +87,13 @@ public class Controller {
      */
     @FXML
     private void addClassBtn() {
+        stateManager.saveState();
         String className = showTextInputDialog("Add Class", "Enter the name of the class to add:", "Class Name:");
         ClassNode classNode = ClassManager.addClass(className, nodeContainer);
         if (classNode != null) {
             classNode.setOnMouseClicked(event -> selectClassNode(classNode));
         }
+
     }
     
     
@@ -314,6 +325,29 @@ public class Controller {
         } else {
             System.out.println("Exit canceled.");
         }
+    }
+
+    @FXML
+    private void undoBtn() {
+        if (stateManager.undo()){
+            populateGUIFromClassMap();
+            showAlert(Alert.AlertType.INFORMATION, "Undo", "Undo Successful", "State has been restored.");
+            System.out.println("Undo successful.");
+        } else {
+            System.out.println("No actions to undo.");
+        }
+    }
+
+    @FXML
+    private void redoBtn() {
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 }

@@ -16,8 +16,9 @@
                 <Button mnemonicParsing="false" onAction="#loadBtn" styleClass="toolbar-button" text="Load" />
                 <Button mnemonicParsing="false" styleClass="toolbar-button" text="Help" />
                 <Button mnemonicParsing="false" onAction="#exitBtn" styleClass="toolbar-button" text="Exit" />
-                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Redo" />
-                <Button mnemonicParsing="false" styleClass="toolbar-button" text="Undo" />
+                <Button mnemonicParsing="false" onAction="#redoBtn" styleClass="toolbar-button" text="Redo" />
+                <Button mnemonicParsing="false" onAction="#undoBtn" styleClass="toolbar-button" text="Undo" />
+
             </items>
         </ToolBar>
     </top>
