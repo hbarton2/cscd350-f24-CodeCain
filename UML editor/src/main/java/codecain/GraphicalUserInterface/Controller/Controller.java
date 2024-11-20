@@ -104,6 +104,7 @@ public class Controller {
      */
     @FXML
     private void deleteClassBtn() {
+        stateManager.saveState();
         String className = currentlySelectedNode != null
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Delete Class", "Enter the name of the class to delete:", "Class Name:");
@@ -116,6 +117,7 @@ public class Controller {
      */
     @FXML
     private void renameClassBtn() {
+        stateManager.saveState();
         String oldClassName = currentlySelectedNode != null
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Rename Class", "Enter the name of the class to rename:", "Class Name:");
