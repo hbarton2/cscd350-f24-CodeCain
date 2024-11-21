@@ -20,7 +20,7 @@ public class DisplayHelper {
             3. rename class 'oldName' 'newName'  - Renames the class from 'oldName' to 'newName'.
 
             Relationship Operations:
-            1. add relationship 'source' 'destination'   - Adds a relationship between 'source' and 'destination' classes.
+            1. add relationship 'source' 'destination' 'type'   - Adds a relationship between 'source' and 'destination' classes of a specified type.
             2. delete relationship 'source' 'destination' - Deletes the relationship between 'source' and 'destination'.
 
             Field Operations:
@@ -55,7 +55,7 @@ public class DisplayHelper {
 
             Examples:
             - add class Person
-            - add relationship Person Address
+            - add relationship Person Address Aggregation
 
             - add field Person String name
             - rename field Person name exampleName int

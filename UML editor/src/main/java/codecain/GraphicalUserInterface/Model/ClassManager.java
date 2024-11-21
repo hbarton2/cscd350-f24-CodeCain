@@ -7,6 +7,7 @@ import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
+import codecain.BackendCode.Model.UMLClassInfo;
 
 /**
  * The {@code ClassManager} class provides utility methods for managing UML class nodes
@@ -40,6 +41,8 @@ public class ClassManager {
         double centerY = (nodeContainer.getHeight() - classNode.getPrefHeight()) / 2;
         classNode.setLayoutX(centerX);
         classNode.setLayoutY(centerY);
+        PositionUtils.calculateAndSetPosition(classNode, classInfo, nodeContainer);
+
         PositionUtils.calculateAndSetPosition(classNode, classInfo, nodeContainer);
 
         // Add the new ClassNode to the node container

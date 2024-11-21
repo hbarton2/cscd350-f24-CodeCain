@@ -167,13 +167,14 @@ public class CommandManager {
      */
     private String handleAddRelationship(String[] tokens) {
         stateManager.saveState();
-        if (tokens.length < 4) {
+        if (tokens.length < 5) {
             return "Usage: add relationship <class1> <class2>";
         }
         if (Relationship.relationshipExists(tokens[2], tokens[3])) {
             return "Relationship between '" + tokens[2] + "' and '" + tokens[3] + "' already exists.";
         }
-        boolean added = Relationship.addRelationship(tokens[2], tokens[3]);
+        boolean added = Relationship.addRelationship(tokens[2], tokens[3],
+                RelationshipType.fromString(tokens[4]));
         if (added) {
             return DisplayHelper.relationshipAdded(tokens[2], tokens[3]);
         } else {
