@@ -40,8 +40,8 @@
                 <Button mnemonicParsing="false" onAction="#changeParameterBtn" text="Rename Single Parameter" />
                 <Button mnemonicParsing="false" onAction="#changeAllParametersBtn" text="Rename All Parameters" />
 
-                <Button mnemonicParsing="false" text="Add Relationship" />
-                <Button mnemonicParsing="false" text="Remove Relationship" />
+                <Button mnemonicParsing="false" onAction="#addRelationshipBtn" text="Add Relationship" />
+                <Button mnemonicParsing="false" onAction="#removeRelationshipBtn" text="Remove Relationship" />
 
             </children>
         </VBox>

@@ -2,10 +2,7 @@ package codecain.GraphicalUserInterface.Controller;
 
 import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
-import codecain.GraphicalUserInterface.Model.FieldManager;
-import codecain.GraphicalUserInterface.Model.MethodManager;
-import codecain.GraphicalUserInterface.Model.ClassManager;
-import codecain.GraphicalUserInterface.Model.ParameterManager;
+import codecain.GraphicalUserInterface.Model.*;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.fxml.FXML;
@@ -28,6 +25,7 @@ import java.util.Optional;
  * as well as saving and loading UML diagrams.
  */
 public class Controller {
+
 
     /**
      * The currently selected ClassNode in the GUI.
@@ -196,6 +194,22 @@ public class Controller {
     }
 
     /**
+     * prompts user, adds a relationship from a prompted user
+     */
+    @FXML
+    private void addRelationshipBtn(){
+        RelationshipManager.addRelationshipBtn();
+    }
+
+    /**
+     * prompts user, removes a relationship inputted
+     */
+    @FXML
+    private void removeRelationshipBtn(){
+        RelationshipManager.removeRelationshipBtn();
+    }
+
+    /**
      * Handles saving the current UML diagram to a JSON file.
      *
      * @throws IOException if there is an error during the save process.
@@ -220,6 +234,7 @@ public class Controller {
             SaveManager.saveToJSON(file.getAbsolutePath());
         }
     }
+
 
     /**
      * Handles loading a UML diagram from a JSON file.
