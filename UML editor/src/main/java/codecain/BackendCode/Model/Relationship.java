@@ -1,4 +1,5 @@
 package codecain.BackendCode.Model;
+import codecain.BackendCode.Model.RelationshipType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,9 +8,23 @@ import java.util.HashSet;
 public class Relationship {
 
     /**
+     * the type of relationship
+     */
+    private RelationshipType type;
+
+    /**
      * Set with 2 class names that will be in the relationship
      */
     private Collection<String> classNames;  // Removed final for deserialization
+
+    /**
+     * this is a string that is the name of the source class.
+     * Source as in 'source to destination' - where the relationship arrow points to.
+     */
+    private String source;
+
+
+    private String destination;
 
     /**
      * ArrayList for every single relationship created.
@@ -22,18 +37,32 @@ public class Relationship {
      */
     public Relationship() {
         this.classNames = new HashSet<>();
+        this.source = "";
+        this.destination = "";
+    }
+
+    /**
+     * getter for the destination string
+     * @return String
+     */
+    public String getDestination(){
+        return this.destination;
     }
 
     /**
      * Constructor for relationship class. This is private
      * and is only used by the addRelationship method
-     * @param class1 name of first class to add
-     * @param class2 name of second class to add
+     * @param source name of first class to add
+     * @param destination name of second class to add
      */
-    private Relationship(String class1, String class2) {
+    private Relationship(String source, String destination, RelationshipType type) {
         this.classNames = new HashSet<>();
-        this.classNames.add(class1);
-        this.classNames.add(class2);
+        this.type = type;
+        this.classNames.add(source);
+        this.classNames.add(destination);
+        this.source = source;
+        this.destination = destination;
+        relationshipList.add(this);
     }
 
     // Getter for Jackson serialization/deserialization
@@ -54,11 +83,11 @@ public class Relationship {
     }
 
     /**
-     * Checks if the relationship already exists
+     * Checks if the relationship already exists with the specified class
      * @param class1 class to look for
      * @return true if there is a relationship with that class
      */
-    public static boolean relationshipExists(String class1) {
+    public static boolean relationshipHasClass(String class1) {
         for (Relationship r : relationshipList) {
             if (r.classNames.contains(class1)) {
                 return true;
@@ -82,6 +111,23 @@ public class Relationship {
         return false;
     }
 
+
+    /**
+     * Checks if the relationship already exists between two classes that has the specified type
+     * @param class1 first class
+     * @param class2 second class
+     * @return true if the relationship exists
+     */
+    public static boolean relationshipExists(String class1, String class2, RelationshipType type){
+        for (Relationship r : relationshipList) {
+            if (r.classNames.contains(class1) && r.classNames.contains(class2) && r.type.equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * Adds a relationship to the relationship map
      *
@@ -89,7 +135,7 @@ public class Relationship {
      * @param class2 the second class to add
      * @return true if the input is valid, false if the input is invalid.
      */
-    public static boolean addRelationship(String class1, String class2) {
+    public static boolean addRelationship(String class1, String class2, RelationshipType type) {
 
         if (relationshipExists(class1, class2)) {
             System.out.println("Relationship already exists");
@@ -104,8 +150,7 @@ public class Relationship {
             return false;
         }
 
-        Relationship newRelationship = new Relationship(class1, class2);
-        relationshipList.add(newRelationship);
+        Relationship newRelationship = new Relationship(class1, class2, type);
         System.out.println("Relationship between " + class1 + " and " + class2 + " added");
         return true;
     }
@@ -142,7 +187,8 @@ public class Relationship {
             if (names.length < 2) {
                 System.out.println("There are no classes to print out");
             } else {
-                s.append(names[0]).append(" ------- ").append(names[1]).append("\n");
+                s.append(names[0]).append(r.type.getArrowString())
+                        .append(names[1]).append(" ").append(r.type).append("\n");
             }
         }
         return s.toString();
@@ -150,12 +196,78 @@ public class Relationship {
 
     /**
      * Helper method to get the names of the classes in the relationship in an array
+     * this method puts the source string in the first address in the array
+     * so that when you print the relationship list, the strings are in order.
      * @return String[]
      */
-    private String[] getClassNamesAsArray() {
+    public String[] getClassNamesAsArray() {
         String[] names = new String[2];
         this.classNames.toArray(names);
+        if(!names[0].equals(source)){
+            String t = names[0];
+            names[0] = names[1];
+            names[1] = t;
+        }
+
         return names;
     }
+
+    /**
+     * setter for the source of the relationship
+     * @return String - the key for the relationship name
+     */
+    public String getSource(){
+        return this.source;
+    }
+
+
+    /**
+     * getter for the source of the relationship
+     * @param source the first class that the relationship goes from
+     */
+    public void setSource(String source){
+        if (!this.classNames.contains(source)){
+            throw new IllegalArgumentException("Class must be inside the relationship");
+        }
+        this.source = source;
+    }
+
+    /**
+     * Getter for relationship type
+     * @return - the type of the relationship
+     */
+    public RelationshipType getType(){
+        return this.type;
+    }
+
+    /**
+     * finds the relationship with the specified type and returns it
+     * as an object
+     * @param class1 the name of the first class
+     * @param class2 the name of the second class
+     * @param type the relationship type
+     * @return the relationship with specified classes and type
+     * @throws IllegalArgumentException if the class doesn't exist
+     */
+    public static Relationship getRelationship(String class1, String class2, RelationshipType type){
+        for (Relationship r : relationshipList){
+            if (/*r.type.equals(type) &&*/ r.classNames.contains(class1) && r.classNames.contains(class2)){
+                return r;
+            }
+        }
+        throw new IllegalArgumentException("this class does not exist");
+    }
+
+
+    public ArrayList<Relationship> getAttachedRelationships(String className){
+        ArrayList<Relationship> relationships = new ArrayList<>();
+        for (Relationship r : relationshipList){
+            if (r.getClassNames().contains(className)){
+                relationships.add(r);
+            }
+        }
+        return relationships;
+    }
+
 
 }

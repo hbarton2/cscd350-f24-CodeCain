@@ -1,0 +1,82 @@
+package codecain.BackendCode.Model;
+
+public enum RelationshipType {
+    AGGREGATION,
+    COMPOSITION,
+    GENERALIZATION,
+    REALIZATION;
+
+    /**
+     * returns the string name of the relationship type
+     * @return String - the name of the relationship type
+     */
+    public String toString(){
+        switch (this){
+            case GENERALIZATION -> {
+                return "Generalization";
+            }
+            case REALIZATION -> {
+                return "Realization";
+            }
+            case COMPOSITION -> {
+                return "Composition";
+            }
+            case AGGREGATION -> {
+                return "Aggregation";
+            }
+        }
+        return null;
+    }
+
+    public static RelationshipType fromString(String type){
+        switch (type){
+            case "generalization"  -> {
+                return GENERALIZATION;
+            }
+            case "realization" -> {
+                return REALIZATION ;
+            }
+            case "composition" -> {
+                return COMPOSITION;
+            }
+            case "aggregation" -> {
+                return AGGREGATION;
+            }
+        }
+        return GENERALIZATION;
+    }
+
+    public static boolean typeExists(String typeName){
+        typeName = typeName.trim().toLowerCase();
+        return typeName.equals("composition")
+                || typeName.equals("aggregation")
+                || typeName.equals("realization")
+                || typeName.equals("generalization");
+    }
+
+    /**
+     * @return - returns an ascii representation of an arrow associated with the relationship
+     * if the relationship type does not exist, it returns null
+     *
+     */
+    public String getArrowString(){
+        switch (this){
+            case GENERALIZATION -> {
+                return " -----|> ";
+            }
+            case REALIZATION -> {
+                return " - - -|> ";
+            }
+            case COMPOSITION -> {
+                return " <*>---- ";
+            }
+            case AGGREGATION -> {
+                return " <>----- ";
+            }
+        }
+        return null;
+    }
+
+}
+
+
