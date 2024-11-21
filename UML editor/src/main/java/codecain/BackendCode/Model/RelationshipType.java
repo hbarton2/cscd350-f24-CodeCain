@@ -29,7 +29,7 @@ public enum RelationshipType {
     }
 
     public static RelationshipType fromString(String type){
-        switch (type){
+        switch (type.toLowerCase().trim()){
             case "generalization"  -> {
                 return GENERALIZATION;
             }

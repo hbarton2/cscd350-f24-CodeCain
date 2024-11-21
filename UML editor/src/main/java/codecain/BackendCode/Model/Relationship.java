@@ -1,12 +1,13 @@
 package codecain.BackendCode.Model;
 import codecain.BackendCode.Model.RelationshipType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Relationship {
-
     /**
      * the type of relationship
      */
