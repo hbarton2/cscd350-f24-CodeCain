@@ -1,5 +1,11 @@
 package codecain.BackendCode.Model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum RelationshipType {
     AGGREGATION,
     COMPOSITION,
@@ -75,6 +81,33 @@ public enum RelationshipType {
             }
         }
         return null;
+    }
+
+    /**
+     * constructor needed for save/load
+     * @param node json node
+     * @return the relationship value of the name of the node
+     */
+    @JsonCreator
+    public static RelationshipType fromNode(JsonNode node) {
+        if (node == null || !node.has("name")) {
+            throw new IllegalArgumentException("Invalid input: JSON node must have a 'name' property.");
+        }
+        String name = node.get("name").asText().toUpperCase();
+        try {
+            return RelationshipType.valueOf(name);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid relationship type: " + name, e);
+        }
+    }
+
+    /**
+     * needed for serialization in jackson
+     * @return the full name of the enum value
+     */
+    @JsonProperty
+    public String getName(){
+        return name();
     }
 
 }

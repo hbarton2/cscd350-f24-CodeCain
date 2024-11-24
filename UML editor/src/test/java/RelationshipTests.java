@@ -1,12 +1,16 @@
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
 
-import codecain.BackendCode.Model.UMLClass;
-import codecain.BackendCode.Model.UMLClassInfo;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import codecain.BackendCode.Model.Relationship;
-import org.junit.jupiter.api.AfterEach;
-import java.util.ArrayList;
+import codecain.BackendCode.Model.RelationshipType;
+import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.UMLClassInfo;
 
 /**
  * The RelationshipTests class contains test cases to validate the functionality of the Relationship class.
@@ -40,7 +44,7 @@ public class RelationshipTests {
         UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
         UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
 
-        boolean result = Relationship.addRelationship("DOG", "BIRD");
+        boolean result = Relationship.addRelationship("DOG", "BIRD", RelationshipType.GENERALIZATION);
         assertTrue(result);
         assertTrue(Relationship.relationshipExists("DOG", "BIRD"));
         assertEquals(1, Relationship.relationshipList.size());
@@ -53,9 +57,9 @@ public class RelationshipTests {
     public void testAddExisitingRelationship() {
         UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
         UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
-        Relationship.addRelationship("DOG", "BIRD");
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.GENERALIZATION);
 
-        boolean result = Relationship.addRelationship("DOG", "BIRD");
+        boolean result = Relationship.addRelationship("DOG", "BIRD", RelationshipType.GENERALIZATION);
         assertFalse(result, "Should be prompted that you can't add an existing class relationship");
     }
 
@@ -66,7 +70,7 @@ public class RelationshipTests {
     public void testRemoveRelationship() {
         UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
         UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
-        Relationship.addRelationship("DOG", "BIRD");
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.GENERALIZATION);
         boolean result = Relationship.removeRelationship("DOG", "BIRD");
         assertTrue(result);
         assertFalse(Relationship.relationshipExists("DOG", "BIRD"));
@@ -94,8 +98,8 @@ public class RelationshipTests {
         UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
         UMLClass.classMap.put("CAT", new UMLClassInfo("CAT"));
 
-        Relationship.addRelationship("DOG", "BIRD");
-        Relationship.addRelationship("DOG", "CAT");
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.GENERALIZATION);
+        Relationship.addRelationship("DOG", "CAT", RelationshipType.GENERALIZATION);
         Relationship.removeAttachedRelationships("DOG");
 
         assertFalse(Relationship.relationshipExists("DOG", "BIRD"));
@@ -110,8 +114,8 @@ public class RelationshipTests {
     public void testInvalidClassesForAddingRelationship() {
         UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
 
-        assertFalse(Relationship.addRelationship("DOG", "BIRD"));
-        assertFalse(Relationship.addRelationship("DOG", "CAT"));
+        assertFalse(Relationship.addRelationship("DOG", "BIRD", RelationshipType.GENERALIZATION));
+        assertFalse(Relationship.addRelationship("DOG", "CAT", RelationshipType.GENERALIZATION));
     }
 
     /**
@@ -123,11 +127,11 @@ public class RelationshipTests {
         UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
         UMLClass.classMap.put("CAT", new UMLClassInfo("CAT"));
 
-        Relationship.addRelationship("DOG", "BIRD");
-        Relationship.addRelationship("DOG", "CAT");
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.GENERALIZATION);
+        Relationship.addRelationship("DOG", "CAT", RelationshipType.GENERALIZATION);
 
         String relationships = Relationship.listToString();
-        String expected = "BIRD ------- DOG\nCAT ------- DOG\n";
+        String expected = "DOG -----|> BIRD Generalization\nDOG -----|> CAT Generalization\n";
         assertEquals(expected, relationships);
     }
 
@@ -136,8 +140,8 @@ public class RelationshipTests {
      */
     @Test
     public void testAddRelationshipWithEmptyClasses() {
-        assertFalse(Relationship.addRelationship("", "BIRD"));
-        assertFalse(Relationship.addRelationship(null, "BIRD"));
+        assertFalse(Relationship.addRelationship("", "BIRD", RelationshipType.GENERALIZATION));
+        assertFalse(Relationship.addRelationship(null, "BIRD", RelationshipType.GENERALIZATION));
     }
 
     /**

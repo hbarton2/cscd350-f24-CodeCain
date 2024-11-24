@@ -40,15 +40,9 @@ public class Relationship {
         this.classNames = new HashSet<>();
         this.source = "";
         this.destination = "";
+        this.type = null;
     }
 
-    /**
-     * getter for the destination string
-     * @return String
-     */
-    public String getDestination(){
-        return this.destination;
-    }
 
     /**
      * Constructor for relationship class. This is private
@@ -64,6 +58,14 @@ public class Relationship {
         this.source = source;
         this.destination = destination;
         relationshipList.add(this);
+    }
+
+    /**
+     * getter for the destination string
+     * @return String
+     */
+    public String getDestination(){
+        return this.destination;
     }
 
     // Getter for Jackson serialization/deserialization
@@ -239,6 +241,14 @@ public class Relationship {
      */
     public RelationshipType getType(){
         return this.type;
+    }
+
+    /**
+     * setter for the type
+     * @param type the type as an enum
+     */
+    public void setType(RelationshipType type){
+        this.type = type;
     }
 
     /**
