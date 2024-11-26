@@ -4,11 +4,13 @@ import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
 import codecain.GraphicalUserInterface.Model.*;
 import codecain.GraphicalUserInterface.View.PositionUtils;
+import codecain.GraphicalUserInterface.View.AlertHelper;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -18,6 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
+import javafx.embed.swing.SwingFXUtils;
+
 /**
  * Controller class for managing user interactions with the UML editor GUI.
  * This class handles user actions, such as adding, deleting, renaming classes,
@@ -25,6 +30,33 @@ import java.util.Optional;
  * as well as saving and loading UML diagrams.
  */
 public class Controller {
+
+    @FXML
+    public void exportAsImageBtn() {
+        try {
+            // Snapshot tre nodeContainer
+            WritableImage image = nodeContainer.snapshot(null, null);
+            
+            // Open a FileChooser to select the file location and name
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Export UML Diagram as Image");
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("PNG Files", "*.png")
+            );
+
+            File file = fileChooser.showSaveDialog(nodeContainer.getScene().getWindow());
+
+            if (file != null) {
+               // Save the image as a png file
+               ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+               System.out.println("UML diagram exported to: " + file.getAbsolutePath());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            AlertHelper.showAlert(Alert.AlertType.ERROR, null, null, "Failed to export UML diagram as PNG: " + e.getMessage());
+        }
+    }
 
 
     /**

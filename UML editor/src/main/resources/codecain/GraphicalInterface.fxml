@@ -42,6 +42,7 @@
 
                 <Button mnemonicParsing="false" onAction="#addRelationshipBtn" text="Add Relationship" />
                 <Button mnemonicParsing="false" onAction="#removeRelationshipBtn" text="Remove Relationship" />
+            <Button layoutX="45.0" layoutY="514.0" mnemonicParsing="false" onAction="#exportAsImageBtn" text="Export as PNG" />
 
             </children>
         </VBox>
