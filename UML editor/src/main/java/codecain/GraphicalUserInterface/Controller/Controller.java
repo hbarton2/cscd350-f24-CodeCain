@@ -8,6 +8,7 @@ import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -26,6 +27,9 @@ import java.util.Optional;
  */
 public class Controller {
 
+
+    @FXML
+    private ScrollPane scrollPane;
 
     /**
      * The currently selected ClassNode in the GUI.
@@ -47,7 +51,7 @@ public class Controller {
      * fields, and relationships.
      */
     @FXML
-    private Pane nodeContainer;
+    private AnchorPane nodeContainer;
 
     /**
      * Initializes the controller after the FXML file has been loaded.
