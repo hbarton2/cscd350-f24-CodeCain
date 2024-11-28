@@ -97,7 +97,7 @@ public class ArrowDesigner {
             case REALIZATION -> {
                 arrow.setFill(Color.TRANSPARENT);
                 arrow.setStroke(Color.BLACK);
-                arrow.getStrokeDashArray().addAll(10.0, 10.0); // Dashed line
+                arrow.getStrokeDashArray().addAll(10.0, 10.0);
             }
             case COMPOSITION -> {
                 arrow.setFill(Color.BLACK);
