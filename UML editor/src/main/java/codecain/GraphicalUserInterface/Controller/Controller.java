@@ -1,11 +1,22 @@
 package codecain.GraphicalUserInterface.Controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Optional;
+
+import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
-import codecain.GraphicalUserInterface.Model.*;
-import codecain.GraphicalUserInterface.View.PositionUtils;
+import codecain.GraphicalUserInterface.Model.ArrowManager;
+import codecain.GraphicalUserInterface.Model.ClassManager;
+import codecain.GraphicalUserInterface.Model.FieldManager;
+import codecain.GraphicalUserInterface.Model.MethodManager;
+import codecain.GraphicalUserInterface.Model.ParameterManager;
+import codecain.GraphicalUserInterface.Model.RelationshipManager;
 import codecain.GraphicalUserInterface.View.ClassNode;
+import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
@@ -13,10 +24,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Controller class for managing user interactions with the UML editor GUI.
@@ -50,6 +57,15 @@ public class Controller {
     private Pane nodeContainer;
 
     /**
+     * The manager for graphical arrows representing relationships between UML classes in the GUI.
+     * This is used to add, update, and remove arrows when relationships are created, modified, or deleted.
+     * It ensures that the graphical representation of relationships stays in sync with the data model.
+     */
+    @FXML
+    private ArrowManager arrowManager;
+
+
+    /**
      * Initializes the controller after the FXML file has been loaded.
      * <p>
      * Sets up event handlers for the GUI, including:
@@ -69,6 +85,11 @@ public class Controller {
                 currentlySelectedNode = null; // Reset the currently selected node
             }
         });
+
+        arrowManager = new ArrowManager(nodeContainer);
+        RelationshipManager.setArrowManager(arrowManager);
+        RelationshipManager.setController(this);
+
     }
 
     /**
@@ -264,6 +285,7 @@ public class Controller {
      */
     public void populateGUIFromClassMap() {
         nodeContainer.getChildren().clear();
+        arrowManager.clearArrows();
         UMLClass.classMap.values().forEach(classInfo -> {
             ClassNode classNode = new ClassNode(classInfo);
             if (classInfo.getX() == 0 && classInfo.getY() == 0) {
@@ -275,9 +297,45 @@ public class Controller {
             classNode.setOnMouseClicked(event -> selectClassNode(classNode));
             nodeContainer.getChildren().add(classNode);
         });
-
+    
+        // Trigger layout update for the container to ensure all nodes are positioned
+        nodeContainer.applyCss();
+        nodeContainer.layout();
+    
+        Relationship.relationshipList.forEach(relationship -> {
+            ClassNode sourceNode = findClassNode(relationship.getSource());
+            ClassNode destNode = findClassNode(relationship.getDestination());
+    
+            if (sourceNode != null && destNode != null) {
+                arrowManager.addArrow(relationship, sourceNode, destNode);
+                arrowManager.updateArrowPosition(
+                    arrowManager.getArrow(relationship),
+                    sourceNode,
+                    destNode,
+                    relationship.getType()
+                );
+            }
+        });
+    
         System.out.println("GUI populated from class map.");
     }
+    
+
+    /**
+     * Finds and returns the ClassNode corresponding to the given class name.
+     * 
+     * @param className the name of the class to search for.
+     * @return the ClassNode with the specified class name, or null if no matching node is found.
+     */
+    public ClassNode findClassNode(String className) {
+        for (Node node : nodeContainer.getChildren()) {
+            if (node instanceof ClassNode && ((ClassNode) node).getName().equals(className)) {
+                return (ClassNode) node;
+            }
+        }
+        return null;
+    }
+    
 
     /**
      * Selects a specific class node in the GUI, updating the selection state.
