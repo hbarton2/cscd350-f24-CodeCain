@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -33,6 +34,9 @@ import javafx.stage.Window;
  */
 public class Controller {
 
+
+    @FXML
+    private ScrollPane scrollPane;
 
     /**
      * The currently selected ClassNode in the GUI.
@@ -54,7 +58,7 @@ public class Controller {
      * fields, and relationships.
      */
     @FXML
-    private Pane nodeContainer;
+    private AnchorPane nodeContainer;
 
     /**
      * The manager for graphical arrows representing relationships between UML classes in the GUI.

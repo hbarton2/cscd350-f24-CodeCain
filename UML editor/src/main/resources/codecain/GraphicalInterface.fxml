@@ -5,6 +5,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
 
 <BorderPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codecain.GraphicalUserInterface.Controller.Controller">
 
@@ -49,7 +51,12 @@
 
     <!-- Center Content (Main Canvas) -->
     <center>
-        <Pane fx:id="nodeContainer" prefHeight="800.0" prefWidth="800.0" />
+        <ScrollPane> 
+            <content>
+                <AnchorPane fx:id="nodeContainer" prefHeight="2000.0" prefWidth="2000.0" />
+            </content>
+        </ScrollPane>
     </center>
+
 
 </BorderPane>
