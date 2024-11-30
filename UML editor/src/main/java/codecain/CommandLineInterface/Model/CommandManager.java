@@ -24,7 +24,8 @@ public class CommandManager {
     public CommandManager(TextArea commandOutput) {
         this.commandOutput = commandOutput;
         this.fileOperations = new FileOperations();
-        this.stateManager = new StateManager();    }
+        this.stateManager = new StateManager();
+    }
 
     /**
      * Appends text to the command output TextArea.
@@ -57,7 +58,7 @@ public class CommandManager {
                 commandOutput.positionCaret(helpStartPosition);
                 return;
             }
-            case "add", "delete", "rename", "list" -> result = handleCommand(tokens);
+            case "add", "delete", "rename", "list" -> result = handleCommand(tokens); // Now includes "list details"
             case "save" -> result = fileOperations.saveDiagram(getFileName(tokens));
             case "load" -> result = fileOperations.loadDiagram(getFileName(tokens));
             case "undo" -> undo();
@@ -99,6 +100,7 @@ public class CommandManager {
 
 
 
+
     /**
      * Handles commands related to specific operations like add, delete, rename, and list by delegating
      * them to their respective handler methods.
@@ -119,6 +121,7 @@ public class CommandManager {
             default -> DisplayHelper.unknownAction(tokens[0]);
         };
     }
+
 
     /**
      * Handles the addition of various UML components, such as classes, relationships, fields, etc.
@@ -156,7 +159,6 @@ public class CommandManager {
         UMLClass.addClass(className);
         return DisplayHelper.classAdded(className);
     }
-
 
 
     /**
@@ -211,6 +213,7 @@ public class CommandManager {
         fields.addField(className, fieldType, fieldName);
         return DisplayHelper.fieldAdded(fieldName, fieldType, className);
     }
+
     /**
      * Adds a method to a specified UML class.
      *
@@ -496,8 +499,19 @@ public class CommandManager {
                 String relationships = Relationship.listToString();
                 yield relationships.isEmpty() ? "No relationships available." : "Relationships:\n" + relationships;
             }
-            default -> "Invalid command. Use 'list classes' or 'list relationships'.";
+            case "details" -> handleListDetails(tokens);
+            default -> "Invalid command. Use 'list classes', 'list relationships', or 'list details'.";
         };
+    }
+
+
+    private String handleListDetails(String[] tokens) {
+        if (tokens.length < 3) {
+            return "Usage: list details <className>";
+        }
+
+        String className = tokens[2];
+        return UMLClass.getClassDetails(className);
     }
 
     /**
@@ -557,6 +571,7 @@ public class CommandManager {
         }
         return classInfo;
     }
+
     private String handleDeleteMethod(String[] tokens) {
         if (tokens.length < 3) {
             return "Usage: delete method <className> <methodName>";
@@ -608,3 +623,4 @@ public class CommandManager {
         }
     }
 }
+
