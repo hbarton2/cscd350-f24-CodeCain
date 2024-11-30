@@ -2,10 +2,7 @@ package codecain.GraphicalUserInterface.View;
 
 import codecain.BackendCode.Model.*;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
@@ -266,7 +263,73 @@ public class ClassNode extends VBox {
             this.setLayoutY(newY);
         }
 
+        // Update the ScrollPane if necessary
+        ScrollPane scrollPane = findScrollPane(parentPane);
+        if(scrollPane != null) {
+            ensureVisibleInScrollPane(scrollPane);
+        }
+
         syncWithUMLClassInfo();
+    }
+
+    /**
+     * Ensures the ClassNode stays visible within the viewport of the ScrollPane
+     * by minimally adjusting the viewport to bring the node into view.
+     *
+     * @param scrollPane The {@link ScrollPane} containing the parent pane.
+     */
+    private void ensureVisibleInScrollPane(ScrollPane scrollPane) {
+        // Get the bounds of the ClassNode relative to the ScrollPane's content
+        double nodeMinX = this.getLayoutX();
+        double nodeMaxX = nodeMinX + this.getPrefWidth();
+        double nodeMinY = this.getLayoutY();
+        double nodeMaxY = nodeMinY + this.getPrefHeight();
+
+        // Get the visible viewport dimensions
+        double viewportWidth = scrollPane.getViewportBounds().getWidth();
+        double viewportHeight = scrollPane.getViewportBounds().getHeight();
+
+        // Calculate the current visible region in the ScrollPane
+        double contentWidth = scrollPane.getContent().getBoundsInLocal().getWidth();
+        double contentHeight = scrollPane.getContent().getBoundsInLocal().getHeight();
+        double viewportMinX = scrollPane.getHvalue() * (contentWidth - viewportWidth);
+        double viewportMaxX = viewportMinX + viewportWidth;
+        double viewportMinY = scrollPane.getVvalue() * (contentHeight - viewportHeight);
+        double viewportMaxY = viewportMinY + viewportHeight;
+
+        // Adjust horizontal scroll
+        if (nodeMinX < viewportMinX) {
+            scrollPane.setHvalue((nodeMinX) / (contentWidth - viewportWidth));
+        } else if (nodeMaxX > viewportMaxX) {
+            scrollPane.setHvalue((nodeMaxX - viewportWidth) / (contentWidth - viewportWidth));
+        }
+
+        // Adjust vertical scroll
+        if (nodeMinY < viewportMinY) {
+            scrollPane.setVvalue((nodeMinY) / (contentHeight - viewportHeight));
+        } else if (nodeMaxY > viewportMaxY) {
+            scrollPane.setVvalue((nodeMaxY - viewportHeight) / (contentHeight - viewportHeight));
+        }
+    }
+
+    /**
+     * Finds the nearest {@link ScrollPane} ancestor of the specified {@link Pane}.
+     * This method traverses the parent hierarchy of the given {@link Pane} to locate
+     * the first {@link ScrollPane} that contains it. If no {@link ScrollPane} is found,
+     * the method returns {@code null}.
+     *
+     * @param pane The {@link Pane} whose parent hierarchy is to be traversed.
+     * @return The nearest {@link ScrollPane} ancestor if one exists, otherwise {@code null}.
+     */
+    private ScrollPane findScrollPane(Pane pane) {
+        while (pane != null) {
+            if (pane.getParent() instanceof ScrollPane) {
+                return (ScrollPane) pane.getParent();
+            }
+            pane = (Pane) pane.getParent();
+        }
+
+        return null;
     }
 
     /**
