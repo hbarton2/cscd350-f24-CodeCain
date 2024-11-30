@@ -33,29 +33,16 @@ public class Controller {
 
     @FXML
     public void exportAsImageBtn() {
-        try {
-            // Snapshot tre nodeContainer
-            WritableImage image = nodeContainer.snapshot(null, null);
-            
-            // Open a FileChooser to select the file location and name
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Export UML Diagram as Image");
-            fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("PNG Files", "*.png")
-            );
 
-            File file = fileChooser.showSaveDialog(nodeContainer.getScene().getWindow());
+        // Open a FileChooser to select the file location and name
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export UML Diagram as Image");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("PNG Files", "*.png")
+        );
 
-            if (file != null) {
-               // Save the image as a png file
-               ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-               System.out.println("UML diagram exported to: " + file.getAbsolutePath());
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            AlertHelper.showAlert(Alert.AlertType.ERROR, null, null, "Failed to export UML diagram as PNG: " + e.getMessage());
-        }
+        File file = fileChooser.showSaveDialog(nodeContainer.getScene().getWindow());
+        ExportImage.exportImage(nodeContainer, file);
     }
 
 
@@ -294,7 +281,7 @@ public class Controller {
      * Clears the existing nodes in the GUI and repopulates them based on the
      * backend state.
      */
-    public void populateGUIFromClassMap() {
+    public Pane populateGUIFromClassMap() {
         nodeContainer.getChildren().clear();
         UMLClass.classMap.values().forEach(classInfo -> {
             ClassNode classNode = new ClassNode(classInfo);
@@ -309,6 +296,7 @@ public class Controller {
         });
 
         System.out.println("GUI populated from class map.");
+        return nodeContainer;
     }
 
     /**
