@@ -59,13 +59,13 @@ public class GridManager {
         classNode.layoutXProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Class node moved. New X: " + newValue);
             instance.getGrid().updateGrid();
-            //printGrid();
+            printGrid();
         });
 
         classNode.layoutYProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Class node moved. New Y: " + newValue);
             instance.getGrid().updateGrid();
-            //printGrid();
+            printGrid();
 
         });
 
@@ -73,14 +73,14 @@ public class GridManager {
         classNode.prefWidthProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Class node width changed. New Width: " + newValue);
             instance.getGrid().updateGrid();
-            //printGrid();
+            printGrid();
 
         });
 
         classNode.prefHeightProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Class node height changed. New Height: " + newValue);
             instance.getGrid().updateGrid();
-            //printGrid();
+            printGrid();
         });
     }
 
