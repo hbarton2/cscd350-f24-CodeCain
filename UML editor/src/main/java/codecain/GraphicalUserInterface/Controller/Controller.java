@@ -7,12 +7,7 @@ import java.util.Optional;
 import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
-import codecain.GraphicalUserInterface.Model.ArrowManager;
-import codecain.GraphicalUserInterface.Model.ClassManager;
-import codecain.GraphicalUserInterface.Model.FieldManager;
-import codecain.GraphicalUserInterface.Model.MethodManager;
-import codecain.GraphicalUserInterface.Model.ParameterManager;
-import codecain.GraphicalUserInterface.Model.RelationshipManager;
+import codecain.GraphicalUserInterface.Model.*;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.fxml.FXML;
@@ -87,6 +82,7 @@ public class Controller {
         });
 
         arrowManager = new ArrowManager(nodeContainer);
+        GridManager.getInstance().setGrid(new LineGrid(50.0,nodeContainer));
         RelationshipManager.setArrowManager(arrowManager);
         RelationshipManager.setController(this);
 
