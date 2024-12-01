@@ -1,6 +1,7 @@
 package codecain.GraphicalUserInterface.View;
 
 import codecain.BackendCode.Model.*;
+import codecain.GraphicalUserInterface.Model.GridManager;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -82,6 +83,8 @@ public class ClassNode extends VBox {
         this.setOnMouseDragged(this::onMouseDragged);
         this.classNameLabel.setOnMouseClicked(this::onLabelDoubleClick);
 
+        GridManager.addClassListeners(this);
+        GridManager.getInstance().getGrid().printGrid();
     }
 
     /**
