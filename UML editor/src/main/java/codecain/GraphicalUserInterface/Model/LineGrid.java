@@ -46,16 +46,12 @@ public class LineGrid {
      * generates a grid. Should only be called in the constructor
      */
     private void initGrid(){
+        numRows = (int) (nodeContainer.getWidth() / cellWidth);
+        numCols = (int) (nodeContainer.getHeight() / cellWidth);
         if (isGenerated){
             return;
         }
         isGenerated = true;
-
-        int screenWidth = 2000;
-        int screenHeight = 2000;
-
-        numRows = (int) (screenWidth / cellWidth);
-        numCols = (int) (screenHeight / cellWidth);
         generateGrid();
     }
 
