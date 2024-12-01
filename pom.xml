@@ -116,6 +116,7 @@
                 <excludes>
                     <exclude>**/GraphicalUserInterface/**</exclude>
                     <exclude>**/CommandLineInterface/**</exclude>
+                    <exclude>**/Main.class</exclude>
                 </excludes>
             </configuration>
                     </execution>
