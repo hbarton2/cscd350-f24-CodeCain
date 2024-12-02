@@ -2,8 +2,11 @@ package codecain.CommandLineInterface.Model;
 
 import codecain.BackendCode.Model.*;
 import codecain.BackendCode.UndoRedo.StateManager;
+import codecain.CommandLineInterface.Controller.CLIController;
 import codecain.CommandLineInterface.View.CLIView;
 import javafx.scene.control.TextArea;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,7 @@ public class CommandManager {
             case "add", "delete", "rename", "list" -> result = handleCommand(tokens);
             case "save" -> result = fileOperations.saveDiagram(getFileName(tokens));
             case "load" -> result = fileOperations.loadDiagram(getFileName(tokens));
+            case "export" -> result = handleExport(tokens);
             case "undo" -> undo();
             case "redo" -> redo();
             case "exit" -> {
@@ -73,6 +77,8 @@ public class CommandManager {
             appendToOutput( "\n" + result + "\n");
         }
     }
+
+    
 
     /**
      * Undo the last action.
@@ -607,4 +613,27 @@ public class CommandManager {
             return ""; // Empty string to prevent immediate output
         }
     }
+    private String handleExport(String[] tokens) {
+    if (tokens.length < 2) {
+        return "Usage: export <filename>.png";
+    }
+
+    String fileName = tokens[1];
+    if (!fileName.endsWith(".png")) {
+        fileName += ".png"; // Ensure the file has a .png extension
+    }
+
+    File file = new File(fileName);
+
+    // Check if the nodeContainer is set (contains the UML diagram)
+    if (CLIController.nodeContainer == null) {
+        return "Error: UML diagram container is not set.";
+    }
+
+    // Call the static method to export the image
+    CLIController.exportAsImage(CLIController.nodeContainer, file);
+
+    return "UML diagram exported to: " + file.getAbsolutePath();
+}
+
 }

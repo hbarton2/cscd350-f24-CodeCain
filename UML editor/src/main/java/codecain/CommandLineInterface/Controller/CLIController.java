@@ -1,10 +1,18 @@
 package codecain.CommandLineInterface.Controller;
 
 import codecain.CommandLineInterface.View.CLIView;
+import codecain.GraphicalUserInterface.Model.ExportImage;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import codecain.CommandLineInterface.Model.CLIExportImage;
 import codecain.CommandLineInterface.Model.CommandManager;
 
+
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
+
+
 
 /**
  * Controller for the Command Line Interface of the UML Editor.
@@ -12,6 +20,13 @@ import java.util.stream.Collectors;
  * It connects the CLIView with the CommandManager.
  */
 public class CLIController {
+
+    public static AnchorPane nodeContainer;
+
+    public void setNodeContainer(AnchorPane nodeContainer) {
+        this.nodeContainer = nodeContainer;
+    }
+    
 
     /**
      * The view component of the CLI, responsible for displaying output and accepting input from the user.
@@ -45,6 +60,7 @@ public class CLIController {
             "delete relationship",
             "list relationships",
             "list classes",
+            "export",
             "help"
     );
 
@@ -100,4 +116,12 @@ public class CLIController {
             view.clearCommandInput();
         }
     }
+    public static void exportAsImage(AnchorPane nodeContainer, File file) {
+        if (nodeContainer == null) {
+            System.out.println("Error: Node container is not set.");
+            return;
+        }
+        CLIExportImage.exportImage(nodeContainer, file);
+    }
+    
 }
