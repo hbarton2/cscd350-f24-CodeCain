@@ -1,5 +1,7 @@
 package codecain.GraphicalUserInterface.Model;
 
+import codecain.GraphicalUserInterface.Model.LineGrid;
+import javafx.animation.AnimationTimer;
 import javafx.scene.layout.VBox;
 
 public class GridManager {
@@ -7,7 +9,9 @@ public class GridManager {
     private LineGrid grid;
 
     private static GridManager instance;
-
+    private boolean updateScheduled = false;
+    private long lastUpdateTime = 0;
+    private final long updateInterval = 100_000_000;
     private GridManager() {}
 
     public static GridManager getInstance() {
@@ -54,37 +58,44 @@ public class GridManager {
     public static void addClassListeners(VBox classNode) {
         if (classNode == null) return;
 
-        instance.getGrid().updateGrid();
-
-        classNode.layoutXProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Class node moved. New X: " + newValue);
-            instance.getGrid().updateGrid();
-            printGrid();
-        });
-
-        classNode.layoutYProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Class node moved. New Y: " + newValue);
-            instance.getGrid().updateGrid();
-            printGrid();
-
-        });
-
-        // Listener for size changes (Width and Height)
-        classNode.prefWidthProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Class node width changed. New Width: " + newValue);
-            instance.getGrid().updateGrid();
-            printGrid();
-
-        });
-
-        classNode.prefHeightProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Class node height changed. New Height: " + newValue);
-            instance.getGrid().updateGrid();
-            printGrid();
-        });
+        classNode.layoutXProperty().addListener((observable, oldValue, newValue) -> instance.scheduleGridUpdate());
+        classNode.layoutYProperty().addListener((observable, oldValue, newValue) -> instance.scheduleGridUpdate());
+        classNode.prefWidthProperty().addListener((observable, oldValue, newValue) -> instance.scheduleGridUpdate());
+        classNode.prefHeightProperty().addListener((observable, oldValue, newValue) -> instance.scheduleGridUpdate());
     }
 
-    private static void printGrid(){
+    /**
+     * Schedules a grid update if it hasn't been scheduled recently.
+     */
+    private void scheduleGridUpdate() {
+        if (!updateScheduled) {
+            updateScheduled = true;
+
+            // Use an AnimationTimer to debounce updates
+            new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    if (now - lastUpdateTime >= updateInterval) {
+                        performGridUpdate();
+                        lastUpdateTime = now;
+                        updateScheduled = false;
+                        stop();
+                    }
+                }
+            }.start();
+        }
+    }
+
+    /**
+     * Perform the actual grid update.
+     */
+    private void performGridUpdate() {
+        System.out.println("Updating grid...");
+        getGrid().updateGrid();
+        printGrid();
+    }
+
+    private static void printGrid() {
         instance.getGrid().printGrid();
     }
 }
