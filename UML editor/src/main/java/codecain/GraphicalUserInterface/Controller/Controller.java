@@ -82,7 +82,7 @@ public class Controller {
         });
 
         arrowManager = new ArrowManager(nodeContainer);
-        GridManager.getInstance().setGrid(new LineGrid(50.0,nodeContainer));
+        GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer));
         RelationshipManager.setArrowManager(arrowManager);
         RelationshipManager.setController(this);
 
