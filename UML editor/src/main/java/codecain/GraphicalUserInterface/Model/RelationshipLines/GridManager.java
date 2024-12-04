@@ -1,6 +1,5 @@
-package codecain.GraphicalUserInterface.Model;
+package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
-import codecain.GraphicalUserInterface.Model.LineGrid;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.VBox;
 
