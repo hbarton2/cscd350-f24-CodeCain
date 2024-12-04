@@ -8,6 +8,8 @@ import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
 import codecain.GraphicalUserInterface.Model.*;
+import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
+import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.fxml.FXML;
