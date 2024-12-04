@@ -36,19 +36,7 @@ public class MenuGUI extends Application {
 
         // GUI Button
         Button guiButton = new Button("Graphical Interface");
-        guiButton.setOnAction(event -> {
-            try {
-                Stage guiStage = new Stage();
-                GraphicalInterfaceJavaFX gui = new GraphicalInterfaceJavaFX();
-                gui.start(guiStage); // Launch GUI directly
-                primaryStage.hide(); // Hide the main menu
-
-                // Show the main menu again when the GUI stage is closed
-                guiStage.setOnCloseRequest(event1 -> primaryStage.show());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        guiButton.setOnAction(event -> guiLaunch(primaryStage));
 
         // Layout setup
         VBox layout = new VBox(20, welcomeText, cliButton, guiButton);
@@ -60,7 +48,20 @@ public class MenuGUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
+    public static void guiLaunch(Stage primaryStage) {
+        try {
+            Stage guiStage = new Stage();
+            GraphicalInterfaceJavaFX gui = new GraphicalInterfaceJavaFX();
+            gui.start(guiStage); // Launch GUI directly
+            primaryStage.hide(); // Hide the main menu
 
+            // Show the main menu again when the GUI stage is closed
+            guiStage.setOnCloseRequest(event1 -> primaryStage.show());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
         launch(args);
     }

@@ -1,6 +1,7 @@
 package codecain.CommandLineInterface.Controller;
 
 import codecain.CommandLineInterface.View.CLIView;
+import codecain.GraphicalUserInterface.Controller.Controller;
 import codecain.GraphicalUserInterface.Model.ExportImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -24,7 +25,7 @@ public class CLIController {
     public static AnchorPane nodeContainer;
 
     public void setNodeContainer(AnchorPane nodeContainer) {
-        this.nodeContainer = nodeContainer;
+        this.nodeContainer = Controller.getContainer();
     }
     
 
@@ -117,10 +118,6 @@ public class CLIController {
         }
     }
     public static void exportAsImage(AnchorPane nodeContainer, File file) {
-        if (nodeContainer == null) {
-            System.out.println("Error: Node container is not set.");
-            return;
-        }
         CLIExportImage.exportImage(nodeContainer, file);
     }
     

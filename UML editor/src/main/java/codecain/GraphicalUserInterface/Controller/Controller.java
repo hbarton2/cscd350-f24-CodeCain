@@ -423,4 +423,8 @@ public class Controller {
         }
     }
 
+    public static AnchorPane getContainer(){
+        return nodeContainer;
+    }
+
 }

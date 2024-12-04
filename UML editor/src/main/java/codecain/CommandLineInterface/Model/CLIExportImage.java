@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import codecain.CommandLineInterface.Controller.CLIController;
+import codecain.GraphicalUserInterface.Controller.Controller;
 import codecain.GraphicalUserInterface.View.AlertHelper;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
@@ -102,23 +103,5 @@ public class CLIExportImage {
         params.setViewport(viewport);
         return params;
     }
-    private String handleExport(String[] tokens) {
-    if (tokens.length < 2) {
-        return "Usage: export <filename>.png";
-    }
-
-    String fileName = tokens[1];
-    if (!fileName.endsWith(".png")) {
-        fileName += ".png";
-    }
-
-    File file = new File(fileName);
-    if (CLIController.nodeContainer == null) {
-        return "Error: UML diagram container is not set.";
-    }
-
-    CLIExportImage.exportImage(CLIController.nodeContainer, file);
-    return "UML diagram exported to: " + file.getAbsolutePath();
-}
-
+    
 }

@@ -4,7 +4,15 @@ import codecain.BackendCode.Model.*;
 import codecain.BackendCode.UndoRedo.StateManager;
 import codecain.CommandLineInterface.Controller.CLIController;
 import codecain.CommandLineInterface.View.CLIView;
+import codecain.GraphicalUserInterface.View.GraphicalInterfaceJavaFX;
+import codecain.GraphicalUserInterface.View.MenuGUI;
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -614,6 +622,8 @@ public class CommandManager {
         }
     }
     private String handleExport(String[] tokens) {
+     launchGui();
+    
     if (tokens.length < 2) {
         return "Usage: export <filename>.png";
     }
@@ -634,6 +644,17 @@ public class CommandManager {
     CLIController.exportAsImage(CLIController.nodeContainer, file);
 
     return "UML diagram exported to: " + file.getAbsolutePath();
-}
 
+    }
+    public void launchGui() {
+        Stage primaryStage = new Stage();
+        MenuGUI.guiLaunch(primaryStage);
+        primaryStage.hide();
+        
+        
+    }
 }
+    
+
+
+
