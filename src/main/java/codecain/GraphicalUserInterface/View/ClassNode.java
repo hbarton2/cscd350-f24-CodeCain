@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import javafx.scene.text.Text;
 
 /**
  * Represents a visual node in the UML editor for a single UML class.
@@ -37,6 +38,9 @@ public class ClassNode extends VBox {
 
     private UMLClassInfo classInfo;
 
+    private static final double MIN_WIDTH = 200;
+    private static final double MIN_HEIGHT = 300;
+
     /**
      * Constructs a ClassNode instance for a specific UML class.
      *
@@ -59,8 +63,12 @@ public class ClassNode extends VBox {
         this.setAlignment(Pos.TOP_CENTER);
 
         this.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 4;");
-        this.setPrefSize(200, 300);
+        this.setPrefSize(MIN_WIDTH, MIN_HEIGHT);
         this.getChildren().addAll(this.classNameLabel, this.fields, this.methods);
+
+        // Adjust width dynamically based on the longest field or method
+        fields.getItems().addListener((javafx.collections.ListChangeListener<UMLFieldInfo>) change -> updateWidth());
+        methods.getItems().addListener((javafx.collections.ListChangeListener<UMLMethodInfo>) change -> updateWidth());
 
         // Configure the shadow effect
         shadowEffect.setRadius(10);
@@ -511,6 +519,45 @@ public class ClassNode extends VBox {
             classInfo.getMethods().removeIf(m -> m.getMethodName().equals(methodName)); // Sync with backend
         }
         return removed;
+    }
+
+    /**
+     * Updates the preferred width of the {@code ClassNode} to ensure it can accommodate
+     * the longest text in the {@code fields} and {@code methods} {@link ListView}.
+     * <p>
+     * The method calculates the maximum text width of items in both {@code fields}
+     * and {@code methods} by measuring their rendered width using the {@link Text} class.
+     * It then adjusts the preferred width of the {@code ClassNode} to be the greater
+     * of the calculated maximum width plus padding or a predefined minimum width.
+     * </p>
+     * <p>
+     * This ensures the {@code ClassNode} resizes dynamically as items are added to
+     * or removed from the {@code fields} and {@code methods} lists.
+     * </p>
+     */
+    private void updateWidth() {
+        // Calculate the widest text in fields
+        double maxFieldWidth = fields.getItems().stream()
+                .map(field -> new Text(field.toString()).getLayoutBounds().getWidth())
+                .max(Double::compare)
+                .orElse(0.0); // Default to 0 if no fields are present
+
+        // Calculate the widest text in methods
+        double maxMethodWidth = methods.getItems().stream()
+                .map(method -> new Text(method.toString()).getLayoutBounds().getWidth())
+                .max(Double::compare)
+                .orElse(0.0); // Default to 0 if no methods are present
+
+        // Determine the maximum width needed based on the longer text
+        double maxContentWidth = Math.max(maxFieldWidth, maxMethodWidth) + 50; // Add padding
+
+        // Ensure the width is at least MIN_WIDTH
+        double finalWidth = Math.max(maxContentWidth, MIN_WIDTH);
+
+        // Set the new preferred width for the ClassNode
+        this.setPrefWidth(finalWidth);
+
+        System.out.println("Updated width to: " + finalWidth);
     }
 
     /**
