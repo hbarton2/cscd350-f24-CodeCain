@@ -460,7 +460,7 @@ public class RelationshipTests {
         assertTrue(attachedRelationships.stream().anyMatch(r -> r.getClassNames().contains("BIRD") && r.getType() == RelationshipType.GENERALIZATION));
         assertTrue(attachedRelationships.stream().anyMatch(r -> r.getClassNames().contains("TIGER") && r.getType() == RelationshipType.COMPOSITION));
     }
-    /*
+
     @Test
     public void testGetClassNamesWithIncompleteRelationships(){
         PrintStream out = System.out;
@@ -477,14 +477,12 @@ public class RelationshipTests {
             assertEquals(0, res.length);
 
             String line = output.toString().trim();
-            assertEquals("There are no classes to print out", output);
+            assertEquals("There are no classes to print out", line);
         } finally {
             System.setOut(out);
         }
 
     }
-    
-     */
 
 
 
