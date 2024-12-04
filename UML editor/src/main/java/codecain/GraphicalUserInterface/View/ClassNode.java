@@ -1,7 +1,7 @@
 package codecain.GraphicalUserInterface.View;
 
 import codecain.BackendCode.Model.*;
-import codecain.GraphicalUserInterface.Model.GridManager;
+import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
