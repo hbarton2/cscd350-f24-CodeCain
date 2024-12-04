@@ -18,8 +18,8 @@ public class FileOperations {
             return "Usage: save <filename>";
         }
         try {
-            SaveManager.saveToJSON(fileName);
-            return "UML diagram saved to " + fileName;
+            SaveManager.saveToJSON(fileName + ".json");
+            return "UML diagram saved to " + fileName + ".json";
         } catch (Exception e) {
             return "Error saving UML diagram: " + e.getMessage();
         }
