@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collection;
 
 import codecain.BackendCode.Model.UMLClass;
 import org.junit.jupiter.api.AfterEach;
@@ -374,8 +375,38 @@ public class RelationshipTests {
 
         assertThrows(IllegalArgumentException.class , () -> relationship.setSource("CAT"));
 
+    }
+    @Test
+    public void testConstructor(){
+        Relationship relationship = new Relationship();
+        assertNotNull(relationship.getClassNames());
+        assertTrue(relationship.getClassNames().isEmpty());
+        assertEquals("",relationship.getSource());
+        assertEquals("",relationship.getDestination());
+        assertNull(relationship.getType());
+    }
 
+    @Test
+    public void testGetDestination(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.REALIZATION);
 
+        Relationship relationship = Relationship.relationshipList.getFirst();
+        assertEquals("BIRD", relationship.getDestination());
+    }
+    @Test
+    public void testGetClassNames(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.REALIZATION);
+
+        Relationship relationship = Relationship.relationshipList.getFirst();
+        Collection<String> classNames = relationship.getClassNames();
+
+        assertEquals(2, classNames.size());
+        assertTrue(classNames.contains("DOG"));
+        assertTrue(classNames.contains("BIRD"));
     }
 
 
