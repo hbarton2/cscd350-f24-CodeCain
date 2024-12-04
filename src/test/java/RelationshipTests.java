@@ -2,9 +2,6 @@ import java.util.ArrayList;
 
 import codecain.BackendCode.Model.UMLClass;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.RelationshipType;
 import codecain.BackendCode.Model.UMLClassInfo;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The RelationshipTests class contains test cases to validate the functionality of the Relationship class.
@@ -327,4 +326,28 @@ public class RelationshipTests {
         relationship.setType(RelationshipType.AGGREGATION);
         assertEquals(RelationshipType.AGGREGATION, relationship.getType());
     }
+    @Test
+    public void testGetClassNameAsArray(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
+
+        Relationship relationship = Relationship.relationshipList.getFirst();
+        String[] classes = relationship.getClassNamesAsArray();
+        assertEquals(2, classes.length);
+        assertEquals("BIRD", classes[1]);
+        assertEquals("DOG", classes[0]);
+    }
+    @Test
+    public void testGetRelationship(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.AGGREGATION);
+
+        Relationship relationship = Relationship.relationshipList.getFirst();
+        assertNotNull(relationship);
+        assertEquals(RelationshipType.AGGREGATION, relationship.getType());
+    }
+    
+
 }
