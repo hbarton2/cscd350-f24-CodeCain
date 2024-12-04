@@ -1,5 +1,9 @@
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 import codecain.BackendCode.Model.UMLClass;
 import org.junit.jupiter.api.AfterEach;
@@ -408,6 +412,82 @@ public class RelationshipTests {
         assertTrue(classNames.contains("DOG"));
         assertTrue(classNames.contains("BIRD"));
     }
+    @Test
+    public void testSetClassNames(){
+        Relationship relationship = new Relationship();
+        Collection<String> classNames = new HashSet<>();
+        classNames.add("DOG");
+        classNames.add("BIRD");
+
+        relationship.setClassNames(classNames);
+        assertTrue(relationship.getClassNames().contains("DOG"));
+        assertTrue(relationship.getClassNames().contains("BIRD"));
+
+        assertEquals(2, relationship.getClassNames().size());
+    }
+    @Test
+    public void testRelationshipHasClass(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.REALIZATION);
+
+        assertTrue(Relationship.relationshipHasClass("DOG"));
+        assertTrue(Relationship.relationshipHasClass("BIRD"));
+        assertFalse(Relationship.relationshipHasClass("IGUANA"));
+    }
+    @Test
+    public void testRelationshipHasType(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
+
+        assertTrue(Relationship.relationshipExists("DOG", "BIRD", RelationshipType.COMPOSITION));
+        assertFalse(Relationship.relationshipExists( "DOG", "BIRD", RelationshipType.AGGREGATION));
+    }
+    @Test
+    public void testGetAttachedRelationships(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        UMLClass.classMap.put("TIGER", new UMLClassInfo("TIGER"));
+
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.GENERALIZATION);
+        Relationship.addRelationship("DOG","TIGER", RelationshipType.COMPOSITION);
+
+        Relationship relationship = new Relationship();
+        ArrayList<Relationship> attachedRelationships = relationship.getAttachedRelationships("DOG");
+
+        assertEquals(2, attachedRelationships.size());
+        assertTrue(attachedRelationships.stream().anyMatch(r -> r.getClassNames().contains("BIRD") && r.getType() == RelationshipType.GENERALIZATION));
+        assertTrue(attachedRelationships.stream().anyMatch(r -> r.getClassNames().contains("TIGER") && r.getType() == RelationshipType.COMPOSITION));
+    }
+    /*
+    @Test
+    public void testGetClassNamesWithIncompleteRelationships(){
+        PrintStream out = System.out;
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+
+        try {
+            Relationship relationship = new Relationship();
+            relationship.setClassNames(new HashSet<>());
+
+            String[] res = relationship.getClassNamesAsArray();
+
+            assertEquals(0, res.length);
+
+            String line = output.toString().trim();
+            assertEquals("There are no classes to print out", output);
+        } finally {
+            System.setOut(out);
+        }
+
+    }
+    
+     */
+
+
+
 
 
 
