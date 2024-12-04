@@ -348,6 +348,37 @@ public class RelationshipTests {
         assertNotNull(relationship);
         assertEquals(RelationshipType.AGGREGATION, relationship.getType());
     }
-    
+    @Test
+    public void testGettingNonExistingRelationships(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        assertThrows(IllegalArgumentException.class, () -> Relationship.getRelationship("Dog", "BIRD", RelationshipType.COMPOSITION));
+    }
+    @Test
+    public void testRemoveAttachedRelationshipsWithNoRelationships(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+
+        Relationship.removeAttachedRelationships("DOG");
+        assertEquals(0, Relationship.relationshipList.size());
+    }
+    @Test
+    public void testSetSource(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.REALIZATION);
+
+        Relationship relationship = Relationship.relationshipList.getFirst();
+
+        relationship.setSource("BIRD");
+        assertEquals("BIRD", relationship.getSource());
+
+        assertThrows(IllegalArgumentException.class , () -> relationship.setSource("CAT"));
+
+
+
+    }
+
+
+
 
 }
