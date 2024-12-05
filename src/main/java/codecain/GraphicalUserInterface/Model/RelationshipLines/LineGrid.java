@@ -15,18 +15,47 @@ import java.util.ArrayList;
 
 public class LineGrid {
 
+    /**
+     * the width of the cell
+     */
     private final double cellWidth;
+
+    /**
+     * matrix containing the cells in the grid
+     */
     private GridCell[][] gridCells;
+
+    /**
+     * tells if the grid has been generated
+     */
     private boolean isGenerated;
 
-
+    /**
+     * number of rows in the grid
+     */
     private int numRows;
+
+    /**
+     * number of columns in the grid
+     */
     private int numCols;
+
+    /**
+     * pane containing the class nodes and everything
+     */
     private final Pane nodeContainer;
+
+    /**
+     * the width of the screen
+     */
     private final double screenWidth;
+
+    /**
+     * the height of the screen
+     */
     private final double screenHeight;
 
-
+    private ArrayList<GridPath> paths;
 
     /**
      * Constructor for GridManager
@@ -47,6 +76,10 @@ public class LineGrid {
         }
     }
 
+    /**
+     * getter for the cell width
+     * @return
+     */
     public double getCellWidth(){
         return this.cellWidth;
     }
@@ -65,6 +98,9 @@ public class LineGrid {
         generateGrid();
     }
 
+    /**
+     * clears the grid
+     */
     public void clearGrid(){
         for (int row = 0; row < numRows; row++){
             for (int col = 0; col < numCols; col++){
