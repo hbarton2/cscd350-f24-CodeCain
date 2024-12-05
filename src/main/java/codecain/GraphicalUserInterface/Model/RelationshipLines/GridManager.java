@@ -55,6 +55,9 @@ public class GridManager {
         return grid;
     }
 
+    /**
+     * setter for the LineDrawer object
+     */
     public void setLineDrawer(){
         if (grid != null && lineDrawer == null){
             this.lineDrawer = new LineDrawer(this.grid);
