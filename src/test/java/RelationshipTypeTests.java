@@ -72,5 +72,13 @@ public class RelationshipTypeTests {
         Assertions.assertEquals("REALIZATION", RelationshipType.REALIZATION.getName());
         Assertions.assertEquals("AGGREGATION", RelationshipType.AGGREGATION.getName());
     }
+    @Test
+    public void testGetArrowString(){
+        Assertions.assertEquals(" -----|> ", RelationshipType.GENERALIZATION.getArrowString());
+        Assertions.assertEquals(" <*>---- ", RelationshipType.COMPOSITION.getArrowString());
+        Assertions.assertEquals(" - - -|> ", RelationshipType.REALIZATION.getArrowString());
+        Assertions.assertEquals(" <>----- ", RelationshipType.AGGREGATION.getArrowString());
+
+    }
 
 }
