@@ -2,7 +2,9 @@ package codecain.GraphicalUserInterface.Model;
 
 import codecain.BackendCode.Model.UMLClass;
 import codecain.BackendCode.Model.UMLClassInfo;
+import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.View.ClassNode;
+import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -47,6 +49,8 @@ public class ClassManager {
 
         // Add the new ClassNode to the node container
         nodeContainer.getChildren().add(classNode);
+
+        GridManager.addClassListeners(classNode);
 
         return classNode;
     }
