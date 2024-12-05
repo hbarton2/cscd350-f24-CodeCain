@@ -3,14 +3,14 @@ package codecain.GraphicalUserInterface.Model.RelationshipLines;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class RelationshipPath {
+public class GridPath {
     private ArrayList<GridCell> cells;
 
-    public RelationshipPath(Collection<GridCell> cells){
+    public GridPath(Collection<GridCell> cells){
         this.cells = (ArrayList<GridCell>) cells;
     }
 
-    public RelationshipPath(){
+    public GridPath(){
         this.cells = new ArrayList<>();
     }
 
@@ -26,4 +26,9 @@ public class RelationshipPath {
     public ArrayList<GridCell> getCells(){
         return cells;
     }
+
+
+
+
+
 }
