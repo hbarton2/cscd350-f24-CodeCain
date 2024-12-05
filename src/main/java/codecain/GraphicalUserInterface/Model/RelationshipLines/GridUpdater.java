@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 public class GridUpdater {
 
     /**
-     * the grid
+     * the grid to update
      */
     private LineGrid grid;
 
