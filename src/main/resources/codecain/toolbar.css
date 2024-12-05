@@ -1,0 +1,15 @@
+/* toolbar.css */
+.toolbar-button {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #ccc;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+.toolbar-button:hover {
+    -fx-background-color: #eaeaea;
+}
+
+.menu-item {
+    -fx-padding: 5px 10px;
+}

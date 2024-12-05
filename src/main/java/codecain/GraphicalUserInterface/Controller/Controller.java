@@ -23,10 +23,7 @@ import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -48,6 +45,9 @@ import javafx.embed.swing.SwingFXUtils;
  * as well as saving and loading UML diagrams.
  */
 public class Controller {
+
+    @FXML
+    private MenuButton fileMenuButton;
 
     @FXML
     public void exportAsImageBtn() {
@@ -109,6 +109,10 @@ public class Controller {
      */
     @FXML
     public void initialize() {
+
+        fileMenuButton.setOnMouseEntered(event -> fileMenuButton.show());
+        fileMenuButton.setOnMouseExited(event -> fileMenuButton.hide());
+
         // Handle clicks on empty space in nodeContainer to deselect the selected node
         nodeContainer.setOnMouseClicked(event -> {
             // Check if the click was directly on the nodeContainer (empty space) and a node
