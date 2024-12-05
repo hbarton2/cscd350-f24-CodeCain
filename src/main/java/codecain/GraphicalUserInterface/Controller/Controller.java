@@ -109,10 +109,6 @@ public class Controller {
      */
     @FXML
     public void initialize() {
-
-        fileMenuButton.setOnMouseEntered(event -> fileMenuButton.show());
-        fileMenuButton.setOnMouseExited(event -> fileMenuButton.hide());
-
         // Handle clicks on empty space in nodeContainer to deselect the selected node
         nodeContainer.setOnMouseClicked(event -> {
             // Check if the click was directly on the nodeContainer (empty space) and a node
