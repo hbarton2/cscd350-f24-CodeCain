@@ -1,3 +1,4 @@
+import codecain.GraphicalUserInterface.Model.RelationshipLines.GridCell;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
 import javafx.scene.layout.Pane;
@@ -33,8 +34,8 @@ public class AStarTests {
      */
     @Test
     void getNeighborsTest(){
-        ArrayList<LineGrid.GridCell> neighbors = gridManager.getGrid().getNeighbors(gridManager.getGrid().getCell(20,20));
-        LineGrid.GridCell cellNeighbor = gridManager.getGrid().getCell(21,20);
+        ArrayList<GridCell> neighbors = gridManager.getGrid().getNeighbors(gridManager.getGrid().getCell(20,20));
+        GridCell cellNeighbor = gridManager.getGrid().getCell(21,20);
         assertTrue(neighbors.contains(cellNeighbor), "neighbor cell wrong");
         cellNeighbor = gridManager.getGrid().getCell(20,21);
         assertTrue(neighbors.contains(cellNeighbor), "neighbor cell wrong");
@@ -52,8 +53,8 @@ public class AStarTests {
 
     @Test
     void getWalkableNeighborsTest(){
-        ArrayList<LineGrid.GridCell> neighbors = gridManager.getGrid().getWalkableNeighbors(gridManager.getGrid().getCell(20,20));
-        LineGrid.GridCell cellNeighbor = gridManager.getGrid().getCell(21,20);
+        ArrayList<GridCell> neighbors = gridManager.getGrid().getWalkableNeighbors(gridManager.getGrid().getCell(20,20));
+        GridCell cellNeighbor = gridManager.getGrid().getCell(21,20);
         assertTrue(neighbors.contains(cellNeighbor), "neighbor cell wrong");
         cellNeighbor = gridManager.getGrid().getCell(20,21);
         assertTrue(neighbors.contains(cellNeighbor), "neighbor cell wrong");
@@ -72,8 +73,8 @@ public class AStarTests {
     @Test
     void getWalkableNeighborsTest1(){
         gridManager.getGrid().getCell(21,20).setOccupied(true);
-        ArrayList<LineGrid.GridCell> neighbors = gridManager.getGrid().getWalkableNeighbors(gridManager.getGrid().getCell(20,20));
-        LineGrid.GridCell cellNeighbor = gridManager.getGrid().getCell(21,20);
+        ArrayList<GridCell> neighbors = gridManager.getGrid().getWalkableNeighbors(gridManager.getGrid().getCell(20,20));
+        GridCell cellNeighbor = gridManager.getGrid().getCell(21,20);
         assertFalse(neighbors.contains(cellNeighbor), "neighbor cell not walkable");
         cellNeighbor = gridManager.getGrid().getCell(19,20);
         assertTrue(neighbors.contains(cellNeighbor));
