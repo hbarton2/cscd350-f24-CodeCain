@@ -11,6 +11,7 @@ import codecain.GraphicalUserInterface.Model.*;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
 import codecain.GraphicalUserInterface.View.ClassNode;
+import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -44,6 +45,7 @@ public class Controller {
      */
     @FXML
     private AnchorPane classContainer;
+
 
     /**
      * The container for the graphical nodes representing UML elements.
@@ -85,6 +87,7 @@ public class Controller {
 
         arrowManager = new ArrowManager(nodeContainer);
         GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer));
+        GridManager.setVisualizer();
         RelationshipManager.setArrowManager(arrowManager);
         RelationshipManager.setController(this);
 
@@ -99,6 +102,7 @@ public class Controller {
         ClassNode classNode = ClassManager.addClass(className, nodeContainer);
         if (classNode != null) {
             classNode.setOnMouseClicked(event -> selectClassNode(classNode));
+
         }
     }
     
