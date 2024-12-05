@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * grids must interact with classes and arrows
@@ -17,60 +16,6 @@ import java.util.List;
  */
 
 public class LineGrid {
-
-    public class GridCell{
-        boolean occupied;
-        double cost;
-        int row;
-        int col;
-
-
-        public GridCell(boolean occupied, double cost) {
-            this.occupied = occupied;
-            this.cost = cost;
-            this.row = 0;
-            this.col = 0;
-        }
-
-        public GridCell(boolean occupied, double cost, int row, int col) {
-            this.occupied = occupied;
-            this.cost = cost;
-            this.row = row;
-            this.col = col;
-        }
-
-        public boolean isOccupied() {
-            return occupied;
-        }
-
-        public void setOccupied(boolean occupied) {
-            this.occupied = occupied;
-        }
-
-        public double getCost() {
-            return cost;
-        }
-
-        public void setCost(double cost) {
-            this.cost = cost;
-        }
-
-        public int getRow() {
-            return row;
-        }
-
-        public void setRow(int row) {
-            this.row = row;
-        }
-
-        public int getCol() {
-            return col;
-        }
-
-        public void setCol(int col) {
-            this.col = col;
-        }
-    }
 
     private final double cellWidth;
     private GridCell[][] grid;
@@ -203,7 +148,7 @@ public class LineGrid {
         generateGrid();
         for (Node node : nodeContainer.getChildren()) {
             if (node instanceof VBox) {
-                updateClassBox((VBox) node);
+                updateOccupiedCells((VBox) node);
             }
         }
     }
@@ -212,7 +157,7 @@ public class LineGrid {
      * helper method to update a single classBox's nodes
      * @param classNode the VBox representing the current classNode
      */
-    private void updateClassBox(VBox classNode){
+    private void updateOccupiedCells(VBox classNode){
         double nodeWidth = classNode.getWidth();
         double nodeHeight = classNode.getHeight();
         double nodeX = classNode.getLayoutX();
@@ -330,6 +275,24 @@ public class LineGrid {
     public Pane getNodeContainer() {
         return nodeContainer;
     }
+
+    public double getXval(int col){
+        return col*cellWidth;
+    }
+
+
+    public double getXval(GridCell cell){
+        return getXval(cell.getCol());
+    }
+
+    public double getYval(int row){
+        return row*cellWidth;
+    }
+
+    public double getYval(GridCell cell){
+        return getYval(cell.getRow());
+    }
+
 
     /**
      * calculates the cost of the path?
