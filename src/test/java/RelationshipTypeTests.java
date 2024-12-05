@@ -1,5 +1,7 @@
 import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.RelationshipType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -42,6 +44,33 @@ public class RelationshipTypeTests {
         Assertions.assertFalse(RelationshipType.typeExists("Invalid"));
         Assertions.assertFalse(RelationshipType.typeExists(""));
         Assertions.assertFalse(RelationshipType.typeExists(null));
+    }
+    @Test
+    public void testFromValidNode() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree("{\"name\": \"GENERALIZATION\"}");
+        Assertions.assertEquals(RelationshipType.GENERALIZATION, RelationshipType.fromNode(node));
+
+        JsonNode node2 = mapper.readTree("{\"name\": \"composition\"}");
+        Assertions.assertEquals(RelationshipType.COMPOSITION, RelationshipType.fromNode(node2));
+    }
+    @Test
+    public void testFromInvalidNode() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree("{}");
+        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> RelationshipType.fromNode(node));
+
+        Assertions.assertEquals("Invalid input: JSON node must have a 'name' property.", exception.getMessage());
+        JsonNode node2 = mapper.readTree("{\"name\": \"invalid\"}");
+        Exception exception2 = Assertions.assertThrows(IllegalArgumentException.class, () -> RelationshipType.fromNode(node2));
+        Assertions.assertTrue(exception2.getMessage().contains("Invalid relationship type"));
+    }
+    @Test
+    public void testGetName(){
+        Assertions.assertEquals("GENERALIZATION", RelationshipType.GENERALIZATION.getName());
+        Assertions.assertEquals("COMPOSITION", RelationshipType.COMPOSITION.getName());
+        Assertions.assertEquals("REALIZATION", RelationshipType.REALIZATION.getName());
+        Assertions.assertEquals("AGGREGATION", RelationshipType.AGGREGATION.getName());
     }
 
 }
