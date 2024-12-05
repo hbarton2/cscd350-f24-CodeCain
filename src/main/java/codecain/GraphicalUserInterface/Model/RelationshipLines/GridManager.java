@@ -1,9 +1,12 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
 import codecain.GraphicalUserInterface.View.GridVisualizer;
+import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+import javax.sound.sampled.Line;
 
 
 /**
@@ -13,19 +16,19 @@ import javafx.scene.layout.VBox;
  */
 public class GridManager {
 
-    private LineGrid grid;
     private static boolean visualizerSet = false;
     private static GridManager instance;
-    private boolean updateScheduled = false;
-    private long lastUpdateTime = 0;
-    private final long updateInterval = 100_000_000;
-    GridVisualizer visualizer;
 
-
+    private LineGrid grid;
+    private GridVisualizer visualizer;
+    private LineDrawer lineDrawer;
+    private GridUpdater updater;
     private GridManager() {}
 
-
-
+    /**
+     * returns only instance allowed of the grid manager
+     * @return instance
+     */
     public static GridManager getInstance() {
         if (instance == null) {
             synchronized (GridManager.class) {
@@ -38,7 +41,7 @@ public class GridManager {
     }
 
     /**
-     * Set the grid for the GridManager instance.
+     * Set the grid for the GridManager instance, also sets lineDrawer
      * @param grid the LineGrid to set
      * @return the provided LineGrid instance
      */
@@ -47,7 +50,15 @@ public class GridManager {
             throw new IllegalStateException("Grid has already been set!");
         }
         this.grid = grid;
+        this.lineDrawer = new LineDrawer(grid);
+        this.updater = new GridUpdater(this.grid);
         return grid;
+    }
+
+    public void setLineDrawer(){
+        if (grid != null && lineDrawer == null){
+            this.lineDrawer = new LineDrawer(this.grid);
+        }
     }
 
     /**
@@ -68,61 +79,47 @@ public class GridManager {
      * @param classNode the VBox to add listeners to
      */
     public static void addClassListeners(VBox classNode) {
-        if (classNode == null) return;
-
-        classNode.layoutXProperty().addListener((observable, oldValue, newValue) -> instance.scheduleGridUpdate());
-        classNode.layoutYProperty().addListener((observable, oldValue, newValue) -> instance.scheduleGridUpdate());
-        classNode.prefWidthProperty().addListener((observable, oldValue, newValue) -> instance.scheduleGridUpdate());
-        classNode.prefHeightProperty().addListener((observable, oldValue, newValue) -> instance.scheduleGridUpdate());
+        instance.updater.addClassListeners(classNode);
     }
+
 
     /**
-     * Schedules a grid update if it hasn't been scheduled recently.
+     * sets the visualizer
      */
-    private void scheduleGridUpdate() {
-        if (!updateScheduled) {
-            updateScheduled = true;
-
-            // Use an AnimationTimer to debounce updates
-            new AnimationTimer() {
-                @Override
-                public void handle(long now) {
-                    if (now - lastUpdateTime >= updateInterval) {
-                        performGridUpdate();
-                        lastUpdateTime = now;
-                        updateScheduled = false;
-                        stop();
-                    }
-                }
-            }.start();
-        }
-    }
-
-    /**
-     * Perform the actual grid update.
-     */
-    private void performGridUpdate() {
-        System.out.println("Updating grid...");
-        getGrid().updateGrid();
-        if (visualizer != null){
-            visualizer.updateGridVisualizer();
-        }
-        printGrid();
-    }
-
     public static void setVisualizer(){
         if (!visualizerSet) {
             instance.visualizer = new GridVisualizer(instance.grid, instance.grid.getNodeContainer());
+            instance.updater.setVisualizer(instance.visualizer);
             visualizerSet = true;
         }
         else return;
     }
 
+    /**
+     * getter for the visualizer
+     * @return the grid visualizer
+     */
     public static GridVisualizer getVisualizer(){
         return instance.visualizer;
     }
 
+    /**
+     * prints an ascii representation of the grid
+     */
     private static void printGrid() {
         instance.getGrid().printGrid();
+    }
+
+    /**
+     * getter for the line drawer object
+     * @return line drawer from the instance
+     */
+    public static LineDrawer getLineDrawer(){
+        if (instance != null){
+            return instance.lineDrawer;
+        }
+        else{
+            throw new RuntimeException("set grid please");
+        }
     }
 }
