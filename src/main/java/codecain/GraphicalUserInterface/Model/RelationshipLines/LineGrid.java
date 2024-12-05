@@ -3,8 +3,6 @@ package codecain.GraphicalUserInterface.Model.RelationshipLines;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
@@ -47,27 +45,10 @@ public class LineGrid {
             System.out.println("Error during grid initialization: " + error.getMessage());
             throw new RuntimeException("Grid initialization failed", error);
         }
-        drawTestDot(100.0,100.0, nodeContainer);
     }
 
     public double getCellWidth(){
         return this.cellWidth;
-    }
-
-    /**
-     * draws a dot to mark a certain point for testing
-     * @param x x value of the dot
-     * @param y y value of the dot
-     * @param pane the pane to draw the dot on
-     */
-    private void drawTestDot(double x, double y, Pane pane){
-        Circle dot = new Circle();
-        dot.setCenterX(x);
-        dot.setCenterY(y);
-        dot.setRadius(3.0);
-        dot.setFill(Color.BLACK);
-        pane.getChildren().add(dot);
-        dot.toFront();
     }
 
     /**
@@ -76,7 +57,7 @@ public class LineGrid {
     private void initGrid() throws Exception {
         this.numRows = (int) (screenWidth / cellWidth);
         this.numCols = (int) (screenHeight / cellWidth);
-        checkConstructorErrors();
+        checkErrors();
         if (isGenerated){
             return;
         }
@@ -95,7 +76,7 @@ public class LineGrid {
     /**
      * validates the dimensions of the screen to make sure everything is created properly
      */
-    private void checkConstructorErrors() throws Exception {
+    private void checkErrors() throws Exception {
         if (screenHeight == 0 || screenWidth == 0){
             String errorMsg = "";
             if (screenHeight == 0){
@@ -115,7 +96,7 @@ public class LineGrid {
     /**
      * helper method to generate the grid
      */
-    private void generateGrid(){
+    public void generateGrid(){
         gridCells = new GridCell[numRows][numCols];
         System.out.println("New grid created: numCols: " + numCols + ", numRows: " + numRows);
         for (int row = 0; row < numRows; row++) {
@@ -158,7 +139,7 @@ public class LineGrid {
      * helper method to update a single classBox's nodes
      * @param classNode the VBox representing the current classNode
      */
-    private void updateOccupiedCells(VBox classNode){
+    public void updateOccupiedCells(VBox classNode){
         double nodeWidth = classNode.getWidth();
         double nodeHeight = classNode.getHeight();
         double nodeX = classNode.getLayoutX();

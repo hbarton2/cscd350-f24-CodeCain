@@ -16,31 +16,16 @@ public class LineDrawer {
     private ArrayList<Polyline> lines;
     private LineGrid grid;
 
+
+
+    /**
+     * constructor takes in a grid object and adds a container
+     * from that object
+     * @param grid
+     */
     public LineDrawer(LineGrid grid){
         this.grid = grid;
         this.nodeContainer = grid.getNodeContainer();
-    }
-
-    public void drawTestLine(){
-        AStarPath path = new AStarPath(getTestCells());
-        drawLineFromPath(path);
-
-        String cellList = "";
-        for (GridCell c: path.getCells()){
-            cellList += "cell | row: " + c.getRow() + ", column: " + c.getCol();
-        }
-        System.out.println(cellList);
-    }
-    
-    private ArrayList<GridCell> getTestCells(){
-        ArrayList<GridCell> cells = new ArrayList<>();
-        cells.add(grid.getCell(0,0));
-        cells.add(grid.getCell(0,1));
-        cells.add(grid.getCell(1,1));
-        cells.add(grid.getCell(1,2));
-        cells.add(grid.getCell(1,3));
-        cells.add(grid.getCell(1,5));
-        return cells;
     }
 
 
