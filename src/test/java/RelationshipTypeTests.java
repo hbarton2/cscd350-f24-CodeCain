@@ -1,3 +1,4 @@
+import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.RelationshipType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,5 +24,24 @@ public class RelationshipTypeTests {
         Assertions.assertEquals(RelationshipType.REALIZATION, RelationshipType.fromString("Realization"));
         Assertions.assertEquals(RelationshipType.AGGREGATION, RelationshipType.fromString("Aggregation"));
     }
-    
+    @Test
+    public void testFromInvalidString(){
+        Assertions.assertNull(RelationshipType.fromString("Invalid"), "Expected null for invalid input");
+        Assertions.assertNull(RelationshipType.fromString(""), "Expected null for empty input");
+        Assertions.assertNull(RelationshipType.fromString(null), "Expected null for null input");
+    }
+    @Test
+    public void testTypeValidExists(){
+        Assertions.assertTrue(RelationshipType.typeExists("Generalization"));
+        Assertions.assertTrue(RelationshipType.typeExists("Composition"));
+        Assertions.assertTrue(RelationshipType.typeExists("Realization"));
+        Assertions.assertTrue(RelationshipType.typeExists("Aggregation"));
+    }
+    @Test
+    public void testTypeInvalidExists(){
+        Assertions.assertFalse(RelationshipType.typeExists("Invalid"));
+        Assertions.assertFalse(RelationshipType.typeExists(""));
+        Assertions.assertFalse(RelationshipType.typeExists(null));
+    }
+
 }

@@ -35,6 +35,10 @@ public enum RelationshipType {
     }
 
     public static RelationshipType fromString(String type){
+        if (type == null || type.trim().isEmpty()){
+            System.err.println("Input cannot be null or empty.");
+            return null;
+        }
         switch (type.toLowerCase().trim()){
             case "generalization"  -> {
                 return GENERALIZATION;
@@ -49,10 +53,14 @@ public enum RelationshipType {
                 return AGGREGATION;
             }
         }
-        return GENERALIZATION;
+        System.err.println("Invalid relationship type: " + type);
+        return null;
     }
 
     public static boolean typeExists(String typeName){
+        if (typeName == null || typeName.trim().isEmpty()){
+            return false;
+        }
         typeName = typeName.trim().toLowerCase();
         return typeName.equals("composition")
                 || typeName.equals("aggregation")
