@@ -1,11 +1,10 @@
 package codecain.GraphicalUserInterface.View;
 
-import codecain.GraphicalUserInterface.Model.RelationshipLines.AStarPath;
+import codecain.GraphicalUserInterface.Model.RelationshipLines.RelationshipPath;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.GridCell;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polyline;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class LineDrawer {
      * draws a line from the specified path
      * @param path the path  to draw
      */
-    public Polyline drawLineFromPath(AStarPath path){
+    public Polyline drawLineFromPath(RelationshipPath path){
         if (path == null || path.getCells() == null) {
             throw new IllegalArgumentException("path or its cells cannot be null");
         }
