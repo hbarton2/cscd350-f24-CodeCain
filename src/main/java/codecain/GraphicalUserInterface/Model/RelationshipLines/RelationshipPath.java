@@ -2,16 +2,15 @@ package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 
-public class AStarPath {
+public class RelationshipPath {
     private ArrayList<GridCell> cells;
 
-    public AStarPath(Collection<GridCell> cells){
+    public RelationshipPath(Collection<GridCell> cells){
         this.cells = (ArrayList<GridCell>) cells;
     }
 
-    public AStarPath(){
+    public RelationshipPath(){
         this.cells = new ArrayList<>();
     }
 

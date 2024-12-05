@@ -3,13 +3,13 @@ package codecain.GraphicalUserInterface.Model.RelationshipLines;
 import java.util.ArrayList;
 import java.util.Queue;
 
-public class AStarPathFinder {
+public class PathNavigator {
 
     private final LineGrid grid;
 
     private Queue<GridCell> priorityQueue;
 
-    public AStarPathFinder(LineGrid grid) {
+    public PathNavigator(LineGrid grid) {
         this.grid = grid;
 
     }
