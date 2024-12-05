@@ -9,6 +9,8 @@ import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
 
 import codecain.GraphicalUserInterface.Model.*;
+import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
+import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import codecain.GraphicalUserInterface.View.AlertHelper;
 
@@ -118,8 +120,8 @@ public class Controller {
                 currentlySelectedNode = null; // Reset the currently selected node
             }
         });
-
         arrowManager = new ArrowManager(nodeContainer);
+        GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer));
         RelationshipManager.setArrowManager(arrowManager);
         RelationshipManager.setController(this);
 
