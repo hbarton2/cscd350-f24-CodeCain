@@ -18,15 +18,15 @@ import java.util.ArrayList;
 public class LineGrid {
 
     private final double cellWidth;
-    private GridCell[][] grid;
+    private GridCell[][] gridCells;
     private boolean isGenerated;
 
 
     private int numRows;
     private int numCols;
     private final Pane nodeContainer;
-    private double screenWidth;
-    private double screenHeight;
+    private final double screenWidth;
+    private final double screenHeight;
 
 
 
@@ -87,7 +87,7 @@ public class LineGrid {
     public void clearGrid(){
         for (int row = 0; row < numRows; row++){
             for (int col = 0; col < numCols; col++){
-                grid[row][col].occupied = false;
+                gridCells[row][col].occupied = false;
             }
         }
     }
@@ -116,11 +116,11 @@ public class LineGrid {
      * helper method to generate the grid
      */
     private void generateGrid(){
-        grid = new GridCell[numRows][numCols];
+        gridCells = new GridCell[numRows][numCols];
         System.out.println("New grid created: numCols: " + numCols + ", numRows: " + numRows);
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
-                grid[row][col] = new GridCell(false, 1.0, row, col);
+                gridCells[row][col] = new GridCell(false, 1.0, row, col);
             }
         }
     }
@@ -133,7 +133,7 @@ public class LineGrid {
             String newLine = "";
             for (int col = 0; col < numCols; col++){
                 newLine += "[";
-                newLine += grid[row][col].occupied? "T":"F";
+                newLine += gridCells[row][col].occupied? "T":"F";
                 newLine += "]";
             }
             System.out.println(newLine);
@@ -148,6 +148,7 @@ public class LineGrid {
         generateGrid();
         for (Node node : nodeContainer.getChildren()) {
             if (node instanceof VBox) {
+                System.out.println("class at " +node.getLayoutX() + " , " + + node.getLayoutY());
                 updateOccupiedCells((VBox) node);
             }
         }
@@ -169,7 +170,7 @@ public class LineGrid {
         for (int row = rowStart; row < rowEnd; row++){
             for (int col = colStart; col < colEnd; col++){
                 if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
-                    grid[row][col].occupied = true;
+                    gridCells[row][col].occupied = true;
                 }
             }
         }
@@ -185,7 +186,7 @@ public class LineGrid {
     public boolean checkOccupied(double layoutX, double layoutY){
         int row = getRow(layoutX);
         int col = getCol(layoutY);
-        return grid[row][col].occupied;
+        return gridCells[row][col].occupied;
     }
 
     /**
@@ -196,7 +197,7 @@ public class LineGrid {
     public void occupyCell(double layoutX, double layoutY){
         int row = getRow(layoutX);
         int col = getCol(layoutY);
-        grid[row][col].occupied = true;
+        gridCells[row][col].occupied = true;
     }
 
     /**
@@ -207,7 +208,7 @@ public class LineGrid {
     public void unoccupyCell(double layoutX, double layoutY){
         int row = getRow(layoutX);
         int col = getCol(layoutY);
-        grid[row][col].occupied = false;
+        gridCells[row][col].occupied = false;
     }
 
     /**
@@ -230,6 +231,12 @@ public class LineGrid {
         return Math.max(0, Math.min(col, numCols - 1));
     }
 
+    /**
+     * returns an arraylist of grid coordinates
+     * @param row the row of the cell
+     * @param col the column of the cell
+     * @return list of neighboring points
+     */
     public ArrayList<int[]> getNeighbors(int row, int col){
         ArrayList<int[]> neighbors = new ArrayList<>();
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
@@ -250,7 +257,7 @@ public class LineGrid {
             int newRow = gridCell.row + dir[0];
             int newCol = gridCell.col + dir[1];
             if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols){
-                neighbors.add(grid[newRow][newCol]);
+                neighbors.add(gridCells[newRow][newCol]);
             }
         }
         return neighbors;
@@ -312,7 +319,7 @@ public class LineGrid {
      */
     public boolean isWalkable(int row, int col) {
         if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
-            return !grid[row][col].isOccupied();
+            return !gridCells[row][col].isOccupied();
         }
         return false;
     }
@@ -325,7 +332,7 @@ public class LineGrid {
      */
     public GridCell getCell(int row, int col){
         if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
-            return grid[row][col];
+            return gridCells[row][col];
         }
         return null;
     }
