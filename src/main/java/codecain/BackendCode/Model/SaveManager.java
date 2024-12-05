@@ -51,7 +51,7 @@ public class SaveManager {
 
         System.out.println("UML diagram loaded successfully from JSON.");
     }
-    //Dead code
+
     public static void saveToJSON(String filePath, Map<String, UMLClassInfo> classMap, List<Relationship> relationshipList) throws IOException {
         validateJSONFile(filePath);
         Map<String, Object> umlData = new HashMap<>();
