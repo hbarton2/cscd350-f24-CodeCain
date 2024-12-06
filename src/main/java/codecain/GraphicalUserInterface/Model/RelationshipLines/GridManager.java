@@ -13,6 +13,8 @@ import javax.sound.sampled.Line;
  * singleton class that sets a grid which can be accessed across the entire program.
  * Hopefully this isn't too confusing to use.
  * First, set the grid when first started, and go from there
+ *
+ * I think the grid should be controlled from here, not sure though
  */
 public class GridManager {
 
@@ -23,6 +25,7 @@ public class GridManager {
     private GridVisualizer visualizer;
     private LineDrawer lineDrawer;
     private GridUpdater updater;
+    private PathNavigator pathNavigator;
     private GridManager() {}
 
     /**
@@ -52,6 +55,7 @@ public class GridManager {
         this.grid = grid;
         this.lineDrawer = new LineDrawer(grid);
         this.updater = new GridUpdater(this.grid);
+        this.pathNavigator = new PathNavigator(this.grid);
         return grid;
     }
 
@@ -124,5 +128,11 @@ public class GridManager {
         else{
             throw new RuntimeException("set grid please");
         }
+    }
+
+    public static void drawTestLine(GridCell start, GridCell goal){
+        GridPath p = instance.pathNavigator.findPath(start,goal);
+        getLineDrawer().drawLineFromPath(p);
+        System.out.println(p.toString());
     }
 }

@@ -19,6 +19,8 @@ public class GridPriorityQueue {
             return cell;
         }
     }
+
+
     private PriorityQueue<PriorityQueueEntry> queue;
     private HashMap<GridCell, PriorityQueueEntry> entryMap;
 
@@ -70,6 +72,8 @@ public class GridPriorityQueue {
         return queue.isEmpty();
     }
 
-
+    public boolean contains(GridCell cell){
+        return this.entryMap.containsKey(cell);
+    }
 
 }

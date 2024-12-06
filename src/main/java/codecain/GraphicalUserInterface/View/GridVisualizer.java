@@ -16,7 +16,7 @@ public class GridVisualizer {
             super();
             super.setCenterX(x);
             super.setCenterY(y);
-            super.setRadius(16.0);
+            super.setRadius(8.0);
             super.setStroke(Color.BLACK);
             super.setFill(Color.BLACK);
         }
@@ -60,8 +60,8 @@ public class GridVisualizer {
         for (int row = 0; row < numRows; row++){
             for (int col = 0; col < numCols; col++){
                 currentCell = grid.getCell(row, col);
-                double x = grid.getXval(col);
-                double y = grid.getYval(row);
+                double x = grid.getXcoord(col);
+                double y = grid.getYcoord(row);
                 if (currentCell.isOccupied()){
                     dots.add(drawDot(x,y));
                 }

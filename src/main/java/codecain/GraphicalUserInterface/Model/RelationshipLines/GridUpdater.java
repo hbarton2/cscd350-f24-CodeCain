@@ -86,7 +86,7 @@ public class GridUpdater {
         for (Node node : nodeContainer.getChildren()) {
             if (node instanceof VBox) {
                 System.out.println("class at " +node.getLayoutX() + " , " + + node.getLayoutY());
-                grid.updateOccupiedCells((VBox) node);
+                grid.updateOccupiedClassBoxCells((VBox) node);
             }
         }
     }

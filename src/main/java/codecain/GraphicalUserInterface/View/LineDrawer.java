@@ -38,8 +38,8 @@ public class LineDrawer {
         }
         Polyline line = new Polyline();
         for (GridCell cell : path.getCells()){
-            double x = grid.getXval(cell);
-            double y = grid.getYval(cell);
+            double x = grid.getXcoord(cell);
+            double y = grid.getYcoord(cell);
             line.getPoints().addAll(x, y);
         }
         line.setStroke(Color.BLACK);

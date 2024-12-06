@@ -27,7 +27,14 @@ public class GridPath {
         return cells;
     }
 
-
+    public String toString(){
+        String s = "path: ";
+        for (GridCell cell : cells){
+            String cellString = "x: " + cell.getCol() + ", y: " + cell.getRow() + " ; ";
+            s+=cellString;
+        }
+        return s;
+    }
 
 
 

@@ -166,7 +166,7 @@ public class LineGrid {
         for (Node node : nodeContainer.getChildren()) {
             if (node instanceof VBox) {
                 System.out.println("class at " +node.getLayoutX() + " , " + + node.getLayoutY());
-                updateOccupiedCells((VBox) node);
+                updateOccupiedClassBoxCells((VBox) node);
             }
         }
     }
@@ -175,15 +175,15 @@ public class LineGrid {
      * helper method to update a single classBox's nodes
      * @param classNode the VBox representing the current classNode
      */
-    public void updateOccupiedCells(VBox classNode){
+    public void updateOccupiedClassBoxCells(VBox classNode){
         double nodeWidth = classNode.getWidth();
         double nodeHeight = classNode.getHeight();
         double nodeX = classNode.getLayoutX();
         double nodeY = classNode.getLayoutY();
-        int rowStart = getRow(nodeY);
-        int rowEnd = getRow(nodeY + nodeHeight);
-        int colStart = getCol(nodeX);
-        int colEnd = getCol(nodeX + nodeWidth);
+        int rowStart = getRow(nodeY) + 1;
+        int rowEnd = getRow(nodeY + nodeHeight) + 1;
+        int colStart = getCol(nodeX) + 1;
+        int colEnd = getCol(nodeX + nodeWidth) + 1;
         for (int row = rowStart; row < rowEnd; row++){
             for (int col = colStart; col < colEnd; col++){
                 if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
@@ -193,6 +193,17 @@ public class LineGrid {
         }
         System.out.printf("\nOccupied at 100,100: %c\n", checkOccupied(100.0,100.0)? 'T' : 'F');
     }
+
+    /**
+     *
+     * @param path
+     */
+    public void updateOccupiedPathCells(GridPath path){
+        for(GridCell cell : path.getCells()){
+            cell.setOccupied(true);
+        }
+    }
+
 
     /**
      * checks if the cell is occupied or not
@@ -280,6 +291,7 @@ public class LineGrid {
         return neighbors;
     }
 
+
     public double getScreenHeight() {
         return screenHeight;
     }
@@ -300,21 +312,21 @@ public class LineGrid {
         return nodeContainer;
     }
 
-    public double getXval(int col){
+    public double getXcoord(int col){
         return col*cellWidth;
     }
 
 
-    public double getXval(GridCell cell){
-        return getXval(cell.getCol());
+    public double getXcoord(GridCell cell){
+        return getXcoord(cell.getCol());
     }
 
-    public double getYval(int row){
+    public double getYcoord(int row){
         return row*cellWidth;
     }
 
-    public double getYval(GridCell cell){
-        return getYval(cell.getRow());
+    public double getYcoord(GridCell cell){
+        return getYcoord(cell.getRow());
     }
 
 
