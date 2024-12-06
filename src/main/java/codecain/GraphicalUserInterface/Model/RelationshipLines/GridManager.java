@@ -1,5 +1,6 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
+import codecain.BackendCode.Model.Relationship;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.animation.AnimationTimer;
@@ -7,6 +8,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import javax.sound.sampled.Line;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -26,8 +29,10 @@ public class GridManager {
     private LineDrawer lineDrawer;
     private GridUpdater updater;
     private PathNavigator pathNavigator;
-    private GridManager() {}
 
+
+
+    private GridManager() {}
     /**
      * returns only instance allowed of the grid manager
      * @return instance
@@ -59,6 +64,13 @@ public class GridManager {
         return grid;
     }
 
+
+    private void checkGrid(){
+        if (grid == null) {
+            throw new IllegalStateException("Grid has not been set!");
+        }
+    }
+
     /**
      * setter for the LineDrawer object
      */
@@ -74,9 +86,7 @@ public class GridManager {
      * @throws IllegalStateException if the grid is not set
      */
     public LineGrid getGrid() {
-        if (grid == null) {
-            throw new IllegalStateException("Grid has not been set!");
-        }
+        checkGrid();
         return grid;
     }
 
@@ -86,6 +96,7 @@ public class GridManager {
      * @param classNode the VBox to add listeners to
      */
     public static void addClassListeners(VBox classNode) {
+        instance.checkGrid();
         instance.updater.addClassListeners(classNode);
     }
 
@@ -94,6 +105,7 @@ public class GridManager {
      * sets the visualizer
      */
     public static void setVisualizer(){
+        instance.checkGrid();
         if (!visualizerSet) {
             instance.visualizer = new GridVisualizer(instance.grid, instance.grid.getNodeContainer());
             instance.updater.setVisualizer(instance.visualizer);
@@ -114,6 +126,7 @@ public class GridManager {
      * prints an ascii representation of the grid
      */
     private static void printGrid() {
+        instance.checkGrid();
         instance.getGrid().printGrid();
     }
 
@@ -130,9 +143,20 @@ public class GridManager {
         }
     }
 
+    public static void drawPath(VBox start, VBox goal){
+        GridPath p = instance.updater.navigatePath(start,goal);
+        getLineDrawer().drawLineFromPath(p);
+        System.out.println(p.toString());
+    }
+
     public static void drawTestLine(GridCell start, GridCell goal){
+        instance.checkGrid();
         GridPath p = instance.pathNavigator.findPath(start,goal);
         getLineDrawer().drawLineFromPath(p);
         System.out.println(p.toString());
+    }
+
+    public GridUpdater getUpdater(){
+        return this.updater;
     }
 }

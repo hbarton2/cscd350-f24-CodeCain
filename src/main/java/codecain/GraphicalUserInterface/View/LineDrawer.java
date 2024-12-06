@@ -49,6 +49,13 @@ public class LineDrawer {
         return line;
     }
 
+    /**
+     * lines should be cleared after every refresh
+     */
+    public void clearLines(){
+        lines.clear();
+    }
+
 
 
 }

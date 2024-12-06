@@ -53,5 +53,9 @@ public class GridCell{
         this.col = col;
     }
 
+    public String toString(){
+        return "col: " + col + " row: " + row;
+    }
+
 
 }

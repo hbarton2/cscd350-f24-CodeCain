@@ -51,11 +51,13 @@ public class PathNavigator {
 
 
             // Step 2: If the current node is the goal, reconstruct the path
-            if (current == goal) {
+            if (current == goal || grid.getNeighbors(current).contains(goal)) {
                 GridPath g = new GridPath(reconstructPath(current));
                 System.out.println(g.toString());
+                grid.addPath(g);
                 return g;
             }
+
 
             // Step 3: Move the current node to the closed list
             closedList.add(current);
@@ -84,6 +86,7 @@ public class PathNavigator {
             }
         }
         System.out.println("no path found");
+
         // Return an empty path if no path was found
         return new GridPath();
     }
@@ -109,7 +112,7 @@ public class PathNavigator {
      * @param goal the end goal
      * @return the distance between current and goal
      */
-    private int calculateHeuristic(GridCell current, GridCell goal){
+    public int calculateHeuristic(GridCell current, GridCell goal){
         return Math.abs(current.col - goal.col) + Math.abs(current.row - goal.row);
     }
 
