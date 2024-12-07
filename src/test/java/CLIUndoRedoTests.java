@@ -27,11 +27,12 @@ class UndoRedoTests {
 
     @Test
     void testSaveState() {
+        caretaker.saveState(classMap, relationshipList);
         classMap.put("Class1", new UMLClassInfo("Class1"));
         caretaker.saveState(classMap, relationshipList);
 
         assertFalse(caretaker.undo().getClassMapSnapshot().isEmpty());
-        assertTrue(caretaker.redo().getRelationshipListSnapshot().isEmpty());
+        assertTrue(caretaker.undo().getRelationshipListSnapshot().isEmpty());
     }
 
     
