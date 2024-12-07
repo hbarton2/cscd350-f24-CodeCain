@@ -101,6 +101,23 @@ public class SaveManagerTests {
         assertTrue(type.contains("REALIZATION"));
         assertTrue(type.contains("GENERALIZATION"));
     }
+    @Test
+    void testLoadFromJSON_Valid() throws IOException {
+        SaveManager.saveToJSON(testPath);
+        UMLClass.classMap.clear();
+        Relationship.relationshipList.clear();
+
+        SaveManager.loadFromJSON(testPath);
+
+        assertEquals(8, UMLClass.classMap.size(), "Class Map size should be 8");
+        assertEquals(4, Relationship.relationshipList.size(), "Relationship List Size should be 4");
+    }
+    @Test
+    void testLoadFromJSON_Invalid() {
+        assertThrows(IOException.class, () -> SaveManager.loadFromJSON(testPath));
+    }
+    
+
 
 
 
