@@ -108,16 +108,16 @@ public class RelationshipManager {
         ClassNode sourceNode = controller.findClassNode(source);
         ClassNode destNode = controller.findClassNode(destination);
         GridManager.getInstance();
-        GridManager.drawPath(sourceNode,destNode);
-
-        if (arrowManager != null && sourceNode != null && destNode != null) {
-            arrowManager.addArrow(Relationship.getRelationship(source, destination, type), sourceNode, destNode);
+        //GridManager.drawPath(sourceNode,destNode);
+        GridManager.updateRelationshipPaths();
+//        if (arrowManager != null && sourceNode != null && destNode != null) {
+//            arrowManager.addArrow(Relationship.getRelationship(source, destination, type), sourceNode, destNode);
+//        } else {
+//            System.out.println("ArrowManager or ClassNodes are not properly initialized.");
+//        }
         } else {
-            System.out.println("ArrowManager or ClassNodes are not properly initialized.");
+            showErrorDialog("Failed to add relationship.");
         }
-    } else {
-        showErrorDialog("Failed to add relationship.");
-    }
     }
 
     
