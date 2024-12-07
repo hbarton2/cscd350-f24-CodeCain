@@ -1,6 +1,9 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
+import codecain.BackendCode.Model.Relationship;
+import codecain.GraphicalUserInterface.Controller.Controller;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
+import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -8,8 +11,14 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class GridUpdater {
+
+    /**
+     * disable to disable debug messages
+     */
+    private boolean showText = false;
 
     /**
      * the grid to update
@@ -21,8 +30,15 @@ public class GridUpdater {
      */
     private Pane nodeContainer;
 
+
+    /**
+     * visualizer for testing
+     */
     private GridVisualizer visualizer;
 
+    /**
+     *
+     */
     private boolean updateScheduled = false;
 
     /**
@@ -31,9 +47,17 @@ public class GridUpdater {
     private long lastUpdateTime = 0;
 
     /**
+     * drawer for lines
+     */
+    private LineDrawer lineDrawer;
+
+
+    /**
      * update interval (every 100 milliseconds)
      */
     private final long updateInterval = 100_000_000;
+
+    private RelationshipPathHolder pathHolder;
 
     private HashMap<VBox, ArrayList<GridCell>> coveredCells;
 
@@ -58,12 +82,13 @@ public class GridUpdater {
      * and updates it
      * @param grid the grid to update
      */
-    public GridUpdater(LineGrid grid){
+    public GridUpdater(LineGrid grid, RelationshipPathHolder pathHolder, LineDrawer lineDrawer){
         this.visualizer = null;
         this.grid = grid;
         this.coveredCells = new HashMap<>();
         this.nodeContainer = grid.getNodeContainer();
-
+        this.pathHolder = pathHolder;
+        this.lineDrawer = lineDrawer;
     }
 
     public void setVisualizer(GridVisualizer visualizer){
@@ -84,27 +109,14 @@ public class GridUpdater {
     }
 
 
-    /**
-     * sifts through all elements of the container and looks for the ones that are VBoxes,
-     * then updates the grid with which ones are occupied
-     */
-    public void updateGridBoxes(){
-        //grid.generateGrid();
-        for (Node node : nodeContainer.getChildren()) {
-            if (node instanceof VBox) {
-                System.out.println("class at " +node.getLayoutX() + " , " + + node.getLayoutY());
-                updateOccupiedClassBoxCells((VBox) node);
-            }
-        }
-        //updatePaths();
-    }
+
 
     /**
      * schedules a grid update whenever the classes are moved or modified
      */
     private void scheduleGridUpdate() {
         if (!updateScheduled) {
-            System.out.println("updateScheduled");
+            if (showText) System.out.println("updateScheduled");
             updateScheduled = true;
             gridUpdateTimer.start();
         }
@@ -115,7 +127,7 @@ public class GridUpdater {
      * helper method to update a single classBox's nodes
      * @param classNode the VBox representing the current classNode
      */
-    public void updateOccupiedClassBoxCells(VBox classNode){
+    private void updateOccupiedClassBoxCells(VBox classNode){
 
         int numRows = grid.getNumRows();
         int numCols = grid.getNumCols();
@@ -155,73 +167,116 @@ public class GridUpdater {
 
     /**
      * Perform the actual grid update.
+     * this is called 100 ms after a class node is moved
+     * or when a relationship is created or removed,
+     * or when a class is created or removed.
      */
     public void performGridUpdate() {
-        System.out.println("Updating grid...");
-        grid.clearGrid();
-        updateGridBoxes();
-        updatePaths();
+        if (showText) System.out.println("Updating grid...");
+        //grid.clearGrid();
+        //updateGridBoxes();
+        lineDrawer.redrawLines(updateRelationshipPaths(0));
         if (visualizer != null){
             visualizer.updateGridVisualizer();
         }
         //grid.printGrid();
     }
 
+
     /**
-     * occupies the cells in the grid path list
+     * sifts through all elements of the container and looks for the ones that are VBoxes,
+     * then updates the grid with which ones are occupied
      */
-    private void updatePaths(){
-        for (GridPath path : grid.getPaths()){
-            System.out.println("Processing path: " + path);
-            occupyPathCells(path);
+    private void updateGridBoxes(){
+        //grid.generateGrid();
+        for (Node node : nodeContainer.getChildren()) {
+            if (node instanceof VBox) {
+                System.out.println("class at " +node.getLayoutX() + " , " + + node.getLayoutY());
+                updateOccupiedClassBoxCells((VBox) node);
+            }
+        }
+        //updatePaths();
+    }
+
+    /**
+     * helper method for PerformGridUpdate
+     * recalculates paths on update
+     * @return list of paths
+     */
+    private RelationshipPathHolder updateRelationshipPaths(int zero){
+
+        //this recursively calls the function again if the path fails, shifting the order of the relationship list
+
+        pathHolder.clearHolder();
+        grid.clearGrid();
+        updateGridBoxes();
+
+        for (Relationship r : Relationship.relationshipList){
+            GridPath newPath = createPathFromRelationship(r);
+            occupyPathCells(newPath);
+            pathHolder.addRelationshipPath(r, newPath);
+
+            if (newPath.size() == 0 && zero < Relationship.relationshipList.size()){
+                moveToFront(Relationship.relationshipList, r);
+                return updateRelationshipPaths(zero+1);
+            }
+        }
+        return pathHolder;
+    }
+
+    public <T> void moveToFront(ArrayList<T> list, T element) {
+        if (list == null || element == null) return;
+        int index = list.indexOf(element);
+        if (index != -1) {
+            list.remove(index);
+            list.add(0, element);
         }
     }
 
+    /**
+     * Helper method - creates a path from an existing relationship
+     * @param relationship
+     * @return null if no path is found, otherwise returns a path
+     */
+    private GridPath createPathFromRelationship(Relationship relationship){
+        pathHolder.addRelationshipHolder(relationship);
+        if (!Relationship.relationshipExists(relationship.getSource(),relationship.getDestination())){
+            throw new IllegalStateException("relationship doesn't exist");
+        }
+        return navigatePath(pathHolder.getSourceClassNode(relationship), pathHolder.getDestinationClassNode(relationship));
+    }
+
+
+    /**
+     * occupies all cells under the specified path
+     * @param path the path to occupy
+     */
     public void occupyPathCells(GridPath path){
         for (GridCell current : path.getCells()){
-            System.out.println("Updating cell: " + current.toString());
+            if (showText) System.out.println("Updating cell: " + current.toString());
             current.occupied = true;
         }
     }
 
-        public void cleanUp(){
-        for (VBox box : coveredCells.keySet()){
-            if(!nodeContainer.getChildren().contains(box)){
-                coveredCells.remove(box);
-            }
-        }
-    }
 
-    public GridCell getStartingCell(VBox startingNode, VBox goalNode){
-
-        int[] goalPoint = findCenter(goalNode);
-        GridCell goal = grid.getCell(goalPoint[0],goalPoint[1]);
-        int minDist = 20000000;
-        GridCell start = null;
-
-        for (GridCell cell : this.coveredCells.get(startingNode)){
-            int dist = (int) grid.calculateHeuristic(cell, goal);
-            if (!grid.getWalkableNeighbors(cell).isEmpty() && dist < minDist){
-                minDist = dist;
-                start=cell;
-            }
-        }
-        if (start == null){
-            System.out.println("no walkable starting points found!");
-        }
-        return start;
-    }
-
-    public GridPath navigatePath(VBox start, VBox goal){
-        GridCell startingCell = getStartingCell(start,goal);
-        GridCell goalCell = getStartingCell(goal, start);
+    /**
+     * navigates the grid from one node to the next
+     * @param start starting node
+     * @param goal goal node
+     * @return null if no path found, otherwise returns a path
+     */
+    private GridPath navigatePath(VBox start, VBox goal){
         PathNavigator navigator = new PathNavigator(grid);
-        GridPath p = navigator.findPath(startingCell,goalCell);
-        grid.getPaths().add(p);
+        GridPath p = navigator.findPathFromCells(coveredCells.get(start), coveredCells.get(goal),
+                findCenter(start),findCenter(goal));
+        if (p == null){
+            System.out.println("No path found");
+            return null;
+        }
         return p;
     }
 
-    private int[] findCenter(VBox classNode){
+    private GridCell findCenter(VBox classNode){
         double nodeWidth = classNode.getWidth();
         double nodeHeight = classNode.getHeight();
         double nodeX = classNode.getLayoutX();
@@ -232,7 +287,8 @@ public class GridUpdater {
         int colEnd = grid.getCol(nodeX + nodeWidth) + 1;
         int col = colStart + Math.abs((int)((colStart - colEnd)/2));
         int row = rowStart + Math.abs((int)((rowStart - rowEnd)/2));
-        return new int[]{col, row};
+        System.out.println("Center found at: col:" + col + ", row: " + row);
+        return grid.getCell(row,col);
     }
 
 }

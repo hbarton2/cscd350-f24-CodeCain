@@ -36,6 +36,22 @@ public class GridPath {
         return s;
     }
 
+    public int size(){
+        return cells.size();
+    }
+
+    public void setEndPoints(GridCell start, GridCell goal){
+        this.cells.addFirst(start);
+        this.cells.addLast(goal);
+    }
+
+    public void addAtFront(GridCell frontCell){
+        this.cells.addFirst(frontCell);
+    }
+
+    public void addAtBack(GridCell backCell){
+        this.cells.add(backCell);
+    }
 
 
 }

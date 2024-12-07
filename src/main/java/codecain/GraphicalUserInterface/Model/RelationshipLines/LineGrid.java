@@ -17,6 +17,8 @@ import java.util.HashMap;
 
 public class LineGrid {
 
+    private boolean showText = false;
+
     /**
      * the width of the cell
      */
@@ -76,7 +78,7 @@ public class LineGrid {
         try {
             initGrid();
         } catch (Exception error) {
-            System.out.println("Error during grid initialization: " + error.getMessage());
+            if (showText)System.out.println("Error during grid initialization: " + error.getMessage());
             throw new RuntimeException("Grid initialization failed", error);
         }
     }
@@ -140,7 +142,7 @@ public class LineGrid {
      */
     public void generateGrid(){
         gridCells = new GridCell[numRows][numCols];
-        System.out.println("New grid created: numCols: " + numCols + ", numRows: " + numRows);
+        if (showText) System.out.println("New grid created: numCols: " + numCols + ", numRows: " + numRows);
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 gridCells[row][col] = new GridCell(false, 1.0, row, col);
@@ -163,54 +165,6 @@ public class LineGrid {
         }
     }
 
-//    /**
-//     * sifts through all elements of the container and looks for the ones that are VBoxes,
-//     * then updates the grid with which ones are occupied
-//     */
-//    public void updateGrid(){
-//        generateGrid();
-//        for (Node node : nodeContainer.getChildren()) {
-//            if (node instanceof VBox) {
-//                System.out.println("class at " +node.getLayoutX() + " , " + + node.getLayoutY());
-//                updateOccupiedClassBoxCells((VBox) node);
-//            }
-//        }
-//    }
-
-//    /**
-//     * helper method to update a single classBox's nodes
-//     * @param classNode the VBox representing the current classNode
-//     */
-//    public void updateOccupiedClassBoxCells(VBox classNode){
-//
-//        double nodeWidth = classNode.getWidth();
-//        double nodeHeight = classNode.getHeight();
-//        double nodeX = classNode.getLayoutX();
-//        double nodeY = classNode.getLayoutY();
-//        int rowStart = getRow(nodeY) + 1;
-//        int rowEnd = getRow(nodeY + nodeHeight) + 1;
-//        int colStart = getCol(nodeX) + 1;
-//        int colEnd = getCol(nodeX + nodeWidth) + 1;
-//
-//        if (this.coveredCells.containsKey(classNode)){
-//            coveredCells.remove(classNode);
-//        }
-//        ArrayList<GridCell> newCoveredCells = new ArrayList<>();
-//        for (int row = rowStart; row < rowEnd; row++){
-//            for (int col = colStart; col < colEnd; col++){
-//                if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
-//                    gridCells[row][col].occupied = true;
-//                    newCoveredCells.add(gridCells[row][col]);
-//                }
-//            }
-//        }
-//        if (newCoveredCells.size() > Math.abs((rowStart - rowEnd) * (colStart - colEnd))){
-//            throw new IllegalStateException("error updating covered cells list");
-//        }
-//        getCoveredCells().put(classNode, newCoveredCells);
-//        System.out.printf("\nOccupied at 100,100: %c\n", checkOccupied(100.0,100.0)? 'T' : 'F');
-//    }
-
     /**
      *
      * @param path
@@ -224,8 +178,8 @@ public class LineGrid {
 
     /**
      * checks if the cell is occupied or not
-     * @param layoutX the x coordinate in the container to check
-     * @param layoutY the y coordinate in the container to check
+     * @param col the x coordinate in the container to check
+     * @param row the y coordinate in the container to check
      * @return true if the cell is occupied
      */
     public boolean checkOccupied(int row, int col){
@@ -393,78 +347,6 @@ public class LineGrid {
         neighbors.removeIf(neighbor -> !isWalkable(neighbor.row, neighbor.col));
         return neighbors;
     }
-
-    /**
-     *
-     * @return
-     */
-    public ArrayList<GridPath> getPaths(){
-        return this.paths;
-    }
-
-    /**
-     * adds a path to the list
-     * @param path the path to add
-     */
-    public void addPath(GridPath path){
-        this.paths.add(path);
-    }
-
-////    public HashMap<VBox, ArrayList<GridCell>> getCoveredCells(){
-////        return this.coveredCells;
-////    }
-//
-////    public void cleanUp(){
-////        for (VBox box : coveredCells.keySet()){
-////            if(!nodeContainer.getChildren().contains(box)){
-////                coveredCells.remove(box);
-////            }
-////        }
-////    }
-//
-////    public GridCell getStartingCell(VBox startingNode, VBox goalNode){
-////
-////        int[] goalPoint = findCenter(goalNode);
-////        GridCell goal = this.getCell(goalPoint[0],goalPoint[1]);
-////        int minDist = 20000000;
-////        GridCell start = null;
-////
-////        for (GridCell cell : this.coveredCells.get(startingNode)){
-////            int dist = (int) calculateHeuristic(cell, goal);
-////            if (!getWalkableNeighbors(cell).isEmpty() && dist < minDist){
-////                minDist = dist;
-////                start=cell;
-////            }
-////        }
-////        if (start == null){
-////            System.out.println("no walkable starting points found!");
-////        }
-////        return start;
-////    }
-//
-////    public GridPath navigatePath(VBox start, VBox goal){
-////        GridCell startingCell = getStartingCell(start,goal);
-////        GridCell goalCell = getStartingCell(goal, start);
-////        PathNavigator navigator = new PathNavigator(this);
-////        GridPath p = navigator.findPath(startingCell,goalCell);
-////        paths.add(p);
-////        return p;
-////    }
-//
-//    private int[] findCenter(VBox classNode){
-//        double nodeWidth = classNode.getWidth();
-//        double nodeHeight = classNode.getHeight();
-//        double nodeX = classNode.getLayoutX();
-//        double nodeY = classNode.getLayoutY();
-//        int rowStart = getRow(nodeY) + 1;
-//        int rowEnd = getRow(nodeY + nodeHeight) + 1;
-//        int colStart = getCol(nodeX) + 1;
-//        int colEnd = getCol(nodeX + nodeWidth) + 1;
-//        int col = colStart + Math.abs((int)((colStart - colEnd)/2));
-//        int row = rowStart + Math.abs((int)((rowStart - rowEnd)/2));
-//        return new int[]{col, row};
-//    }
-
 
 
 }

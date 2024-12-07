@@ -1,13 +1,18 @@
 package codecain.GraphicalUserInterface.View;
 
+import codecain.BackendCode.Model.Relationship;
+import codecain.BackendCode.Model.RelationshipType;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.GridPath;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.GridCell;
 import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
+import codecain.GraphicalUserInterface.Model.RelationshipLines.RelationshipPathHolder;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class LineDrawer {
 
@@ -32,7 +37,7 @@ public class LineDrawer {
      * draws a line from the specified path
      * @param path the path  to draw
      */
-    public Polyline drawLineFromPath(GridPath path){
+    public Polyline drawLineFromPath(GridPath path, boolean isDashed){
         if (path == null || path.getCells() == null) {
             throw new IllegalArgumentException("path or its cells cannot be null");
         }
@@ -44,9 +49,31 @@ public class LineDrawer {
         }
         line.setStroke(Color.BLACK);
         line.setStrokeWidth(3.0);
+        if (isDashed){
+            line.getStrokeDashArray().addAll(10.0, 10.0);
+        }
 
         nodeContainer.getChildren().add(line);
         return line;
+    }
+
+    private void drawLinesFromPaths(RelationshipPathHolder holder){
+        for (Relationship r:Relationship.relationshipList){
+            boolean isDashed = r.getType().equals(RelationshipType.REALIZATION);
+            drawLineFromPath(holder.getPath(r), isDashed).toBack();
+        }
+    }
+
+
+    public void redrawLines(RelationshipPathHolder holder) {
+        Iterator<Node> iterator = nodeContainer.getChildren().iterator();
+        while (iterator.hasNext()) {
+            Node n = iterator.next();
+            if (n instanceof Polyline) {
+                iterator.remove();
+            }
+        }
+        drawLinesFromPaths(holder);
     }
 
     /**

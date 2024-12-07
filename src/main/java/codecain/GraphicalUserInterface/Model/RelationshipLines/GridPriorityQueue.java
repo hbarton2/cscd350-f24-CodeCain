@@ -76,4 +76,23 @@ public class GridPriorityQueue {
         return this.entryMap.containsKey(cell);
     }
 
+    public ArrayList<GridCell> toArrayList(){
+        ArrayList<PriorityQueueEntry> list = new ArrayList<>();
+        ArrayList<GridCell> cellList = new ArrayList<>();
+        list.addAll(queue);
+        for (PriorityQueueEntry e : list){
+            cellList.add(e.getCell());
+        }
+        return cellList;
+    }
+
+    @Override
+    public String toString(){
+        String s ="priority queue contents: ";
+        for (GridCell cell : toArrayList()){
+            s+=cell.toString() + ", ";
+        }
+        return s;
+    }
+
 }

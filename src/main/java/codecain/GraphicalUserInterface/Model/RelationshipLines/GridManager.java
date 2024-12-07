@@ -1,6 +1,7 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
 import codecain.BackendCode.Model.Relationship;
+import codecain.GraphicalUserInterface.Controller.Controller;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.animation.AnimationTimer;
@@ -29,7 +30,7 @@ public class GridManager {
     private LineDrawer lineDrawer;
     private GridUpdater updater;
     private PathNavigator pathNavigator;
-
+    private RelationshipPathHolder holder;
 
 
     private GridManager() {}
@@ -53,14 +54,16 @@ public class GridManager {
      * @param grid the LineGrid to set
      * @return the provided LineGrid instance
      */
-    public LineGrid setGrid(LineGrid grid) {
+    public LineGrid setGrid(LineGrid grid, Controller controller) {
         if (this.grid != null) {
             throw new IllegalStateException("Grid has already been set!");
         }
         this.grid = grid;
         this.lineDrawer = new LineDrawer(grid);
-        this.updater = new GridUpdater(this.grid);
         this.pathNavigator = new PathNavigator(this.grid);
+        this.holder = new RelationshipPathHolder(this.pathNavigator,controller);
+        this.updater = new GridUpdater(this.grid,holder, this.lineDrawer);
+
         return grid;
     }
 
@@ -143,18 +146,10 @@ public class GridManager {
         }
     }
 
-    public static void drawPath(VBox start, VBox goal){
-        GridPath p = instance.updater.navigatePath(start,goal);
-        getLineDrawer().drawLineFromPath(p);
-        System.out.println(p.toString());
+    public static void updateRelationshipPaths(){
+        instance.getUpdater().performGridUpdate();
     }
 
-    public static void drawTestLine(GridCell start, GridCell goal){
-        instance.checkGrid();
-        GridPath p = instance.pathNavigator.findPath(start,goal);
-        getLineDrawer().drawLineFromPath(p);
-        System.out.println(p.toString());
-    }
 
     public GridUpdater getUpdater(){
         return this.updater;

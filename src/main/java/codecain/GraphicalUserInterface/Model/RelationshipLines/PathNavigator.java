@@ -1,5 +1,7 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
+import javafx.scene.layout.VBox;
+
 import java.util.*;
 
 /**
@@ -30,7 +32,7 @@ public class PathNavigator {
      * @param goal the cell to reach
      * @return list of ordered grid cells to traverse the path
      */
-    public GridPath findPath(GridCell start, GridCell goal) {
+    private GridPath findPath(GridCell start, GridCell goal) {
         // fScore is the total estimated cost, gScore is the actual cost from start to current
         HashMap<GridCell, Integer> gScore = new HashMap<>();
         HashMap<GridCell, Integer> fScore = new HashMap<>();
@@ -47,14 +49,15 @@ public class PathNavigator {
         while (!open.isEmpty()) {
             // Step 1: Get the node with the lowest f score
             GridCell current = open.pop();
-            System.out.println("node added at " + current.getCol() + ", " + current.getRow());
+            //System.out.println("node added at " + current.getCol() + ", " + current.getRow());
 
 
             // Step 2: If the current node is the goal, reconstruct the path
             if (current == goal || grid.getNeighbors(current).contains(goal)) {
                 GridPath g = new GridPath(reconstructPath(current));
+                g.setEndPoints(start,goal);
                 System.out.println(g.toString());
-                grid.addPath(g);
+                //grid.addPath(g);
                 return g;
             }
 
@@ -85,12 +88,106 @@ public class PathNavigator {
                 }
             }
         }
-        System.out.println("no path found");
+        //System.out.println("no path found");
 
         // Return an empty path if no path was found
         return new GridPath();
     }
 
+
+    /**
+     * finds a path from one node to the other
+     * @param coveredCellsStart
+     * @param coveredCellsGoal
+     * @param startCenter
+     * @param goalCenter
+     * @return
+     */
+    public GridPath findPathFromCells(ArrayList<GridCell> coveredCellsStart,
+                                      ArrayList<GridCell> coveredCellsGoal, GridCell startCenter, GridCell goalCenter){
+        boolean printStuff = true;
+        GridPriorityQueue availableStartCells;
+        GridPriorityQueue availableGoalCells;
+
+        //add all start cells to a priority queue ordered by their cost
+        availableStartCells = loadAvailableStartingCells(coveredCellsStart,goalCenter);
+
+        //findPath until one works
+        GridPath path = null;
+
+        while (!availableStartCells.isEmpty()) {
+            //checks every start cell and end cell
+            GridCell start = availableStartCells.pop();
+            availableGoalCells = loadAvailableGoalCells(coveredCellsGoal,start);
+            while(!availableGoalCells.isEmpty()){
+                path = findPath(start, availableGoalCells.pop());
+                if (path != null) {
+                    return path;
+                }
+            }
+        }
+
+        //returns null if no path was found
+
+        return null;
+    }
+
+    /**
+     * helper method for findPathFromCells
+     * finds all available starting cells and adds them to a GridPriorityQueue based on their
+     * heuristic cost (estimated distance)
+     * @param coveredCellsStart arralylist with all the cells covered by the ClassNode
+     * @param goalCenter the center cell of the destination node
+     * @return priority queue of all available grid cells
+     */
+    private GridPriorityQueue loadAvailableStartingCells(ArrayList<GridCell> coveredCellsStart, GridCell goalCenter){
+        boolean printStuff = true;
+
+        GridPriorityQueue availableStartCells = new GridPriorityQueue();
+
+        for ( GridCell cell: coveredCellsStart){
+            if (!grid.getWalkableNeighbors(cell).isEmpty()){
+                availableStartCells.push(cell, calculateHeuristic(cell,goalCenter));
+                if (printStuff == true) System.out.println("available start cell found: " + cell.toString());
+            }
+        }
+
+        if (printStuff) System.out.println(availableStartCells.toString());
+
+        return availableStartCells;
+    }
+
+    /**
+     * helper method for findPathFromCells
+     * finds all available starting cells and adds them to a GridPriorityQueue based on their
+     * heuristic cost (estimated distance)
+     * @param coveredCellsGoal arralylist with all the cells covered by the ClassNode
+     * @param startingCell the center cell of the destination node
+     * @return priority queue of all available grid cells
+     */
+    private GridPriorityQueue loadAvailableGoalCells(ArrayList<GridCell> coveredCellsGoal, GridCell startingCell){
+        boolean printStuff = true;
+
+        GridPriorityQueue availableStartCells = new GridPriorityQueue();
+
+        for ( GridCell cell: coveredCellsGoal){
+            if (!grid.getWalkableNeighbors(cell).isEmpty()){
+                availableStartCells.push(cell, calculateHeuristic(cell,startingCell));
+                if (printStuff == true) System.out.println("available start cell found: " + cell.toString());
+            }
+        }
+
+        if (printStuff) System.out.println(availableStartCells.toString());
+
+        return availableStartCells;
+    }
+
+
+    /**
+     * reconstructs the path from the goal cell
+     * @param goal the goal of the path to reconstruct from
+     * @return a new path reconstructed from the cameFrom HashMap
+     */
     private ArrayList<GridCell> reconstructPath(GridCell goal) {
         ArrayList<GridCell> path = new ArrayList<>();
         GridCell node = goal;
@@ -115,39 +212,6 @@ public class PathNavigator {
     public int calculateHeuristic(GridCell current, GridCell goal){
         return Math.abs(current.col - goal.col) + Math.abs(current.row - goal.row);
     }
-
-
-    /**
-     * returns the cost to move from one cell to the neighboring cell
-     * @param neighbor
-     * @return
-     */
-    private int calculateMovementCost(GridCell neighbor){
-        return (int) neighbor.cost;
-    }
-
-    /**
-     * validates the movement from the current node to it's neighbor
-     * @param current
-     * @param neighbor
-     * @return
-     */
-    private boolean checkHeuristicConsistency(GridCell current, GridCell neighbor, GridCell goal){
-        return calculateHeuristic(current, goal) <= calculateHeuristic(neighbor, goal) + calculateMovementCost(neighbor);
-    }
-
-    /**
-     *
-     * @param actualCost the total number of steps from the starting cell to the
-     *                   cell in question
-     * @param estimatedCost the heuristic from the current node to the ending goal
-     * @return the total cost f(n) = g(n) + h(n)
-     */
-    private int calculateTotalCost(int actualCost, int estimatedCost){
-        return actualCost + estimatedCost;
-    }
-
-
 
 
 }
