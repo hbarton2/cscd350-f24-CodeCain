@@ -1,17 +1,16 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import codecain.BackendCode.Model.Relationship;
-import codecain.GraphicalUserInterface.Controller.Controller;
+import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class GridUpdater {
 
@@ -59,7 +58,7 @@ public class GridUpdater {
 
     private RelationshipPathHolder pathHolder;
 
-    private HashMap<VBox, ArrayList<GridCell>> coveredCells;
+    private HashMap<ClassNode, ArrayList<GridCell>> coveredCells;
 
     /**
      * animation timer to keep track of the last grid updates
@@ -96,11 +95,11 @@ public class GridUpdater {
     }
 
     /**
-     * Adds listeners to a VBox node for position and size changes.
+     * Adds listeners to a ClassNode node for position and size changes.
      * When any changes occur, the grid is updated accordingly.
-     * @param classNode the VBox to add listeners to
+     * @param classNode the ClassNode to add listeners to
      */
-    public void addClassListeners(VBox classNode) {
+    public void addClassListeners(ClassNode classNode) {
         if (classNode == null) return;
         classNode.layoutXProperty().addListener((observable, oldValue, newValue) -> scheduleGridUpdate());
         classNode.layoutYProperty().addListener((observable, oldValue, newValue) -> scheduleGridUpdate());
@@ -124,11 +123,10 @@ public class GridUpdater {
 
 
     /**
-     * helper method to update a single classBox's nodes
-     * @param classNode the VBox representing the current classNode
+     * Helper method to update a single ClassNode's occupied cells.
+     * @param classNode the ClassNode representing the current classNode
      */
-    private void updateOccupiedClassBoxCells(VBox classNode){
-
+    private void updateOccupiedClassBoxCells(ClassNode classNode) {
         int numRows = grid.getNumRows();
         int numCols = grid.getNumCols();
         double nodeWidth = classNode.getWidth();
@@ -140,28 +138,27 @@ public class GridUpdater {
         int colStart = grid.getCol(nodeX) + 1;
         int colEnd = grid.getCol(nodeX + nodeWidth) + 1;
 
-        if (this.coveredCells.containsKey(classNode)){
+        if (this.coveredCells.containsKey(classNode)) {
             coveredCells.remove(classNode);
         }
         ArrayList<GridCell> newCoveredCells = new ArrayList<>();
-        for (int row = rowStart; row < rowEnd; row++){
-            for (int col = colStart; col < colEnd; col++){
+        for (int row = rowStart; row < rowEnd; row++) {
+            for (int col = colStart; col < colEnd; col++) {
                 if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
-                    GridCell cell = grid.getCell(row,col);
+                    GridCell cell = grid.getCell(row, col);
                     cell.occupied = true;
                     newCoveredCells.add(cell);
                 }
             }
         }
-        if (newCoveredCells.size() > Math.abs((rowStart - rowEnd) * (colStart - colEnd))){
+        if (newCoveredCells.size() > Math.abs((rowStart - rowEnd) * (colStart - colEnd))) {
             throw new IllegalStateException("error updating covered cells list");
         }
         getCoveredCells().put(classNode, newCoveredCells);
-        //System.out.printf("\nOccupied at 100,100: %c\n", grid.checkOccupied(100.0,100.0)? 'T' : 'F');
     }
 
 
-    public HashMap<VBox, ArrayList<GridCell>> getCoveredCells(){
+    public HashMap<ClassNode, ArrayList<GridCell>> getCoveredCells(){
         return this.coveredCells;
     }
 
@@ -190,9 +187,9 @@ public class GridUpdater {
     private void updateGridBoxes(){
         //grid.generateGrid();
         for (Node node : nodeContainer.getChildren()) {
-            if (node instanceof VBox) {
+            if (node instanceof ClassNode) {
                 System.out.println("class at " +node.getLayoutX() + " , " + + node.getLayoutY());
-                updateOccupiedClassBoxCells((VBox) node);
+                updateOccupiedClassBoxCells((ClassNode) node);
             }
         }
         //updatePaths();
@@ -243,7 +240,7 @@ public class GridUpdater {
         if (!Relationship.relationshipExists(relationship.getSource(),relationship.getDestination())){
             throw new IllegalStateException("relationship doesn't exist");
         }
-        return navigatePath(pathHolder.getSourceClassNode(relationship), pathHolder.getDestinationClassNode(relationship));
+        return navigatePath((ClassNode) pathHolder.getSourceClassNode(relationship), (ClassNode) pathHolder.getDestinationClassNode(relationship));
     }
 
 
@@ -260,23 +257,28 @@ public class GridUpdater {
 
 
     /**
-     * navigates the grid from one node to the next
+     * Navigates the grid from one node to the next.
      * @param start starting node
      * @param goal goal node
      * @return null if no path found, otherwise returns a path
      */
-    private GridPath navigatePath(VBox start, VBox goal){
+    private GridPath navigatePath(ClassNode start, ClassNode goal) {
         PathNavigator navigator = new PathNavigator(grid);
         GridPath p = navigator.findPathFromCells(coveredCells.get(start), coveredCells.get(goal),
-                findCenter(start),findCenter(goal));
-        if (p == null){
+                findCenter(start), findCenter(goal));
+        if (p == null) {
             System.out.println("No path found");
             return null;
         }
         return p;
     }
 
-    private GridCell findCenter(VBox classNode){
+    /**
+     * Finds the center cell of a ClassNode.
+     * @param classNode the ClassNode
+     * @return the central GridCell
+     */
+    private GridCell findCenter(ClassNode classNode) {
         double nodeWidth = classNode.getWidth();
         double nodeHeight = classNode.getHeight();
         double nodeX = classNode.getLayoutX();
@@ -285,10 +287,10 @@ public class GridUpdater {
         int rowEnd = grid.getRow(nodeY + nodeHeight) + 1;
         int colStart = grid.getCol(nodeX) + 1;
         int colEnd = grid.getCol(nodeX + nodeWidth) + 1;
-        int col = colStart + Math.abs((int)((colStart - colEnd)/2));
-        int row = rowStart + Math.abs((int)((rowStart - rowEnd)/2));
+        int col = colStart + Math.abs((int) ((colStart - colEnd) / 2));
+        int row = rowStart + Math.abs((int) ((rowStart - rowEnd) / 2));
         System.out.println("Center found at: col:" + col + ", row: " + row);
-        return grid.getCell(row,col);
+        return grid.getCell(row, col);
     }
 
 }

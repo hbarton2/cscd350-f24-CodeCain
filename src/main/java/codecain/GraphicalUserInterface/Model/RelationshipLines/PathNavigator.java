@@ -1,8 +1,11 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
-import javafx.scene.layout.VBox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * generates a path around occupied nodes

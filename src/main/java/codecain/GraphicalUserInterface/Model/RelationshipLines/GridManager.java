@@ -1,17 +1,9 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
-import codecain.BackendCode.Model.Relationship;
 import codecain.GraphicalUserInterface.Controller.Controller;
+import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.LineDrawer;
-import javafx.animation.AnimationTimer;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-
-import javax.sound.sampled.Line;
-import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * singleton class that sets a grid which can be accessed across the entire program.
@@ -94,11 +86,11 @@ public class GridManager {
     }
 
     /**
-     * Adds listeners to a VBox node for position and size changes.
+     * Adds listeners to a ClassNode node for position and size changes.
      * When any changes occur, the grid is updated accordingly.
-     * @param classNode the VBox to add listeners to
+     * @param classNode the ClassNode to add listeners to
      */
-    public static void addClassListeners(VBox classNode) {
+    public static void addClassListeners(ClassNode classNode) {
         instance.checkGrid();
         instance.updater.addClassListeners(classNode);
     }

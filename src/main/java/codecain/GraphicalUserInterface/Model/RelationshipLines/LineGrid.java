@@ -1,12 +1,9 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import javafx.scene.layout.Pane;
+
 
 /**
  * grids must interact with classes and arrows

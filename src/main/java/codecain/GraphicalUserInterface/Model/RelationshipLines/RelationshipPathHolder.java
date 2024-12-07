@@ -1,39 +1,36 @@
 package codecain.GraphicalUserInterface.Model.RelationshipLines;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import codecain.BackendCode.Model.Relationship;
 import codecain.GraphicalUserInterface.Controller.Controller;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import codecain.GraphicalUserInterface.View.ClassNode;
 
 /**
  * this is a class to take relationships and turn them into paths.
  * Also maps relatioinships to the classNodes from the GUI
- *
  */
 public class RelationshipPathHolder {
 
     /**
-     * helper class to hold the source and destination nodes of the relationship line
+     * Helper class to hold the source and destination nodes of the relationship line.
      */
-    private static class RelBoxHolder{
-        VBox source;
-        VBox destination;
+    private static class RelBoxHolder {
+        ClassNode source;
+        ClassNode destination;
 
-        RelBoxHolder (VBox source, VBox destination){
+        RelBoxHolder(ClassNode source, ClassNode destination) {
             this.source = source;
             this.destination = destination;
         }
 
-        VBox getSource(){
+        ClassNode getSource() {
             return this.source;
         }
 
-        VBox getDestination(){
+        ClassNode getDestination() {
             return this.destination;
         }
     }
@@ -54,11 +51,11 @@ public class RelationshipPathHolder {
         this.controller = controller;
     }
 
-    public VBox getSourceClassNode(Relationship r){
+    public ClassNode getSourceClassNode(Relationship r) {
         return this.classBoxHolder.get(r).getSource();
     }
 
-    public VBox getDestinationClassNode(Relationship r){
+    public ClassNode getDestinationClassNode(Relationship r) {
         return this.classBoxHolder.get(r).getDestination();
     }
 
@@ -80,9 +77,9 @@ public class RelationshipPathHolder {
 
     }
 
-    public void addRelationshipHolder(Relationship relationship){
-        VBox sourceBox = controller.findClassNode(relationship.getSource());
-        VBox destBox = controller.findClassNode(relationship.getDestination());
+    public void addRelationshipHolder(Relationship relationship) {
+        ClassNode sourceBox = controller.findClassNode(relationship.getSource());
+        ClassNode destBox = controller.findClassNode(relationship.getDestination());
         RelBoxHolder h = new RelBoxHolder(sourceBox, destBox);
         classBoxHolder.put(relationship, h);
     }
