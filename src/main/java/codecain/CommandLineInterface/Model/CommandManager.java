@@ -1,11 +1,25 @@
 package codecain.CommandLineInterface.Model;
 
-import codecain.BackendCode.Model.*;
-import codecain.BackendCode.UndoRedo.StateManager;
-import codecain.CommandLineInterface.View.CLIView;
-import javafx.scene.control.TextArea;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import codecain.BackendCode.Model.Relationship;
+import codecain.BackendCode.Model.RelationshipType;
+import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.UMLClassInfo;
+import codecain.BackendCode.Model.UMLFields;
+import codecain.BackendCode.Model.UMLMethods;
+import codecain.BackendCode.Model.UMLParameterInfo;
+import codecain.BackendCode.UndoRedo.StateManager;
+import codecain.CommandLineInterface.View.CLIView;
+import codecain.GraphicalUserInterface.Controller.Controller;
+import codecain.GraphicalUserInterface.Model.ExportImage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
  * Manages and executes user commands for UML diagram operations.
@@ -62,6 +76,13 @@ public class CommandManager {
             case "load" -> result = fileOperations.loadDiagram(getFileName(tokens));
             case "undo" -> undo();
             case "redo" -> redo();
+            case "export" -> {
+                if (tokens.length < 2) {
+                    appendToOutput("Usage: export-gui <file-path>\n");
+                    return;
+                }
+                openGUIAndExport(tokens[1]);
+            }
             case "exit" -> {
                 System.exit(0);
                 return;
@@ -73,6 +94,45 @@ public class CommandManager {
             appendToOutput( "\n" + result + "\n");
         }
     }
+
+    /**
+     * Opens the GUI through the Controller and exports the UML diagram as an image.
+     *
+     * @param exportFilePath The file path to save the UML diagram image.
+     */
+    public void openGUIAndExport(String exportFilePath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/codecain/GraphicalInterface.fxml"));
+            Pane root = loader.load();
+            Controller controller = loader.getController();
+    
+            Stage guiStage = new Stage();
+            guiStage.setTitle("UML Diagram Editor");
+            guiStage.setScene(new Scene(root));
+            guiStage.setOpacity(0);
+            guiStage.show();
+    
+            Pane nodeContainer = controller.getNodeContainer();
+            nodeContainer = controller.populateGUIFromClassMap();
+    
+        if (exportFilePath != null) {
+            if (!exportFilePath.toLowerCase().endsWith(".png")) {
+                exportFilePath += ".png";
+            }
+
+            File exportFile = new File(exportFilePath);
+            ExportImage.exportImage(nodeContainer, exportFile);
+            appendToOutput("UML diagram successfully exported to: " + exportFilePath + "\n");
+        } else {
+            appendToOutput("Export file path is null. Cannot export UML diagram.\n");
+        }
+        guiStage.close();
+    } catch (Exception e) {
+        appendToOutput("Failed to open GUI and export UML diagram: " + e.getMessage() + "\n");
+        e.printStackTrace();
+    }
+}
+    
 
     /**
      * Undo the last action.
