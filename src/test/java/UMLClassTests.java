@@ -1,9 +1,12 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The UMLClassTests class contains test cases to validate the functionality of the UMLClass class.
@@ -111,4 +114,31 @@ public class UMLClassTests {
         String res = UMLClass.listAllClassesInfo();
         assertEquals("No classes to display.",res);
     }
+    @Test
+    public void testGetClassInfo(){
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+        assertNotNull(info);
+        assertEquals("DOG", info.getClassName());
+    }
+    @Test
+    public void testGetClassInfoFields(){
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+        assertTrue(info.getFields().isEmpty());
+
+
+        List<UMLFieldInfo> fields = new ArrayList<>();
+        fields.add(new UMLFieldInfo("NAME", "String"));
+        fields.add(new UMLFieldInfo("TYPE", "String"));
+        info.getFields().addAll(fields);
+        assertEquals(2, info.getFields().size(), "Should have two fields");
+
+        List<UMLMethodInfo> methods = new ArrayList<>();
+        methods.add(new UMLMethodInfo("getAge", new ArrayList<>()));
+        methods.add(new UMLMethodInfo("setName", List.of(new UMLParameterInfo("NAME", "String"))));
+        info.getMethods().addAll(methods);
+        assertEquals(2, info.getMethods().size(), "Should have two methods");
+    }
+
 }
