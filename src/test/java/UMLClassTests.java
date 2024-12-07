@@ -98,4 +98,17 @@ public class UMLClassTests {
         assertFalse(UMLClass.classMap.containsKey("DOG"));
         assertFalse(UMLClass.classMap.containsKey("CAT"));
     }
+    @Test
+    public void testListAllClasses() {
+        UMLClass.addClass("DOG");
+        UMLClass.addClass("CAT");
+        String res = UMLClass.listAllClassesInfo();
+        assertTrue(res.contains("DOG"));
+        assertTrue(res.contains("CAT"));
+    }
+    @Test
+    public void testListAllClassesWithNoClasses(){
+        String res = UMLClass.listAllClassesInfo();
+        assertEquals("No classes to display.",res);
+    }
 }
