@@ -121,8 +121,8 @@ public class Controller {
             }
         });
         arrowManager = new ArrowManager(nodeContainer);
-        GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer));
-        GridManager.setVisualizer();
+        GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer),this);
+        //GridManager.setVisualizer();
         RelationshipManager.setArrowManager(arrowManager);
         RelationshipManager.setController(this);
     }
@@ -150,7 +150,6 @@ public class Controller {
         String className = currentlySelectedNode != null
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Delete Class", "Enter the name of the class to delete:", "Class Name:");
-
         ClassManager.removeClass(className, nodeContainer);
     }
 
