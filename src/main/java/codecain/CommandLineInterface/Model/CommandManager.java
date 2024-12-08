@@ -9,6 +9,7 @@ import codecain.BackendCode.Model.RelationshipType;
 import codecain.BackendCode.Model.UMLClass;
 import codecain.BackendCode.Model.UMLClassInfo;
 import codecain.BackendCode.Model.UMLFields;
+import codecain.BackendCode.Model.UMLMethodInfo;
 import codecain.BackendCode.Model.UMLMethods;
 import codecain.BackendCode.Model.UMLParameterInfo;
 import codecain.BackendCode.UndoRedo.StateManager;
@@ -322,15 +323,62 @@ public class CommandManager {
      * @return message confirming or denying the addition of the parameter
      */
     private String handleAddParameter(String[] tokens) {
-        stateManager.saveState();
-        String errorMessage = checkClassExists(tokens[2]);
+        if (tokens.length < 5) {
+            return "Usage: add parameter <className> <methodName> <parameterType> <parameterName>";
+        }
+    
+        String className = tokens[2];
+        String methodName = tokens[3];
+        String parameterType = tokens[4];
+        String parameterName = tokens[5];
+    
+        // Check if the class exists
+        String errorMessage = checkClassExists(className);
         if (errorMessage != null) {
             return errorMessage;
         }
-        UMLMethods paramMethods = new UMLMethods();
-        paramMethods.addParameter(tokens[2], tokens[3], tokens[4], tokens[5]);
-        return DisplayHelper.parameterAdded(tokens[5], tokens[3], tokens[2]);
+    
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) {
+            return "Class '" + className + "' not found.";
+        }
+    
+        // Find methods with the given name
+        var matchingMethods = classInfo.getMethods().stream()
+                .filter(method -> method.getMethodName().equals(methodName))
+                .toList();
+    
+        if (matchingMethods.isEmpty()) {
+            return "No method named '" + methodName + "' found in class '" + className + "'.";
+        } else if (matchingMethods.size() == 1) {
+            // If there's only one method, add the parameter directly
+            matchingMethods.get(0).addParameter(new UMLParameterInfo(parameterType, parameterName));
+            return "Parameter '" + parameterName + "' added to method '" + methodName + "' in class '" + className + "'.";
+        } else {
+            // If there are multiple methods, prompt the user to choose
+            StringBuilder prompt = new StringBuilder("Multiple methods named '" + methodName + "' found. Please choose which one to modify:\n");
+            for (int i = 0; i < matchingMethods.size(); i++) {
+                prompt.append((i + 1)).append(": ").append(matchingMethods.get(i)).append("\n");
+            }
+    
+            CLIView.promptForInput(prompt.toString() + "Enter the number:", userInput -> {
+                try {
+                    int choice = Integer.parseInt(userInput);
+                    if (choice > 0 && choice <= matchingMethods.size()) {
+                        matchingMethods.get(choice - 1).addParameter(new UMLParameterInfo(parameterType, parameterName));
+                        CLIView.getCommandOutput().appendText("Parameter '" + parameterName + "' added to method '" + methodName + "' (option " + choice + ") in class '" + className + "'.\n");
+                    } else {
+                        CLIView.getCommandOutput().appendText("Invalid choice. No parameter added.\n");
+                    }
+                } catch (NumberFormatException e) {
+                    CLIView.getCommandOutput().appendText("Invalid input. Please enter a valid number.\n");
+                }
+            });
+    
+            return ""; // Empty string to prevent immediate output
+        }
     }
+    
 
     /**
      * Handles deletion of various UML components, such as classes, relationships, fields, etc.
@@ -432,16 +480,67 @@ public class CommandManager {
      * @return message confirming or denying the deletion of the method
      */
     private String handleDeleteParameter(String[] tokens) {
-        stateManager.saveState();
-        String errorMessage = checkClassExists(tokens[2]);
+        if (tokens.length < 6) {
+            return "Usage: delete parameter <className> <methodName> <parameterType> <parameterName>";
+        }
+    
+        String className = tokens[2];
+        String methodName = tokens[3];
+        String parameterType = tokens[4];
+        String parameterName = tokens[5];
+    
+        UMLParameterInfo parameterInfo = new UMLParameterInfo(parameterType, parameterName);
+
+        String errorMessage = checkClassExists(className);
         if (errorMessage != null) {
             return errorMessage;
         }
-
-        UMLMethods paramMethods = new UMLMethods();
-        paramMethods.removeParameter(tokens[2], tokens[3], tokens[4]);
-        return DisplayHelper.parameterRemoved(tokens[4], tokens[3], tokens[2]);
+    
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) {
+            return "Class '" + className + "' not found.";
+        }
+            var matchingMethods = classInfo.getMethods().stream()
+                .filter(method -> method.getMethodName().equals(methodName))
+                .toList();
+    
+        if (matchingMethods.isEmpty()) {
+            return "No method named '" + methodName + "' found in class '" + className + "'.";
+        } else if (matchingMethods.size() == 1) {
+            if (matchingMethods.get(0).getParameters().contains(parameterInfo)) {
+                matchingMethods.get(0).getParameters().remove(parameterInfo);
+                return "Parameter '" + parameterInfo + "' removed from method '" + methodName + "' in class '" + className + "'.";
+            } else {
+                return "Parameter '" + parameterInfo + "' not found in method '" + methodName + "' of class '" + className + "'.";
+            }
+        } else {
+            StringBuilder prompt = new StringBuilder("Multiple methods named '" + methodName + "' found. Please choose which one to modify:\n");
+            for (int i = 0; i < matchingMethods.size(); i++) {
+                prompt.append((i + 1)).append(": ").append(matchingMethods.get(i)).append("\n");
+            }
+            CLIView.promptForInput(prompt.toString() + "Enter the number:", userInput -> {
+                try {
+                    int choice = Integer.parseInt(userInput);
+                    if (choice > 0 && choice <= matchingMethods.size()) {
+                        var selectedMethod = matchingMethods.get(choice - 1);
+                        if (selectedMethod.getParameters().contains(parameterInfo)) {
+                            selectedMethod.getParameters().remove(parameterInfo);
+                            CLIView.getCommandOutput().appendText("Parameter '" + parameterInfo + "' removed from method '" + methodName + "' (option " + choice + ") in class '" + className + "'.\n");
+                        } else {
+                            CLIView.getCommandOutput().appendText("Parameter '" + parameterInfo + "' not found in selected method.\n");
+                        }
+                    } else {
+                        CLIView.getCommandOutput().appendText("Invalid choice. No parameter removed.\n");
+                    }
+                } catch (NumberFormatException e) {
+                    CLIView.getCommandOutput().appendText("Invalid input. Please enter a valid number.\n");
+                }
+            });
+    
+            return "";
+        }
     }
+    
 
     /**
      * Renames various UML components, such as classes, fields, methods, etc.
@@ -530,7 +629,6 @@ public class CommandManager {
         return DisplayHelper.methodRenamed(tokens[3], tokens[4], tokens[2]);
     }
 
-
     /**
      * Renames a parameter in a specified method of a UML class.
      *
@@ -543,15 +641,84 @@ public class CommandManager {
             return "Usage: rename parameter <className> <methodName> <oldParameterName> <newParameterType> <newParameterName>";
         }
 
-        String errorMessage = checkClassExists(tokens[2]);
+        String className = tokens[2];
+        String methodName = tokens[3];
+        String oldParameterName = tokens[4];
+        String newParameterType = tokens[5];
+        String newParameterName = tokens[6];
+
+        String errorMessage = checkClassExists(className);
         if (errorMessage != null) {
             return errorMessage;
         }
 
-        UMLMethods methods = new UMLMethods();
-        methods.changeSingleParameter(tokens[2], tokens[3], tokens[4], tokens[5], tokens[6]);
-        return DisplayHelper.parameterRenamed(tokens[4], tokens[6], tokens[3], tokens[2]);
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) {
+            return "Class '" + className + "' not found.";
+        }
+
+        var matchingMethods = classInfo.getMethods().stream()
+                .filter(method -> method.getMethodName().equals(methodName))
+                .toList();
+
+        if (matchingMethods.isEmpty()) {
+            return "No method named '" + methodName + "' found in class '" + className + "'.";
+        } else if (matchingMethods.size() == 1) {
+            UMLMethodInfo selectedMethod = matchingMethods.get(0);
+            if (renameParameter(selectedMethod, oldParameterName, newParameterType, newParameterName)) {
+                return "Parameter '" + oldParameterName + "' renamed to '" + newParameterType + " " + newParameterName + "' in method '" + methodName + "' of class '" + className + "'.";
+            } else {
+                return "Parameter '" + oldParameterName + "' not found in method '" + methodName + "' of class '" + className + "'.";
+            }
+        } else {
+            StringBuilder prompt = new StringBuilder("Multiple methods named '" + methodName + "' found in class '" + className + "'. Please choose which one to modify:\n");
+            for (int i = 0; i < matchingMethods.size(); i++) {
+                prompt.append((i + 1)).append(": ").append(matchingMethods.get(i)).append("\n");
+            }
+
+            CLIView.promptForInput(prompt.toString() + "Enter the number:", userInput -> {
+                try {
+                    int choice = Integer.parseInt(userInput);
+                    if (choice > 0 && choice <= matchingMethods.size()) {
+                        UMLMethodInfo selectedMethod = matchingMethods.get(choice - 1);
+                        if (renameParameter(selectedMethod, oldParameterName, newParameterType, newParameterName)) {
+                            CLIView.getCommandOutput().appendText("Parameter '" + oldParameterName + "' renamed to '" + newParameterType + " " + newParameterName + "' in method '" + methodName + "' (option " + choice + ") in class '" + className + "'.\n");
+                        } else {
+                            CLIView.getCommandOutput().appendText("Parameter '" + oldParameterName + "' not found in selected method.\n");
+                        }
+                    } else {
+                        CLIView.getCommandOutput().appendText("Invalid choice. No parameter renamed.\n");
+                    }
+                } catch (NumberFormatException e) {
+                    CLIView.getCommandOutput().appendText("Invalid input. Please enter a valid number.\n");
+                }
+            });
+
+            return "";
+        }
     }
+
+    /**
+     * Helper method to rename a parameter in a method.
+     *
+     * @param method           The UMLMethodInfo object
+     * @param oldParameterName The current name of the parameter
+     * @param newParameterType The new type for the parameter
+     * @param newParameterName The new name for the parameter
+     * @return true if the parameter was found and updated, false otherwise
+     */
+    private boolean renameParameter(UMLMethodInfo method, String oldParameterName, String newParameterType, String newParameterName) {
+        for (UMLParameterInfo param : method.getParameters()) {
+            if (param.getParameterName().equals(oldParameterName)) {
+                param.setParameterType(newParameterType);
+                param.setParameterName(newParameterName);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     /**
      * Changes all parameters for a specified method in a UML class.
@@ -564,7 +731,6 @@ public class CommandManager {
         if (tokens.length < 5) {
             return "Usage: change parameters <className> <methodName> <parameterType1> <parameterName1> ...";
         }
-
         String className = tokens[2];
         String methodName = tokens[3];
         List<UMLParameterInfo> newParameters = parseParameters(tokens, 4);
@@ -574,10 +740,47 @@ public class CommandManager {
             return errorMessage;
         }
 
-        UMLMethods methods = new UMLMethods();
-        methods.changeAllParameters(className, methodName, newParameters);
-        return DisplayHelper.allParametersChanged(methodName, className);
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) {
+            return "Class '" + className + "' not found.";
+        }
+
+        var matchingMethods = classInfo.getMethods().stream()
+                .filter(method -> method.getMethodName().equals(methodName))
+                .toList();
+
+        if (matchingMethods.isEmpty()) {
+            return "No method named '" + methodName + "' found in class '" + className + "'.";
+        } else if (matchingMethods.size() == 1) {
+            UMLMethodInfo selectedMethod = matchingMethods.get(0);
+            selectedMethod.getParameters().clear();
+            selectedMethod.getParameters().addAll(newParameters);
+            return "All parameters changed for method '" + methodName + "' in class '" + className + "'.";
+        } else {
+            StringBuilder prompt = new StringBuilder("Multiple methods named '" + methodName + "' found in class '" + className + "'. Please choose which one to modify:\n");
+            for (int i = 0; i < matchingMethods.size(); i++) {
+                prompt.append((i + 1)).append(": ").append(matchingMethods.get(i)).append("\n");
+            }
+            CLIView.promptForInput(prompt.toString() + "Enter the number:", userInput -> {
+                try {
+                    int choice = Integer.parseInt(userInput);
+                    if (choice > 0 && choice <= matchingMethods.size()) {
+                        UMLMethodInfo selectedMethod = matchingMethods.get(choice - 1);
+                        selectedMethod.getParameters().clear();
+                        selectedMethod.getParameters().addAll(newParameters);
+                        CLIView.getCommandOutput().appendText("All parameters changed for method '" + methodName + "' (option " + choice + ") in class '" + className + "'.\n");
+                    } else {
+                        CLIView.getCommandOutput().appendText("Invalid choice. No parameters changed.\n");
+                    }
+                } catch (NumberFormatException e) {
+                    CLIView.getCommandOutput().appendText("Invalid input. Please enter a valid number.\n");
+                }
+            });
+
+            return "";
+        }
     }
+
 
     /**
      * Lists UML classes or relationships based on the provided tokens.
