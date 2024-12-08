@@ -2,12 +2,12 @@ package codecain.GraphicalUserInterface.Model;
 
 import codecain.BackendCode.Model.UMLClass;
 import codecain.BackendCode.Model.UMLClassInfo;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
-import codecain.BackendCode.Model.UMLClassInfo;
 
 /**
  * The {@code ClassManager} class provides utility methods for managing UML class nodes
@@ -48,6 +48,9 @@ public class ClassManager {
         // Add the new ClassNode to the node container
         nodeContainer.getChildren().add(classNode);
 
+        GridManager.addClassListeners(classNode);
+        GridManager.updateRelationshipPaths();
+
         return classNode;
     }
 
@@ -69,6 +72,8 @@ public class ClassManager {
         }
 
         UMLClass.removeClass(className);
+        GridManager.updateRelationshipPaths();
+
         nodeContainer.getChildren()
                 .removeIf(node -> node instanceof ClassNode && ((ClassNode) node).getName().equals(className));
     }

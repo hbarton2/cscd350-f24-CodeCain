@@ -1,6 +1,7 @@
 package codecain.GraphicalUserInterface.View;
 
 import codecain.CommandLineInterface.View.CLI;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -82,6 +83,7 @@ public class MenuGUI extends Application {
             if (parentStage != null) parentStage.hide();
 
             guiStage.setOnCloseRequest(event1 -> {
+                GridManager.getInstance().resetGrid(); // Reset the grid when GUI is closed
                 if (parentStage != null) parentStage.show();
             });
         } catch (Exception e) {

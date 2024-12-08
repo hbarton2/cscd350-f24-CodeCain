@@ -8,6 +8,7 @@ import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.RelationshipType;
 import codecain.BackendCode.Model.UMLClass;
 import codecain.GraphicalUserInterface.Controller.Controller;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
@@ -20,6 +21,7 @@ public class RelationshipManager {
      * between UML class nodes in the GUI.
      */
     private static ArrowManager arrowManager;
+
 
     /**
      * The Controller instance responsible for managing user interactions and coordinating between 
@@ -105,15 +107,17 @@ public class RelationshipManager {
 
         ClassNode sourceNode = controller.findClassNode(source);
         ClassNode destNode = controller.findClassNode(destination);
-
-        if (arrowManager != null && sourceNode != null && destNode != null) {
-            arrowManager.addArrow(Relationship.getRelationship(source, destination, type), sourceNode, destNode);
+        GridManager.getInstance();
+        //GridManager.drawPath(sourceNode,destNode);
+        GridManager.updateRelationshipPaths();
+//        if (arrowManager != null && sourceNode != null && destNode != null) {
+//            arrowManager.addArrow(Relationship.getRelationship(source, destination, type), sourceNode, destNode);
+//        } else {
+//            System.out.println("ArrowManager or ClassNodes are not properly initialized.");
+//        }
         } else {
-            System.out.println("ArrowManager or ClassNodes are not properly initialized.");
+            showErrorDialog("Failed to add relationship.");
         }
-    } else {
-        showErrorDialog("Failed to add relationship.");
-    }
     }
 
     

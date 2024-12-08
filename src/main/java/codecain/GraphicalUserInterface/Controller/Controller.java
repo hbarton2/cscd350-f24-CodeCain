@@ -9,6 +9,8 @@ import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
 import codecain.GraphicalUserInterface.Model.ArrowManager;
 import codecain.GraphicalUserInterface.Model.ClassManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
 import codecain.GraphicalUserInterface.Model.ExportImage;
 import codecain.GraphicalUserInterface.Model.FieldManager;
 import codecain.GraphicalUserInterface.Model.MethodManager;
@@ -110,6 +112,9 @@ public class Controller {
         });
 
         arrowManager = new ArrowManager(nodeContainer);
+        //loadGridManager needs to be called when the load button is pressed. The arguments should be the same as below
+        GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer),this);
+        //GridManager.setVisualizer();
         RelationshipManager.setArrowManager(arrowManager);
         RelationshipManager.setController(this);
 
@@ -299,6 +304,11 @@ public class Controller {
             SaveManager.loadFromJSON(file.getAbsolutePath());
             populateGUIFromClassMap();
         }
+
+        GridManager.loadGridManager(new LineGrid(50.0,2000.0,2000.0, nodeContainer),
+                this, nodeContainer);
+
+
     }
 
     /**
