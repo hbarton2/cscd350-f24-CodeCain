@@ -253,24 +253,27 @@ public class CommandManager {
         if (tokens.length < 5) {
             return "Usage: add field <className> <fieldType> <fieldName>";
         }
+
         String className = tokens[2];
         String fieldType = tokens[3];
         String fieldName = tokens[4];
 
         String errorMessage = checkClassExists(className);
-
         if (errorMessage != null) {
             return errorMessage;
         }
 
         UMLFields fields = new UMLFields();
+        
         if (fields.doesFieldExist(getClassInfo(className), fieldName)) {
-            return "Field '" + fieldName + "' already exists in class '" + className + "'.";
+            return "Error: Field '" + fieldName + "' already exists in class '" + className + "'.";
         }
 
         fields.addField(className, fieldType, fieldName);
         return DisplayHelper.fieldAdded(fieldName, fieldType, className);
     }
+
+
     /**
      * Adds a method to a specified UML class.
      *
@@ -391,14 +394,27 @@ public class CommandManager {
      */
     private String handleDeleteField(String[] tokens) {
         stateManager.saveState();
-        String errorMessage = checkClassExists(tokens[2]);
+
+        if (tokens.length < 4) {
+            return "Usage: delete field <className> <fieldName>";
+        }
+
+        String className = tokens[2];
+        String fieldName = tokens[3];
+
+        String errorMessage = checkClassExists(className);
         if (errorMessage != null) {
             return errorMessage;
         }
 
         UMLFields fields = new UMLFields();
-        fields.removeField(tokens[2], tokens[3]);
-        return DisplayHelper.fieldRemoved(tokens[3], tokens[2]);
+
+        if (!fields.doesFieldExist(getClassInfo(className), fieldName)) {
+            return "Error: Field '" + fieldName + "' does not exist in class '" + className + "'.";
+        }
+
+        fields.removeField(className, fieldName);
+        return DisplayHelper.fieldRemoved(fieldName, className);
     }
 
     /**
