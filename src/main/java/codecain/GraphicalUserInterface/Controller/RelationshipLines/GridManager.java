@@ -65,6 +65,14 @@ public class GridManager {
         return grid;
     }
 
+    public void resetGrid() {
+        this.grid = null;
+        this.visualizer = null;
+        this.lineDrawer = null;
+        this.updater = null;
+        this.pathNavigator = null;
+        this.holder = null;
+    }
 
     private void checkGrid(){
         if (grid == null) {
