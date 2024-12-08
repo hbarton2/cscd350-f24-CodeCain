@@ -11,6 +11,10 @@ import codecain.GraphicalUserInterface.View.ClassNode;
 /**
  * this is a class to take relationships and turn them into paths.
  * Also maps relatioinships to the classNodes from the GUI
+ * This class is useful for linking the paths to the relationships that they
+ * represent, and also for linking the relationships to the
+ * ClassNodes from the GUI. Allows mediation between the
+ * grid paths and the ClassNodes
  */
 public class RelationshipPathHolder {
 
@@ -39,33 +43,34 @@ public class RelationshipPathHolder {
     /**
      * finds the classboxes from the relationship?
      */
-    private HashMap<Relationship, RelBoxHolder> classBoxHolder;
-    private HashMap<Relationship, GridPath> paths;
-    private PathNavigator navigator;
-    private Controller controller;
+    private final HashMap<Relationship, RelBoxHolder> classBoxHolder;
+    private final HashMap<Relationship, GridPath> paths;
+    private final Controller controller;
 
-    public RelationshipPathHolder(PathNavigator navigator, Controller controller){
+    public RelationshipPathHolder(Controller controller){
         this.classBoxHolder = new HashMap<>();
         this.paths = new HashMap<>();
-        this.navigator=navigator;
         this.controller = controller;
     }
 
     public ClassNode getSourceClassNode(Relationship r) {
-        return this.classBoxHolder.get(r).getSource();
+        ClassNode src = this.classBoxHolder.get(r).getSource();
+        if (src == null){
+
+            throw new IllegalStateException("No such ClassNode exists for the source");
+        }
+        return src;
     }
 
     public ClassNode getDestinationClassNode(Relationship r) {
-        return this.classBoxHolder.get(r).getDestination();
+        ClassNode dest = this.classBoxHolder.get(r).getDestination();
+        if (dest == null){
+
+            throw new IllegalStateException("No such ClassNode exists for the destination");
+        }
+        return dest;
     }
 
-    public ArrayList<GridPath> loadPathsFromRelationships(ArrayList<Relationship> relationships){
-        ArrayList<GridPath> newPaths = new ArrayList<>();
-        for(Relationship r : relationships){
-            newPaths.add(this.paths.get(r));
-        }
-        return newPaths;
-    }
 
     /**
      * must be called every time a relationship is added
@@ -100,15 +105,18 @@ public class RelationshipPathHolder {
         return new ArrayList<>(this.paths.values());
     }
 
+
+
     public void clearHolder(){
         this.classBoxHolder.clear();
         this.paths.clear();
     }
 
+
+
     public GridPath getPath(Relationship relationship){
         return paths.get(relationship);
     }
-
 
 
 }

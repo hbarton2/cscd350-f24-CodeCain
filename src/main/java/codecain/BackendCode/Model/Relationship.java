@@ -280,5 +280,22 @@ public class Relationship {
         return relationships;
     }
 
+    /**
+     * removes all relationships with invalid source and destination classes
+     */
+    public static void removeInvalidRelationships(){
+        for (Relationship r : relationshipList){
+            if (!hasClasses(r)){
+                relationshipList.remove(r);
+            }
+        }
+    }
+
+    private static boolean hasClasses(Relationship r){
+        String source = r.source;
+        String destination = r.destination;
+        return UMLClass.exists(source) && UMLClass.exists(destination);
+    }
+
 
 }

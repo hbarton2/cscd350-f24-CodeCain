@@ -8,6 +8,7 @@ import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
@@ -133,9 +134,9 @@ public class GridUpdater {
         double nodeHeight = classNode.getHeight();
         double nodeX = classNode.getLayoutX();
         double nodeY = classNode.getLayoutY();
-        int rowStart = grid.getRow(nodeY) + 1;
+        int rowStart = grid.getRow(nodeY) +1;
         int rowEnd = grid.getRow(nodeY + nodeHeight) + 1;
-        int colStart = grid.getCol(nodeX) + 1;
+        int colStart = grid.getCol(nodeX) +1;
         int colEnd = grid.getCol(nodeX + nodeWidth) + 1;
 
         if (this.coveredCells.containsKey(classNode)) {
@@ -154,6 +155,7 @@ public class GridUpdater {
         if (newCoveredCells.size() > Math.abs((rowStart - rowEnd) * (colStart - colEnd))) {
             throw new IllegalStateException("error updating covered cells list");
         }
+
         getCoveredCells().put(classNode, newCoveredCells);
     }
 
@@ -170,9 +172,13 @@ public class GridUpdater {
      */
     public void performGridUpdate() {
         if (showText) System.out.println("Updating grid...");
-        //grid.clearGrid();
+        grid.clearGrid();
         //updateGridBoxes();
+        Relationship.removeInvalidRelationships();
+
         lineDrawer.redrawLines(updateRelationshipPaths(0));
+
+
         if (visualizer != null){
             visualizer.updateGridVisualizer();
         }
@@ -204,11 +210,15 @@ public class GridUpdater {
 
         //this recursively calls the function again if the path fails, shifting the order of the relationship list
 
+
         pathHolder.clearHolder();
         grid.clearGrid();
         updateGridBoxes();
 
         for (Relationship r : Relationship.relationshipList){
+            if (r.getSource() == null || r.getDestination() == null){
+                throw new NullPointerException("Invalid relationship");
+            }
             GridPath newPath = createPathFromRelationship(r);
             occupyPathCells(newPath);
             pathHolder.addRelationshipPath(r, newPath);
@@ -236,6 +246,7 @@ public class GridUpdater {
      * @return null if no path is found, otherwise returns a path
      */
     private GridPath createPathFromRelationship(Relationship relationship){
+        Relationship.removeInvalidRelationships();
         pathHolder.addRelationshipHolder(relationship);
         if (!Relationship.relationshipExists(relationship.getSource(),relationship.getDestination())){
             throw new IllegalStateException("relationship doesn't exist");

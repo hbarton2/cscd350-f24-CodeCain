@@ -36,7 +36,7 @@ public class PathNavigator {
      * @return list of ordered grid cells to traverse the path
      */
     private GridPath findPath(GridCell start, GridCell goal) {
-        // fScore is the total estimated cost, gScore is the actual cost from start to current
+        // fScore is the total estimated cost, gScore is the actual cost from start to current (number of steps from start to current)
         HashMap<GridCell, Integer> gScore = new HashMap<>();
         HashMap<GridCell, Integer> fScore = new HashMap<>();
         cameFrom = new HashMap<>(); // To reconstruct the path

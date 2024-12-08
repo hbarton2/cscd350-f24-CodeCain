@@ -62,6 +62,7 @@ public class UMLClass {
         if (!exists(className)) {
             System.out.println("Class " + className + " does not exist");
         } else {
+            Relationship.removeAttachedRelationships(className);
             classMap.remove(className);
             System.out.println("Class " + className + " removed");
         }

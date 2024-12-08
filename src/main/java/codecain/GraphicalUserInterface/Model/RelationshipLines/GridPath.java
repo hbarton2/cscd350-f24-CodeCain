@@ -45,12 +45,13 @@ public class GridPath {
         this.cells.addLast(goal);
     }
 
-    public void addAtFront(GridCell frontCell){
-        this.cells.addFirst(frontCell);
+
+    public GridCell getStart(){
+        return this.cells.getFirst();
     }
 
-    public void addAtBack(GridCell backCell){
-        this.cells.add(backCell);
+    public GridCell getGoal(){
+        return this.cells.getLast();
     }
 
 

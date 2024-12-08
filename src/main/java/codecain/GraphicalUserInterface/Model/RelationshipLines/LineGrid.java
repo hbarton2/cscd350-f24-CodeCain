@@ -218,7 +218,7 @@ public class LineGrid {
     }
 
     /**
-     * returns the column from the coordinate y value
+     * returns the column index from the coordinate y value
      * @param x the coordinate y value
      * @return the index of the column of the coordinate y value
      */
@@ -280,33 +280,47 @@ public class LineGrid {
         return nodeContainer;
     }
 
-    public double getXcoord(int col){
-        return col*cellWidth;
+
+    /**
+     * Returns the x-coordinate of the specified column in the grid.
+     *
+     * @param col the column index
+     * @return the x-coordinate corresponding to the column
+     */
+    public double getXcoord(int col) {
+        return col * cellWidth;
     }
 
-
-    public double getXcoord(GridCell cell){
+    /**
+     * Returns the x-coordinate of the specified GridCell.
+     *
+     * @param cell the GridCell whose x-coordinate is to be found
+     * @return the x-coordinate corresponding to the GridCell
+     */
+    public double getXcoord(GridCell cell) {
         return getXcoord(cell.getCol());
     }
 
-    public double getYcoord(int row){
-        return row*cellWidth;
+    /**
+     * Returns the y-coordinate of the specified row in the grid.
+     *
+     * @param row the row index
+     * @return the y-coordinate corresponding to the row
+     */
+    public double getYcoord(int row) {
+        return row * cellWidth;
     }
 
-    public double getYcoord(GridCell cell){
+    /**
+     * Returns the y-coordinate of the specified GridCell.
+     *
+     * @param cell the GridCell whose y-coordinate is to be found
+     * @return the y-coordinate corresponding to the GridCell
+     */
+    public double getYcoord(GridCell cell) {
         return getYcoord(cell.getRow());
     }
 
-
-    /**
-     * calculates the cost of the path?
-     * @param start starting cell
-     * @param goal ending cell
-     * @return the cost
-     */
-    public double calculateHeuristic(GridCell start, GridCell goal) {
-        return Math.abs(start.row - goal.row) + Math.abs(start.col - goal.col);
-    }
 
     /**
      * tests to see if a cell is walkable or not

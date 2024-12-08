@@ -53,7 +53,7 @@ public class GridManager {
         this.grid = grid;
         this.lineDrawer = new LineDrawer(grid);
         this.pathNavigator = new PathNavigator(this.grid);
-        this.holder = new RelationshipPathHolder(this.pathNavigator,controller);
+        this.holder = new RelationshipPathHolder(controller);
         this.updater = new GridUpdater(this.grid,holder, this.lineDrawer);
 
         return grid;
@@ -117,13 +117,13 @@ public class GridManager {
         return instance.visualizer;
     }
 
-    /**
-     * prints an ascii representation of the grid
-     */
-    private static void printGrid() {
-        instance.checkGrid();
-        instance.getGrid().printGrid();
-    }
+//    /**
+//     * prints an ascii representation of the grid
+//     */
+//    private static void printGrid() {
+//        instance.checkGrid();
+//        instance.getGrid().printGrid();
+//    }
 
     /**
      * getter for the line drawer object
