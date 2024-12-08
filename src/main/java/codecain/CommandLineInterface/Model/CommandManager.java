@@ -264,7 +264,7 @@ public class CommandManager {
         }
 
         UMLFields fields = new UMLFields();
-        
+
         if (fields.doesFieldExist(getClassInfo(className), fieldName)) {
             return "Error: Field '" + fieldName + "' already exists in class '" + className + "'.";
         }
@@ -362,11 +362,19 @@ public class CommandManager {
      */
     private String handleDeleteClass(String className) {
         stateManager.saveState();
+
+        if (className == null || className.isBlank()) {
+            return "Error: The class name provided is invalid.";
+        }
+
+        if (!UMLClass.exists(className)) {
+            return "Error: Class '" + className + "' does not exist.";
+        }
+
         UMLClass.removeClass(className);
         Relationship.removeAttachedRelationships(className);
         return DisplayHelper.classRemoved(className);
     }
-
     /**
      * Deletes a relationship between two classes.
      *
@@ -466,6 +474,22 @@ public class CommandManager {
      */
     private String handleRenameClass(String oldName, String newName) {
         stateManager.saveState();
+
+        if (oldName == null || oldName.isBlank()) {
+            return "Error: The old class name provided is invalid.";
+        }
+
+        if (newName == null || newName.isBlank()) {
+            return "Error: The new class name provided is invalid.";
+        }
+
+        if (!UMLClass.exists(oldName)) {
+            return "Error: Class '" + oldName + "' does not exist.";
+        }
+        if (UMLClass.exists(newName)) {
+            return "Error: Class '" + newName + "' already exists.";
+        }
+
         UMLClass.renameClass(oldName, newName);
         return DisplayHelper.classRenamed(oldName, newName);
     }
