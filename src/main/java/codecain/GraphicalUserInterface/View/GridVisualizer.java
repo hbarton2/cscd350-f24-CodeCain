@@ -1,7 +1,7 @@
 package codecain.GraphicalUserInterface.View;
 
-import codecain.GraphicalUserInterface.Model.RelationshipLines.GridCell;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridCell;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;

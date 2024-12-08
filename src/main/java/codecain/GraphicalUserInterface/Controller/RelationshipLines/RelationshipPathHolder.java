@@ -1,4 +1,4 @@
-package codecain.GraphicalUserInterface.Model.RelationshipLines;
+package codecain.GraphicalUserInterface.Controller.RelationshipLines;
 
 
 import java.util.ArrayList;

@@ -2,10 +2,10 @@ package codecain.GraphicalUserInterface.View;
 
 import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.RelationshipType;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.GridPath;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.GridCell;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.RelationshipPathHolder;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridPath;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridCell;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.RelationshipPathHolder;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

@@ -1,4 +1,4 @@
-package codecain.GraphicalUserInterface.Model.RelationshipLines;
+package codecain.GraphicalUserInterface.Controller.RelationshipLines;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,6 @@ import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 

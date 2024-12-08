@@ -1,9 +1,11 @@
-package codecain.GraphicalUserInterface.Model.RelationshipLines;
+package codecain.GraphicalUserInterface.Controller.RelationshipLines;
 
 import codecain.GraphicalUserInterface.Controller.Controller;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.LineDrawer;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 /**
  * singleton class that sets a grid which can be accessed across the entire program.
@@ -39,6 +41,10 @@ public class GridManager {
             }
         }
         return instance;
+    }
+
+    public static void clearGridManager(){
+        instance = new GridManager();
     }
 
     /**
@@ -93,6 +99,17 @@ public class GridManager {
     public static void addClassListeners(ClassNode classNode) {
         instance.checkGrid();
         instance.updater.addClassListeners(classNode);
+    }
+
+    public static void loadGridManager(LineGrid grid, Controller controller, Pane container){
+        instance = new GridManager();
+        instance.setGrid(grid,controller);
+        for ( Node n :container.getChildren()){
+            if (n instanceof ClassNode){
+                addClassListeners((ClassNode) n);
+            }
+        }
+        updateRelationshipPaths();
     }
 
 

@@ -1,4 +1,4 @@
-package codecain.GraphicalUserInterface.Model.RelationshipLines;
+package codecain.GraphicalUserInterface.Controller.RelationshipLines;
 
 public class GridCell{
     boolean occupied;

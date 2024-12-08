@@ -9,10 +9,9 @@ import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
 
 import codecain.GraphicalUserInterface.Model.*;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
 import codecain.GraphicalUserInterface.View.PositionUtils;
-import codecain.GraphicalUserInterface.View.AlertHelper;
 
 import codecain.GraphicalUserInterface.Model.ArrowManager;
 import codecain.GraphicalUserInterface.Model.ClassManager;
@@ -22,26 +21,16 @@ import codecain.GraphicalUserInterface.Model.ParameterManager;
 import codecain.GraphicalUserInterface.Model.RelationshipManager;
 
 import codecain.GraphicalUserInterface.View.ClassNode;
-import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Optional;
-
-import javax.imageio.ImageIO;
-import javafx.embed.swing.SwingFXUtils;
 
 /**
  * Controller class for managing user interactions with the UML editor GUI.
@@ -121,6 +110,7 @@ public class Controller {
             }
         });
         arrowManager = new ArrowManager(nodeContainer);
+        //loadGridManager needs to be called when the load button is pressed. The arguments should be the same as below
         GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer),this);
         //GridManager.setVisualizer();
         RelationshipManager.setArrowManager(arrowManager);
@@ -298,6 +288,7 @@ public class Controller {
      */
     @FXML
     private void loadBtn() throws IOException {
+        GridManager.clearGridManager();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open UML Diagram File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
@@ -310,6 +301,11 @@ public class Controller {
             SaveManager.loadFromJSON(file.getAbsolutePath());
             populateGUIFromClassMap();
         }
+
+        GridManager.loadGridManager(new LineGrid(50.0,2000.0,2000.0, nodeContainer),
+                this, nodeContainer);
+
+
     }
 
     /**

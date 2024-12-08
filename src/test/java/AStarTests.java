@@ -1,8 +1,7 @@
 import codecain.GraphicalUserInterface.Controller.Controller;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.GridCell;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.GridPath;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.LineGrid;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridCell;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;

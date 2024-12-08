@@ -8,7 +8,7 @@ import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.RelationshipType;
 import codecain.BackendCode.Model.UMLClass;
 import codecain.GraphicalUserInterface.Controller.Controller;
-import codecain.GraphicalUserInterface.Model.RelationshipLines.GridManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
