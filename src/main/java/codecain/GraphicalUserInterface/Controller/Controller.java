@@ -7,24 +7,22 @@ import java.util.Optional;
 import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
-
-import codecain.GraphicalUserInterface.Model.*;
-import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
-import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
-import codecain.GraphicalUserInterface.View.PositionUtils;
-
 import codecain.GraphicalUserInterface.Model.ArrowManager;
 import codecain.GraphicalUserInterface.Model.ClassManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
+import codecain.GraphicalUserInterface.Model.ExportImage;
 import codecain.GraphicalUserInterface.Model.FieldManager;
 import codecain.GraphicalUserInterface.Model.MethodManager;
 import codecain.GraphicalUserInterface.Model.ParameterManager;
 import codecain.GraphicalUserInterface.Model.RelationshipManager;
-
 import codecain.GraphicalUserInterface.View.ClassNode;
+import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
@@ -39,6 +37,9 @@ import javafx.stage.Window;
  * as well as saving and loading UML diagrams.
  */
 public class Controller {
+
+    @FXML
+    private MenuButton fileMenuButton;
 
     @FXML
     public void exportAsImageBtn() {
@@ -109,12 +110,14 @@ public class Controller {
                 currentlySelectedNode = null; // Reset the currently selected node
             }
         });
+
         arrowManager = new ArrowManager(nodeContainer);
         //loadGridManager needs to be called when the load button is pressed. The arguments should be the same as below
         GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer),this);
         //GridManager.setVisualizer();
         RelationshipManager.setArrowManager(arrowManager);
         RelationshipManager.setController(this);
+
     }
 
     /**
@@ -140,6 +143,7 @@ public class Controller {
         String className = currentlySelectedNode != null
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Delete Class", "Enter the name of the class to delete:", "Class Name:");
+
         ClassManager.removeClass(className, nodeContainer);
     }
 
@@ -288,7 +292,6 @@ public class Controller {
      */
     @FXML
     private void loadBtn() throws IOException {
-        GridManager.clearGridManager();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open UML Diagram File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
@@ -418,6 +421,15 @@ public class Controller {
         } else {
             System.out.println("Exit canceled.");
         }
+    }
+
+    /**
+     * Gets the node container for the UML diagram.
+     *
+     * @return The AnchorPane containing the UML diagram nodes.
+     */
+    public Pane getNodeContainer() {
+        return nodeContainer;
     }
 
 }
