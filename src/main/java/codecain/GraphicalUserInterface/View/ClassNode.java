@@ -41,6 +41,8 @@ public class ClassNode extends VBox {
     private static final double MIN_WIDTH = 200;
     private static final double MIN_HEIGHT = 300;
 
+    private static final double MIN_LIST_VIEW_HEIGHT = 150;
+
     /**
      * Constructs a ClassNode instance for a specific UML class.
      *
@@ -70,6 +72,10 @@ public class ClassNode extends VBox {
         fields.getItems().addListener((javafx.collections.ListChangeListener<UMLFieldInfo>) change -> updateWidth());
         methods.getItems().addListener((javafx.collections.ListChangeListener<UMLMethodInfo>) change -> updateWidth());
 
+        // Adjust height dynamically based on the total number of fields and methods
+        fields.getItems().addListener((javafx.collections.ListChangeListener<UMLFieldInfo>) change -> updateHeight());
+        methods.getItems().addListener((javafx.collections.ListChangeListener<UMLMethodInfo>) change -> updateHeight());
+        
         // Configure the shadow effect
         shadowEffect.setRadius(10);
         shadowEffect.setOffsetX(5);
@@ -559,6 +565,37 @@ public class ClassNode extends VBox {
 
         System.out.println("Updated width to: " + finalWidth);
     }
+
+    /**
+     * Updates the preferred height of the {@code ClassNode} to ensure it can
+     * accommodate all items in the {@code fields} and {@code methods} {@link ListView}.
+    */
+    private void updateHeight() {
+        // Calculate the required height for fields and methods
+    double fieldListHeight = fields.getItems().size() * 24; // Approx. 25px per item
+    double methodListHeight = methods.getItems().size() * 24; // Approx. 25px per item
+
+    // Add padding and consider class name label height
+    double classNameHeight = this.classNameLabel.getHeight(); // Add extra padding for label
+    double calculatedFieldHeight = Math.max(fieldListHeight, MIN_LIST_VIEW_HEIGHT); // Minimum height for fields ListView
+    double calculatedMethodHeight = Math.max(methodListHeight, MIN_LIST_VIEW_HEIGHT); // Minimum height for methods ListView
+
+    // Update the height of the ListView components
+    fields.setPrefHeight(calculatedFieldHeight);
+    methods.setPrefHeight(calculatedMethodHeight);
+
+    // Calculate the total height for the ClassNode
+    double totalHeight = classNameHeight + calculatedFieldHeight + calculatedMethodHeight; // Add padding
+
+    // Ensure the ClassNode height is at least the minimum height
+    double finalHeight = Math.max(totalHeight, MIN_HEIGHT);
+    this.setPrefHeight(finalHeight);
+
+    System.out.println("Updated ClassNode height: " + finalHeight);
+    System.out.println("Updated fields ListView height: " + calculatedFieldHeight);
+    System.out.println("Updated methods ListView height: " + calculatedMethodHeight);
+    }
+    
 
     /**
      * Renames a method in the UML class represented by this ClassNode.
