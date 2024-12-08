@@ -52,7 +52,7 @@ public class DisplayHelper {
             Other Commands:
             1. help                                - Shows this help message.
             2. exit                                - Exits the application.
-            3. export                              - Exports the UML diagram to a PNG file. 
+            3. export                              - Exports the UML diagram to a PNG file. Automatically assigns it to PNG format.
 
             Examples:
             - add class Person

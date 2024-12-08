@@ -78,7 +78,7 @@ public class CommandManager {
             case "redo" -> redo();
             case "export" -> {
                 if (tokens.length < 2) {
-                    appendToOutput("Usage: export-gui <file-path>\n");
+                    appendToOutput("Usage: export <file-path>\n");
                     return;
                 }
                 openGUIAndExport(tokens[1]);
