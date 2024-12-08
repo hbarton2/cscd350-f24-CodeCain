@@ -172,6 +172,38 @@ public class UMLClassTests {
         assertEquals("No classes to display.",res);
     }
     @Test
+    public void testListAllClassesWithEmptyFieldsAndMethods(){
+        UMLClass.addClass("DOG");
+        String res = UMLClass.listAllClassesInfo();
+        String expectedMessage = "Class: DOG\n"+ "  Fields:\n" + "  Methods:\n\n";
+        assertEquals(expectedMessage, res);
+    }
+    @Test
+    public void testListAllClassesWithFieldsAndMethods(){
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+
+        List<UMLFieldInfo> fields = new ArrayList<>();
+        fields.add(new UMLFieldInfo("NAME", "String"));
+        fields.add(new UMLFieldInfo("TYPE", "String"));
+        info.getFields().addAll(fields);
+
+        List<UMLMethodInfo> methods = new ArrayList<>();
+        methods.add(new UMLMethodInfo("getAge", new ArrayList<>()));
+        methods.add(new UMLMethodInfo("setName", List.of(new UMLParameterInfo("NAME", "String"))));
+        info.getMethods().addAll(methods);
+
+        String res = UMLClass.listAllClassesInfo();
+        String expectedMessage = "Class: DOG\n" +
+                "  Fields:\n" +
+                "    - NAME String\n" +
+                "    - TYPE String\n" +
+                "  Methods:\n" +
+                "    - getAge()\n" +
+                "    - setName(NAME String)\n\n";
+        assertEquals(expectedMessage, res);
+    }
+    @Test
     public void testGetClassInfo(){
         UMLClass.addClass("DOG");
         UMLClassInfo info = UMLClass.getClassInfo("DOG");
