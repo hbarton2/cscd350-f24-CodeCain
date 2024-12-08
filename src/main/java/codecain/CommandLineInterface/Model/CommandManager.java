@@ -556,8 +556,16 @@ public class CommandManager {
                 String relationships = Relationship.listToString();
                 yield relationships.isEmpty() ? "No relationships available." : "Relationships:\n" + relationships;
             }
-            default -> "Invalid command. Use 'list classes' or 'list relationships'.";
+            case "details" -> handleListDetails(tokens);
+            default -> "Invalid command. Use 'list classes', 'list relationships', or 'list details'.";
         };
+    }
+    private String handleListDetails(String[] tokens) {
+        if (tokens.length < 3) {
+            return "Usage: list details <className>";
+        }
+        String className = tokens[2];
+        return UMLClass.getClassDetails(className);
     }
 
     /**
