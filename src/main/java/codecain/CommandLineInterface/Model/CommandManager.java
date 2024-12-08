@@ -283,39 +283,51 @@ public class CommandManager {
      */
     private String handleAddMethod(String[] tokens) {
         if (tokens.length < 4) {
-            return "Usage: add method <className> <methodName> [<parameterType> <parameterName>]. Type 'help' for more info.";
+            return "Usage: add method <className> <methodName> <parameterType1 parameterName1, parameterType2 parameterName2, ...>. Type 'help' for more info.";
         }
-
+    
         String className = tokens[2];
         String methodName = tokens[3];
-
+    
         // Validate if the class exists
         String errorMessage = checkClassExists(className);
         if (errorMessage != null) {
             return errorMessage;
         }
-
+    
         List<UMLParameterInfo> parameters = new ArrayList<>();
-
-        // Ensure parameters are provided in pairs
+    
+        // Reassemble parameters string from tokens after the method name
         if (tokens.length > 4) {
-            if ((tokens.length - 4) % 2 != 0) {
-                return "Invalid number of parameters. Parameters must be provided in <parameterType> <parameterName> pairs.";
+            StringBuilder parametersBuilder = new StringBuilder();
+            for (int i = 4; i < tokens.length; i++) {
+                parametersBuilder.append(tokens[i]).append(" ");
             }
-
-            for (int i = 4; i < tokens.length; i += 2) {
-                String parameterType = tokens[i];
-                String parameterName = tokens[i + 1];
+    
+            String parametersString = parametersBuilder.toString().trim();
+            String[] paramTokens = parametersString.split(",");
+    
+            for (String paramToken : paramTokens) {
+                paramToken = paramToken.trim(); // Trim spaces around the pair
+                String[] typeAndName = paramToken.split("\\s+"); // Split by space
+    
+                if (typeAndName.length != 2) {
+                    return "Invalid parameter format. Each parameter must be in the format <parameterType> <parameterName>, separated by commas.";
+                }
+    
+                String parameterType = typeAndName[0].trim();
+                String parameterName = typeAndName[1].trim();
+    
                 parameters.add(new UMLParameterInfo(parameterType, parameterName));
             }
         }
-
+    
         UMLMethods methods = new UMLMethods();
         methods.addMethod(className, methodName, parameters);
-
+    
         return DisplayHelper.methodAdded(methodName, className);
     }
-
+    
     /**
      * Adds a parameter to a specified method of a class.
      *
