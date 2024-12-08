@@ -253,24 +253,27 @@ public class CommandManager {
         if (tokens.length < 5) {
             return "Usage: add field <className> <fieldType> <fieldName>";
         }
+
         String className = tokens[2];
         String fieldType = tokens[3];
         String fieldName = tokens[4];
 
         String errorMessage = checkClassExists(className);
-
         if (errorMessage != null) {
             return errorMessage;
         }
 
         UMLFields fields = new UMLFields();
+
         if (fields.doesFieldExist(getClassInfo(className), fieldName)) {
-            return "Field '" + fieldName + "' already exists in class '" + className + "'.";
+            return "Error: Field '" + fieldName + "' already exists in class '" + className + "'.";
         }
 
         fields.addField(className, fieldType, fieldName);
         return DisplayHelper.fieldAdded(fieldName, fieldType, className);
     }
+
+
     /**
      * Adds a method to a specified UML class.
      *
@@ -359,11 +362,19 @@ public class CommandManager {
      */
     private String handleDeleteClass(String className) {
         stateManager.saveState();
+
+        if (className == null || className.isBlank()) {
+            return "Error: The class name provided is invalid.";
+        }
+
+        if (!UMLClass.exists(className)) {
+            return "Error: Class '" + className + "' does not exist.";
+        }
+
         UMLClass.removeClass(className);
         Relationship.removeAttachedRelationships(className);
         return DisplayHelper.classRemoved(className);
     }
-
     /**
      * Deletes a relationship between two classes.
      *
@@ -391,14 +402,27 @@ public class CommandManager {
      */
     private String handleDeleteField(String[] tokens) {
         stateManager.saveState();
-        String errorMessage = checkClassExists(tokens[2]);
+
+        if (tokens.length < 4) {
+            return "Usage: delete field <className> <fieldName>";
+        }
+
+        String className = tokens[2];
+        String fieldName = tokens[3];
+
+        String errorMessage = checkClassExists(className);
         if (errorMessage != null) {
             return errorMessage;
         }
 
         UMLFields fields = new UMLFields();
-        fields.removeField(tokens[2], tokens[3]);
-        return DisplayHelper.fieldRemoved(tokens[3], tokens[2]);
+
+        if (!fields.doesFieldExist(getClassInfo(className), fieldName)) {
+            return "Error: Field '" + fieldName + "' does not exist in class '" + className + "'.";
+        }
+
+        fields.removeField(className, fieldName);
+        return DisplayHelper.fieldRemoved(fieldName, className);
     }
 
     /**
@@ -450,6 +474,22 @@ public class CommandManager {
      */
     private String handleRenameClass(String oldName, String newName) {
         stateManager.saveState();
+
+        if (oldName == null || oldName.isBlank()) {
+            return "Error: The old class name provided is invalid.";
+        }
+
+        if (newName == null || newName.isBlank()) {
+            return "Error: The new class name provided is invalid.";
+        }
+
+        if (!UMLClass.exists(oldName)) {
+            return "Error: Class '" + oldName + "' does not exist.";
+        }
+        if (UMLClass.exists(newName)) {
+            return "Error: Class '" + newName + "' already exists.";
+        }
+
         UMLClass.renameClass(oldName, newName);
         return DisplayHelper.classRenamed(oldName, newName);
     }
@@ -556,8 +596,16 @@ public class CommandManager {
                 String relationships = Relationship.listToString();
                 yield relationships.isEmpty() ? "No relationships available." : "Relationships:\n" + relationships;
             }
-            default -> "Invalid command. Use 'list classes' or 'list relationships'.";
+            case "details" -> handleListDetails(tokens);
+            default -> "Invalid command. Use 'list classes', 'list relationships', or 'list details'.";
         };
+    }
+    private String handleListDetails(String[] tokens) {
+        if (tokens.length < 3) {
+            return "Usage: list details <className>";
+        }
+        String className = tokens[2];
+        return UMLClass.getClassDetails(className);
     }
 
     /**
