@@ -572,8 +572,8 @@ public class ClassNode extends VBox {
     */
     private void updateHeight() {
         // Calculate the required height for fields and methods
-    double fieldListHeight = fields.getItems().size() * 24; // Approx. 25px per item
-    double methodListHeight = methods.getItems().size() * 24; // Approx. 25px per item
+    double fieldListHeight = fields.getItems().size() * 25; // Approx. 25px per item
+    double methodListHeight = methods.getItems().size() * 25; // Approx. 25px per item
 
     // Add padding and consider class name label height
     double classNameHeight = this.classNameLabel.getHeight(); // Add extra padding for label
