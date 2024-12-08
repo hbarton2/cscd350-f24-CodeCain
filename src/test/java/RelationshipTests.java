@@ -271,4 +271,37 @@ public class RelationshipTests {
             System.setOut(out);
         }
     }
+    @Test
+    public void testRelationshipHasClass(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
+
+        assertTrue(Relationship.relationshipHasClass("BIRD"));
+        assertTrue(Relationship.relationshipHasClass("DOG"));
+        assertFalse(Relationship.relationshipHasClass("CAT"));
+    }
+    @Test
+    public void testRelationshipExistsWithType(){
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
+
+        assertTrue(Relationship.relationshipExists("DOG", "BIRD", RelationshipType.COMPOSITION));
+        assertFalse(Relationship.relationshipExists("DOG", "CAT", RelationshipType.COMPOSITION));
+        assertFalse(Relationship.relationshipExists("DOG", "BIRD", RelationshipType.AGGREGATION));
+    }
+    @Test
+    public void testGetRelationships() {
+        UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
+        UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+        Relationship.addRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
+
+        Relationship relationship = Relationship.getRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
+        assertNotNull(relationship);
+        assertEquals(RelationshipType.COMPOSITION, relationship.getType());
+        assertEquals("BIRD", relationship.getDestination());
+        assertEquals("DOG", relationship.getSource());
+    }
+
 }
