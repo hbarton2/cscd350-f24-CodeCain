@@ -212,9 +212,40 @@ public class PathNavigator {
      * @param goal the end goal
      * @return the distance between current and goal
      */
-    public int calculateHeuristic(GridCell current, GridCell goal){
-        return Math.abs(current.col - goal.col) + Math.abs(current.row - goal.row);
+    private int calculateHeuristic(GridCell current, GridCell goal) {
+        int dx = Math.abs(current.getCol() - goal.getCol());
+        int dy = Math.abs(current.getRow() - goal.getRow());
+        int heuristic = dx + dy; // Manhattan distance
+
+        // Add a penalty for direction changes
+        if (cameFrom.containsKey(current)) {
+            GridCell previous = cameFrom.get(current);
+            int currentDirection = calculateDirection(previous, current);
+            int goalDirection = calculateDirection(current, goal);
+            if (currentDirection != goalDirection) {
+                if (currentDirection >= 4 && currentDirection <= 7) {
+                    heuristic += 20; // Higher penalty for diagonal direction changes
+                } else {
+                    heuristic += 10; // Lower penalty for non-diagonal direction changes
+                }
+            }
+        }
+
+        return heuristic;
     }
 
+    private int calculateDirection(GridCell from, GridCell to) {
+        int dx = to.getCol() - from.getCol();
+        int dy = to.getRow() - from.getRow();
+        if (dx == 0 && dy > 0) return 0; // Down
+        if (dx == 0 && dy < 0) return 1; // Up
+        if (dx > 0 && dy == 0) return 2; // Right
+        if (dx < 0 && dy == 0) return 3; // Left
+        if (dx > 0 && dy > 0) return 4; // Down-Right
+        if (dx > 0 && dy < 0) return 5; // Up-Right
+        if (dx < 0 && dy > 0) return 6; // Down-Left
+        if (dx < 0 && dy < 0) return 7; // Up-Left
+        return -1; // Same cell
+    }
 
 }
