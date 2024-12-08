@@ -75,7 +75,7 @@ public class ClassNode extends VBox {
         // Adjust height dynamically based on the total number of fields and methods
         fields.getItems().addListener((javafx.collections.ListChangeListener<UMLFieldInfo>) change -> updateHeight());
         methods.getItems().addListener((javafx.collections.ListChangeListener<UMLMethodInfo>) change -> updateHeight());
-        
+
         // Configure the shadow effect
         shadowEffect.setRadius(10);
         shadowEffect.setOffsetX(5);
@@ -96,11 +96,26 @@ public class ClassNode extends VBox {
     }
 
     /**
-     * Initializes the fields and methods from the underlying {@link UMLClassInfo}.
+     * Initializes the fields and methods form the underlying {@link UMLClassInfo}.
+     * Ensures that the listeners for height and width updates are set up correctly.
      */
     private void initializeFieldsAndMethods() {
+        // Populate fields and methods from the UMLClassInfo
         classInfo.getFields().forEach(field -> fields.getItems().add(field));
         classInfo.getMethods().forEach(method -> methods.getItems().add(method));
+
+        // Set listeners to update width and height dynamically
+        fields.getItems().addListener((javafx.collections.ListChangeListener<UMLFieldInfo>) change -> updateHeight());
+        fields.getItems().addListener((javafx.collections.ListChangeListener<UMLFieldInfo>) change -> updateWidth());
+        methods.getItems().addListener((javafx.collections.ListChangeListener<UMLMethodInfo>) change -> updateHeight());
+        methods.getItems().addListener((javafx.collections.ListChangeListener<UMLMethodInfo>) change -> updateWidth());
+
+        // Trigger height and width updates explicitly after loading data
+        javafx.application.Platform.runLater(() -> {
+            updateHeight();
+            updateWidth();
+        });
+        
     }
 
     /**
