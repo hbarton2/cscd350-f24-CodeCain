@@ -234,6 +234,16 @@ public class PathNavigator {
         return heuristic;
     }
 
+     /**
+     * Calculates the direction between two cells.
+     * 
+     * @param from the starting cell
+     * @param to the destination cell
+     * @return an integer representing the direction:
+     *         0 - Down, 1 - Up, 2 - Right, 3 - Left,
+     *         4 - Down-Right, 5 - Up-Right, 6 - Down-Left, 7 - Up-Left,
+     *         -1 - Same cell
+     */
     private int calculateDirection(GridCell from, GridCell to) {
         int dx = to.getCol() - from.getCol();
         int dy = to.getRow() - from.getRow();
