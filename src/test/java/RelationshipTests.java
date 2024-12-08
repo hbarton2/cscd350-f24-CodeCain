@@ -271,37 +271,62 @@ public class RelationshipTests {
             System.setOut(out);
         }
     }
+    /**
+     * Tests the functionality of checking if a class is part of any relationship.
+     * Verifies that the relationship correctly identifies classes involved in it.
+     */
     @Test
-    public void testRelationshipHasClass(){
+    public void testRelationshipHasClass() {
+        // Add classes to the UMLClass map
         UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
         UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+
+        // Add a relationship between DOG and BIRD
         Relationship.addRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
 
-        assertTrue(Relationship.relationshipHasClass("BIRD"));
-        assertTrue(Relationship.relationshipHasClass("DOG"));
-        assertFalse(Relationship.relationshipHasClass("CAT"));
+        // Verify that the relationship recognizes the involved classes
+        assertTrue(Relationship.relationshipHasClass("BIRD"), "Relationship should recognize the class 'BIRD'.");
+        assertTrue(Relationship.relationshipHasClass("DOG"), "Relationship should recognize the class 'DOG'.");
+        assertFalse(Relationship.relationshipHasClass("CAT"), "Relationship should not recognize the class 'CAT' as it's not part of any relationship.");
     }
+
+    /**
+     * Tests the functionality of verifying if a relationship exists between specific classes
+     * with a specified relationship type.
+     */
     @Test
-    public void testRelationshipExistsWithType(){
+    public void testRelationshipExistsWithType() {
+        // Add classes to the UMLClass map
         UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
         UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+
+        // Add a COMPOSITION relationship between DOG and BIRD
         Relationship.addRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
 
-        assertTrue(Relationship.relationshipExists("DOG", "BIRD", RelationshipType.COMPOSITION));
-        assertFalse(Relationship.relationshipExists("DOG", "CAT", RelationshipType.COMPOSITION));
-        assertFalse(Relationship.relationshipExists("DOG", "BIRD", RelationshipType.AGGREGATION));
+        // Verify relationships with correct and incorrect types or classes
+        assertTrue(Relationship.relationshipExists("DOG", "BIRD", RelationshipType.COMPOSITION), "Relationship of type COMPOSITION should exist between DOG and BIRD.");
+        assertFalse(Relationship.relationshipExists("DOG", "CAT", RelationshipType.COMPOSITION), "No relationship should exist between DOG and CAT.");
+        assertFalse(Relationship.relationshipExists("DOG", "BIRD", RelationshipType.AGGREGATION), "Relationship of type AGGREGATION should not exist between DOG and BIRD.");
     }
+
+    /**
+     * Tests the functionality of retrieving a specific relationship between classes.
+     * Verifies that the retrieved relationship matches the specified type and involved classes.
+     */
     @Test
     public void testGetRelationships() {
+        // Add classes to the UMLClass map
         UMLClass.classMap.put("DOG", new UMLClassInfo("DOG"));
         UMLClass.classMap.put("BIRD", new UMLClassInfo("BIRD"));
+
+        // Add a COMPOSITION relationship between DOG and BIRD
         Relationship.addRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
 
+        // Retrieve the relationship and verify its properties
         Relationship relationship = Relationship.getRelationship("DOG", "BIRD", RelationshipType.COMPOSITION);
-        assertNotNull(relationship);
-        assertEquals(RelationshipType.COMPOSITION, relationship.getType());
-        assertEquals("BIRD", relationship.getDestination());
-        assertEquals("DOG", relationship.getSource());
+        assertNotNull(relationship, "The relationship should not be null.");
+        assertEquals(RelationshipType.COMPOSITION, relationship.getType(), "The relationship type should match COMPOSITION.");
+        assertEquals("BIRD", relationship.getDestination(), "The destination should match 'BIRD'.");
+        assertEquals("DOG", relationship.getSource(), "The source should match 'DOG'.");
     }
-
 }

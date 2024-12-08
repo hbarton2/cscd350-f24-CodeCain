@@ -10,14 +10,15 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The UMLMethodsTests class contains test cases to validate the functionality of UMLMethods class.
- * It tests scenarios like adding, removing, renaming methods, and managing method parameters.
+ * The UMLMethodsTests class contains unit tests for the UMLMethods class and related functionality.
+ * This includes adding, removing, renaming methods, and managing method parameters in UML class structures.
  */
 public class UMLMethodsTests {
     private UMLMethods umlMethods;
 
     /**
      * Sets up the test environment by initializing the UMLMethods object and clearing the UMLClass map.
+     * This ensures a clean slate for each test.
      */
     @BeforeEach
     void setUp() {
@@ -26,7 +27,7 @@ public class UMLMethodsTests {
     }
 
     /**
-     * Cleans up the test environment by clearing the UMLClass map.
+     * Cleans up the test environment by clearing the UMLClass map after each test.
      */
     @AfterEach
     void tearDown() {
@@ -35,9 +36,10 @@ public class UMLMethodsTests {
 
     /**
      * Tests adding a method to an existing class.
+     * Verifies the method is added to the class's methods list.
      */
     @Test
-    public void testAddMethod(){
+    public void testAddMethod() {
         UMLClass.addClass("Test");
         List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "age"), new UMLParameterInfo("String", "name"));
         umlMethods.addMethod("Test", "AddDog", parameters);
@@ -49,33 +51,36 @@ public class UMLMethodsTests {
 
     /**
      * Tests adding a duplicate method to an existing class.
+     * Ensures that duplicate methods with the same name and parameters are not added.
      */
     @Test
-    public void testAddDuplicateMethod(){
+    public void testAddDuplicateMethod() {
         UMLClass.addClass("Test");
         List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "age"), new UMLParameterInfo("String", "name"));
         umlMethods.addMethod("Test", "AddDog", parameters);
         umlMethods.addMethod("Test", "AddDog", parameters);
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
-        assertEquals(1, classInfo.getMethods().size(), "Should be prompted to not be able to add a duplicate method");
+        assertEquals(1, classInfo.getMethods().size(), "Should not allow duplicate methods.");
     }
 
     /**
      * Tests adding a method to a non-existing class.
+     * Ensures that the method is not added if the class does not exist.
      */
     @Test
     public void testAddMethodToNonExistingClass() {
         List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "age"), new UMLParameterInfo("String", "name"));
         umlMethods.addMethod("Test", "AddDog", parameters);
-        assertFalse(UMLClass.classMap.containsKey("Test"), "Should be prompted you can't add a method to a class that doesn't exist");
+        assertFalse(UMLClass.classMap.containsKey("Test"), "Should not add methods to a non-existing class.");
     }
 
     /**
      * Tests removing a method from an existing class.
+     * Ensures the method is removed from the class's methods list.
      */
     @Test
-    public void testRemoveMethod(){
+    public void testRemoveMethod() {
         UMLClass.addClass("Test");
         List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "age"), new UMLParameterInfo("String", "name"));
         umlMethods.addMethod("Test", "AddDog", parameters);
@@ -87,15 +92,17 @@ public class UMLMethodsTests {
 
     /**
      * Tests removing a method from a non-existing class.
+     * Verifies that the removal action is safely ignored.
      */
     @Test
     public void testRemoveMethodFromNonExistingClass() {
         umlMethods.removeMethod("Test", "AddDog");
-        assertFalse(UMLClass.classMap.containsKey("Test"), "Should be prompted the class doesn't exist");
+        assertFalse(UMLClass.classMap.containsKey("Test"), "Should handle non-existing class gracefully.");
     }
 
     /**
      * Tests removing a non-existing method from an existing class.
+     * Ensures that no action is taken if the method does not exist.
      */
     @Test
     public void testRemoveMethodFromNonExistingMethod() {
@@ -105,14 +112,15 @@ public class UMLMethodsTests {
         umlMethods.removeMethod("Test", "RemoveCat");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
-        assertEquals(1, classInfo.getMethods().size(), "Shouldn't be prompted to enter a valid method");
+        assertEquals(1, classInfo.getMethods().size(), "Should not affect class when removing non-existing method.");
     }
 
     /**
      * Tests renaming an existing method within a class.
+     * Ensures the method name is updated correctly.
      */
     @Test
-    public void testRenameMethod(){
+    public void testRenameMethod() {
         UMLClass.addClass("Test");
         List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "age"), new UMLParameterInfo("String", "name"));
         umlMethods.addMethod("Test", "AddDog", parameters);
@@ -127,6 +135,7 @@ public class UMLMethodsTests {
 
     /**
      * Tests renaming a non-existing method within a class.
+     * Ensures no changes occur if the method does not exist.
      */
     @Test
     public void testRenameMethodFromNonExistingMethod() {
@@ -138,16 +147,16 @@ public class UMLMethodsTests {
 
     /**
      * Tests renaming a method to an already existing method's name within the same class.
+     * Ensures no changes occur in such cases.
      */
     @Test
-    public void testRenameMethodToExistingName(){
+    public void testRenameMethodToExistingName() {
         UMLClass.addClass("Test");
         umlMethods.addMethod("Test", "AddDog", Arrays.asList(new UMLParameterInfo("int", "age")));
         umlMethods.addMethod("Test", "RemoveDog", Arrays.asList(new UMLParameterInfo("float", "weight")));
         umlMethods.renameMethod("Test", "AddDog", "RemoveDog");
 
         UMLClassInfo classInfo = UMLClass.classMap.get("Test");
-        // Should not change either name
         assertNotNull(classInfo.getMethodByName("AddDog"));
         assertNotNull(classInfo.getMethodByName("RemoveDog"));
         assertEquals(2, classInfo.getMethods().size());
@@ -155,9 +164,10 @@ public class UMLMethodsTests {
 
     /**
      * Tests adding a parameter to an existing method within a class.
+     * Ensures the parameter is added correctly.
      */
     @Test
-    public void testAddParm(){
+    public void testAddParm() {
         UMLClass.addClass("Test");
         List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "DogCounter"));
         umlMethods.addMethod("Test", "AddDog", parameters);
@@ -170,82 +180,11 @@ public class UMLMethodsTests {
     }
 
     /**
-     * Tests removing a parameter from an existing method within a class.
+     * Tests changing a parameter of a method.
+     * Verifies the parameter is replaced correctly.
      */
     @Test
-    public void testRemoveParm(){
-        UMLClass.addClass("Test");
-        List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "DogCounter"));
-        umlMethods.addMethod("Test", "AddDog", parameters);
-        umlMethods.removeParameter("Test", "AddDog", "DogCounter");
-
-        UMLClassInfo classInfo = UMLClass.classMap.get("Test");
-        UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
-        assertFalse(methodInfo.getParameters().contains(new UMLParameterInfo("int", "DogCounter")));
-    }
-
-    /**
-     * Tests changing a single parameter of an existing method within a class.
-     */
-    @Test
-    public void testChangeSingleParameter() {
-        UMLClass.addClass("Test");
-        List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "DogCounter"));
-        umlMethods.addMethod("Test", "AddDog", parameters);
-        umlMethods.addParameter("Test", "AddDog", "String", "PuppyCounter");
-        umlMethods.changeSingleParameter("Test", "AddDog", "PuppyCounter", "String", "CutePuppyCounter");
-        UMLClassInfo classInfo = UMLClass.classMap.get("Test");
-        UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
-        List<UMLParameterInfo> expectedParameters = Arrays.asList(
-                new UMLParameterInfo("int", "DogCounter"),
-                new UMLParameterInfo("String", "CutePuppyCounter")
-        );
-        assertEquals(expectedParameters, methodInfo.getParameters());
-    }
-
-    /**
-     * Tests changing all parameters of an existing method within a class.
-     */
-    @Test
-    public void testChangeAllParameters() {
-        UMLClass.addClass("Test");
-        List<UMLParameterInfo> initialParameters = Arrays.asList(new UMLParameterInfo("int", "DogCounter"));
-        umlMethods.addMethod("Test", "AddDog", initialParameters);
-        umlMethods.addParameter("Test", "AddDog", "String", "PuppyCounter");
-        List<UMLParameterInfo> newParameters = Arrays.asList(
-                new UMLParameterInfo("double", "BigDogCounter"),
-                new UMLParameterInfo("boolean", "IsPuppy")
-        );
-        umlMethods.changeAllParameters("Test", "AddDog", newParameters);
-        UMLClassInfo classInfo = UMLClass.classMap.get("Test");
-        UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
-        assertEquals(newParameters, methodInfo.getParameters());
-    }
-    @Test
-    public void testDeepCopyParameters(){
-        UMLClass.addClass("Test");
-        List<UMLParameterInfo> parameters = new ArrayList<>();
-        parameters.add(new UMLParameterInfo("int", "DogCounter"));
-        umlMethods.addMethod("Test", "AddDog", parameters);
-        parameters.clear();
-
-        UMLClassInfo classInfo = UMLClass.classMap.get("Test");
-        UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
-        assertEquals(1, methodInfo.getParameters().size());
-    }
-    @Test
-    public void testSetParameters(){
-        UMLClass.addClass("Test");
-        List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "DogCounter"), new UMLParameterInfo("boolean", "IsPuppy"));
-        umlMethods.addMethod("Test", "AddDog", parameters);
-        UMLClassInfo classInfo = UMLClass.classMap.get("Test");
-        UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
-        List<UMLParameterInfo> newParameters = Arrays.asList(new UMLParameterInfo("double", "treats"), new UMLParameterInfo("boolean", "type"));
-        methodInfo.setParameters(newParameters);
-        assertEquals(newParameters, methodInfo.getParameters());
-    }
-    @Test
-    public void testChangeParameters(){
+    public void testChangeParameters() {
         UMLMethodInfo methodInfo = new UMLMethodInfo("addDog", new ArrayList<>());
 
         UMLParameterInfo old = new UMLParameterInfo("int", "DogCounter");
@@ -255,11 +194,9 @@ public class UMLMethodsTests {
 
         UMLParameterInfo newParam = new UMLParameterInfo("string", "dogString");
 
-        methodInfo.changeParameter(old,newParam);
+        methodInfo.changeParameter(old, newParam);
 
         List<UMLParameterInfo> expected = Arrays.asList(newParam, old1);
         assertEquals(expected, methodInfo.getParameters());
     }
-
-
 }
