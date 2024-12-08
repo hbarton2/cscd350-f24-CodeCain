@@ -1,9 +1,12 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The UMLClassTests class contains test cases to validate the functionality of the UMLClass class.
@@ -45,6 +48,22 @@ public class UMLClassTests {
         UMLClass.addClass("DOG");
         assertEquals(1, UMLClass.classMap.size(), "Should prompt you can't add a class that already exists");
     }
+    @Test
+    public void testAddClassNullName() {
+        UMLClass.addClass(null);
+        // Assuming the system prints an error message to the console
+        String expectedMessage = "Canceled: Inputted Class Name is Blank";
+        assertEquals(expectedMessage, "Canceled: Inputted Class Name is Blank",
+                "Should prompt the correct error message for null class name");
+    }
+    @Test
+    public void testAddClassBlankName() {
+        UMLClass.addClass("");
+        // Assuming the system prints an error message to the console
+        String expectedMessage = "Canceled: Inputted Class Name is Blank";
+        assertEquals(expectedMessage, "Canceled: Inputted Class Name is Blank",
+                "Should prompt the correct error message for blank class name");
+    }
 
     /**
      * Tests removing a class from the class map.
@@ -63,6 +82,22 @@ public class UMLClassTests {
     public void testRemoveNonExistingClass() {
         UMLClass.removeClass("DOG");
         assertFalse(UMLClass.classMap.containsKey("DOG"), "Should prompt you cannot delete a class that isn't there");
+    }
+    @Test
+    public void testRemoveClassNullName() {
+        UMLClass.removeClass(null);
+        // Assuming the system prints an error message to the console
+        String expectedMessage = "Canceled: Inputted Class Name is Blank";
+        assertEquals(expectedMessage, "Canceled: Inputted Class Name is Blank",
+                "Should prompt the correct error message for null class name");
+    }
+    @Test
+    public void testRemoveClassBlankName() {
+        UMLClass.removeClass("");
+        // Assuming the system prints an error message to the console
+        String expectedMessage = "Canceled: Inputted Class Name is Blank";
+        assertEquals(expectedMessage, "Canceled: Inputted Class Name is Blank",
+                "Should prompt the correct error message for blank class name");
     }
 
     /**
@@ -98,4 +133,169 @@ public class UMLClassTests {
         assertFalse(UMLClass.classMap.containsKey("DOG"));
         assertFalse(UMLClass.classMap.containsKey("CAT"));
     }
+    /**
+     * Tests renaming a class with a null old name.
+     */
+    @Test
+    public void testRenameClassNullOldName() {
+        UMLClass.renameClass(null, "CAT");
+        String expectedMessage = "Canceled: Inputted Old Class Name is Blank";
+        assertEquals(expectedMessage, "Canceled: Inputted Old Class Name is Blank",
+                "Should prompt the correct error message for null old class name");
+    }
+
+    /**
+     * Tests renaming a class with a blank old name.
+     */
+    @Test
+    public void testRenameClassBlankOldName() {
+        UMLClass.renameClass("", "CAT");
+        String expectedMessage = "Canceled: Inputted Old Class Name is Blank";
+        assertEquals(expectedMessage, "Canceled: Inputted Old Class Name is Blank",
+                "Should prompt the correct error message for blank old class name");
+    }
+
+    /**
+     * Tests renaming a class with a blank new name.
+     */
+    @Test
+    public void testRenameClassBlankNewName() {
+        UMLClass.renameClass("DOG", "");
+        String expectedMessage = "Canceled: Inputted New Class Name is Blank";
+        assertEquals(expectedMessage, "Canceled: Inputted New Class Name is Blank",
+                "Should prompt the correct error message for blank new class name");
+    }
+
+    /**
+     * Tests listing all classes when multiple classes are present.
+     */
+    @Test
+    public void testListAllClasses() {
+        UMLClass.addClass("DOG");
+        UMLClass.addClass("CAT");
+        String res = UMLClass.listAllClassesInfo();
+        assertTrue(res.contains("DOG"));
+        assertTrue(res.contains("CAT"));
+    }
+
+    /**
+     * Tests listing all classes when no classes are present.
+     */
+    @Test
+    public void testListAllClassesWithNoClasses() {
+        String res = UMLClass.listAllClassesInfo();
+        assertEquals("No classes to display.", res);
+    }
+
+    /**
+     * Tests listing all classes when fields and methods are empty.
+     */
+    @Test
+    public void testListAllClassesWithEmptyFieldsAndMethods() {
+        UMLClass.addClass("DOG");
+        String res = UMLClass.listAllClassesInfo();
+        String expectedMessage = "Class: DOG\n" + "  Fields:\n" + "  Methods:\n\n";
+        assertEquals(expectedMessage, res);
+    }
+
+    /**
+     * Tests listing all classes when fields and methods are populated.
+     */
+    @Test
+    public void testListAllClassesWithFieldsAndMethods() {
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+
+        List<UMLFieldInfo> fields = new ArrayList<>();
+        fields.add(new UMLFieldInfo("NAME", "String"));
+        fields.add(new UMLFieldInfo("TYPE", "String"));
+        info.getFields().addAll(fields);
+
+        List<UMLMethodInfo> methods = new ArrayList<>();
+        methods.add(new UMLMethodInfo("getAge", new ArrayList<>()));
+        methods.add(new UMLMethodInfo("setName", List.of(new UMLParameterInfo("NAME", "String"))));
+        info.getMethods().addAll(methods);
+
+        String res = UMLClass.listAllClassesInfo();
+        String expectedMessage = "Class: DOG\n" +
+                "  Fields:\n" +
+                "    - NAME String\n" +
+                "    - TYPE String\n" +
+                "  Methods:\n" +
+                "    - getAge()\n" +
+                "    - setName(NAME String)\n\n";
+        assertEquals(expectedMessage, res);
+    }
+
+    /**
+     * Tests retrieving class information for a specific class.
+     */
+    @Test
+    public void testGetClassInfo() {
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+        assertNotNull(info);
+        assertEquals("DOG", info.getClassName());
+    }
+
+    /**
+     * Tests retrieving class information including fields and methods.
+     */
+    @Test
+    public void testGetClassInfoFieldsAndMethods() {
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+        assertTrue(info.getFields().isEmpty());
+
+        List<UMLFieldInfo> fields = new ArrayList<>();
+        fields.add(new UMLFieldInfo("NAME", "String"));
+        fields.add(new UMLFieldInfo("TYPE", "String"));
+        info.getFields().addAll(fields);
+        assertEquals(2, info.getFields().size(), "Should have two fields");
+
+        List<UMLMethodInfo> methods = new ArrayList<>();
+        methods.add(new UMLMethodInfo("getAge", new ArrayList<>()));
+        methods.add(new UMLMethodInfo("setName", List.of(new UMLParameterInfo("NAME", "String"))));
+        info.getMethods().addAll(methods);
+        assertEquals(2, info.getMethods().size(), "Should have two methods");
+    }
+
+    /**
+     * Tests retrieving a method by its name from class information.
+     */
+    @Test
+    public void testGetClassInfoMethodsName() {
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+        UMLMethodInfo method = new UMLMethodInfo("getAge", new ArrayList<>());
+        info.getMethods().add(method);
+        assertNotNull(info.getMethodByName("getAge"));
+        assertNull(info.getMethodByName("setName"));
+    }
+
+    /**
+     * Tests setting a class name for a specific class.
+     */
+    @Test
+    public void testSetClassName() {
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+        info.setClassName("CAT");
+        assertEquals("CAT", info.getClassName());
+    }
+
+    /**
+     * Tests setting the position of a class using x and y coordinates.
+     */
+    @Test
+    public void testSetPosition() {
+        UMLClass.addClass("DOG");
+        UMLClassInfo info = UMLClass.getClassInfo("DOG");
+        info.setX(100);
+        info.setY(200);
+        assertEquals(100, info.getX(), "Should have the same x value");
+        assertEquals(200, info.getY(), "Should have the same y value");
+    }
+
+
 }

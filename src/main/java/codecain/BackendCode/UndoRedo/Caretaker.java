@@ -25,6 +25,9 @@ public class Caretaker {
      * @param relationshipList The current list of relationships between UML classes.
      */
     public void saveState(Map<String, UMLClassInfo> classMap, List<Relationship> relationshipList) {
+        if (classMap == null || relationshipList == null) {
+            throw new IllegalArgumentException("classMap and relationshipList cannot be null");
+        }
         undoStack.push(new Memento(new HashMap<>(classMap), new ArrayList<>(relationshipList))); // Deep copy
         redoStack.clear();
     }
@@ -39,6 +42,8 @@ public class Caretaker {
         if (!undoStack.isEmpty()) {
             Memento state = undoStack.pop();
             redoStack.push(new Memento(UMLClass.classMap, Relationship.relationshipList));
+
+
             return state;
         }
         return null;
@@ -54,6 +59,8 @@ public class Caretaker {
         if (!redoStack.isEmpty()) {
             Memento state = redoStack.pop();
             undoStack.push(new Memento(UMLClass.classMap, Relationship.relationshipList));
+
+
             return state;
         }
         return null;
