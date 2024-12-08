@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -220,4 +221,45 @@ public class UMLMethodsTests {
         UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
         assertEquals(newParameters, methodInfo.getParameters());
     }
+    @Test
+    public void testDeepCopyParameters(){
+        UMLClass.addClass("Test");
+        List<UMLParameterInfo> parameters = new ArrayList<>();
+        parameters.add(new UMLParameterInfo("int", "DogCounter"));
+        umlMethods.addMethod("Test", "AddDog", parameters);
+        parameters.clear();
+
+        UMLClassInfo classInfo = UMLClass.classMap.get("Test");
+        UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
+        assertEquals(1, methodInfo.getParameters().size());
+    }
+    @Test
+    public void testSetParameters(){
+        UMLClass.addClass("Test");
+        List<UMLParameterInfo> parameters = Arrays.asList(new UMLParameterInfo("int", "DogCounter"), new UMLParameterInfo("boolean", "IsPuppy"));
+        umlMethods.addMethod("Test", "AddDog", parameters);
+        UMLClassInfo classInfo = UMLClass.classMap.get("Test");
+        UMLMethodInfo methodInfo = classInfo.getMethodByName("AddDog");
+        List<UMLParameterInfo> newParameters = Arrays.asList(new UMLParameterInfo("double", "treats"), new UMLParameterInfo("boolean", "type"));
+        methodInfo.setParameters(newParameters);
+        assertEquals(newParameters, methodInfo.getParameters());
+    }
+    @Test
+    public void testChangeParameters(){
+        UMLMethodInfo methodInfo = new UMLMethodInfo("addDog", new ArrayList<>());
+
+        UMLParameterInfo old = new UMLParameterInfo("int", "DogCounter");
+        UMLParameterInfo old1 = new UMLParameterInfo("boolean", "IsPuppy");
+        methodInfo.addParameter(old);
+        methodInfo.addParameter(old1);
+
+        UMLParameterInfo newParam = new UMLParameterInfo("string", "dogString");
+
+        methodInfo.changeParameter(old,newParam);
+
+        List<UMLParameterInfo> expected = Arrays.asList(newParam, old1);
+        assertEquals(expected, methodInfo.getParameters());
+    }
+
+
 }
