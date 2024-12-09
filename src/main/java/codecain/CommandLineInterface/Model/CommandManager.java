@@ -630,16 +630,59 @@ public class CommandManager {
      * @return message confirming the renaming of the method, or an error message if the class does not exist
      */
     private String handleRenameMethod(String[] tokens) {
+        if (tokens.length < 5) {
+            return "Usage: rename method <className> <currentMethodName> <newMethodName>";
+        }
+
         stateManager.saveState();
-        String errorMessage = checkClassExists(tokens[2]);
+
+        String className = tokens[2];
+        String currentMethodName = tokens[3];
+        String newMethodName = tokens[4];
+
+        String errorMessage = checkClassExists(className);
         if (errorMessage != null) {
             return errorMessage;
         }
 
-        UMLMethods methods = new UMLMethods();
-        methods.renameMethod(tokens[2], tokens[3], tokens[4]);
-        return DisplayHelper.methodRenamed(tokens[3], tokens[4], tokens[2]);
+        UMLClassInfo classInfo = getClassInfo(className);
+        if (classInfo == null) {
+            return "Class '" + className + "' not found.";
+        }
+
+        var matchingMethods = classInfo.getMethods().stream()
+                .filter(method -> method.getMethodName().equals(currentMethodName))
+                .toList();
+
+        if (matchingMethods.isEmpty()) {
+            return "No method named '" + currentMethodName + "' found in class '" + className + "'.";
+        } else if (matchingMethods.size() == 1) {
+            matchingMethods.get(0).setMethodName(newMethodName);
+            return "Method '" + currentMethodName + "' renamed to '" + newMethodName + "' in class '" + className + "'.";
+        } else {
+            StringBuilder prompt = new StringBuilder("Multiple methods named '" + currentMethodName + "' found. Please choose which one to rename:\n");
+            for (int i = 0; i < matchingMethods.size(); i++) {
+                prompt.append((i + 1)).append(": ").append(matchingMethods.get(i)).append("\n");
+            }
+
+            CLIView.promptForInput(prompt.toString() + "Enter the number:", userInput -> {
+                try {
+                    int choice = Integer.parseInt(userInput);
+                    if (choice > 0 && choice <= matchingMethods.size()) {
+                        matchingMethods.get(choice - 1).setMethodName(newMethodName);
+                        CLIView.getCommandOutput().appendText("Method '" + currentMethodName + "' renamed to '" + newMethodName + "' (option " + choice + ") in class '" + className + "'.\n");
+                    } else {
+                        CLIView.getCommandOutput().appendText("Invalid choice. No method renamed.\n");
+                    }
+                } catch (NumberFormatException e) {
+                    CLIView.getCommandOutput().appendText("Invalid input. Please enter a valid number.\n");
+                }
+            });
+
+            return ""; // Empty string to prevent immediate output
+        }
     }
+
 
     /**
      * Renames a parameter in a specified method of a UML class.
