@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Memento.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.UndoRedo</a> &gt; <span class="el_source">Memento.java</span></div><h1>Memento.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.UndoRedo;
+
+import codecain.BackendCode.Model.Relationship;
+import codecain.BackendCode.Model.UMLClassInfo;
+
+import java.util.*;
+
+/**
+ * The Memento class stores a snapshot of the UML diagram's state.
+ * This includes the class map and the list of relationships at a given point in time.
+ * The class is used in conjunction with the Caretaker class to enable undo and redo functionality.
+ */
+public class Memento {
+    private final Map&lt;String, UMLClassInfo&gt; classMapSnapshot;
+    private final List&lt;Relationship&gt; relationshipListSnapshot;
+
+    /**
+     * Constructs a new Memento object with the provided snapshots of the class map and relationship list.
+     *
+     * @param classMap        A snapshot of the current mapping of class names to UMLClassInfo objects.
+     * @param relationshipList A snapshot of the current list of relationships between UML classes.
+     */
+<span class="fc" id="L23">    public Memento(Map&lt;String, UMLClassInfo&gt; classMap, List&lt;Relationship&gt; relationshipList) {</span>
+<span class="fc" id="L24">        this.classMapSnapshot = new HashMap&lt;&gt;(classMap);</span>
+<span class="fc" id="L25">        this.relationshipListSnapshot = new ArrayList&lt;&gt;(relationshipList);</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * Returns the snapshot of the class map stored in this Memento.
+     *
+     * @return A deep copy of the class map at the time this Memento was created.
+     */
+    public Map&lt;String, UMLClassInfo&gt; getClassMapSnapshot() {
+<span class="fc" id="L34">        return classMapSnapshot;</span>
+    }
+
+    /**
+     * Returns the snapshot of the relationship list stored in this Memento.
+     *
+     * @return A deep copy of the relationship list at the time this Memento was created.
+     */
+    public List&lt;Relationship&gt; getRelationshipListSnapshot() {
+<span class="fc" id="L43">        return relationshipListSnapshot;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

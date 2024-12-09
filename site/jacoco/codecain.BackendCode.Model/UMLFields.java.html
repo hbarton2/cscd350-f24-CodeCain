@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UMLFields.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.Model</a> &gt; <span class="el_source">UMLFields.java</span></div><h1>UMLFields.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.Model;
+
+/**
+ * The UMLFields class provides functionality to manage fields in a UML class.
+ * This includes adding, removing, and renaming fields within a class.
+ */
+<span class="fc" id="L7">public class UMLFields {</span>
+
+    /**
+     * Adds a field to a class.
+     *
+     * @param className the name of the class to which the field is added
+     * @param fieldName the name of the field being added
+     * @param fieldType the type of the field being added
+     */
+    public void addField(String className, String fieldType, String fieldName) {
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">        if (isInputInvalid(className, fieldName)) return;</span>
+<span class="pc bpc" id="L18" title="2 of 4 branches missed.">        if (fieldType == null || fieldType.isBlank()) {</span>
+<span class="nc" id="L19">            System.out.println(&quot;Action Canceled: Field type is invalid&quot;);</span>
+<span class="nc" id="L20">            return;</span>
+        }
+<span class="fc" id="L22">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (classInfo == null) return;</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (doesFieldExist(classInfo, fieldName)) {</span>
+
+<span class="fc" id="L26">            System.out.println(&quot;Action Canceled: Field of type &quot; + fieldType + &quot; &quot; + fieldName + &quot; already exists in class &quot; + className);</span>
+<span class="fc" id="L27">            return;</span>
+        }
+<span class="fc" id="L29">        classInfo.getFields().add(new UMLFieldInfo(fieldType, fieldName));</span>
+<span class="fc" id="L30">        System.out.println(&quot;Field of type &quot; + fieldType + &quot; &quot; + fieldName + &quot; added to class &quot; + className);</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * Removes a field from a class.
+     *
+     * @param className the name of the class from which the field is removed
+     * @param fieldName the name of the field to be removed
+     */
+    public void removeField(String className, String fieldName) {
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        if (isInputInvalid(className, fieldName)) return;</span>
+<span class="fc" id="L41">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (classInfo == null) return;</span>
+<span class="fc" id="L43">        UMLFieldInfo field = getFieldByName(classInfo, fieldName);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (field == null) {</span>
+<span class="fc" id="L45">            System.out.println(&quot;Action Canceled: Field &quot; + fieldName + &quot; does not exist in class &quot; + className);</span>
+<span class="fc" id="L46">            return;</span>
+        }
+<span class="fc" id="L48">        classInfo.getFields().remove(field);</span>
+<span class="fc" id="L49">        System.out.println(&quot;Field &quot; + fieldName + &quot; removed from class &quot; + className);</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Renames an existing field in a class and optionally changes its type.
+     *
+     * @param className the name of the class containing the field
+     * @param oldFieldName the current name of the field
+     * @param newFieldName the new name for the field
+     * @param newFieldType the new type for the field
+     */
+    public void renameField(String className, String oldFieldName, String newFieldType, String newFieldName) {
+<span class="pc bpc" id="L61" title="2 of 4 branches missed.">        if (isInputInvalid(className, oldFieldName) || isInputInvalid(className, newFieldName)) {</span>
+<span class="nc" id="L62">            return;</span>
+        }
+<span class="fc" id="L64">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (classInfo == null) return;</span>
+<span class="fc" id="L66">        UMLFieldInfo field = getFieldByName(classInfo, oldFieldName);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (field == null) {</span>
+<span class="fc" id="L68">            System.out.println(&quot;Action Canceled: Field &quot; + oldFieldName + &quot; does not exist in class &quot; + className);</span>
+<span class="fc" id="L69">            return;</span>
+        }
+<span class="pc bpc" id="L71" title="2 of 4 branches missed.">        if (!oldFieldName.equals(newFieldName) &amp;&amp; getFieldByName(classInfo, newFieldName) != null) {</span>
+<span class="nc" id="L72">            System.out.println(&quot;Action Canceled: Field &quot; + newFieldName + &quot; already exists in class &quot; + className);</span>
+<span class="nc" id="L73">            return;</span>
+        }
+<span class="fc" id="L75">        field.setFieldName(newFieldName);</span>
+<span class="fc" id="L76">        field.setFieldType(newFieldType);</span>
+<span class="fc" id="L77">        System.out.println(&quot;Field &quot; + oldFieldName + &quot; renamed to &quot; + newFieldName + &quot; with type &quot; + newFieldType + &quot; in class &quot; + className);</span>
+<span class="fc" id="L78">    }</span>
+
+
+    /**
+     * Helper method to validate className and fieldName.
+     *
+     * @param className the name of the class
+     * @param fieldName the name of the field
+     * @return true if any of the inputs are invalid, false otherwise
+     */
+    private boolean isInputInvalid(String className, String fieldName) {
+<span class="pc bpc" id="L89" title="2 of 4 branches missed.">        if (className == null || className.isBlank()) {</span>
+<span class="nc" id="L90">            System.out.println(&quot;Action Canceled: Class name is invalid&quot;);</span>
+<span class="nc" id="L91">            return true;</span>
+        }
+<span class="pc bpc" id="L93" title="2 of 4 branches missed.">        if (fieldName == null || fieldName.isBlank()) {</span>
+<span class="nc" id="L94">            System.out.println(&quot;Action Canceled: Field name is invalid&quot;);</span>
+<span class="nc" id="L95">            return true;</span>
+        }
+<span class="fc" id="L97">        return false;</span>
+    }
+
+
+    /**
+     * Helper method to get UMLClassInfo for a class.
+     *
+     * @param className the name of the class
+     * @return the UMLClassInfo object, or null if class does not exist
+     */
+    private UMLClassInfo getClassInfo(String className) {
+<span class="fc" id="L108">        UMLClassInfo classInfo = UMLClass.classMap.get(className);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (classInfo == null) {</span>
+<span class="fc" id="L110">            System.out.println(&quot;Action Canceled: Class &quot; + className + &quot; does not exist&quot;);</span>
+        }
+<span class="fc" id="L112">        return classInfo;</span>
+    }
+
+    /**
+     * Helper method to check if a field with the given type and name exists in the class.
+     *
+     * @param classInfo the UMLClassInfo object for the class
+     * @param fieldName the name of the field
+     * @return true if the field exists, false otherwise
+     */
+    public boolean doesFieldExist(UMLClassInfo classInfo, String fieldName) {
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (UMLFieldInfo field : classInfo.getFields()) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (field.getFieldName().equals(fieldName)) {</span>
+<span class="fc" id="L125">                return true;</span>
+            }
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">        return false;</span>
+    }
+
+    /**
+     * Retrieves a field by its name from the class.
+     *
+     * @param classInfo the UMLClassInfo object for the class
+     * @param fieldName the name of the field
+     * @return the UMLFieldInfo object representing the field, or null if not found
+     */
+    private UMLFieldInfo getFieldByName(UMLClassInfo classInfo, String fieldName) {
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        for (UMLFieldInfo field : classInfo.getFields()) {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            if (field.getFieldName().equals(fieldName)) {</span>
+<span class="fc" id="L141">                return field;</span>
+            }
+<span class="fc" id="L143">        }</span>
+<span class="fc" id="L144">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

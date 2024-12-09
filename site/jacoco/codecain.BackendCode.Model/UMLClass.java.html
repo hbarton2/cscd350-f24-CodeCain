@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UMLClass.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.Model</a> &gt; <span class="el_source">UMLClass.java</span></div><h1>UMLClass.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.Model;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * The UMLClass class provides static methods to manage UML classes.
+ * It includes functionality to add, remove, and rename classes.
+ * All class information is stored in a static map where the key is the class name
+ * and the value is the UMLClassInfo object containing details about the class.
+ */
+<span class="nc" id="L14">public class UMLClass {</span>
+
+    /**
+     * A static map storing all classes, where the key is the class name and the value is the UMLClassInfo object.
+     */
+<span class="fc" id="L19">    public static Map&lt;String, UMLClassInfo&gt; classMap = new HashMap&lt;&gt;();</span>
+
+    /**
+     * Adds a new class to the classMap if it does not already exist.
+     *
+     * @param className the name of the class to be added
+     */
+    public static void addClass(String className) {
+
+        // new logic for addClass. Old logic was incorrect.
+        // boolean result = false;
+        // if (className == null || className.isBlank()) {
+        //     System.out.println(&quot;Canceled: Inputted Class Name is Blank&quot;);
+        // } else if (exists(className)) {
+        //     System.out.println(&quot;Class &quot; + className + &quot; already exists&quot;);
+        // } else {
+        //     classMap.put(className, new UMLClassInfo(className));
+        //     System.out.println(&quot;Class &quot; + className + &quot; added&quot;);
+        //     result = true;
+        // }
+
+        // Old logic for addClass
+
+<span class="fc bfc" id="L42" title="All 4 branches covered.">        if (className == null || className.isBlank()) {</span>
+<span class="fc" id="L43">            System.out.println(&quot;Canceled: Inputted Class Name is Blank&quot;);</span>
+<span class="fc" id="L44">            return;</span>
+        }
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (exists(className)) {</span>
+<span class="fc" id="L47">            System.out.println(&quot;Class &quot; + className + &quot; already exists&quot;);</span>
+        } else {
+<span class="fc" id="L49">            classMap.put(className, new UMLClassInfo(className));</span>
+<span class="fc" id="L50">            System.out.println(&quot;Class &quot; + className + &quot; added&quot;);</span>
+        }
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * Removes a class from the classMap if it exists.
+     *
+     * @param className the name of the class to be removed
+     */
+    public static void removeClass(String className) {
+<span class="fc bfc" id="L60" title="All 4 branches covered.">        if (className == null || className.isBlank()) {</span>
+<span class="fc" id="L61">            System.out.println(&quot;Canceled: Inputted Class Name is Blank&quot;);</span>
+<span class="fc" id="L62">            return;</span>
+        }
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (!exists(className)) {</span>
+<span class="fc" id="L65">            System.out.println(&quot;Class &quot; + className + &quot; does not exist&quot;);</span>
+        } else {
+<span class="fc" id="L67">            classMap.remove(className);</span>
+<span class="fc" id="L68">            System.out.println(&quot;Class &quot; + className + &quot; removed&quot;);</span>
+        }
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * Renames an existing class by replacing its old name with a new name.
+     *
+     * @param oldClassName the current name of the class
+     * @param newClassName the new name for the class
+     */
+    public static void renameClass(String oldClassName, String newClassName) {
+<span class="fc bfc" id="L79" title="All 4 branches covered.">        if (oldClassName == null || oldClassName.isBlank()) {</span>
+<span class="fc" id="L80">            System.out.println(&quot;Canceled: Inputted Old Class Name is Blank&quot;);</span>
+<span class="fc" id="L81">            return;</span>
+        }
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">        if (newClassName == null || newClassName.isBlank()) {</span>
+<span class="fc" id="L84">            System.out.println(&quot;Canceled: Inputted New Class Name is Blank&quot;);</span>
+<span class="fc" id="L85">            return;</span>
+        }
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (!exists(oldClassName)) {</span>
+<span class="fc" id="L88">            System.out.println(&quot;Class &quot; + oldClassName + &quot; does not exist&quot;);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        } else if (exists(newClassName)) {</span>
+<span class="fc" id="L90">            System.out.println(&quot;Class &quot; + newClassName + &quot; already exists&quot;);</span>
+        } else {
+<span class="fc" id="L92">            UMLClassInfo classInfo = classMap.remove(oldClassName);</span>
+<span class="fc" id="L93">            classInfo.setClassName(newClassName);</span>
+<span class="fc" id="L94">            classMap.put(newClassName, classInfo);</span>
+<span class="fc" id="L95">            System.out.println(&quot;Class &quot; + oldClassName + &quot; renamed to &quot; + newClassName);</span>
+        }
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Lists all classes and their details (fields and methods) in a formatted string.
+     * If no classes are present, returns &quot;No classes to display.&quot;
+     *
+     * @return a formatted string of all classes, fields, and methods
+     */
+    public static String listAllClassesInfo() {
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (classMap.isEmpty()) {</span>
+<span class="fc" id="L107">            return &quot;No classes to display.&quot;;</span>
+        }
+<span class="fc" id="L109">        StringBuilder result = new StringBuilder();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (Map.Entry&lt;String, UMLClassInfo&gt; entry : classMap.entrySet()) {</span>
+<span class="fc" id="L111">            UMLClassInfo classInfo = entry.getValue();</span>
+<span class="fc" id="L112">            result.append(&quot;Class: &quot;).append(classInfo.getClassName()).append(&quot;\n&quot;);</span>
+<span class="fc" id="L113">            result.append(&quot;  Fields:\n&quot;);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">            for (UMLFieldInfo field : classInfo.getFields()) {</span>
+<span class="fc" id="L115">                result.append(&quot;    - &quot;).append(field).append(&quot;\n&quot;);</span>
+<span class="fc" id="L116">            }</span>
+<span class="fc" id="L117">            result.append(&quot;  Methods:\n&quot;);</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            for (UMLMethodInfo method : classInfo.getMethods()) {</span>
+<span class="fc" id="L119">                result.append(&quot;    - &quot;).append(method).append(&quot;\n&quot;);</span>
+<span class="fc" id="L120">            }</span>
+<span class="fc" id="L121">            result.append(&quot;\n&quot;);</span>
+<span class="fc" id="L122">        }</span>
+<span class="fc" id="L123">        return result.toString();</span>
+    }
+
+    /**
+     * Checks if a class with the given name exists in the classMap.
+     *
+     * @param className the name of the class to check for existence
+     * @return true if the class exists, false otherwise
+     */
+    public static boolean exists(String className) {
+<span class="fc" id="L133">        return classMap.containsKey(className);</span>
+    }
+
+
+    /**
+     * Checks if a class with the given name exists in the classMap.
+     *
+     * @param className the name of the class to check for existence
+     * @return the name if the class exists, null otherwise
+     */
+    public static UMLClassInfo getClassInfo(String className) {
+<span class="fc" id="L144">        return classMap.get(className);</span>
+    }
+
+    /**
+     * Retrieves detailed information about a specific class and its relationships
+     *
+     * @param className The name of the class to retrieve information for
+     * @return A formatted string containing class details and its relationships
+     */
+    public static String getClassDetails(String className) {
+
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (!UMLClass.classMap.containsKey(className)) {</span>
+<span class="fc" id="L156">            return &quot;Class '&quot; + className + &quot;' does not exist in the system.&quot;;</span>
+        }
+
+<span class="fc" id="L159">        UMLClassInfo classInfo = UMLClass.classMap.get(className);</span>
+
+<span class="fc" id="L161">        StringBuilder details = new StringBuilder();</span>
+<span class="fc" id="L162">        details.append(&quot;Class Name: &quot;).append(classInfo.getClassName()).append(&quot;\n&quot;);</span>
+<span class="fc" id="L163">        details.append(&quot;Fields:\n&quot;);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for (UMLFieldInfo field : classInfo.getFields()) {</span>
+<span class="fc" id="L165">            details.append(&quot;  - &quot;).append(field.toString()).append(&quot;\n&quot;);</span>
+<span class="fc" id="L166">        }</span>
+<span class="fc" id="L167">        details.append(&quot;Methods:\n&quot;);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        for (UMLMethodInfo method : classInfo.getMethods()) {</span>
+<span class="fc" id="L169">            details.append(&quot;  - &quot;).append(method.toString()).append(&quot;\n&quot;);</span>
+<span class="fc" id="L170">        }</span>
+
+<span class="fc" id="L172">        ArrayList&lt;Relationship&gt; relationships = Relationship.relationshipList.stream()</span>
+<span class="fc" id="L173">                .filter(rel -&gt; rel.getClassNames().contains(className))</span>
+<span class="fc" id="L174">                .collect(Collectors.toCollection(ArrayList::new));</span>
+
+<span class="fc" id="L176">        details.append(&quot;Relationships:\n&quot;);</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (relationships.isEmpty()) {</span>
+<span class="fc" id="L178">            details.append(&quot;  No relationships found.\n&quot;);</span>
+        } else {
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            for (Relationship rel : relationships) {</span>
+<span class="fc" id="L181">                String[] classNames = rel.getClassNamesAsArray();</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                String otherClass = classNames[0].equals(className) ? classNames[1] : classNames[0];</span>
+<span class="fc" id="L183">                details.append(&quot;  &quot;).append(className)</span>
+<span class="fc" id="L184">                        .append(rel.getType().getArrowString())</span>
+<span class="fc" id="L185">                        .append(otherClass)</span>
+<span class="fc" id="L186">                        .append(&quot; (&quot;).append(rel.getType().toString()).append(&quot;)\n&quot;);</span>
+<span class="fc" id="L187">            }</span>
+        }
+
+<span class="fc" id="L190">        return details.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

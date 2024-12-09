@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StateManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.UndoRedo</a> &gt; <span class="el_source">StateManager.java</span></div><h1>StateManager.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.UndoRedo;
+
+import codecain.BackendCode.Model.Relationship;
+import codecain.BackendCode.Model.UMLClass;
+
+import java.util.*;
+
+/**
+ * The StateManager class provides an interface for managing the state of the UML diagram.
+ * It uses the Caretaker class to enable undo and redo functionality.
+ * The state of the UML diagram, including class mappings and relationships, is saved and restored as needed.
+ */
+<span class="fc" id="L13">public class StateManager {</span>
+<span class="fc" id="L14">    private final Caretaker caretaker = new Caretaker();</span>
+
+    /**
+     * Saves the current state of the UML diagram by storing the class map and relationship list.
+     * This state is pushed onto the undo stack in the Caretaker.
+     */
+    public void saveState() {
+<span class="fc" id="L21">        caretaker.saveState(UMLClass.classMap, Relationship.relationshipList);</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * Restores the last saved state by performing an undo operation.
+     * Updates the UMLClass and Relationship objects with the restored state.
+     *
+     * @return {@code true} if the undo operation was successful, {@code false} if there is no state to undo.
+     */
+    public boolean undo() {
+<span class="fc" id="L31">        Memento memento = caretaker.undo();</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (memento != null) {</span>
+<span class="fc" id="L33">            UMLClass.classMap = memento.getClassMapSnapshot();</span>
+<span class="fc" id="L34">            Relationship.relationshipList = new ArrayList&lt;&gt;(memento.getRelationshipListSnapshot());</span>
+<span class="fc" id="L35">            return true;</span>
+        }
+<span class="fc" id="L37">        return false;</span>
+    }
+
+    /**
+     * Restores the most recently undone state by performing a redo operation.
+     * Updates the UMLClass and Relationship objects with the restored state.
+     *
+     * @return {@code true} if the redo operation was successful, {@code false} if there is no state to redo.
+     */
+    public boolean redo() {
+<span class="fc" id="L47">        Memento memento = caretaker.redo();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (memento != null) {</span>
+<span class="fc" id="L49">            UMLClass.classMap = memento.getClassMapSnapshot();</span>
+<span class="fc" id="L50">            Relationship.relationshipList = new ArrayList&lt;&gt;(memento.getRelationshipListSnapshot());</span>
+<span class="fc" id="L51">            return true;</span>
+        }
+<span class="fc" id="L53">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

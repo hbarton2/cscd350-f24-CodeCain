@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UMLParameterInfo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.Model</a> &gt; <span class="el_source">UMLParameterInfo.java</span></div><h1>UMLParameterInfo.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.Model;
+
+import java.util.Objects;
+
+/**
+ * The UMLParameterInfo class represents a parameter in a UML class.
+ * It includes the parameter name and the parameter type.
+ */
+public class UMLParameterInfo {
+
+    /**
+     * The name of the parameter.
+     */
+    private String parameterName;
+
+    /**
+     * The type of the parameter.
+     */
+    private String parameterType;
+
+    /**
+     * No-argument constructor for Jackson deserialization.
+     */
+<span class="nc" id="L24">    public UMLParameterInfo() {}</span>
+
+    /**
+     * Constructs a UMLParameterInfo object with the specified parameter type and parameter name.
+     *
+     * @param parameterType the type of the parameter
+     * @param parameterName the name of the parameter
+     */
+<span class="fc" id="L32">    public UMLParameterInfo(String parameterType, String parameterName) {</span>
+<span class="fc" id="L33">        this.parameterType = parameterType;</span>
+<span class="fc" id="L34">        this.parameterName = parameterName;</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Gets the name of the parameter.
+     *
+     * @return the name of the parameter
+     */
+    public String getParameterName() {
+<span class="fc" id="L43">        return parameterName;</span>
+    }
+
+    /**
+     * Sets the name of the parameter.
+     *
+     * @param parameterName the new name of the parameter
+     */
+    public void setParameterName(String parameterName) {
+<span class="fc" id="L52">        this.parameterName = parameterName;</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Gets the type of the parameter.
+     *
+     * @return the type of the parameter
+     */
+    public String getParameterType() {
+<span class="fc" id="L61">        return parameterType;</span>
+    }
+
+    /**
+     * Sets the type of the parameter.
+     *
+     * @param parameterType the new type of the parameter
+     */
+    public void setParameterType(String parameterType) {
+<span class="fc" id="L70">        this.parameterType = parameterType;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Returns a string representation of the parameter in the format &quot;type name&quot;.
+     *
+     * @return a formatted string representing the parameter as &quot;type name&quot;
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L80">        return parameterType + &quot; &quot; + parameterName;</span>
+    }
+
+    /**
+     * Compares this UMLParameterInfo object to another object for equality.
+     * Two UMLParameterInfo objects are considered equal if they have the same parameter type and name.
+     *
+     * @param o the object to compare with this UMLParameterInfo
+     * @return true if the specified object is equal to this UMLParameterInfo; false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L93" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L94">        UMLParameterInfo that = (UMLParameterInfo) o;</span>
+<span class="pc bpc" id="L95" title="1 of 4 branches missed.">        return parameterType.equals(that.parameterType) &amp;&amp; parameterName.equals(that.parameterName);</span>
+    }
+
+    /**
+     * Returns the hash code value for this UMLParameterInfo object based on the parameter type and name.
+     *
+     * @return the hash code value for this UMLParameterInfo
+     */
+    @Override
+    public int hashCode() {
+<span class="nc" id="L105">        return Objects.hash(parameterType, parameterName);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
