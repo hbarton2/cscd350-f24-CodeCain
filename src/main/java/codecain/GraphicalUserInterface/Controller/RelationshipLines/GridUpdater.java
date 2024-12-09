@@ -276,9 +276,9 @@ public class GridUpdater {
         PathNavigator navigator = new PathNavigator(grid);
         GridPath p = navigator.findPathFromCells(coveredCells.get(start), coveredCells.get(goal),
                 findCenter(start), findCenter(goal));
-        if (p == null) {
-            System.out.println("No path found");
-            return null;
+        if (p.size() == 0) {
+            System.out.println("Empty path between " + start + " and " + goal);
+            return p;
         }
         return p;
     }

@@ -132,7 +132,7 @@ public class PathNavigator {
 
         //returns null if no path was found
 
-        return null;
+        return new GridPath();
     }
 
     /**
