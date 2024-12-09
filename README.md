@@ -1,104 +1,174 @@
-# Code Cain UML Editor Project
+---
+
+# Code Cain UML Editor
 
 ## Overview
 
-The Code Cain UML Editor is a Java-based application that provides a graphical interface for designing and managing UML diagrams. It supports creating classes, relationships, and various UML diagram elements while offering undo/redo functionality, file operations (save/load), and a command-line interface (CLI) for advanced users.
+Code Cain UML (Unified Modeling Language) Editor is a Java 21 application for creating and managing UML diagrams. It features a JavaFX GUI and an interactive CLI, supporting essential UML diagramming functionalities with undo/redo and file operations. It includes a syncronized GUI to CLI transition and vise versa through the interative GUI that allows the choice between the two on startup.
 
 ## Features
 
-- **Graphical User Interface (GUI)** using JavaFX
-- **Command-Line Interface (CLI)** for an FX CLI with auto-complete and intuitive commands
-- **Undo/Redo Functionality** to manage diagram edits
-- **File Operations**: Save and load diagrams as JSON files
-- **UML Element Management**:
-  - Create, rename, and delete classes, fields, methods, and relationships
-  - Modify UML class elements dynamically
+- **JavaFX GUI** for intuitive diagram editing.
 
+- **CLI** with auto-complete commands.
 
+- **Undo/Redo** support (CLI Only).
+
+- **File Operations**: Save and load diagrams as JSON.
+
+- **UML Management**:
+
+  - Add, edit, and delete classes, fields, methods, and relationships.
+
+  
 
 ## Usage
-Running the Application, make sure you are using Java 23.  
-GUI Mode: Launch MainGUI.java.  
-CLI Mode: Run CommandManager to enter commands interactively.  
-JAR File: Run the UML Editor JAR file
+
+### Prerequisites
+
+- Java 21 (Download: [Java Downloads](https://www.oracle.com/java/technologies/downloads/#java21))
 
 
-## Launching The Program
-To run this program, you will need to have Java 23 installed on your machine. You can download the latest version of Java from the official Oracle website. Once you have Java installed, you can run the program by executing the following command in the terminal:
+### Run Instructions
 
-### Option 1
+  
+#### Precompiled JAR File
+
+For Windows users who can use the already compiled JAR file:
+
+1. **Windows**:
+
+   - Run the JAR file with the following command:
+
 ```bash
-java -jar cscd350-f24-CodeCain.jar
+java -jar umlEditor.jar
 ```
 
-### Option 2
-Simply double click on cscd350-f24-CodeCain.jar
+   - Or double-click `umlEditor.jar` to launch the application.
 
-Here is a link to the latest version of Java: https://www.oracle.com/java/technologies/downloads/  
-Download SDK 23 for your desired operating system.
-# Future Enhancements
-Improved UI for a more intuitive design experience.
-Export UML diagrams to various formats (e.g., PNG, JPEG).
+  
 
-# Contact
-For any questions or feedback, please feel free to reach out to the project maintainers (Those who use have our info):
-- Aaron Williams-Breth
-- Sergei Uss
-- Colby Crutcher
-- Riley Rudolfo
-- Ben Foster
-- Aaron Oehler
+#### Build Your Own JAR (Mac/Linux)
 
+For Mac and Linux users who need to build their own JAR file:
 
+  
+
+1. **Prerequisites**:
+
+   - Java 21 (Download: [Java Downloads](https://www.oracle.com/java/technologies/downloads/#java21)).
+
+     - **Verify Installation**: Run the following command to ensure Java is installed:
+```bash
+java --version
+```
+
+   - Install Maven ([Install Maven](https://maven.apache.org/download.cgi)).
+   - Choose the appropriate binary distribution for your system:
+     - For Linux/Mac: Download the **Binary tar.gz archive**.
+     - For Windows: Download the **Binary zip archive**.
+
+  **Extract the Archive**:
+   - Linux/Mac:
+```bash
+tar -xvzf apache-maven-3.9.9-bin.tar.gz
+```
+   - Windows:
+     - Use a tool like WinRAR or 7-Zip to extract the `apache-maven-3.9.9-bin.zip` file.
+
+   **Set Environment Variables**:
+   - Add Maven's `bin` directory to your `PATH` environment variable:
+     - **Linux/Mac**: Add the following to your `.bashrc`, `.zshrc`, or `.bash_profile`:
+```bash
+export PATH=/path/to/apache-maven-3.9.9/bin:$PATH
+```
+
+       Replace `/path/to/apache-maven-3.9.9` with the path to the extracted directory.
+       Then, reload the shell configuration:
+```bash
+source ~/.bashrc
+```
+
+     - **Windows**:
+       1. Open "System Properties" > "Environment Variables".
+       2. Add Maven's `bin` directory to the `Path` variable.
+
+   **Verify Installation**:
+   Run the following command to confirm Maven is installed:
+```bash
+mvn -version
+```
+   You should see the Maven version and Java version in the output.  
+
+2. **Clone the Repository**:
+
+```bash
+git clone https://github.com/hbarton2/cscd350-f24-CodeCain.git
+cd codecain-uml-editor
+```
+
+  
+
+3. **Build the JAR**:
+
+   Run the Maven package command in the project directory:
+
+```bash
+mvn clean package
+```
+
+  
+
+4. **Locate the JAR**:
+
+   - After building, the JAR file will be in the `target` directory:
+
+```bash
+target/umlEditor.jar
+```
+
+  
+
+5. **Run the Application**:
+
+   Execute the JAR file:
+```bash
+java -jar target/umlEditor.jar
+```
+
+---
+  
 
 ## Project Structure
 
-- **`src/main/java/codecain`**: Contains the main application code.
+- **`src/main/java/codecain`**: Core application code.
 
-  - **`BackendCode`**: Backend logic for managing UML diagrams.
-    - **`Model`**: Represents the data structure and relationships in UML diagrams.
-      - **`Relationship.java`**: Represents relationships between UML classes.
-      - **`SaveManager.java`**: Handles saving and loading UML diagrams as JSON files.
-      - **`UMLClass.java`**: Represents UML classes with their fields, methods, and relationships.
-      - **`UMLClassInfo.java`**: Stores information about UML classes.
-      - **`UMLFieldInfo.java`**: Models a UML class field.
-      - **`UMLFields.java`**: Manages fields within UML classes.
-      - **`UMLMethodInfo.java`**: Models a UML method.
-      - **`UMLMethods.java`**: Manages methods within UML classes.
-      - **`UMLParameterInfo.java`**: Represents a parameter in a UML method.
-    - **`UndoRedo`**: Provides undo/redo functionality.
-      - **`Caretaker.java`**: Maintains the history of states for undo/redo operations.
-      - **`Memento.java`**: Captures and restores the state of the UML diagram.
-      - **`StateManager.java`**: Manages undo/redo logic and state transitions.
+  - **BackendCode**: UML data and state management (e.g., `UMLClass.java`, `StateManager.java`).
 
-  - **`CommandLineInterface`**: Provides the command-line interface for managing UML diagrams.
-    - **`Controller`**: Handles user inputs and commands.
-      - **`CLIController.java`**: Manages command execution for the CLI.
-    - **`Model`**: Core classes for CLI operations.
-      - **`CommandManager.java`**: Manages command execution and history for CLI operations.
-      - **`DisplayHelper.java`**: Provides helper functions to display information in the CLI.
-      - **`FileOperations.java`**: Handles saving and loading files through CLI.
-    - **`View`**: Visual representation for the CLI.
-      - **`CLI.java`**: Entry point for the command-line interface.
-      - **`CLIView.java`**: Displays the CLI interface and manages user interactions.
+  - **CommandLineInterface**: CLI logic and display (e.g., `CommandManager.java`, `CLI.java`).
 
-  - **`GraphicalUserInterface`**: Contains the JavaFX-based graphical user interface.
-    - **`Controller`**: Manages interactions and events in the GUI.
-      - **`Controller.java`**: Centralized controller for the graphical user interface.
-    - **`Model`**: Backend logic for GUI-specific operations.
-      - **`ClassManager.java`**: Handles operations for UML classes in the GUI.
-      - **`FieldManager.java`**: Handles operations for UML fields in the GUI.
-      - **`MethodManager.java`**: Handles operations for UML methods in the GUI.
-      - **`ParameterManager.java`**: Handles operations for UML method parameters in the GUI.
-    - **`View`**: JavaFX components and utilities for the GUI.
-      - **`AlertHelper.java`**: Provides utility methods to display alerts and dialogs.
-      - **`ClassNode.java`**: Represents a visual UML class node in the diagram.
-      - **`DialogUtils.java`**: Utility class for managing dialogs in the GUI.
-      - **`GraphicalInterfaceJavaFX.java`**: Handles main graphical interface operations.
-      - **`MenuGUI.java`**: Manages the menu bar and associated events in the GUI.
-      - **`PositionUtils.java`**: Provides utilities for managing node positioning.
+  - **GraphicalUserInterface**: JavaFX-based GUI components (e.g., `GraphicalInterfaceJavaFX.java`, `ClassNode.java`).
 
-  - **`Main.java`**: Entry point for launching the UML Editor application.
+  - **Main.java**: Application entry point.
 
-- **`src/test/java/codecain`**: Contains unit tests for validating the application's functionality.
-- **`src/main/resources`**: Stores FXML files and other resources for the JavaFX GUI.
+- **`src/test/java/codecain`**: Unit tests.
+
+- **`src/main/resources`**: FXML files and GUI assets.
+
+  
+
+## Future Enhancements
+
+- Improved UI/UX.
+
+- GUI Undo/Redo
+
+  
+
+## Contact
+
+For questions or feedback, contact the maintainers:
+
+- Aaron Williams-Breth, Sergei Uss, Colby Crutcher, Riley Rudolfo, Ben Foster, Aaron Oehler.
+
+---
