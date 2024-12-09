@@ -45,14 +45,14 @@ public class DisplayHelper {
 
             Listing Operations:
             1. list classes                        - Lists all the classes in the project.
-            2. list class 'className'              - (doesn't work) Lists the contents (fields and methods) of the specified class.
-            3. list relationships                  - Lists all the relationships between classes.
-            4. list AllClassInfo                   - Lists all the classes with their fields and methods.
+            2. list relationships                  - Lists all the relationships between classes.
+            3. list details 'className'            - Lists the specified class details (fields, methods, relationships).
+            
 
             Other Commands:
             1. help                                - Shows this help message.
             2. exit                                - Exits the application.
-            3. export                              - Exports the UML diagram to a PNG file. 
+            3. export                              - Exports the UML diagram to a PNG file. Automatically assigns it to PNG format.
 
             Examples:
             - add class Person

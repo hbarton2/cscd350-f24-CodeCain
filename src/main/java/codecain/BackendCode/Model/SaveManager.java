@@ -27,6 +27,7 @@ public class SaveManager {
      * @throws IOException If an I/O error occurs while saving the file.
      */
     public static void saveToJSON(String filePath) throws IOException {
+        validateJSONFile(filePath); //added check to ensure .json file
         Map<String, Object> umlData = new HashMap<>();
         umlData.put("classes", UMLClass.classMap);
         umlData.put("relationships", Relationship.relationshipList);

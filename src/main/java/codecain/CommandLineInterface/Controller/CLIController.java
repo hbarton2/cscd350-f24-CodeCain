@@ -45,6 +45,7 @@ public class CLIController {
             "delete relationship",
             "list relationships",
             "list classes",
+            "export",
             "help"
     );
 

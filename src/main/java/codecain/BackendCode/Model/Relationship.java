@@ -187,8 +187,9 @@ public class Relationship {
 
         for (Relationship r : relationshipList) {
             String[] names = r.getClassNamesAsArray();
+            //!!!
             if (names.length < 2) {
-                System.out.println("There are no classes to print out");
+                continue;
             } else {
                 s.append(names[0]).append(r.type.getArrowString())
                         .append(names[1]).append(" ").append(r.type).append("\n");
@@ -206,6 +207,11 @@ public class Relationship {
     public String[] getClassNamesAsArray() {
         String[] names = new String[2];
         this.classNames.toArray(names);
+        //!!!
+        if (names[0] == null || names[1] == null) {
+            System.out.print("There are no classes to print out");
+            return new String[0];
+        }
         if(!names[0].equals(source)){
             String t = names[0];
             names[0] = names[1];

@@ -1,7 +1,9 @@
 package codecain.BackendCode.Model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The UMLClass class provides static methods to manage UML classes.
@@ -143,4 +145,49 @@ public class UMLClass {
         return classMap.get(className);
     }
 
+    /**
+     * Retrieves detailed information about a specific class and its relationships
+     *
+     * @param className The name of the class to retrieve information for
+     * @return A formatted string containing class details and its relationships
+     */
+    public static String getClassDetails(String className) {
+
+        if (!UMLClass.classMap.containsKey(className)) {
+            return "Class '" + className + "' does not exist in the system.";
+        }
+
+        UMLClassInfo classInfo = UMLClass.classMap.get(className);
+
+        StringBuilder details = new StringBuilder();
+        details.append("Class Name: ").append(classInfo.getClassName()).append("\n");
+        details.append("Fields:\n");
+        for (UMLFieldInfo field : classInfo.getFields()) {
+            details.append("  - ").append(field.toString()).append("\n");
+        }
+        details.append("Methods:\n");
+        for (UMLMethodInfo method : classInfo.getMethods()) {
+            details.append("  - ").append(method.toString()).append("\n");
+        }
+
+        ArrayList<Relationship> relationships = Relationship.relationshipList.stream()
+                .filter(rel -> rel.getClassNames().contains(className))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        details.append("Relationships:\n");
+        if (relationships.isEmpty()) {
+            details.append("  No relationships found.\n");
+        } else {
+            for (Relationship rel : relationships) {
+                String[] classNames = rel.getClassNamesAsArray();
+                String otherClass = classNames[0].equals(className) ? classNames[1] : classNames[0];
+                details.append("  ").append(className)
+                        .append(rel.getType().getArrowString())
+                        .append(otherClass)
+                        .append(" (").append(rel.getType().toString()).append(")\n");
+            }
+        }
+
+        return details.toString();
+    }
 }
