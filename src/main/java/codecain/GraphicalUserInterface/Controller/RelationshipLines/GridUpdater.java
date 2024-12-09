@@ -177,11 +177,6 @@ public class GridUpdater {
 
         lineDrawer.redrawLines(updateRelationshipPaths(0));
 
-
-        if (visualizer != null){
-            visualizer.updateGridVisualizer();
-        }
-        //grid.printGrid();
     }
 
 
