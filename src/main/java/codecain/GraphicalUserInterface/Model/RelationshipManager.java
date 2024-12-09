@@ -10,8 +10,10 @@ import codecain.BackendCode.Model.UMLClass;
 import codecain.GraphicalUserInterface.Controller.Controller;
 import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.View.ClassNode;
+import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
+import codecain.GraphicalUserInterface.Controller.*;
 
 
 public class RelationshipManager {
@@ -108,13 +110,8 @@ public class RelationshipManager {
         ClassNode sourceNode = controller.findClassNode(source);
         ClassNode destNode = controller.findClassNode(destination);
         GridManager.getInstance();
-        //GridManager.drawPath(sourceNode,destNode);
         GridManager.updateRelationshipPaths();
-//        if (arrowManager != null && sourceNode != null && destNode != null) {
-//            arrowManager.addArrow(Relationship.getRelationship(source, destination, type), sourceNode, destNode);
-//        } else {
-//            System.out.println("ArrowManager or ClassNodes are not properly initialized.");
-//        }
+
         } else {
             showErrorDialog("Failed to add relationship.");
         }
@@ -160,21 +157,8 @@ public class RelationshipManager {
             return;
         }
 
-        List<String> relationshipTypes = Arrays.asList("COMPOSITION", "AGGREGATION", "GENERALIZATION", "REALIZATION");
-        ChoiceDialog<String> typeDialog = new ChoiceDialog<>("COMPOSITION", relationshipTypes);
-        typeDialog.setTitle("Relationship Type");
-        typeDialog.setHeaderText("Select the type of relationship");
-        typeDialog.setContentText("Relationship Type:");
-
-        Optional<String> typeResult = typeDialog.showAndWait();
-        if (typeResult.isEmpty()) {
-            showErrorDialog("Relationship type is required.");
-            return;
-        }
-        String relationshipType = typeResult.get();
-        RelationshipType type = RelationshipType.fromString(relationshipType);
-    
-        Relationship rel = Relationship.getRelationship(source, destination, type);
+  
+        Relationship rel = Relationship.getRelationship(source, destination, null);
     
         if (rel == null) {
             showErrorDialog("The specified relationship does not exist.");
@@ -189,6 +173,8 @@ public class RelationshipManager {
     
         if (Relationship.removeRelationship(source, destination)) {
             System.out.println("Relationship removed successfully.");
+            GridManager.updateRelationshipPaths();
+            
         } else {
             showErrorDialog("Failed to remove relationship from backend.");
         }    
