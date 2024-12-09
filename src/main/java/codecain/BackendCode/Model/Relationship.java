@@ -50,7 +50,7 @@ public class Relationship {
      * @param source name of first class to add
      * @param destination name of second class to add
      */
-    private Relationship(String source, String destination, RelationshipType type) {
+    public Relationship(String source, String destination, RelationshipType type) {
         this.classNames = new HashSet<>();
         this.type = type;
         this.classNames.add(source);

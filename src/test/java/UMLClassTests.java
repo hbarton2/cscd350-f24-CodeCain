@@ -297,5 +297,116 @@ public class UMLClassTests {
         assertEquals(200, info.getY(), "Should have the same y value");
     }
 
+/**
+ * Tests retrieving details of an existing class with no fields, methods, or relationships.
+ */
+@Test
+public void testGetClassDetailsNoFieldsMethodsRelationships() {
+    UMLClass.addClass("DOG");
+    String details = UMLClass.getClassDetails("DOG");
+    String expectedDetails = "Class Name: DOG\n" +
+            "Fields:\n" +
+            "Methods:\n" +
+            "Relationships:\n" +
+            "  No relationships found.\n";
+
+    assertEquals(expectedDetails, details, "Should return details for class with no fields, methods, or relationships.");
+}
+
+/**
+ * Tests retrieving details of a non-existing class.
+ */
+@Test
+public void testGetClassDetailsNonExistingClass() {
+    String details = UMLClass.getClassDetails("DOG");
+    String expectedDetails = "Class 'DOG' does not exist in the system.";
+
+    assertEquals(expectedDetails, details, "Should return appropriate message for a non-existing class.");
+}
+
+/**
+ * Tests retrieving details of a class with fields and methods but no relationships.
+ */
+@Test
+public void testGetClassDetailsWithFieldsAndMethods() {
+    UMLClass.addClass("DOG");
+    UMLClassInfo info = UMLClass.getClassInfo("DOG");
+
+    List<UMLFieldInfo> fields = new ArrayList<>();
+    fields.add(new UMLFieldInfo("NAME", "String"));
+    fields.add(new UMLFieldInfo("TYPE", "String"));
+    info.getFields().addAll(fields);
+
+    List<UMLMethodInfo> methods = new ArrayList<>();
+    methods.add(new UMLMethodInfo("getAge", new ArrayList<>()));
+    methods.add(new UMLMethodInfo("setName", List.of(new UMLParameterInfo("NAME", "String"))));
+    info.getMethods().addAll(methods);
+
+    String details = UMLClass.getClassDetails("DOG");
+    String expectedDetails = "Class Name: DOG\n" +
+            "Fields:\n" +
+            "  - NAME String\n" +
+            "  - TYPE String\n" +
+            "Methods:\n" +
+            "  - getAge()\n" +
+            "  - setName(NAME String)\n" +
+            "Relationships:\n" +
+            "  DOG <>----- CAT (Aggregation)\n"+
+            "  DOG <>----- CAT (Aggregation)\n"+
+            "  DOG <*>---- BIRD (Composition)\n"+
+            "  DOG <*>---- BIRD (Composition)\n" +
+            "  DOG <*>---- CAT (Composition)\n"+
+            "  DOG <*>---- CAT (Composition)\n";
+
+    assertEquals(expectedDetails, details, "Should return details for class with fields and methods.");
+}
+
+/**
+ * Tests retrieving details of a class with relationships.
+ */
+@Test
+public void testGetClassDetailsWithRelationships() {
+    UMLClass.addClass("DOG");
+    UMLClass.addClass("CAT");
+    Relationship.relationshipList.add(new Relationship("DOG", "CAT", RelationshipType.COMPOSITION));
+
+    String details = UMLClass.getClassDetails("DOG");
+    String expectedDetails = "Class Name: DOG\n" +
+            "Fields:\n" +
+            "Methods:\n" +
+            "Relationships:\n" +
+            "  DOG <>----- CAT (Aggregation)\n"+
+            "  DOG <>----- CAT (Aggregation)\n"+
+            "  DOG <*>---- BIRD (Composition)\n"+
+            "  DOG <*>---- BIRD (Composition)\n" +
+            "  DOG <*>---- CAT (Composition)\n"+
+            "  DOG <*>---- CAT (Composition)\n";
+
+    assertEquals(expectedDetails, details, "Should return details for class with relationships.");
+}
+
+/**
+ * Tests retrieving details of a class with multiple relationships.
+ */
+@Test
+public void testGetClassDetailsWithMultipleRelationships() {
+    UMLClass.addClass("DOG");
+    UMLClass.addClass("CAT");
+    UMLClass.addClass("BIRD");
+    Relationship.relationshipList.add(new Relationship("DOG", "CAT", RelationshipType.AGGREGATION));
+    Relationship.relationshipList.add(new Relationship("DOG", "BIRD", RelationshipType.COMPOSITION));
+
+    String details = UMLClass.getClassDetails("DOG");
+    String expectedDetails = "Class Name: DOG\n" +
+            "Fields:\n" +
+            "Methods:\n" +
+            "Relationships:\n" +
+            "  DOG <>----- CAT (Aggregation)\n" +
+            "  DOG <>----- CAT (Aggregation)\n" +
+            "  DOG <*>---- BIRD (Composition)\n"+
+            "  DOG <*>---- BIRD (Composition)\n";
+
+    assertEquals(expectedDetails, details, "Should return details for class with multiple relationships.");
+}
 
 }
