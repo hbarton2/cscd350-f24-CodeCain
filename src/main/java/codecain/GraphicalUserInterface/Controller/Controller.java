@@ -7,7 +7,8 @@ import java.util.Optional;
 import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.SaveManager;
 import codecain.BackendCode.Model.UMLClass;
-import codecain.GraphicalUserInterface.Model.ArrowManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
 import codecain.GraphicalUserInterface.Model.ClassManager;
 import codecain.GraphicalUserInterface.Model.ExportImage;
 import codecain.GraphicalUserInterface.Model.FieldManager;
@@ -79,13 +80,6 @@ public class Controller {
     @FXML
     private AnchorPane nodeContainer;
 
-    /**
-     * The manager for graphical arrows representing relationships between UML classes in the GUI.
-     * This is used to add, update, and remove arrows when relationships are created, modified, or deleted.
-     * It ensures that the graphical representation of relationships stays in sync with the data model.
-     */
-    @FXML
-    private ArrowManager arrowManager;
 
 
     /**
@@ -109,8 +103,9 @@ public class Controller {
             }
         });
 
-        arrowManager = new ArrowManager(nodeContainer);
-        RelationshipManager.setArrowManager(arrowManager);
+        //loadGridManager needs to be called when the load button is pressed. The arguments should be the same as below
+        GridManager.getInstance().setGrid(new LineGrid(50.0,2000.0,2000.0, nodeContainer),this);
+        GridManager.setVisualizer();
         RelationshipManager.setController(this);
 
     }
@@ -299,6 +294,11 @@ public class Controller {
             SaveManager.loadFromJSON(file.getAbsolutePath());
             populateGUIFromClassMap();
         }
+
+        GridManager.loadGridManager(new LineGrid(50.0,2000.0,2000.0, nodeContainer),
+                this, nodeContainer);
+
+
     }
 
     /**
@@ -308,7 +308,6 @@ public class Controller {
      */
     public Pane populateGUIFromClassMap() {
         nodeContainer.getChildren().clear();
-        arrowManager.clearArrows();
         UMLClass.classMap.values().forEach(classInfo -> {
             ClassNode classNode = new ClassNode(classInfo);
             if (classInfo.getX() == 0 && classInfo.getY() == 0) {
@@ -328,16 +327,6 @@ public class Controller {
         Relationship.relationshipList.forEach(relationship -> {
             ClassNode sourceNode = findClassNode(relationship.getSource());
             ClassNode destNode = findClassNode(relationship.getDestination());
-    
-            if (sourceNode != null && destNode != null) {
-                arrowManager.addArrow(relationship, sourceNode, destNode);
-                arrowManager.updateArrowPosition(
-                    arrowManager.getArrow(relationship),
-                    sourceNode,
-                    destNode,
-                    relationship.getType()
-                );
-            }
         });
     
         System.out.println("GUI populated from class map.");

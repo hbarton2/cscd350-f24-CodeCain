@@ -8,6 +8,7 @@ import codecain.BackendCode.Model.Relationship;
 import codecain.BackendCode.Model.RelationshipType;
 import codecain.BackendCode.Model.UMLClass;
 import codecain.GraphicalUserInterface.Controller.Controller;
+import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
@@ -15,11 +16,7 @@ import javafx.scene.control.TextInputDialog;
 
 public class RelationshipManager {
 
-    /**
-     * The ArrowManager instance responsible for managing graphical arrows that represent relationships
-     * between UML class nodes in the GUI.
-     */
-    private static ArrowManager arrowManager;
+
 
     /**
      * The Controller instance responsible for managing user interactions and coordinating between 
@@ -27,15 +24,6 @@ public class RelationshipManager {
      */
     private static Controller controller;
 
-
-    /**
-     * Sets the ArrowManager to handle the graphical representation of relationships.
-     *
-     * @param manager the ArrowManager instance to manage arrows.
-     */
-    public static void setArrowManager(ArrowManager manager) {
-    arrowManager = manager;
-    }
 
 
     /**
@@ -105,15 +93,12 @@ public class RelationshipManager {
 
         ClassNode sourceNode = controller.findClassNode(source);
         ClassNode destNode = controller.findClassNode(destination);
+        GridManager.getInstance();
+        GridManager.updateRelationshipPaths();
 
-        if (arrowManager != null && sourceNode != null && destNode != null) {
-            arrowManager.addArrow(Relationship.getRelationship(source, destination, type), sourceNode, destNode);
         } else {
-            System.out.println("ArrowManager or ClassNodes are not properly initialized.");
+            showErrorDialog("Failed to add relationship.");
         }
-    } else {
-        showErrorDialog("Failed to add relationship.");
-    }
     }
 
     
@@ -156,35 +141,18 @@ public class RelationshipManager {
             return;
         }
 
-        List<String> relationshipTypes = Arrays.asList("COMPOSITION", "AGGREGATION", "GENERALIZATION", "REALIZATION");
-        ChoiceDialog<String> typeDialog = new ChoiceDialog<>("COMPOSITION", relationshipTypes);
-        typeDialog.setTitle("Relationship Type");
-        typeDialog.setHeaderText("Select the type of relationship");
-        typeDialog.setContentText("Relationship Type:");
-
-        Optional<String> typeResult = typeDialog.showAndWait();
-        if (typeResult.isEmpty()) {
-            showErrorDialog("Relationship type is required.");
-            return;
-        }
-        String relationshipType = typeResult.get();
-        RelationshipType type = RelationshipType.fromString(relationshipType);
-    
-        Relationship rel = Relationship.getRelationship(source, destination, type);
+  
+        Relationship rel = Relationship.getRelationship(source, destination, null);
     
         if (rel == null) {
             showErrorDialog("The specified relationship does not exist.");
             return;
         }
     
-        if (arrowManager != null) {
-            arrowManager.removeArrow(rel);
-        } else {
-            System.out.println("ArrowManager not initialized.");
-        }
-    
         if (Relationship.removeRelationship(source, destination)) {
             System.out.println("Relationship removed successfully.");
+            GridManager.updateRelationshipPaths();
+            
         } else {
             showErrorDialog("Failed to remove relationship from backend.");
         }    
