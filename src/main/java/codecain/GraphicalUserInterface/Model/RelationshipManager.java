@@ -10,19 +10,12 @@ import codecain.BackendCode.Model.UMLClass;
 import codecain.GraphicalUserInterface.Controller.Controller;
 import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridManager;
 import codecain.GraphicalUserInterface.View.ClassNode;
-import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
-import codecain.GraphicalUserInterface.Controller.*;
 
 
 public class RelationshipManager {
 
-    /**
-     * The ArrowManager instance responsible for managing graphical arrows that represent relationships
-     * between UML class nodes in the GUI.
-     */
-    private static ArrowManager arrowManager;
 
 
     /**
@@ -31,15 +24,6 @@ public class RelationshipManager {
      */
     private static Controller controller;
 
-
-    /**
-     * Sets the ArrowManager to handle the graphical representation of relationships.
-     *
-     * @param manager the ArrowManager instance to manage arrows.
-     */
-    public static void setArrowManager(ArrowManager manager) {
-    arrowManager = manager;
-    }
 
 
     /**
@@ -163,12 +147,6 @@ public class RelationshipManager {
         if (rel == null) {
             showErrorDialog("The specified relationship does not exist.");
             return;
-        }
-    
-        if (arrowManager != null) {
-            arrowManager.removeArrow(rel);
-        } else {
-            System.out.println("ArrowManager not initialized.");
         }
     
         if (Relationship.removeRelationship(source, destination)) {
