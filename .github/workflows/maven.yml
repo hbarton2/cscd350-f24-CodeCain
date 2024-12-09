@@ -37,11 +37,20 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml', '**/pom.lock') }}
         restore-keys: ${{ runner.os }}-maven
         
     - name: Clean and Install with Maven
       run: mvn clean install -B
 
-    - name: Run Tests
-      run: mvn test
+    - name: Run Tests and Generate Coverage Report
+      run: mvn verify
+
+    - name: Display Coverage Summary
+      run: grep -A 3 '<counter type="INSTRUCTION">' target/site/jacoco/jacoco.xml
+
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: target/site/jacoco/
