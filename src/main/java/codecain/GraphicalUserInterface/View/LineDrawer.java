@@ -54,20 +54,20 @@ public class LineDrawer {
         switch (type) {
             case GENERALIZATION:
                 line.setStroke(Color.BLUE);
-                addArrowhead(line, Color.BLUE);
+                //addArrowhead(line, Color.BLUE);
                 break;
             case AGGREGATION:
                 line.setStroke(Color.ORANGE);
-                addDiamond(line, Color.ORANGE);
+                //addDiamond(line, Color.ORANGE);
                 break;
             case COMPOSITION:
                 line.setStroke(Color.PURPLE);
-                addFilledDiamond(line, Color.PURPLE);
+                //addFilledDiamond(line, Color.PURPLE);
                 break;
             case REALIZATION:
                 line.setStroke(Color.RED);
                 line.getStrokeDashArray().addAll(10.0, 10.0); // Dashed for realization
-                addArrowhead(line, Color.RED);
+                //addArrowhead(line, Color.RED);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported relationship type: " + type);
@@ -204,12 +204,25 @@ public class LineDrawer {
         }
     }
 
+//    public void redrawLines(RelationshipPathHolder holder) {
+//        // Remove all Polyline and Polygon nodes (lines and markers)
+//        Iterator<Node> iterator = nodeContainer.getChildren().iterator();
+//        while (iterator.hasNext()) {
+//            Node n = iterator.next();
+//            if (n instanceof Polyline || n instanceof Polygon) {
+//                iterator.remove();
+//            }
+//        }
+//        // Redraw all lines from paths
+//        drawLinesFromPaths(holder);
+//    }
+
     public void redrawLines(RelationshipPathHolder holder) {
         // Remove all Polyline and Polygon nodes (lines and markers)
         Iterator<Node> iterator = nodeContainer.getChildren().iterator();
         while (iterator.hasNext()) {
             Node n = iterator.next();
-            if (n instanceof Polyline || n instanceof Polygon) {
+            if (n instanceof Polyline) {
                 iterator.remove();
             }
         }
