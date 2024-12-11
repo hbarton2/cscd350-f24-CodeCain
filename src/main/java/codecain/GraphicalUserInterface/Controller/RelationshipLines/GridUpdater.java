@@ -192,10 +192,10 @@ public class GridUpdater {
 
         lineDrawer.redrawLines(updateRelationshipPaths(0));
 
-
         if (visualizer != null){
             visualizer.updateGridVisualizer((HashSet<Point2D>) arrowPoints);
         }
+
         //grid.printGrid();
     }
 

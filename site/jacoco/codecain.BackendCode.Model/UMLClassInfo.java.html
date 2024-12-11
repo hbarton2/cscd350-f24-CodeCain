@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UMLClassInfo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.Model</a> &gt; <span class="el_source">UMLClassInfo.java</span></div><h1>UMLClassInfo.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.Model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+
+ * The UMLClassInfo class represents the details of a UML class, including its name, fields, methods, and position.
+ */
+public class UMLClassInfo {
+
+    /**
+     * The name of the UML class.
+     */
+    private String className;
+
+    /**
+     * A list of fields (UMLFieldsInfo) in the UML class.
+     */
+    private List&lt;UMLFieldInfo&gt; fields;
+
+    /**
+     * A list of methods (UMLMethodInfo) in the UML class.
+     */
+    private List&lt;UMLMethodInfo&gt; methods;
+
+    /**
+     * The x-coordinate of the class box position.
+     */
+    private int x;
+
+    /**
+     * The y-coordinate of the class box position.
+     */
+    private int y;
+
+    /**
+     * Default constructor for UMLClassInfo. Required for JSON deserialization.
+     */
+<span class="fc" id="L40">    public UMLClassInfo() {</span>
+<span class="fc" id="L41">        this.fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L42">        this.methods = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * Constructs a UMLClassInfo object with the specified class name.
+     * Initializes empty lists for fields and methods and sets default position.
+     *
+     * @param className the name of the UML class
+     */
+<span class="fc" id="L51">    public UMLClassInfo(String className) {</span>
+<span class="fc" id="L52">        this.className = className;</span>
+<span class="fc" id="L53">        this.fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L54">        this.methods = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L55">        this.x = 0;</span>
+<span class="fc" id="L56">        this.y = 0;</span>
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Gets the name of the UML class.
+     *
+     * @return the name of the class
+     */
+
+    public String getClassName() {
+<span class="fc" id="L66">        return this.className;</span>
+    }
+
+    /**
+     * Sets the name of the UML class.
+     *
+     * @param className the new name of the class
+     */
+    public void setClassName(String className) {
+<span class="fc" id="L75">        this.className = className;</span>
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * Gets the list of fields in the UML class.
+     *
+     * @return a list of UMLFieldsInfo objects representing the fields
+     */
+    public List&lt;UMLFieldInfo&gt; getFields() {
+<span class="fc" id="L84">        return this.fields;</span>
+    }
+
+    /**
+     * Gets the list of methods in the UML class.
+     *
+     * @return a list of UMLMethodInfo objects representing the methods
+     */
+    public List&lt;UMLMethodInfo&gt; getMethods() {
+<span class="fc" id="L93">        return this.methods;</span>
+    }
+
+
+    public int getX() {
+<span class="fc" id="L98">        return x;</span>
+    }
+
+    /**
+     * Sets the x-coordinate of the class box position.
+     *
+     * @param x the x-coordinate
+     */
+    public void setX(int x) {
+<span class="fc" id="L107">        this.x = x;</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * Gets the y-coordinate of the class box position.
+     *
+     * @return the y-coordinate
+     */
+    public int getY() {
+<span class="fc" id="L116">        return y;</span>
+    }
+
+    /**
+     * Sets the y-coordinate of the class box position.
+     *
+     * @param y the y-coordinate
+     */
+    public void setY(int y) {
+<span class="fc" id="L125">        this.y = y;</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Retrieves a method by its name from the list of methods in the UML class.
+     *
+     * @param methodName the name of the method to retrieve
+     * @return the UMLMethodInfo object representing the method if found, or null if not found
+     */
+    public UMLMethodInfo getMethodByName(String methodName) {
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        for (UMLMethodInfo method : methods) {</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">            if (method.getMethodName().equals(methodName)) {</span>
+<span class="fc" id="L137">                return method;</span>
+            }
+<span class="fc" id="L139">        }</span>
+<span class="fc" id="L140">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

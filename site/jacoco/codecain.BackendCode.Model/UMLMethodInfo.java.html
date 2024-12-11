@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UMLMethodInfo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.Model</a> &gt; <span class="el_source">UMLMethodInfo.java</span></div><h1>UMLMethodInfo.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.Model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The UMLMethodInfo class represents a method in a UML class.
+ * It stores the method name and a list of parameters.
+ */
+public class UMLMethodInfo {
+
+    /**
+     * The name of the method.
+     */
+    private String methodName;
+
+    /**
+     * The list of parameters for the method.
+     */
+    private List&lt;UMLParameterInfo&gt; parameters;
+
+
+    /**
+     * Constructs a UMLMethodInfo object with an empty list of parameters.
+     */
+<span class="nc" id="L26">    public UMLMethodInfo() {</span>
+<span class="nc" id="L27">        this.parameters = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L28">    }</span>
+
+
+    /**
+     * Constructs a UMLMethodInfo object with the specified method name and parameters.
+     *
+     * @param methodName the name of the method
+     * @param parameters the list of parameters for the method (can be null)
+     */
+<span class="fc" id="L37">    public UMLMethodInfo(String methodName, List&lt;UMLParameterInfo&gt; parameters) {</span>
+<span class="fc" id="L38">        this.methodName = methodName;</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (parameters != null) {</span>
+<span class="fc" id="L40">            this.parameters = new ArrayList&lt;&gt;(parameters);</span>
+        } else {
+<span class="nc" id="L42">            this.parameters = new ArrayList&lt;&gt;();</span>
+        }
+<span class="fc" id="L44">    }</span>
+
+
+    /**
+     * Gets the name of the method.
+     *
+     * @return the name of the method
+     */
+    public String getMethodName() {
+<span class="fc" id="L53">        return this.methodName;</span>
+    }
+
+    /**
+     * Sets the name of the method.
+     *
+     * @param methodName the new name of the method
+     */
+    public void setMethodName(String methodName) {
+<span class="fc" id="L62">        this.methodName = methodName;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Gets the list of parameters for the method.
+     *
+     * @return the list of parameters
+     */
+    public List&lt;UMLParameterInfo&gt; getParameters() {
+<span class="fc" id="L71">        return this.parameters;</span>
+    }
+
+    /**
+     * Sets the list of parameters for the method.
+     *
+     * @param parameters
+     */
+<span class="fc" id="L79">    public void setParameters(List&lt;UMLParameterInfo&gt; parameters) { this.parameters = parameters; }</span>
+
+    /**
+     * Adds a parameter to the method.
+     *
+     * @param parameter the parameter to be added
+     */
+    public void addParameter(UMLParameterInfo parameter) {
+<span class="fc" id="L87">        this.parameters.add(parameter);</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Removes a parameter from the method.
+     *
+     * @param parameter the parameter to be removed
+     */
+    public void removeParameter(UMLParameterInfo parameter) {
+<span class="fc" id="L96">        this.parameters.remove(parameter);</span>
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Renames an existing parameter by replacing the old name with the new name.
+     *
+     * @param oldParameter the current name of the parameter
+     * @param newParameter the new name for the parameter
+     */
+    public void changeParameter(UMLParameterInfo oldParameter, UMLParameterInfo newParameter) {
+<span class="fc" id="L106">        int index = this.parameters.indexOf(oldParameter);</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (index != -1) {</span>
+<span class="fc" id="L108">            this.parameters.set(index, newParameter);</span>
+        }
+<span class="fc" id="L110">    }</span>
+
+    /**
+     * Returns a string representation of the method with parameters in the format &quot;name(type name, ...)&quot;.
+     *
+     * @return formatted method as &quot;name(type name, ...)&quot;
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L119">        StringBuilder parameterList = new StringBuilder();</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        for (int i = 0; i &lt; parameters.size(); i++) {</span>
+<span class="fc" id="L121">            parameterList.append(parameters.get(i).toString());</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">            if (i &lt; parameters.size() - 1) {</span>
+<span class="nc" id="L123">                parameterList.append(&quot;, &quot;);</span>
+            }
+        }
+<span class="fc" id="L126">        return methodName + &quot;(&quot; + parameterList + &quot;)&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

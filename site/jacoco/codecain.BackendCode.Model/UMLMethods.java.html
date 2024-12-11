@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UMLMethods.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.Model</a> &gt; <span class="el_source">UMLMethods.java</span></div><h1>UMLMethods.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.Model;
+
+import java.util.List;
+
+/**
+ * The UMLMethods class provides functionality to manage methods in a UML class.
+ * This includes adding, removing, renaming methods, and managing their parameters(adding, removing, and renaming).
+ */
+<span class="fc" id="L9">public class UMLMethods {</span>
+
+    /**
+     * Adds a method to a class.
+     *
+     * @param className   The name of the class to which the method is added
+     * @param methodName  The name of the method being added
+     * @param parameters  A list of UMLParameterInfo objects for the method
+     */
+    public void addMethod(String className, String methodName, List&lt;UMLParameterInfo&gt; parameters) {
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        if (isInputInvalid(className, methodName)) return;</span>
+<span class="fc" id="L20">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if (classInfo == null) return;</span>
+
+<span class="fc" id="L23">        UMLMethodInfo existingMethod = classInfo.getMethodByName(methodName);</span>
+<span class="pc bpc" id="L24" title="1 of 4 branches missed.">        if (existingMethod != null &amp;&amp; existingMethod.getParameters().equals(parameters)) {</span>
+<span class="fc" id="L25">            System.out.println(&quot;Action Canceled: Method &quot; + methodName + &quot; with &quot; + parameters + &quot; already exists in class &quot; + className);</span>
+        } else {
+<span class="fc" id="L27">            classInfo.getMethods().add(new UMLMethodInfo(methodName, parameters));</span>
+<span class="fc" id="L28">            System.out.println(&quot;Method &quot; + methodName + &quot; with &quot; + parameters + &quot; added to class &quot; + className);</span>
+        }
+<span class="fc" id="L30">    }</span>
+
+
+    /**
+     * Removes a method from a class.
+     *
+     * @param className  The name of the class
+     * @param methodName The name of the method to remove
+     */
+    public void removeMethod(String className, String methodName) {
+<span class="fc" id="L40">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (classInfo == null) return;</span>
+<span class="fc" id="L42">        UMLMethodInfo method = classInfo.getMethodByName(methodName);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (method == null) {</span>
+<span class="fc" id="L44">            System.out.println(&quot;Action Canceled: Method &quot; + methodName + &quot; does not exist in class &quot; + className);</span>
+        } else {
+<span class="fc" id="L46">            classInfo.getMethods().remove(method);</span>
+<span class="fc" id="L47">            System.out.println(&quot;Method &quot; + methodName + &quot; removed from class &quot; + className);</span>
+        }
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Renames a method in a class.
+     *
+     * @param className     The name of the class containing the method
+     * @param oldMethodName The current name of the method
+     * @param newMethodName The new name for the method
+     */
+    public void renameMethod(String className, String oldMethodName, String newMethodName) {
+<span class="fc" id="L59">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (classInfo == null) return;</span>
+<span class="fc" id="L61">        UMLMethodInfo method = classInfo.getMethodByName(oldMethodName);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (method == null) {</span>
+<span class="fc" id="L63">            System.out.println(&quot;Action Canceled: Method &quot; + oldMethodName + &quot; does not exist in class &quot; + className);</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        } else if (classInfo.getMethodByName(newMethodName) != null) {</span>
+<span class="fc" id="L65">            System.out.println(&quot;Action Canceled: Method &quot; + newMethodName + &quot; already exists in class &quot; + className);</span>
+            // Needs Fixed to work with overloaded methods
+        } else {
+<span class="fc" id="L68">            method.setMethodName(newMethodName);</span>
+<span class="fc" id="L69">            System.out.println(&quot;Method &quot; + oldMethodName + &quot; renamed to &quot; + newMethodName + &quot; in class &quot; + className);</span>
+        }
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Adds a parameter to a method.
+     *
+     * @param className     The name of the class
+     * @param methodName    The name of the method to add a parameter to
+     * @param parameterType The type of the parameter to add
+     * @param parameterName The name of the parameter to add
+     */
+    public void addParameter(String className, String methodName, String parameterType, String parameterName) {
+<span class="fc" id="L82">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (classInfo == null) return;</span>
+<span class="fc" id="L84">        UMLMethodInfo method = classInfo.getMethodByName(methodName);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (method == null) {</span>
+<span class="nc" id="L86">            System.out.println(&quot;Action Canceled: Method &quot; + methodName + &quot; does not exist in class &quot; + className);</span>
+<span class="nc" id="L87">            return;</span>
+        }
+<span class="fc" id="L89">        UMLParameterInfo newParameter = new UMLParameterInfo(parameterType, parameterName);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (!method.getParameters().contains(newParameter)) {</span>
+<span class="fc" id="L91">            method.addParameter(newParameter);</span>
+<span class="fc" id="L92">            System.out.println(&quot;Parameter &quot; + newParameter + &quot; added to method &quot; + methodName + &quot; in class &quot; + className);</span>
+        } else {
+<span class="nc" id="L94">            System.out.println(&quot;Action Canceled: Parameter &quot; + newParameter + &quot; already exists in method &quot; + methodName);</span>
+        }
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Removes a parameter from a method based on the parameter name.
+     *
+     * @param className  The name of the class
+     * @param methodName The name of the method to remove a parameter from
+     * @param parameterName The name of the parameter to remove
+     */
+    public void removeParameter(String className, String methodName, String parameterName) {
+<span class="fc" id="L106">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (classInfo == null) return;</span>
+<span class="fc" id="L108">        UMLMethodInfo method = classInfo.getMethodByName(methodName);</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if (method == null) {</span>
+<span class="nc" id="L110">            System.out.println(&quot;Action Canceled: Method &quot; + methodName + &quot; does not exist in class &quot; + className);</span>
+<span class="nc" id="L111">            return;</span>
+        }
+<span class="fc" id="L113">        UMLParameterInfo parameterToRemove = getParameterByName(method, parameterName);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (parameterToRemove != null) {</span>
+<span class="fc" id="L115">            method.removeParameter(parameterToRemove);</span>
+<span class="fc" id="L116">            System.out.println(&quot;Parameter '&quot; + parameterName + &quot;' removed from method '&quot; + methodName + &quot;' in class '&quot; + className + &quot;'.&quot;);</span>
+        } else {
+<span class="nc" id="L118">            System.out.println(&quot;Action Canceled: Parameter '&quot; + parameterName + &quot;' does not exist in method '&quot; + methodName + &quot;'.&quot;);</span>
+        }
+<span class="fc" id="L120">    }</span>
+
+
+    /**
+     * Changes all parameters of a method by replacing the current list with a new list of parameters.
+     *
+     * @param className   The name of the class
+     * @param methodName  The name of the method to change parameters for
+     * @param newParameters The new list of UMLParameterInfo objects to set as the parameters of the method
+     */
+    public void changeAllParameters(String className, String methodName, List&lt;UMLParameterInfo&gt; newParameters) {
+<span class="fc" id="L131">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (classInfo == null) return;</span>
+<span class="fc" id="L133">        UMLMethodInfo method = getMethodInfo(classInfo, methodName);</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (method == null) return;</span>
+<span class="fc" id="L135">        method.getParameters().clear();</span>
+<span class="fc" id="L136">        newParameters.forEach(param -&gt; addParameter(className, methodName, param.getParameterType(), param.getParameterName()));</span>
+<span class="fc" id="L137">        System.out.println(&quot;All parameters replaced for method &quot; + methodName + &quot; in class &quot; + className);</span>
+<span class="fc" id="L138">    }</span>
+
+    /**
+     * Changes a single parameter in a method, identified by the old parameter name, with a new parameter type and name.
+     *
+     * @param className        The name of the class
+     * @param methodName       The name of the method to change the parameter in
+     * @param oldParameterName The name of the existing parameter to replace
+     * @param newParameterType The type of the new parameter
+     * @param newParameterName The name of the new parameter
+     */
+    public void changeSingleParameter(String className, String methodName, String oldParameterName, String newParameterType, String newParameterName) {
+<span class="fc" id="L150">        UMLClassInfo classInfo = getClassInfo(className);</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (classInfo == null) return;</span>
+<span class="fc" id="L152">        UMLMethodInfo method = classInfo.getMethodByName(methodName);</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (method == null) {</span>
+<span class="nc" id="L154">            System.out.println(&quot;Action Canceled: Method &quot; + methodName + &quot; does not exist in class &quot; + className);</span>
+<span class="nc" id="L155">            return;</span>
+        }
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (renameParameter(method, oldParameterName, newParameterType, newParameterName)) {</span>
+<span class="fc" id="L158">            System.out.println(&quot;Parameter &quot; + oldParameterName + &quot; updated to &quot; + newParameterType + &quot; &quot; + newParameterName + &quot; in method &quot; + methodName + &quot; of class &quot; + className);</span>
+        } else {
+<span class="nc" id="L160">            System.out.println(&quot;Action Canceled: Parameter &quot; + oldParameterName + &quot; does not exist in method &quot; + methodName);</span>
+        }
+<span class="fc" id="L162">    }</span>
+
+    /**
+     * Helper method to update a parameter's name and type within a UMLMethodInfo.
+     *
+     * @param method           The UMLMethodInfo object
+     * @param oldParameterName The current name of the parameter
+     * @param newParameterType The new type for the parameter
+     * @param newParameterName The new name for the parameter
+     * @return true if the parameter was found and updated, false otherwise
+     */
+    private boolean renameParameter(UMLMethodInfo method, String oldParameterName, String newParameterType, String newParameterName) {
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        for (UMLParameterInfo param : method.getParameters()) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            if (param.getParameterName().equals(oldParameterName)) {</span>
+<span class="fc" id="L176">                param.setParameterType(newParameterType);</span>
+<span class="fc" id="L177">                param.setParameterName(newParameterName);</span>
+<span class="fc" id="L178">                return true;</span>
+            }
+<span class="fc" id="L180">        }</span>
+<span class="nc" id="L181">        return false;</span>
+    }
+
+    /**
+     * Helper method to check if className and methodName are not blank.
+     *
+     * @param className  The name of the class
+     * @param methodName The name of the method
+     * @return true if both values are valid, false otherwise
+     */
+    private boolean isInputInvalid(String className, String methodName) {
+<span class="pc bpc" id="L192" title="2 of 4 branches missed.">        if (className == null || className.isBlank()) {</span>
+<span class="nc" id="L193">            System.out.println(&quot;Action Canceled: Input Class Name is Blank&quot;);</span>
+<span class="nc" id="L194">            return true;</span>
+        }
+<span class="pc bpc" id="L196" title="2 of 4 branches missed.">        if (methodName == null || methodName.isBlank()) {</span>
+<span class="nc" id="L197">            System.out.println(&quot;Action Canceled: Input Method Name is Blank&quot;);</span>
+<span class="nc" id="L198">            return true;</span>
+        }
+<span class="fc" id="L200">        return false;</span>
+    }
+
+    /**
+     * Helper method to retrieve UMLClassInfo for a class.
+     * Prints an error message if the class does not exist.
+     *
+     * @param className The name of the class.
+     * @return The UMLClassInfo object if the class exists; null otherwise.
+     */
+    private UMLClassInfo getClassInfo(String className) {
+<span class="fc" id="L211">        UMLClassInfo classInfo = UMLClass.classMap.get(className);</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (classInfo == null) {</span>
+<span class="fc" id="L213">            System.out.println(&quot;Action Canceled: Class &quot; + className + &quot; does not exist&quot;);</span>
+        }
+<span class="fc" id="L215">        return classInfo;</span>
+    }
+
+    /**
+     * Helper method to retrieve a method from a class if it exists.
+     * Prints an error message if the method does not exist.
+     *
+     * @param classInfo  The UMLClassInfo object representing the class.
+     * @param methodName The name of the method.
+     * @return The UMLMethodInfo object if the method exists; null otherwise.
+     */
+    private UMLMethodInfo getMethodInfo(UMLClassInfo classInfo, String methodName) {
+<span class="fc" id="L227">        UMLMethodInfo method = classInfo.getMethodByName(methodName);</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        if (method == null) {</span>
+<span class="nc" id="L229">            System.out.println(&quot;Action Canceled: Method &quot; + methodName + &quot; does not exist in class &quot; + classInfo.getClassName());</span>
+        }
+<span class="fc" id="L231">        return method;</span>
+    }
+
+    /**
+     * Retrieves a parameter by its name from a method.
+     *
+     * @param method the UMLMethodInfo object representing the method
+     * @param parameterName the name of the parameter to find
+     * @return the UMLParameterInfo object representing the parameter, or null if not found
+     */
+    private UMLParameterInfo getParameterByName(UMLMethodInfo method, String parameterName) {
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">        for (UMLParameterInfo parameter : method.getParameters()) {</span>
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">            if (parameter.getParameterName().equals(parameterName)) {</span>
+<span class="fc" id="L244">                return parameter;</span>
+            }
+<span class="nc" id="L246">        }</span>
+<span class="nc" id="L247">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Relationship.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.Model</a> &gt; <span class="el_source">Relationship.java</span></div><h1>Relationship.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.Model;
+import codecain.BackendCode.Model.RelationshipType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Relationship {
+    /**
+     * the type of relationship
+     */
+    private RelationshipType type;
+
+    /**
+     * Set with 2 class names that will be in the relationship
+     */
+    private Collection&lt;String&gt; classNames;  // Removed final for deserialization
+
+    /**
+     * this is a string that is the name of the source class.
+     * Source as in 'source to destination' - where the relationship arrow points to.
+     */
+    private String source;
+
+
+    private String destination;
+
+    /**
+     * ArrayList for every single relationship created.
+     * This is a static list, so every relationship created only exists in this list
+     */
+<span class="fc" id="L34">    public static ArrayList&lt;Relationship&gt; relationshipList = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Default constructor needed for Jackson deserialization
+     */
+<span class="fc" id="L39">    public Relationship() {</span>
+<span class="fc" id="L40">        this.classNames = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L41">        this.source = &quot;&quot;;</span>
+<span class="fc" id="L42">        this.destination = &quot;&quot;;</span>
+<span class="fc" id="L43">        this.type = null;</span>
+<span class="fc" id="L44">    }</span>
+
+
+    /**
+     * Constructor for relationship class. This is private
+     * and is only used by the addRelationship method
+     * @param source name of first class to add
+     * @param destination name of second class to add
+     */
+<span class="fc" id="L53">    public Relationship(String source, String destination, RelationshipType type) {</span>
+<span class="fc" id="L54">        this.classNames = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L55">        this.type = type;</span>
+<span class="fc" id="L56">        this.classNames.add(source);</span>
+<span class="fc" id="L57">        this.classNames.add(destination);</span>
+<span class="fc" id="L58">        this.source = source;</span>
+<span class="fc" id="L59">        this.destination = destination;</span>
+<span class="fc" id="L60">        relationshipList.add(this);</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * getter for the destination string
+     * @return String
+     */
+    public String getDestination(){
+<span class="fc" id="L68">        return this.destination;</span>
+    }
+
+    // Getter for Jackson serialization/deserialization
+    public Collection&lt;String&gt; getClassNames() {
+<span class="fc" id="L73">        return classNames;</span>
+    }
+
+    // Setter for Jackson deserialization
+    public void setClassNames(Collection&lt;String&gt; classNames) {
+<span class="fc" id="L78">        this.classNames = new HashSet&lt;&gt;(classNames);  // Ensure it's a HashSet</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Deletes all relationships that contain the specified class
+     */
+    public static void removeAttachedRelationships(String className) {
+<span class="fc" id="L85">        relationshipList.removeIf(r -&gt; r.classNames.contains(className));</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Checks if the relationship already exists with the specified class
+     * @param class1 class to look for
+     * @return true if there is a relationship with that class
+     */
+    public static boolean relationshipHasClass(String class1) {
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for (Relationship r : relationshipList) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (r.classNames.contains(class1)) {</span>
+<span class="fc" id="L96">                return true;</span>
+            }
+<span class="fc" id="L98">        }</span>
+<span class="fc" id="L99">        return false;</span>
+    }
+
+    /**
+     * Checks if the relationship already exists between two classes
+     * @param class1 first class
+     * @param class2 second class
+     * @return true if the relationship exists
+     */
+    public static boolean relationshipExists(String class1, String class2) {
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        for (Relationship r : relationshipList) {</span>
+<span class="fc bfc" id="L110" title="All 4 branches covered.">            if (r.classNames.contains(class1) &amp;&amp; r.classNames.contains(class2)) {</span>
+<span class="fc" id="L111">                return true;</span>
+            }
+<span class="fc" id="L113">        }</span>
+<span class="fc" id="L114">        return false;</span>
+    }
+
+
+    /**
+     * Checks if the relationship already exists between two classes that has the specified type
+     * @param class1 first class
+     * @param class2 second class
+     * @return true if the relationship exists
+     */
+    public static boolean relationshipExists(String class1, String class2, RelationshipType type){
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        for (Relationship r : relationshipList) {</span>
+<span class="pc bpc" id="L126" title="1 of 6 branches missed.">            if (r.classNames.contains(class1) &amp;&amp; r.classNames.contains(class2) &amp;&amp; r.type.equals(type)) {</span>
+<span class="fc" id="L127">                return true;</span>
+            }
+<span class="fc" id="L129">        }</span>
+<span class="fc" id="L130">        return false;</span>
+    }
+
+
+    /**
+     * Adds a relationship to the relationship map
+     *
+     * @param class1 the first class to add
+     * @param class2 the second class to add
+     * @return true if the input is valid, false if the input is invalid.
+     */
+    public static boolean addRelationship(String class1, String class2, RelationshipType type) {
+
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (relationshipExists(class1, class2)) {</span>
+<span class="fc" id="L144">            System.out.println(&quot;Relationship already exists&quot;);</span>
+<span class="fc" id="L145">            return false;</span>
+        }
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (!UMLClass.classMap.containsKey(class1)) {</span>
+<span class="fc" id="L148">            System.out.println(class1 + &quot; is not an existing class&quot;);</span>
+<span class="fc" id="L149">            return false;</span>
+        }
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (!UMLClass.classMap.containsKey(class2)) {</span>
+<span class="fc" id="L152">            System.out.println(class2 + &quot; is not an existing class&quot;);</span>
+<span class="fc" id="L153">            return false;</span>
+        }
+
+<span class="fc" id="L156">        Relationship newRelationship = new Relationship(class1, class2, type);</span>
+<span class="fc" id="L157">        System.out.println(&quot;Relationship between &quot; + class1 + &quot; and &quot; + class2 + &quot; added&quot;);</span>
+<span class="fc" id="L158">        return true;</span>
+    }
+
+    /**
+     * Removes a relationship from the relationship list
+     * @param class1 the first class to add
+     * @param class2 the second class to add
+     * @return true if the relationship is removed, otherwise it returns false;
+     */
+    public static boolean removeRelationship(String class1, String class2) {
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        for (Relationship r : relationshipList) {</span>
+<span class="pc bpc" id="L169" title="2 of 4 branches missed.">            if (r.classNames.contains(class1) &amp;&amp; r.classNames.contains(class2)) {</span>
+<span class="fc" id="L170">                relationshipList.remove(r);</span>
+<span class="fc" id="L171">                System.out.println(&quot;Relationship between &quot; + class1 + &quot; and &quot; + class2 + &quot; removed&quot;);</span>
+<span class="fc" id="L172">                return true;</span>
+            }
+<span class="nc" id="L174">        }</span>
+<span class="fc" id="L175">        System.out.println(&quot;Relationship not found&quot;);</span>
+<span class="fc" id="L176">        return false;</span>
+    }
+
+    /**
+     * Converts the list of relationships into a string representation
+     * @return String - the list of relationships
+     */
+    public static String listToString() {
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (relationshipList.isEmpty()) return &quot;&quot;;</span>
+
+<span class="fc" id="L186">        StringBuilder s = new StringBuilder();</span>
+
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        for (Relationship r : relationshipList) {</span>
+<span class="fc" id="L189">            String[] names = r.getClassNamesAsArray();</span>
+            //!!!
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">            if (names.length &lt; 2) {</span>
+<span class="nc" id="L192">                continue;</span>
+            } else {
+<span class="fc" id="L194">                s.append(names[0]).append(r.type.getArrowString())</span>
+<span class="fc" id="L195">                        .append(names[1]).append(&quot; &quot;).append(r.type).append(&quot;\n&quot;);</span>
+            }
+<span class="fc" id="L197">        }</span>
+<span class="fc" id="L198">        return s.toString();</span>
+    }
+
+    /**
+     * Helper method to get the names of the classes in the relationship in an array
+     * this method puts the source string in the first address in the array
+     * so that when you print the relationship list, the strings are in order.
+     * @return String[]
+     */
+    public String[] getClassNamesAsArray() {
+<span class="fc" id="L208">        String[] names = new String[2];</span>
+<span class="fc" id="L209">        this.classNames.toArray(names);</span>
+        //!!!
+<span class="pc bpc" id="L211" title="1 of 4 branches missed.">        if (names[0] == null || names[1] == null) {</span>
+<span class="fc" id="L212">            System.out.print(&quot;There are no classes to print out&quot;);</span>
+<span class="fc" id="L213">            return new String[0];</span>
+        }
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if(!names[0].equals(source)){</span>
+<span class="fc" id="L216">            String t = names[0];</span>
+<span class="fc" id="L217">            names[0] = names[1];</span>
+<span class="fc" id="L218">            names[1] = t;</span>
+        }
+
+<span class="fc" id="L221">        return names;</span>
+    }
+
+    /**
+     * setter for the source of the relationship
+     * @return String - the key for the relationship name
+     */
+    public String getSource(){
+<span class="fc" id="L229">        return this.source;</span>
+    }
+
+
+    /**
+     * getter for the source of the relationship
+     * @param source the first class that the relationship goes from
+     */
+    public void setSource(String source){
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (!this.classNames.contains(source)){</span>
+<span class="nc" id="L239">            throw new IllegalArgumentException(&quot;Class must be inside the relationship&quot;);</span>
+        }
+<span class="fc" id="L241">        this.source = source;</span>
+<span class="fc" id="L242">    }</span>
+
+    /**
+     * Getter for relationship type
+     * @return - the type of the relationship
+     */
+    public RelationshipType getType(){
+<span class="fc" id="L249">        return this.type;</span>
+    }
+
+    /**
+     * setter for the type
+     * @param type the type as an enum
+     */
+    public void setType(RelationshipType type){
+<span class="fc" id="L257">        this.type = type;</span>
+<span class="fc" id="L258">    }</span>
+
+    /**
+     * finds the relationship with the specified type and returns it
+     * as an object
+     * @param class1 the name of the first class
+     * @param class2 the name of the second class
+     * @param type the relationship type
+     * @return the relationship with specified classes and type
+     * @throws IllegalArgumentException if the class doesn't exist
+     */
+    public static Relationship getRelationship(String class1, String class2, RelationshipType type){
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        for (Relationship r : relationshipList){</span>
+<span class="pc bpc" id="L271" title="2 of 4 branches missed.">            if (/*r.type.equals(type) &amp;&amp;*/ r.classNames.contains(class1) &amp;&amp; r.classNames.contains(class2)){</span>
+<span class="fc" id="L272">                return r;</span>
+            }
+<span class="nc" id="L274">        }</span>
+<span class="nc" id="L275">        throw new IllegalArgumentException(&quot;this class does not exist&quot;);</span>
+    }
+
+
+    public ArrayList&lt;Relationship&gt; getAttachedRelationships(String className){
+<span class="fc" id="L280">        ArrayList&lt;Relationship&gt; relationships = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        for (Relationship r : relationshipList){</span>
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">            if (r.getClassNames().contains(className)){</span>
+<span class="fc" id="L283">                relationships.add(r);</span>
+            }
+<span class="fc" id="L285">        }</span>
+<span class="fc" id="L286">        return relationships;</span>
+    }
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

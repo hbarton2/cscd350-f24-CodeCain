@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RelationshipType.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.Model</a> &gt; <span class="el_source">RelationshipType.java</span></div><h1>RelationshipType.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.Model;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+
+<span class="fc" id="L8">@JsonFormat(shape = JsonFormat.Shape.OBJECT)</span>
+public enum RelationshipType {
+<span class="fc" id="L10">    AGGREGATION,</span>
+<span class="fc" id="L11">    COMPOSITION,</span>
+<span class="fc" id="L12">    GENERALIZATION,</span>
+<span class="fc" id="L13">    REALIZATION;</span>
+
+    /**
+     * returns the string name of the relationship type
+     * @return String - the name of the relationship type
+     */
+    public String toString(){
+<span class="pc bpc" id="L20" title="1 of 5 branches missed.">        switch (this){</span>
+            case GENERALIZATION -&gt; {
+<span class="fc" id="L22">                return &quot;Generalization&quot;;</span>
+            }
+            case REALIZATION -&gt; {
+<span class="fc" id="L25">                return &quot;Realization&quot;;</span>
+            }
+            case COMPOSITION -&gt; {
+<span class="fc" id="L28">                return &quot;Composition&quot;;</span>
+            }
+            case AGGREGATION -&gt; {
+<span class="fc" id="L31">                return &quot;Aggregation&quot;;</span>
+            }
+        }
+<span class="nc" id="L34">        return null;</span>
+    }
+
+    public static RelationshipType fromString(String type){
+<span class="fc bfc" id="L38" title="All 4 branches covered.">        if (type == null || type.trim().isEmpty()){</span>
+<span class="fc" id="L39">            System.err.println(&quot;Input cannot be null or empty.&quot;);</span>
+<span class="fc" id="L40">            return null;</span>
+        }
+<span class="fc bfc" id="L42" title="All 5 branches covered.">        switch (type.toLowerCase().trim()){</span>
+            case &quot;generalization&quot;  -&gt; {
+<span class="fc" id="L44">                return GENERALIZATION;</span>
+            }
+            case &quot;realization&quot; -&gt; {
+<span class="fc" id="L47">                return REALIZATION ;</span>
+            }
+            case &quot;composition&quot; -&gt; {
+<span class="fc" id="L50">                return COMPOSITION;</span>
+            }
+            case &quot;aggregation&quot; -&gt; {
+<span class="fc" id="L53">                return AGGREGATION;</span>
+            }
+        }
+<span class="fc" id="L56">        System.err.println(&quot;Invalid relationship type: &quot; + type);</span>
+<span class="fc" id="L57">        return null;</span>
+    }
+
+    public static boolean typeExists(String typeName){
+<span class="fc bfc" id="L61" title="All 4 branches covered.">        if (typeName == null || typeName.trim().isEmpty()){</span>
+<span class="fc" id="L62">            return false;</span>
+        }
+<span class="fc" id="L64">        typeName = typeName.trim().toLowerCase();</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        return typeName.equals(&quot;composition&quot;)</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">                || typeName.equals(&quot;aggregation&quot;)</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">                || typeName.equals(&quot;realization&quot;)</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                || typeName.equals(&quot;generalization&quot;);</span>
+    }
+
+    /**
+     * @return - returns an ascii representation of an arrow associated with the relationship
+     * if the relationship type does not exist, it returns null
+     *
+     */
+    public String getArrowString(){
+<span class="pc bpc" id="L77" title="1 of 5 branches missed.">        switch (this){</span>
+            case GENERALIZATION -&gt; {
+<span class="fc" id="L79">                return &quot; -----|&gt; &quot;;</span>
+            }
+            case REALIZATION -&gt; {
+<span class="fc" id="L82">                return &quot; - - -|&gt; &quot;;</span>
+            }
+            case COMPOSITION -&gt; {
+<span class="fc" id="L85">                return &quot; &lt;*&gt;---- &quot;;</span>
+            }
+            case AGGREGATION -&gt; {
+<span class="fc" id="L88">                return &quot; &lt;&gt;----- &quot;;</span>
+            }
+        }
+<span class="nc" id="L91">        return null;</span>
+    }
+
+    /**
+     * constructor needed for save/load
+     * @param node json node
+     * @return the relationship value of the name of the node
+     */
+    @JsonCreator
+    public static RelationshipType fromNode(JsonNode node) {
+<span class="pc bpc" id="L101" title="1 of 4 branches missed.">        if (node == null || !node.has(&quot;name&quot;)) {</span>
+<span class="fc" id="L102">            throw new IllegalArgumentException(&quot;Invalid input: JSON node must have a 'name' property.&quot;);</span>
+        }
+<span class="fc" id="L104">        String name = node.get(&quot;name&quot;).asText().toUpperCase();</span>
+        try {
+<span class="fc" id="L106">            return RelationshipType.valueOf(name);</span>
+<span class="fc" id="L107">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L108">            throw new IllegalArgumentException(&quot;Invalid relationship type: &quot; + name, e);</span>
+        }
+    }
+
+    /**
+     * needed for serialization in jackson
+     * @return the full name of the enum value
+     */
+    @JsonProperty
+    public String getName(){
+<span class="fc" id="L118">        return name();</span>
+    }
+
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

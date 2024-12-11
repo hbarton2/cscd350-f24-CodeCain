@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Caretaker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">UMLeditor</a> &gt; <a href="index.source.html" class="el_package">codecain.BackendCode.UndoRedo</a> &gt; <span class="el_source">Caretaker.java</span></div><h1>Caretaker.java</h1><pre class="source lang-java linenums">package codecain.BackendCode.UndoRedo;
+
+import codecain.BackendCode.Model.Relationship;
+import codecain.BackendCode.Model.UMLClass;
+import codecain.BackendCode.Model.UMLClassInfo;
+
+import java.util.*;
+
+/**
+ * The Caretaker class is responsible for managing the undo and redo functionality.
+ * It maintains two stacks: one for undo operations and another for redo operations.
+ * Each stack stores Memento objects that represent the state of the UML diagram
+ * at a given point in time.
+ */
+<span class="fc" id="L15">public class Caretaker {</span>
+<span class="fc" id="L16">    private final Stack&lt;Memento&gt; undoStack = new Stack&lt;&gt;();</span>
+<span class="fc" id="L17">    private final Stack&lt;Memento&gt; redoStack = new Stack&lt;&gt;();</span>
+
+    /**
+     * Saves the current state of the UML diagram to the undo stack.
+     * Clears the redo stack to ensure that redo operations are only
+     * available after an undo operation.
+     *
+     * @param classMap        The current mapping of class names to UMLClassInfo objects.
+     * @param relationshipList The current list of relationships between UML classes.
+     */
+    public void saveState(Map&lt;String, UMLClassInfo&gt; classMap, List&lt;Relationship&gt; relationshipList) {
+<span class="pc bpc" id="L28" title="2 of 4 branches missed.">        if (classMap == null || relationshipList == null) {</span>
+<span class="nc" id="L29">            throw new IllegalArgumentException(&quot;classMap and relationshipList cannot be null&quot;);</span>
+        }
+<span class="fc" id="L31">        undoStack.push(new Memento(new HashMap&lt;&gt;(classMap), new ArrayList&lt;&gt;(relationshipList))); // Deep copy</span>
+<span class="fc" id="L32">        redoStack.clear();</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Performs an undo operation by restoring the last saved state.
+     * Moves the current state to the redo stack for potential redo operations.
+     *
+     * @return The Memento representing the last saved state, or null if undo is not possible.
+     */
+    public Memento undo() {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (!undoStack.isEmpty()) {</span>
+<span class="fc" id="L43">            Memento state = undoStack.pop();</span>
+<span class="fc" id="L44">            redoStack.push(new Memento(UMLClass.classMap, Relationship.relationshipList));</span>
+
+
+<span class="fc" id="L47">            return state;</span>
+        }
+<span class="fc" id="L49">        return null;</span>
+    }
+
+    /**
+     * Performs a redo operation by restoring the last undone state.
+     * Moves the current state to the undo stack for potential further undo operations.
+     *
+     * @return The Memento representing the last undone state, or null if redo is not possible.
+     */
+    public Memento redo() {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (!redoStack.isEmpty()) {</span>
+<span class="fc" id="L60">            Memento state = redoStack.pop();</span>
+<span class="fc" id="L61">            undoStack.push(new Memento(UMLClass.classMap, Relationship.relationshipList));</span>
+
+
+<span class="fc" id="L64">            return state;</span>
+        }
+<span class="fc" id="L66">        return null;</span>
+    }
+
+    /**
+     * Gets the size of the undo stack.
+     *
+     * @return The number of states currently stored in the undo stack.
+     */
+    public int undoStackSize() {
+<span class="fc" id="L75">        return undoStack.size();</span>
+    }
+
+    /**
+     * Gets the size of the redo stack.
+     *
+     * @return The number of states currently stored in the redo stack.
+     */
+    public int redoStackSize() {
+<span class="fc" id="L84">        return redoStack.size();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -105,7 +105,9 @@ public class Controller {
 
         //loadGridManager needs to be called when the load button is pressed. The arguments should be the same as below
         GridManager.getInstance().setGrid(new LineGrid(50.0,6000.0,6000.0, nodeContainer),this);
+
         //GridManager.setVisualizer();
+
         RelationshipManager.setController(this);
 
     }

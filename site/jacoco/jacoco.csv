@@ -1,0 +1,16 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+UMLeditor,codecain.BackendCode.UndoRedo,Memento,0,21,0,0,0,6,0,3,0,3
+UMLeditor,codecain.BackendCode.UndoRedo,Caretaker,5,88,2,6,1,19,2,8,0,6
+UMLeditor,codecain.BackendCode.UndoRedo,StateManager,0,52,0,4,0,16,0,6,0,4
+UMLeditor,codecain.BackendCode.Model,RelationshipType,4,147,3,32,2,39,3,26,0,7
+UMLeditor,codecain.BackendCode.Model,UMLMethods,62,326,22,38,17,80,22,22,0,14
+UMLeditor,codecain.BackendCode.Model,UMLFields,24,203,13,33,9,50,13,18,0,8
+UMLeditor,codecain.BackendCode.Model,UMLClass,6,362,2,42,1,79,3,29,1,9
+UMLeditor,codecain.BackendCode.Model,UMLClassInfo,0,83,0,4,0,27,0,13,0,11
+UMLeditor,codecain.BackendCode.Model,Relationship,15,392,11,43,5,91,11,37,0,21
+UMLeditor,codecain.BackendCode.Model,SaveManager.new TypeReference() {...},0,3,0,0,0,1,0,1,0,1
+UMLeditor,codecain.BackendCode.Model,UMLMethodInfo,17,91,3,5,5,23,4,10,1,9
+UMLeditor,codecain.BackendCode.Model,SaveManager.new TypeReference() {...},0,3,0,0,0,1,0,1,0,1
+UMLeditor,codecain.BackendCode.Model,UMLFieldInfo,3,29,0,0,2,11,1,6,1,6
+UMLeditor,codecain.BackendCode.Model,SaveManager,3,115,0,2,1,29,1,6,1,5
+UMLeditor,codecain.BackendCode.Model,UMLParameterInfo,19,60,3,7,2,15,5,9,2,7

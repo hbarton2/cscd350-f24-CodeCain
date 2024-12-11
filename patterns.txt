@@ -42,8 +42,12 @@ StateManager.java: Acts as the originator, capturing its current state into meme
 
 Pattern 10: MVC
 All files
-Justification: It is the format of the 
+Justification: It is the files in the CommandLineInterface and the GraphicalUserInterface.
 
 Pattern 11: Factory
 ClassNode.java: Lines 278-295, 303-322
 Justification: It is the proper extension for custom behavior in ListView class from JavaFX
+
+Pattern 12: Facade
+UMLMethods.java: Lines 18-28, 58-69, 81-94
+Justification: It provides simplified interface for managing the methods and parameters without exposing the complexities of UMLClassInfo or UMLMethodInfo.
