@@ -1,6 +1,7 @@
 package codecain.GraphicalUserInterface.View;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import codecain.BackendCode.Model.Relationship;
@@ -9,6 +10,7 @@ import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridCell;
 import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridPath;
 import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
 import codecain.GraphicalUserInterface.Controller.RelationshipLines.RelationshipPathHolder;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -16,6 +18,17 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polyline;
 
 public class LineDrawer {
+
+    private class pointHolder{
+        Point2D start;
+        Point2D goal;
+
+        pointHolder(Point2D start, Point2D end){
+            this.goal = end;
+            this.start = start;
+        }
+
+    }
 
     private Pane nodeContainer;
     private ArrayList<Polyline> lines;
@@ -38,7 +51,7 @@ public class LineDrawer {
      * @param path the path to draw
      * @param type the relationship type
      */
-    public Polyline drawLineFromPath(GridPath path, RelationshipType type) {
+    public Polyline drawLineFromPath(GridPath path, RelationshipType type, ClassNode goalNode) {
         if (path == null || path.getCells() == null) {
             throw new IllegalArgumentException("path or its cells cannot be null");
         }
@@ -54,20 +67,20 @@ public class LineDrawer {
         switch (type) {
             case GENERALIZATION:
                 line.setStroke(Color.BLUE);
-                //addArrowhead(line, Color.BLUE);
+                addArrowhead(findArrowGoalPoint(path,type,goalNode), Color.BLUE);
                 break;
             case AGGREGATION:
                 line.setStroke(Color.ORANGE);
-                //addDiamond(line, Color.ORANGE);
+                addDiamond(findArrowGoalPoint(path,type,goalNode), Color.ORANGE);
                 break;
             case COMPOSITION:
                 line.setStroke(Color.PURPLE);
-                //addFilledDiamond(line, Color.PURPLE);
+                addFilledDiamond(findArrowGoalPoint(path,type,goalNode), Color.PURPLE);
                 break;
             case REALIZATION:
                 line.setStroke(Color.RED);
                 line.getStrokeDashArray().addAll(10.0, 10.0); // Dashed for realization
-                //addArrowhead(line, Color.RED);
+                addArrowhead(findArrowGoalPoint(path,type,goalNode), Color.RED);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported relationship type: " + type);
@@ -78,15 +91,14 @@ public class LineDrawer {
         return line;
     }
 
-    private void addArrowhead(Polyline line, Color color) {
-        double[] points = getLastSegment(line);
-        double startX = points[0];
-        double startY = points[1];
-        double endX = points[2];
-        double endY = points[3];
+    private void addArrowhead(pointHolder points, Color color) {
+        double startX = points.start.getX();
+        double startY = points.start.getY();
+        double endX = points.goal.getX();
+        double endY = points.goal.getY();
 
         // Calculate arrowhead points
-        double angle = Math.atan2(endY - startY, endX - startX) - Math.PI / 2;
+        double angle = Math.atan2(endY - startY, endX - startX) - Math.PI;
         double arrowLength = 15;
         double arrowWidth = 7;
 
@@ -100,16 +112,18 @@ public class LineDrawer {
         nodeContainer.getChildren().add(arrowhead);
     }
 
-    private void addDiamond(Polyline line, Color color) {
-        double[] points = getLastSegment(line);
-        double startX = points[0];
-        double startY = points[1];
-        double endX = points[2];
-        double endY = points[3];
+
+
+    private void addDiamond(pointHolder points, Color color) {
+
+        double startX = points.start.getX();
+        double startY = points.start.getY();
+        double endX = points.goal.getX();
+        double endY = points.goal.getY();
 
         // Calculate the midpoint of the line
-        double midX = (startX + endX) / 2;
-        double midY = (startY + endY) / 2;
+        double midX = endX;
+        double midY = endY;
 
         // Calculate the vector for the direction of the line
         double dx = endX - startX;
@@ -130,6 +144,62 @@ public class LineDrawer {
 
         // Calculate diamond points
         double tipX = midX + unitX * diamondHeight;
+
+        double tipY = midY + unitY * diamondHeight;
+
+        double leftX = midX + perpX * diamondWidth;
+        double leftY = midY + perpY * diamondWidth;
+
+        double rightX = midX - perpX * diamondWidth;
+        double rightY = midY - perpY * diamondWidth;
+
+        double baseX = midX - unitX * diamondHeight;
+        double baseY = midY - unitY * diamondHeight;
+
+        // Create the diamond as a filled polygon
+        Polygon diamond = new Polygon(
+                tipX, tipY,
+                leftX, leftY,
+                baseX, baseY,
+                rightX, rightY);
+        diamond.setStrokeWidth(3.0);
+        diamond.setStroke(color);
+        diamond.setFill(Color.WHITE);
+        nodeContainer.getChildren().add(diamond);
+    }
+
+
+    private void addFilledDiamond(pointHolder points, Color color) {
+
+        double startX = points.start.getX();
+        double startY = points.start.getY();
+        double endX = points.goal.getX();
+        double endY = points.goal.getY();
+
+        // Calculate the midpoint of the line
+        double midX = endX;
+        double midY = endY;
+
+        // Calculate the vector for the direction of the line
+        double dx = endX - startX;
+        double dy = endY - startY;
+
+        // Normalize the direction vector
+        double length = Math.sqrt(dx * dx + dy * dy);
+        double unitX = dx / length;
+        double unitY = dy / length;
+
+        // Perpendicular vector for the diamond shape
+        double perpX = -unitY;
+        double perpY = unitX;
+
+        // Dimensions of the diamond
+        double diamondWidth = 10;
+        double diamondHeight = 15;
+
+        // Calculate diamond points
+        double tipX = midX + unitX * diamondHeight;
+
         double tipY = midY + unitY * diamondHeight;
 
         double leftX = midX + perpX * diamondWidth;
@@ -151,19 +221,14 @@ public class LineDrawer {
         nodeContainer.getChildren().add(diamond);
     }
 
-    private void addFilledDiamond(Polyline line, Color color) {
-        double[] points = getLastSegment(line);
-        double startX = points[0];
-        double startY = points[1];
-        double endX = points[2];
-        double endY = points[3];
 
-        // Calculate diamond points
-        double midX = (startX + endX) / 2;
-        double midY = (startY + endY) / 2;
+    private void addFilledDiamond(Point2D position, Color color) {
+        double midX = position.getX();
+        double midY = position.getY();
         double diamondWidth = 10;
         double diamondHeight = 10;
 
+        // Calculate diamond points relative to the input position
         double x1 = midX + diamondWidth;
         double y1 = midY;
         double x2 = midX;
@@ -173,8 +238,11 @@ public class LineDrawer {
         double x4 = midX;
         double y4 = midY + diamondHeight;
 
+        // Create and style the diamond
         Polygon diamond = new Polygon(midX, midY, x1, y1, x2, y2, x3, y3, x4, y4);
-        diamond.setFill(color); // Filled diamond
+        diamond.setFill(color); // Set the fill color of the diamond
+
+        // Add the diamond to the container
         nodeContainer.getChildren().add(diamond);
     }
 
@@ -200,7 +268,7 @@ public class LineDrawer {
     private void drawLinesFromPaths(RelationshipPathHolder holder) {
         for (Relationship r : Relationship.relationshipList) {
             RelationshipType type = r.getType();
-            drawLineFromPath(holder.getPath(r), type).toBack();
+            drawLineFromPath(holder.getPath(r), type, holder.getDestinationClassNode(r)).toBack();
         }
     }
 
@@ -222,7 +290,7 @@ public class LineDrawer {
         Iterator<Node> iterator = nodeContainer.getChildren().iterator();
         while (iterator.hasNext()) {
             Node n = iterator.next();
-            if (n instanceof Polyline) {
+            if (n instanceof Polyline || n instanceof Polygon) {
                 iterator.remove();
             }
         }
@@ -236,5 +304,63 @@ public class LineDrawer {
     public void clearLines() {
         lines.clear();
     }
+
+
+    public pointHolder findArrowGoalPoint(GridPath path, RelationshipType type, ClassNode node){
+        //ClassNode node = pathHolder.getDestinationClassNode(r);
+        if (path.getCells().isEmpty()){
+            return new pointHolder(new Point2D(0.0,0.0) , new Point2D(0.0,0.0));
+        }
+        double xLowerBound = node.getLayoutX();
+        double xUpperBoumd = xLowerBound + node.getWidth();
+        double yLowerBound = node.getLayoutY() + node.getHeight();
+        double yUpperBound = node.getLayoutY();
+        double x = 10.0;
+        double y = 10.0;
+
+        int direction = 0;
+        GridCell destinationCell1 = path.getCells().getLast();
+        GridCell destinationCell2 = path.getCells().get(path.size() - 2);
+
+        double colX1 = destinationCell1.getCol() * grid.getCellWidth();
+        double colX2 = destinationCell2.getCol() * grid.getCellWidth();
+        double rowY1 = destinationCell1.getRow() * grid.getCellWidth();
+        double rowY2 = destinationCell2.getRow() * grid.getCellWidth();
+
+        Point2D start = new Point2D(colX2,rowY2);
+
+        //if upper bound y is in between the two cells
+        if (destinationCell1.getCol() == destinationCell2.getCol()){
+            x = destinationCell1.getCol() *grid.getCellWidth();
+            // if is in between
+            if (isInbetween(rowY1,rowY2,yUpperBound)){
+                y= yUpperBound;
+            }
+            else y = yLowerBound;
+        }
+        else if (destinationCell1.getRow() == destinationCell2.getRow()){
+            y = destinationCell2.getRow() * grid.getCellWidth();
+            if (isInbetween(colX1,colX2,xUpperBoumd)){
+                x = xUpperBoumd;
+            }
+            else x = xLowerBound;
+        }
+
+        //arrowPoints.add(new Point2D(x,y));
+        Point2D end = new Point2D(x,y);
+        return new pointHolder(start, end);
+    }
+
+//    public HashSet<Point2D> getArrowPoints(){
+//        return (HashSet<Point2D>) this.arrowPoints;
+//    }
+
+    private boolean isInbetween(double v1, double v2, double c){
+        if (v1 < v2){
+            return c >= v1 && c <= v2;
+        }
+        return c >= v2 && c <= v1;
+    }
+
 
 }

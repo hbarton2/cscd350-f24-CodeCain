@@ -2,12 +2,15 @@ package codecain.GraphicalUserInterface.Controller.RelationshipLines;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import codecain.BackendCode.Model.Relationship;
 import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.GridVisualizer;
 import codecain.GraphicalUserInterface.View.LineDrawer;
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
@@ -50,6 +53,7 @@ public class GridUpdater {
      */
     private LineDrawer lineDrawer;
 
+    private Set<Point2D> arrowPoints;
 
     /**
      * update interval (every 100 milliseconds)
@@ -88,6 +92,7 @@ public class GridUpdater {
         this.nodeContainer = grid.getNodeContainer();
         this.pathHolder = pathHolder;
         this.lineDrawer = lineDrawer;
+        this.arrowPoints = new HashSet<>();
     }
 
     public void setVisualizer(GridVisualizer visualizer){
@@ -101,10 +106,18 @@ public class GridUpdater {
      */
     public void addClassListeners(ClassNode classNode) {
         if (classNode == null) return;
-        classNode.layoutXProperty().addListener((observable, oldValue, newValue) -> scheduleGridUpdate());
-        classNode.layoutYProperty().addListener((observable, oldValue, newValue) -> scheduleGridUpdate());
-        classNode.prefWidthProperty().addListener((observable, oldValue, newValue) -> scheduleGridUpdate());
-        classNode.prefHeightProperty().addListener((observable, oldValue, newValue) -> scheduleGridUpdate());
+        classNode.layoutXProperty().addListener((observable, oldValue, newValue) -> {
+            scheduleGridUpdate();
+        });
+        classNode.layoutYProperty().addListener((observable, oldValue, newValue) -> {
+            scheduleGridUpdate();
+        });
+        classNode.prefWidthProperty().addListener((observable, oldValue, newValue) -> {
+            scheduleGridUpdate();
+        });
+        classNode.prefHeightProperty().addListener((observable, oldValue, newValue) -> {
+            scheduleGridUpdate();
+        });
     }
 
 
@@ -175,11 +188,13 @@ public class GridUpdater {
         //updateGridBoxes();
         Relationship.removeInvalidRelationships();
 
+
+
         lineDrawer.redrawLines(updateRelationshipPaths(0));
 
 
         if (visualizer != null){
-            visualizer.updateGridVisualizer();
+            visualizer.updateGridVisualizer((HashSet<Point2D>) arrowPoints);
         }
         //grid.printGrid();
     }
@@ -212,6 +227,7 @@ public class GridUpdater {
 
         pathHolder.clearHolder();
         grid.clearGrid();
+        arrowPoints.clear();
         updateGridBoxes();
 
         for (Relationship r : Relationship.relationshipList){
@@ -227,6 +243,7 @@ public class GridUpdater {
                 return updateRelationshipPaths(zero+1);
             }
         }
+        //genArrowGoalPoints();
         return pathHolder;
     }
 
@@ -302,5 +319,6 @@ public class GridUpdater {
         System.out.println("Center found at: col:" + col + ", row: " + row);
         return grid.getCell(row, col);
     }
+
 
 }
