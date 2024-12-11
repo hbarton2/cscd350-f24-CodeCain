@@ -2,11 +2,14 @@ package codecain.GraphicalUserInterface.View;
 
 import codecain.GraphicalUserInterface.Controller.RelationshipLines.GridCell;
 import codecain.GraphicalUserInterface.Controller.RelationshipLines.LineGrid;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GridVisualizer {
 
@@ -52,7 +55,7 @@ public class GridVisualizer {
         return dot;
     }
 
-    public void updateGridVisualizer(){
+    public void updateGridVisualizer(HashSet<Point2D> arrowPoints){
         clearDots();
         int numRows = grid.getNumRows();
         int numCols = grid.getNumCols();
@@ -68,6 +71,11 @@ public class GridVisualizer {
                 else if (showSmallDots){
                     dots.add(drawDot(x,y,2.0));
                 }
+            }
+        }
+        for (Object p : arrowPoints.toArray()){
+            if (p instanceof Point2D){
+                dots.add(drawDot(((Point2D) p).getX(), ((Point2D) p).getY(), 8.0));
             }
         }
     }

@@ -117,6 +117,8 @@ public class PathNavigator {
 
         //findPath until one works
         GridPath path = null;
+        GridPath bestPath = null;
+        int bestPathSize = 1000;
 
         while (!availableStartCells.isEmpty()) {
             //checks every start cell and end cell
@@ -130,7 +132,7 @@ public class PathNavigator {
             }
         }
 
-        //returns null if no path was found
+        //returns empty path if no path was found
 
         return new GridPath();
     }
@@ -155,7 +157,7 @@ public class PathNavigator {
             }
         }
 
-        if (printStuff) System.out.println(availableStartCells.toString());
+        //if (printStuff) System.out.println(availableStartCells.toString());
 
         return availableStartCells;
     }
@@ -176,11 +178,11 @@ public class PathNavigator {
         for ( GridCell cell: coveredCellsGoal){
             if (!grid.getWalkableNeighbors(cell).isEmpty()){
                 availableStartCells.push(cell, calculateHeuristic(cell,startingCell));
-                if (printStuff == true) System.out.println("available start cell found: " + cell.toString());
+                //if (printStuff == true) System.out.println("available start cell found: " + cell.toString());
             }
         }
 
-        if (printStuff) System.out.println(availableStartCells.toString());
+        //if (printStuff) System.out.println(availableStartCells.toString());
 
         return availableStartCells;
     }
