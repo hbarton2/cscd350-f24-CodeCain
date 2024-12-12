@@ -19,6 +19,10 @@ import codecain.GraphicalUserInterface.View.ClassNode;
 import codecain.GraphicalUserInterface.View.PositionUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuButton;
@@ -116,7 +120,7 @@ public class Controller {
      * Handles the action of adding a new class to the diagram.
      */
     @FXML
-    private void addClassBtn() {
+    public void addClassBtn() {
         String className = showTextInputDialog("Add Class", "Enter the name of the class to add:", "Class Name:");
         ClassNode classNode = ClassManager.addClass(className, nodeContainer);
         if (classNode != null) {
@@ -131,7 +135,7 @@ public class Controller {
      * the diagram.
      */
     @FXML
-    private void deleteClassBtn() {
+    public void deleteClassBtn() {
         String className = currentlySelectedNode != null
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Delete Class", "Enter the name of the class to delete:", "Class Name:");
@@ -143,7 +147,7 @@ public class Controller {
      * Handles the action of renaming the selected class or a specified class.
      */
     @FXML
-    private void renameClassBtn() {
+    public void renameClassBtn() {
         String oldClassName = currentlySelectedNode != null
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Rename Class", "Enter the name of the class to rename:", "Class Name:");
