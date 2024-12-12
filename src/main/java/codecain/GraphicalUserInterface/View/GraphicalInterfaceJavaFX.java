@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -31,6 +32,12 @@ public class GraphicalInterfaceJavaFX extends Application {
 
             // Set up the stage
             stage.setTitle("UML Editor");
+
+            Screen screen = Screen.getPrimary();
+            stage.setWidth(screen.getBounds().getWidth());
+            stage.setHeight(screen.getBounds().getHeight());
+            stage.centerOnScreen();
+
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {

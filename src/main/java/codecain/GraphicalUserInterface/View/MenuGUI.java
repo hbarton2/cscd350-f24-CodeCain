@@ -6,10 +6,13 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import java.awt.Taskbar;
+import java.awt.Toolkit;
 
 
 /**
@@ -28,6 +31,20 @@ public class MenuGUI extends Application {
     public void start(Stage primaryStage) {
         Text welcomeText = new Text("Welcome to Code Cain UML Editor");
         welcomeText.setFont(Font.font("Arial", 20));
+
+        // Add an icon to the application window
+        Image icon = new Image(getClass().getResourceAsStream("/codecain/icon.png"));
+        primaryStage.getIcons().add(icon);
+
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar taskbar = Taskbar.getTaskbar();
+            try {
+                java.awt.Image badge = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/codecain/icon.png"));
+                taskbar.setIconImage(badge);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         Button cliButton = new Button("CLI");
         cliButton.setOnAction(event -> {
