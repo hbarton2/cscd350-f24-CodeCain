@@ -93,6 +93,8 @@ public class ClassNode extends VBox {
         this.setOnMouseDragged(this::onMouseDragged);
         this.classNameLabel.setOnMouseClicked(this::onLabelDoubleClick);
 
+        this.configureKeyboardShortcuts();
+
     }
 
     /**
@@ -115,7 +117,7 @@ public class ClassNode extends VBox {
             updateHeight();
             updateWidth();
         });
-        
+
     }
 
     /**
@@ -214,6 +216,8 @@ public class ClassNode extends VBox {
      */
     public void select() {
         isSelected = true;
+        this.requestFocus();
+        System.out.println("ClassNode selected: " + classInfo.getClassName());
 
         // Apply a slight color change and shadow effect
         this.setStyle("-fx-background-color: #e0f7fa; -fx-border-color: #02769e; -fx-border-width: 4;");
@@ -294,7 +298,7 @@ public class ClassNode extends VBox {
 
         // Update the ScrollPane if necessary
         ScrollPane scrollPane = findScrollPane(parentPane);
-        if(scrollPane != null) {
+        if (scrollPane != null) {
             ensureVisibleInScrollPane(scrollPane);
         }
 
@@ -343,12 +347,15 @@ public class ClassNode extends VBox {
 
     /**
      * Finds the nearest {@link ScrollPane} ancestor of the specified {@link Pane}.
-     * This method traverses the parent hierarchy of the given {@link Pane} to locate
-     * the first {@link ScrollPane} that contains it. If no {@link ScrollPane} is found,
+     * This method traverses the parent hierarchy of the given {@link Pane} to
+     * locate
+     * the first {@link ScrollPane} that contains it. If no {@link ScrollPane} is
+     * found,
      * the method returns {@code null}.
      *
      * @param pane The {@link Pane} whose parent hierarchy is to be traversed.
-     * @return The nearest {@link ScrollPane} ancestor if one exists, otherwise {@code null}.
+     * @return The nearest {@link ScrollPane} ancestor if one exists, otherwise
+     *         {@code null}.
      */
     private ScrollPane findScrollPane(Pane pane) {
         while (pane != null) {
@@ -543,12 +550,15 @@ public class ClassNode extends VBox {
     }
 
     /**
-     * Updates the preferred width of the {@code ClassNode} to ensure it can accommodate
+     * Updates the preferred width of the {@code ClassNode} to ensure it can
+     * accommodate
      * the longest text in the {@code fields} and {@code methods} {@link ListView}.
      * <p>
      * The method calculates the maximum text width of items in both {@code fields}
-     * and {@code methods} by measuring their rendered width using the {@link Text} class.
-     * It then adjusts the preferred width of the {@code ClassNode} to be the greater
+     * and {@code methods} by measuring their rendered width using the {@link Text}
+     * class.
+     * It then adjusts the preferred width of the {@code ClassNode} to be the
+     * greater
      * of the calculated maximum width plus padding or a predefined minimum width.
      * </p>
      * <p>
@@ -583,34 +593,36 @@ public class ClassNode extends VBox {
 
     /**
      * Updates the preferred height of the {@code ClassNode} to ensure it can
-     * accommodate all items in the {@code fields} and {@code methods} {@link ListView}.
-    */
+     * accommodate all items in the {@code fields} and {@code methods}
+     * {@link ListView}.
+     */
     private void updateHeight() {
         // Calculate the required height for fields and methods
-    double fieldListHeight = fields.getItems().size() * 25; // Approx. 25px per item
-    double methodListHeight = methods.getItems().size() * 25; // Approx. 25px per item
+        double fieldListHeight = fields.getItems().size() * 25; // Approx. 25px per item
+        double methodListHeight = methods.getItems().size() * 25; // Approx. 25px per item
 
-    // Add padding and consider class name label height
-    double classNameHeight = this.classNameLabel.getHeight(); // Add extra padding for label
-    double calculatedFieldHeight = Math.max(fieldListHeight, MIN_LIST_VIEW_HEIGHT); // Minimum height for fields ListView
-    double calculatedMethodHeight = Math.max(methodListHeight, MIN_LIST_VIEW_HEIGHT); // Minimum height for methods ListView
+        // Add padding and consider class name label height
+        double classNameHeight = this.classNameLabel.getHeight(); // Add extra padding for label
+        double calculatedFieldHeight = Math.max(fieldListHeight, MIN_LIST_VIEW_HEIGHT); // Minimum height for fields
+                                                                                        // ListView
+        double calculatedMethodHeight = Math.max(methodListHeight, MIN_LIST_VIEW_HEIGHT); // Minimum height for methods
+                                                                                          // ListView
 
-    // Update the height of the ListView components
-    fields.setPrefHeight(calculatedFieldHeight);
-    methods.setPrefHeight(calculatedMethodHeight);
+        // Update the height of the ListView components
+        fields.setPrefHeight(calculatedFieldHeight);
+        methods.setPrefHeight(calculatedMethodHeight);
 
-    // Calculate the total height for the ClassNode
-    double totalHeight = classNameHeight + calculatedFieldHeight + calculatedMethodHeight; // Add padding
+        // Calculate the total height for the ClassNode
+        double totalHeight = classNameHeight + calculatedFieldHeight + calculatedMethodHeight; // Add padding
 
-    // Ensure the ClassNode height is at least the minimum height
-    double finalHeight = Math.max(totalHeight, MIN_HEIGHT);
-    this.setPrefHeight(finalHeight);
+        // Ensure the ClassNode height is at least the minimum height
+        double finalHeight = Math.max(totalHeight, MIN_HEIGHT);
+        this.setPrefHeight(finalHeight);
 
-    System.out.println("Updated ClassNode height: " + finalHeight);
-    System.out.println("Updated fields ListView height: " + calculatedFieldHeight);
-    System.out.println("Updated methods ListView height: " + calculatedMethodHeight);
+        System.out.println("Updated ClassNode height: " + finalHeight);
+        System.out.println("Updated fields ListView height: " + calculatedFieldHeight);
+        System.out.println("Updated methods ListView height: " + calculatedMethodHeight);
     }
-    
 
     /**
      * Renames a method in the UML class represented by this ClassNode.
@@ -657,5 +669,114 @@ public class ClassNode extends VBox {
     public void updateMethod(UMLMethodInfo method) {
         methods.getItems().removeIf(m -> m.getMethodName().equals(method.getMethodName())); // Remove old method
         methods.getItems().add(method); // Add updated method with new parameter
+    }
+
+    /**
+     * Adds keyboard shortcuts for managing fields and methods within the ClassNode.
+     */
+    private void configureKeyboardShortcuts() {
+        // Focus handler for the entire ClassNode
+        this.setOnKeyPressed(event -> {
+            if (isSelected) { // Only respond if this ClassNode is selected
+                if (event.isControlDown() && event.getCode() == KeyCode.A) {
+                    // Add new field/method
+                    handleAddShortcut();
+                } else if (event.isControlDown() && event.getCode() == KeyCode.E) {
+                    // Edit selected field/method
+                    handleEditShortcut();
+                } else if (event.getCode() == KeyCode.DELETE) {
+                    // Delete selected field/method
+                    handleDeleteShortcut();
+                }
+            }
+        });
+    }
+
+    /**
+     * Handles the Add shortcut (Ctrl + A) to add a new field or method.
+     */
+    private void handleAddShortcut() {
+        if (fields.isFocused()) {
+            UMLFieldInfo newField = new UMLFieldInfo("newField", "String"); // Example default values
+            addField(newField);
+        } else if (methods.isFocused()) {
+            UMLMethodInfo newMethod = new UMLMethodInfo("newMethod", new ArrayList<>());
+            addMethod(newMethod);
+        }
+    }
+
+    /**
+     * Handles the Edit shortcut (Ctrl + E) to edit the selected field or method.
+     */
+    private void handleEditShortcut() {
+        if (fields.isFocused()) {
+            UMLFieldInfo selectedField = fields.getSelectionModel().getSelectedItem();
+            if (selectedField != null) {
+                // Launch editing logic
+                editField(selectedField);
+            }
+        } else if (methods.isFocused()) {
+            UMLMethodInfo selectedMethod = methods.getSelectionModel().getSelectedItem();
+            if (selectedMethod != null) {
+                // Launch editing logic
+                editMethod(selectedMethod);
+            }
+        }
+    }
+
+    /**
+     * Handles the Delete shortcut (Delete key) to remove the selected field or
+     * method.
+     */
+    private void handleDeleteShortcut() {
+        if (fields.isFocused()) {
+            UMLFieldInfo selectedField = fields.getSelectionModel().getSelectedItem();
+            if (selectedField != null) {
+                removeField(selectedField.getFieldName());
+            }
+        } else if (methods.isFocused()) {
+            UMLMethodInfo selectedMethod = methods.getSelectionModel().getSelectedItem();
+            if (selectedMethod != null) {
+                removeMethod(selectedMethod.getMethodName());
+            }
+        }
+    }
+
+    /**
+     * Edit a specific field (opens an inline editor or dialog).
+     */
+    private void editField(UMLFieldInfo field) {
+        TextInputDialog dialog = new TextInputDialog(field.toString());
+        dialog.setTitle("Edit Field");
+        dialog.setHeaderText("Edit the field details (format: type name)");
+        dialog.setContentText("Field:");
+
+        dialog.showAndWait().ifPresent(input -> {
+            String[] parts = input.split(" ");
+            if (parts.length == 2) {
+                field.setFieldType(parts[0]);
+                field.setFieldName(parts[1]);
+                fields.refresh();
+                syncWithUMLClassInfo();
+            } else {
+                alert("Error", "Invalid field format. Use: type name");
+            }
+        });
+    }
+
+    /**
+     * Edit a specific method (opens an inline editor or dialog).
+     */
+    private void editMethod(UMLMethodInfo method) {
+        TextInputDialog dialog = new TextInputDialog(method.toString());
+        dialog.setTitle("Edit Method");
+        dialog.setHeaderText("Edit the method details");
+        dialog.setContentText("Method:");
+
+        dialog.showAndWait().ifPresent(input -> {
+            method.setMethodName(input);
+            methods.refresh();
+            syncWithUMLClassInfo();
+        });
     }
 }
