@@ -22,6 +22,11 @@ public class ShortcutManager {
 
 		// Add shortcut for deleting a class
 		addShortcut(getPlatformSpecificShortcut(KeyCode.D), controller::deleteClassBtn);
+
+		// Add shortcut for rename a class
+		addShortcut(getPlatformSpecificShortcut(KeyCode.R), controller::renameClassBtn);
+
+		
 		
 	}
 

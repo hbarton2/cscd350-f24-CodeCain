@@ -145,7 +145,7 @@ public class Controller {
      * Handles the action of renaming the selected class or a specified class.
      */
     @FXML
-    private void renameClassBtn() {
+    public void renameClassBtn() {
         String oldClassName = currentlySelectedNode != null
                 ? currentlySelectedNode.getName()
                 : showTextInputDialog("Rename Class", "Enter the name of the class to rename:", "Class Name:");
